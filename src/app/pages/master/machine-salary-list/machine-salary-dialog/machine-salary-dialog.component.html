@@ -1,15 +1,18 @@
 <h2 mat-dialog-title class="m-b-24">{{action}} Machine Salary</h2>
 <mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate">
   <form [formGroup]="machineSalaryForm">
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-select #dropdown formControlName="employeeList" placeholder="Employee list">
+    <mat-form-field appearance="outline" class="w-100 m-t-10">
+      <mat-label>Enter Employee</mat-label>
+      <mat-select #dropdown formControlName="employeeList" placeholder="Enter employee">
         <mat-option value="abc">abc</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field appearance="outline" class="w-100">
-      <input type="text" matInput required placeholder="Amount" formControlName="amount" />
+    <mat-form-field appearance="outline" class="w-100 m-t-10">
+      <mat-label>Enter Amount</mat-label>
+      <input type="text" matInput required placeholder="Enter amount" formControlName="amount" />
     </mat-form-field>
-    <mat-form-field appearance="outline" class="w-100">
+    <mat-form-field appearance="outline" class="w-100 m-t-10">
+      <mat-label>Select Date</mat-label>
       <input matInput [matDatepicker]="Date" formControlName="date" placeholder="Select date" />
       <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
       <mat-datepicker #Date></mat-datepicker>

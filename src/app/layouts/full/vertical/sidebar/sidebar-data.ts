@@ -49,7 +49,7 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Khata Book',
-    iconName: 'mail',
+    iconName: 'books',
     route: '/master/khatabook',
   },
 
@@ -63,7 +63,7 @@ export const navItems: NavItem[] = [
   },
    {
     displayName: 'Attendance',
-    iconName: 'mail',
+    iconName: 'user',
     route: '/master/absent',
   },
   {
@@ -83,28 +83,27 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Party Master',
-    iconName: 'message-2',
+    iconName: 'books',
     route: '/master/partymaster',
   },
   {
     displayName: 'Firm Master',
-    iconName: 'calendar-event',
+    iconName: 'books',
     route: '/master/firmmaster',
   },
   {
     displayName: 'Design Master',
-    iconName: 'mail',
+    iconName: 'folder',
     route: '/master/designmaster',
   },
   {
     displayName: 'Maintenance Masters',
-    // iconName: 'chart-line',
-    iconName: 'mail',
+    iconName: 'checklist',
     route: '/master/maintenancemasters',
   },
   {
     displayName: 'Company Account',
-    iconName: 'mail',
+    iconName: 'building-bank',
     route: '/master/companyaccount',
   },
 
@@ -116,12 +115,12 @@ export const navItems: NavItem[] = [
   
   {
     displayName: 'Kharch Master',
-    iconName: 'mail',
+    iconName: 'id-badge',
     route: '/master/kharchmaster',
   },
   {
     displayName: 'Account',
-    iconName: 'mail',
+    iconName: 'sort-descending',
     route: '/master/account',
   },
   {

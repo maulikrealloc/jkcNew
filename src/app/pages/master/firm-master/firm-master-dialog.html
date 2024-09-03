@@ -3,76 +3,87 @@
   <form [formGroup]="firmForm">
     <div class="row">
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Enter Header</mat-label>
           <input type="text" matInput required formControlName="header" placeholder="Enter header" />
           <mat-hint *ngIf="firmForm.get('header')?.hasError('required') && firmForm.get('header')?.touched"
             class="error-message error-color">
-            header is required
+            Header is required
           </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Enter Sub Header</mat-label>
           <input type="text" matInput required formControlName="subHeader" placeholder="Enter sub header" /> <mat-hint
             *ngIf="firmForm.get('subHeader')?.hasError('required') && firmForm.get('subHeader')?.touched"
             class="error-message error-color">
-            sub header is required
+            Sub header is required
           </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <input type="text" matInput required formControlName="address" placeholder="Enter Address" />
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Enter Address</mat-label>
+          <input type="text" matInput required formControlName="address" placeholder="Enter address" />
           <mat-hint *ngIf="firmForm.get('address')?.hasError('required') && firmForm.get('address')?.touched"
             class="error-message error-color">
-            address is required
+            Address is required
           </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <input type="text" matInput formControlName="GSTNo" placeholder="GST No" />
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Enter GST No</mat-label>
+          <input type="text" matInput formControlName="GSTNo" placeholder="Enter GST no" />
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <input type="number" matInput formControlName="gstPercentage" placeholder="GST Percentage" />
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Enter GST Percentage</mat-label>
+          <input type="number" matInput formControlName="gstPercentage" placeholder="Enter GST percentage" />
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <input type="text" matInput formControlName="panNo" placeholder="Pan no" />
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Enter Pan No</mat-label>
+          <input type="text" matInput formControlName="panNo" placeholder="Enter pan no" />
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Enter Mobile No</mat-label>
           <input type="number" matInput onKeyPress="if(this.value.length==10) return false;" required
-            formControlName="mobileNO" placeholder="Mobile no" />
+            formControlName="mobileNO" placeholder="Enter mobile no" />
           <mat-hint *ngIf="firmForm.get('mobileNO')?.hasError('required') && firmForm.get('mobileNO')?.touched"
             class="error-message error-color">
-            mobile no is required
+            Mobile no is required
           </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Enter Personal Mobile No</mat-label>
           <input type="number" matInput onKeyPress="if(this.value.length==10) return false;"
-            formControlName="personalMobileNo" placeholder="Personal mobile no" />
+            formControlName="personalMobileNo" placeholder="Enter personal mobile no" />
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <input type="text" matInput formControlName="bankName" placeholder="Bank name" />
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Enter Bank Name</mat-label>
+          <input type="text" matInput formControlName="bankName" placeholder="Enter bank name" />
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <input type="text" matInput formControlName="ifscCode" placeholder="IFSC code" />
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Enter Bank IFSC</mat-label>
+          <input type="text" matInput formControlName="ifscCode" placeholder="Enter bank IFSC" />
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <input type="number" matInput formControlName="bankAccountNo" placeholder="Bank account no" />
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Enter Bank Account No</mat-label>
+          <input type="number" matInput formControlName="bankAccountNo" placeholder="Enter bank account no" />
         </mat-form-field>
       </div>
     </div>

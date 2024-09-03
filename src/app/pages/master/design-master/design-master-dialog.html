@@ -1,16 +1,19 @@
 <h2 mat-dialog-title class="m-b-24">Add Design</h2>
 <mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate">
   <form [formGroup]="designForm">
-    <mat-form-field appearance="outline" class="w-100">
+    <mat-form-field appearance="outline" class="w-100 m-t-10">
+      <mat-label>Select A Party</mat-label>
       <mat-select #dropdown formControlName="partyName" placeholder="Select a party">
         <mat-option value="ABC">ABC</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field appearance="outline" class="w-100">
-      <input type="text" matInput required formControlName="designNo" placeholder="Enter Design No" />
+    <mat-form-field appearance="outline" class="w-100 m-t-10">
+      <mat-label>Enter Design No</mat-label>
+      <input type="text" matInput required formControlName="designNo" placeholder="Enter design no" />
     </mat-form-field>
-    <mat-form-field appearance="outline" class="w-100">
-      <input type="number" matInput required formControlName="designPrice" placeholder="Design Price" />
+    <mat-form-field appearance="outline" class="w-100 m-t-10">
+      <mat-label>Enter Design Price</mat-label>
+      <input type="number" matInput required formControlName="designPrice" placeholder="Enter design price" />
     </mat-form-field>
     <div class="d-flex align-items-center m-b-16">
       <img class="mat-card-avatar" [src]="local_data.imagePath" class="rounded-circle" width="50" />

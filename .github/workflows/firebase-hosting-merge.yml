@@ -11,16 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-            - uses: actions/checkout@v4
-      - name: Install dependencies
-run: npm install --force
-- name: Install Angular CLI
-run: npm install -g @angular/cli
-- name: Build Angular project
-run: ng build
+      run: npm install --force
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JKC_NEW }}
           channelId: live
           projectId: jkc-new
+
+
+#       - name: Install dependencies
+# run: npm install --force
+# - name: Install Angular CLI
+# run: npm install -g @angular/cli
+# - name: Build Angular project
+# run: ng build

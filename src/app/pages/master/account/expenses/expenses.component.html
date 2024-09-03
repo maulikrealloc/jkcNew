@@ -1,0 +1,32 @@
+<mat-card class="cardWithShadow">
+    <mat-card-content class="p-24">
+            <div style="align-items: baseline;" class="row">
+                <div class="col-4">
+                    <mat-form-field appearance="outline" class="w-100 hide-hint">
+                        <input matInput placeholder="Search expenses" />
+                        <mat-icon matSuffix>
+                            <i-tabler name="search" class="icon-20"></i-tabler>
+                        </mat-icon>
+                    </mat-form-field>
+                </div>
+                <div class="col-4">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-select #dropdown
+                            placeholder="Select party">
+                            <mat-option value="ABC">ABC</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-4">
+                  <div class="d-flex align-items-center justify-content-end">
+                    <button mat-flat-button color="primary">
+                        Expenses Master 
+                    </button>
+                     <button mat-flat-button color="primary">
+                        Add Expenses 
+                    </button>
+                  </div>
+              </div>
+            </div>
+    </mat-card-content>
+</mat-card>

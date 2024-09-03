@@ -1,0 +1,32 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-24">
+    <div class="row justify-content-between">
+      <div class="col-lg-4">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
+          <input matInput placeholder="Search Row Material" />
+          <mat-icon matSuffix>
+            <i-tabler name="search" class="icon-20"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+      <div class="col-lg-4 d-flex align-items-center justify-content-end">
+        <button mat-flat-button color="primary" (click)="addRowMaterial()">
+          Add Row Material
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-24" style="max-height: 500px; overflow-y: auto;">
+    <div class="row justify-content-between">
+      <div *ngFor="let item of materials" class="col-4">
+        <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">{{item.materialName}} </mat-label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input type="text" matInput required [(ngModel)]="item.materialValue" />
+        </mat-form-field>
+      </div>
+
+    </div>
+  </mat-card-content>
+</mat-card>

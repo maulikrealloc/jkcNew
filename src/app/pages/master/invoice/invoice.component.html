@@ -1,0 +1,181 @@
+<mat-card class="cardWithShadow">
+    <mat-card-content class="p-24">
+        <form [formGroup]="invoiceForm">
+            <div style="align-items: baseline;" class="row">
+                <div class="col-3">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-select #dropdown formControlName="firm" placeholder="Select firm">
+                            <mat-option value="ABC">ABC</mat-option>
+                        </mat-select>
+                        <mat-hint
+                            *ngIf="invoiceForm.get('firm')?.hasError('required') && invoiceForm.get('firm')?.touched"
+                            class="error-message error-color">
+                            firm is required
+                        </mat-hint>
+                    </mat-form-field>
+                </div>
+                <div class="col-3">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-select #dropdown formControlName="party" placeholder="Select party">
+                            <mat-option value="ABC">ABC</mat-option>
+                        </mat-select>
+                        <mat-hint
+                            *ngIf="invoiceForm.get('party')?.hasError('required') && invoiceForm.get('party')?.touched"
+                            class="error-message error-color">
+                            party is required
+                        </mat-hint>
+                    </mat-form-field>
+                </div>
+                <div class="col-3">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-select #dropdown formControlName="chalanNo" placeholder="Select chalan no">
+                            <mat-option value="ABC">ABC</mat-option>
+                        </mat-select>
+                        <mat-hint
+                            *ngIf="invoiceForm.get('chalanNo')?.hasError('required') && invoiceForm.get('chalanNo')?.touched"
+                            class="error-message error-color">
+                            chalan no is required
+                        </mat-hint>
+                    </mat-form-field>
+                </div>
+                <div class="col-3">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <input matInput [matDatepicker]="Date" formControlName="date" placeholder="Invoice date" />
+                        <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
+                        <mat-datepicker #Date></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-3">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <input type="number" matInput required formControlName="invoiceNo" placeholder="Invoice no" />
+                        <mat-hint
+                            *ngIf="invoiceForm.get('invoiceNo')?.hasError('required') && invoiceForm.get('invoiceNo')?.touched"
+                            class="error-message error-color">
+                            invoice no is required
+                        </mat-hint>
+                    </mat-form-field>
+                </div>
+                <div class="col-3">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <input type="text" matInput required formControlName="cgst" placeholder="Select C.G.S.T" />
+                        <mat-hint
+                            *ngIf="invoiceForm.get('cgst')?.hasError('required') && invoiceForm.get('cgst')?.touched"
+                            class="error-message error-color">
+                            C.G.S.T is required
+                        </mat-hint>
+                    </mat-form-field>
+                </div>
+                <div class="col-3">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <input type="text" matInput required formControlName="sgst" placeholder="Select S.G.S.T" />
+                        <mat-hint
+                            *ngIf="invoiceForm.get('sgst')?.hasError('required') && invoiceForm.get('sgst')?.touched"
+                            class="error-message error-color">
+                            S.G.S.T no is required
+                        </mat-hint>
+                    </mat-form-field>
+                </div>
+                <div class="col-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <input type="number" matInput required formControlName="discountRatio"
+                            placeholder="Discount ratio (%)" />
+                        <mat-hint
+                            *ngIf="invoiceForm.get('discountRatio')?.hasError('required') && invoiceForm.get('discountRatio')?.touched"
+                            class="error-message error-color">
+                            discount is required
+                        </mat-hint>
+                    </mat-form-field>
+                </div>
+                <div class="col-1">
+                    <div class="d-flex align-items-center justify-content-end">
+                        <button mat-flat-button color="primary" (click)="invoiceview()">
+                            View
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
+<mat-card class="cardWithShadow">
+    <mat-card-content class="p-24">
+        <div class="table-responsive">
+            <table mat-table [dataSource]="khataListdataSource" class="w-100">
+                <ng-container matColumnDef="#">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
+                    <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="productName">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Product Name
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.productName }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="productPrice">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Product Price
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.productPrice }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="quantity">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Quantity
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.quantity }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="chalanNo">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Chalan No
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.chalanNo }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="totalAmount">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Total Amount
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.totalAmount }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="finalAmount">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Final Amount ₹
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.finalAmount }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Action
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="action-link">
+                        <a class="m-r-10 cursor-pointer"><i-tabler name="edit" class="icon-18"></i-tabler></a>
+                        <a class="m-r-10 cursor-pointer">
+                            <i-tabler name="trash" class="icon-18"></i-tabler>
+                        </a>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="khataColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: khataColumns"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+    </mat-card-content>
+</mat-card>

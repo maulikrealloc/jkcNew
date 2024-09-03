@@ -1,0 +1,73 @@
+<h2 mat-dialog-title class="m-b-24">{{action}} Khatu</h2>
+<mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate">
+  <form [formGroup]="khatuForm">
+    <div class="row">
+      <div class="col-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <input type="text" matInput required formControlName="name" placeholder="Name" />
+          <mat-hint *ngIf="khatuForm.get('name')?.hasError('required') && khatuForm.get('name')?.touched"
+            class="error-message color">
+            name is required
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <input type="text" matInput required formControlName="ownerName" placeholder="Owner name" />
+          <mat-hint *ngIf="khatuForm.get('ownerName')?.hasError('required') && khatuForm.get('ownerName')?.touched"
+            class="error-message color">
+            owner name is required
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <input type="text" matInput required formControlName="address" placeholder="Address" />
+          <mat-hint *ngIf="khatuForm.get('address')?.hasError('required') && khatuForm.get('address')?.touched"
+            class="error-message color">
+            address is required
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <input type="number" matInput onKeyPress="if(this.value.length==10) return false;" required
+            formControlName="mobileNo" placeholder="Mobile no" />
+          <mat-hint *ngIf="khatuForm.get('mobileNo')?.hasError('required') && khatuForm.get('mobileNo')?.touched"
+            class="error-message color">
+            mobile no is required
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <input type="text" matInput formControlName="pan" placeholder="Pan" />
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <input type="text" matInput formControlName="gst" placeholder="Gst" />
+        </mat-form-field>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <mat-dialog-actions class="p-24">
+      <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
+      <button mat-flat-button [mat-dialog-close]="true" [disabled]="" color="primary" (click)="doAction();">
+        {{action}}
+      </button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>
+<ng-template #elseTemplate>
+  <div class="p-x-24">
+    <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
+  </div>
+  <mat-divider></mat-divider>
+  <div mat-dialog-actions class="p-x-24 p-b-24 m-t-10 justify-content-end">
+    <button mat-button (click)="doAction()" mat-flat-button color="warn">
+      {{action}}
+    </button>
+    <button mat-stroked-button color="warn" (click)="closeDialog()" class="m-l-8">Cancel</button>
+  </div>
+</ng-template>

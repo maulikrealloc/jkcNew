@@ -1,0 +1,37 @@
+<h2 mat-dialog-title class="m-b-24">{{action}} Machine Salary</h2>
+<mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate">
+  <form [formGroup]="machineSalaryForm">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-select #dropdown formControlName="employeeList" placeholder="Employee list">
+        <mat-option value="abc">abc</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-100">
+      <input type="text" matInput required placeholder="Amount" formControlName="amount" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-100">
+      <input matInput [matDatepicker]="Date" formControlName="date" placeholder="Select date" />
+      <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
+      <mat-datepicker #Date></mat-datepicker>
+    </mat-form-field>
+    <mat-divider></mat-divider>
+    <mat-dialog-actions class="p-24">
+      <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
+      <button mat-flat-button [mat-dialog-close]="true" [disabled]="" color="primary" (click)="doAction();">
+        {{action}}
+      </button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>
+<ng-template #elseTemplate>
+  <div class="p-x-24">
+    <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
+  </div>
+  <mat-divider></mat-divider>
+  <div mat-dialog-actions class="p-x-24 p-b-24 m-t-10 justify-content-end">
+    <button mat-button (click)="doAction()" mat-flat-button color="warn">
+      {{action}}
+    </button>
+    <button mat-stroked-button color="warn" (click)="closeDialog()" class="m-l-8">Cancel</button>
+  </div>
+</ng-template>

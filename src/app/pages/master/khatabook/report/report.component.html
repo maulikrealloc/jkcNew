@@ -1,0 +1,173 @@
+<mat-card class="cardWithShadow">
+    <mat-card-content class="p-24">
+        <div style="align-items: baseline;" class="row">
+            <div class="col-3">
+                <mat-form-field appearance="outline" class="w-100 hide-hint">
+                    <input matInput placeholder="Search Report" />
+                    <mat-icon matSuffix>
+                        <i-tabler name="search" class="icon-20"></i-tabler>
+                    </mat-icon>
+                </mat-form-field>
+            </div>
+            <div class="col-4">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Enter a date</mat-label>
+                    <mat-date-range-input [rangePicker]="picker">
+                        <input matStartDate placeholder="Start date">
+                        <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+            </div>
+            <div class="col-3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-select #dropdown placeholder="Select a party">
+                        <mat-option value="ABC">ABC</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-pdf">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                    <path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4" />
+                    <path d="M5 18h1.5a1.5 1.5 0 0 0 0 -3h-1.5v6" />
+                    <path d="M17 18h2" />
+                    <path d="M20 15h-3v6" />
+                    <path d="M11 15v6h1a2 2 0 0 0 2 -2v-2a2 2 0 0 0 -2 -2h-1z" />
+                </svg>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+<mat-card class="cardWithShadow">
+    <mat-card-content class="p-24">
+        <div class="table-responsive">
+            <table mat-table [dataSource]="reportDataSource" style="min-width: 187%;" class="w-100">
+                <ng-container matColumnDef="#">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
+                    <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="partyName">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Party Name
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.partyName }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="partyOrder">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Party Order
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.partyOrder }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="khataName">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Khata Name
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.khataName }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="itemName">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Item Name
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.itemName }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="pQuantity">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        P-Quantity
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.pQuantity }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="kQuantity">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        K-Quantity
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.kQuantity }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="pPrice">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        P-Price
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.pPrice }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="kPrice">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        K-Price
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.kPrice }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="pTotal">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        P-Total
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.pTotal }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="kTotal">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        K-Total
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.kTotal }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="profit">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Profit
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.profit }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Action
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="action-link">
+                        <a class="m-r-10 cursor-pointer"><i-tabler name="edit" class="icon-18"></i-tabler></a>
+                        <a class="m-r-10 cursor-pointer">
+                            <i-tabler name="trash" class="icon-18"></i-tabler>
+                        </a>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="reportColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: reportColumns"></tr>
+            </table>
+            <mat-paginator style="min-width: 185%;" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons></mat-paginator>
+        </div>
+    </mat-card-content>
+</mat-card>

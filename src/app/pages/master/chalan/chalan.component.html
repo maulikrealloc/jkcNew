@@ -1,0 +1,217 @@
+<form [formGroup]="chalanForm">
+    <div class="row">
+        <div class="col-4">
+            <mat-card class="cardWithShadow">
+                <mat-card-content class="p-24">
+                    <div style="align-items: baseline;">
+                        <div>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-select #dropdown formControlName="firm" placeholder="Select firm">
+                                    <mat-option value="ABC">ABC</mat-option>
+                                </mat-select>
+                                <mat-hint
+                                    *ngIf="chalanForm.get('firm')?.hasError('required') && chalanForm.get('firm')?.touched"
+                                    class="error-message error-color">
+                                    firm is required
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-select #dropdown formControlName="party" placeholder="Select party">
+                                    <mat-option value="ABC">ABC</mat-option>
+                                </mat-select>
+                                <mat-hint
+                                    *ngIf="chalanForm.get('party')?.hasError('required') && chalanForm.get('party')?.touched"
+                                    class="error-message error-color">
+                                    party is required
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <input matInput [matDatepicker]="chalanDate" formControlName="date"
+                                    placeholder="Chalan date" />
+                                <mat-datepicker-toggle matSuffix [for]="chalanDate"></mat-datepicker-toggle>
+                                <mat-datepicker #chalanDate></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <input type="text" matInput required formControlName="partyOrder"
+                                    placeholder="Party order" />
+                                <mat-hint
+                                    *ngIf="chalanForm.get('partyOrder')?.hasError('required') && chalanForm.get('partyOrder')?.touched"
+                                    class="error-message error-color">
+                                    party order is required
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <div class="col-8">
+            <mat-card class="cardWithShadow">
+                <mat-card-content class="p-24">
+                    <div style="align-items: baseline;" class="row">
+                        <div class="col-6">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <input type="text" matInput required formControlName="productName"
+                                    placeholder="Product name" />
+                                <mat-hint
+                                    *ngIf="chalanForm.get('productName')?.hasError('required') && chalanForm.get('productName')?.touched"
+                                    class="error-message error-color">
+                                    name is required
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-6">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <input type="number" matInput formControlName="srNo" placeholder="Sr no" />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-6">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <input type="number" matInput required formControlName="quantity"
+                                    placeholder="Quantity" />
+                                <mat-hint
+                                    *ngIf="chalanForm.get('quantity')?.hasError('required') && chalanForm.get('quantity')?.touched"
+                                    class="error-message error-color">
+                                    quantity is required
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-6">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <input type="number" matInput formControlName="totalAmount"
+                                    placeholder="Total amount" />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-6">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <input type="number" matInput required formControlName="productPrice"
+                                    placeholder="Product price" />
+                                <mat-hint
+                                    *ngIf="chalanForm.get('productPrice')?.hasError('required') && chalanForm.get('productPrice')?.touched"
+                                    class="error-message error-color">
+                                    price is required
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-6">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <input type="number" matInput required formControlName="chalanNo"
+                                    placeholder="Chalan no" />
+                                <mat-hint
+                                    *ngIf="chalanForm.get('chalanNo')?.hasError('required') && chalanForm.get('chalanNo')?.touched"
+                                    class="error-message error-color">
+                                    chalan no is required
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center justify-content-end">
+                                <button (click)="doAction()" mat-flat-button color="primary">
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center justify-content-end">
+                                <button style="margin-right: 80%;" mat-flat-button color="primary">
+                                    View
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</form>
+
+<mat-card class="cardWithShadow">
+    <mat-card-content class="p-24">
+        <div class="table-responsive">
+            <table mat-table [dataSource]="khataListdataSource" class="w-100">
+                <ng-container matColumnDef="#">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
+                    <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="partyOrder">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Party Order
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.partyOrder }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="productName">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Product Name
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.productName }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="quantity">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Quantity
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.quantity }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="productPrice">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Product Price
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.productPrice }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="chalanNo">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Chalan No
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.chalanNo }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="totalAmount">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Total Amount
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.totalAmount }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Action
+                    </th>
+                    <td mat-cell *matCellDef="let element; let i = index" class="action-link">
+                        <a class="m-r-10 cursor-pointer"><i-tabler name="edit" (click)="updateData(element, i)"
+                                class="icon-18"></i-tabler></a>
+
+                        <a class="m-r-10 cursor-pointer">
+                            <i-tabler name="trash" (click)="deleteData(i)" class="icon-18"></i-tabler>
+                        </a>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="khataColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: khataColumns"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+    </mat-card-content>
+</mat-card>

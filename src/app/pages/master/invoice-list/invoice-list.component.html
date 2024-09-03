@@ -1,0 +1,154 @@
+<mat-card class="cardWithShadow">
+    <mat-card-content class="p-24">
+        <div style="align-items: baseline;" class="row">
+            <div class="col-3">
+                <mat-form-field appearance="outline" class="w-100 hide-hint">
+                    <input matInput placeholder="Search Invoice List" />
+                    <mat-icon matSuffix>
+                        <i-tabler name="search" class="icon-20"></i-tabler>
+                    </mat-icon>
+                </mat-form-field>
+            </div>
+            <div class="col-3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-select #dropdown placeholder="Select">
+                        <mat-option value="ABC">ABC</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Invoice date</mat-label>
+                    <mat-date-range-input [rangePicker]="picker">
+                        <input matStartDate placeholder="Start date">
+                        <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+            </div>
+            <div class="col-3">
+                <a class="m-r-10 cursor-pointer"><i-tabler name="file-text" class="icon-18"></i-tabler> </a>
+                <a class="m-r-10 cursor-pointer"><i-tabler name="pdf" class="icon-18"></i-tabler> </a>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+<mat-card class="cardWithShadow">
+    <mat-card-content class="p-24">
+        <div class="table-responsive">
+            <table mat-table [dataSource]="khataListdataSource" class="w-100">
+                <ng-container matColumnDef="#">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
+                    <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="no">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        No
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.no }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Date
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.date | date : "mediumDate" }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="party">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Party
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.party }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="gross">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Gross
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.gross }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="discount">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Discount
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.discount }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="net">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Net
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.net }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="CGST">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        CGST
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.CGST }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="SGST">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        SGST
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.SGST }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="final">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Final
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.final }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="recived">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Recived
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.recived }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Action
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="action-link">
+                        <a class="m-r-10 cursor-pointer"><i-tabler name="edit" class="icon-18"></i-tabler></a>
+                        <a class="m-r-10 cursor-pointer">
+                            <i-tabler name="trash" class="icon-18"></i-tabler>
+                        </a>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="khataColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: khataColumns"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+    </mat-card-content>
+</mat-card>

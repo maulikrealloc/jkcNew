@@ -98,7 +98,7 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Maintenance Masters',
-    iconName: 'mail',
+    iconName: 'chart-line',
     route: '/master/maintenancemasters',
   },
   {

@@ -5,7 +5,7 @@ export const navItems: NavItem[] = [
     navCap: 'Home',
   },
   {
-    displayName: 'Dashboard test',
+    displayName: 'Dashboard',
     iconName: 'aperture',
     route: '/dashboards/dashboard1',
   },

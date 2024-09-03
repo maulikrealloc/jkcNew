@@ -1,10 +1,12 @@
 <h2 mat-dialog-title class="m-b-24">{{action}} Maintenance</h2>
 <mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate">
   <form [formGroup]="maintenanceForm">
-    <mat-form-field appearance="outline" class="w-100">
+    <mat-form-field appearance="outline" class="w-100 m-t-10">
+      <mat-label>Enter Name</mat-label>
       <input type="text" matInput required formControlName="name" placeholder="Enter name" />
     </mat-form-field>
-    <mat-form-field appearance="outline" class="w-100">
+    <mat-form-field appearance="outline" class="w-100 m-t-10">
+      <mat-label>Enter Value</mat-label>
       <input type="text" matInput required formControlName="value" placeholder="Enter value" />
     </mat-form-field>
     <mat-divider></mat-divider>

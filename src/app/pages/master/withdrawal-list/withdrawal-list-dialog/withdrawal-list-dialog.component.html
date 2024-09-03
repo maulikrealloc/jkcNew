@@ -1,15 +1,19 @@
 <h2 mat-dialog-title class="m-b-24">{{action}} Withdrawal</h2>
 <mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate">
   <form [formGroup]="withdrawalForm">
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-select #dropdown formControlName="employeeList" placeholder="Employee list">
+    <mat-form-field appearance="outline" class="w-100 m-t-10">
+      <mat-label>Enter Employee</mat-label>
+      <mat-select #dropdown formControlName="employeeList" placeholder="Enter employee">
         <mat-option value="abc">abc</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field appearance="outline" class="w-100">
-      <input type="number" matInput required placeholder="Amount" formControlName="amount" />
+    <mat-form-field class="w-100 m-t-10" appearance="outline">
+      <mat-label>Enter Amount</mat-label>
+      <input type="email" matInput formControlName="amount" placeholder="Enter amount">
     </mat-form-field>
-    <mat-form-field appearance="outline" class="w-100">
+
+    <mat-form-field appearance="outline" class="w-100 m-t-10">
+      <mat-label>Select Date</mat-label>
       <input matInput [matDatepicker]="Date" formControlName="date" placeholder="Select date" />
       <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
       <mat-datepicker #Date></mat-datepicker>

@@ -3,8 +3,8 @@
         <form [formGroup]="invoiceForm">
             <div style="align-items: baseline;" class="row">
                 <div class="col-3">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-select #dropdown formControlName="firm" placeholder="Select firm">
+                    <mat-form-field appearance="outline" class="w-100 m-t-10">
+                        <mat-select #dropdown formControlName="firm" placeholder="Enter firm">
                             <mat-option value="ABC">ABC</mat-option>
                         </mat-select>
                         <mat-hint
@@ -15,8 +15,8 @@
                     </mat-form-field>
                 </div>
                 <div class="col-3">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-select #dropdown formControlName="party" placeholder="Select party">
+                    <mat-form-field appearance="outline" class="w-100 m-t-10">
+                        <mat-select #dropdown formControlName="party" placeholder="Enter party">
                             <mat-option value="ABC">ABC</mat-option>
                         </mat-select>
                         <mat-hint
@@ -27,8 +27,8 @@
                     </mat-form-field>
                 </div>
                 <div class="col-3">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-select #dropdown formControlName="chalanNo" placeholder="Select chalan no">
+                    <mat-form-field appearance="outline" class="w-100 m-t-10">
+                        <mat-select #dropdown formControlName="chalanNo" placeholder="Enter chalan no">
                             <mat-option value="ABC">ABC</mat-option>
                         </mat-select>
                         <mat-hint
@@ -39,25 +39,29 @@
                     </mat-form-field>
                 </div>
                 <div class="col-3">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <input matInput [matDatepicker]="Date" formControlName="date" placeholder="Invoice date" />
+                    <mat-form-field appearance="outline" class="w-100 m-t-10">
+                        <input matInput [matDatepicker]="Date" formControlName="date"
+                            placeholder="Enter Invoice date"/>
                         <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
                         <mat-datepicker #Date></mat-datepicker>
                     </mat-form-field>
                 </div>
                 <div class="col-3">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <input type="number" matInput required formControlName="invoiceNo" placeholder="Invoice no" />
+                    <mat-form-field appearance="outline" class="w-100 m-t-10">
+                        <mat-label>Invoice No</mat-label>
+                        <input type="number" matInput required formControlName="invoiceNo"
+                            placeholder="Enter invoice no"/>
                         <mat-hint
                             *ngIf="invoiceForm.get('invoiceNo')?.hasError('required') && invoiceForm.get('invoiceNo')?.touched"
                             class="error-message error-color">
-                            invoice no is required
+                            Invoice no is required
                         </mat-hint>
                     </mat-form-field>
                 </div>
                 <div class="col-3">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <input type="text" matInput required formControlName="cgst" placeholder="Select C.G.S.T" />
+                    <mat-form-field appearance="outline" class="w-100 m-t-10">
+                        <mat-label>C.G.S.T</mat-label>
+                        <input type="text" matInput required formControlName="cgst" placeholder="Enter C.G.S.T"/>
                         <mat-hint
                             *ngIf="invoiceForm.get('cgst')?.hasError('required') && invoiceForm.get('cgst')?.touched"
                             class="error-message error-color">
@@ -66,8 +70,9 @@
                     </mat-form-field>
                 </div>
                 <div class="col-3">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <input type="text" matInput required formControlName="sgst" placeholder="Select S.G.S.T" />
+                    <mat-form-field appearance="outline" class="w-100 m-t-10">
+                        <mat-label>S.G.S.T</mat-label>
+                        <input type="text" matInput required formControlName="sgst" placeholder="Enter S.G.S.T"/>
                         <mat-hint
                             *ngIf="invoiceForm.get('sgst')?.hasError('required') && invoiceForm.get('sgst')?.touched"
                             class="error-message error-color">
@@ -76,13 +81,14 @@
                     </mat-form-field>
                 </div>
                 <div class="col-2">
-                    <mat-form-field appearance="outline" class="w-100">
+                    <mat-form-field appearance="outline" class="w-100 m-t-10">
+                        <mat-label>Discount Ratio</mat-label>
                         <input type="number" matInput required formControlName="discountRatio"
-                            placeholder="Discount ratio (%)" />
+                            placeholder="Discount ratio (%)"/>
                         <mat-hint
                             *ngIf="invoiceForm.get('discountRatio')?.hasError('required') && invoiceForm.get('discountRatio')?.touched"
                             class="error-message error-color">
-                            discount is required
+                            Discount is required
                         </mat-hint>
                     </mat-form-field>
                 </div>
@@ -100,7 +106,7 @@
 <mat-card class="cardWithShadow">
     <mat-card-content class="p-24">
         <div class="table-responsive">
-            <table mat-table [dataSource]="khataListdataSource" class="w-100">
+            <table mat-table [dataSource]="khataListdataSource" class="w-100 m-t-10">
                 <ng-container matColumnDef="#">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
                     <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>

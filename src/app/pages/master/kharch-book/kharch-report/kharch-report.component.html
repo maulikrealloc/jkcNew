@@ -2,16 +2,17 @@
     <mat-card-content class="p-24">
         <div class="row justify-content-between">
             <div class="col-5">
-                <mat-form-field appearance="outline" class="w-100 hide-hint">
-                    <input matInput placeholder="Search order" />
+                <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
+                    <mat-label>Order</mat-label>
+                    <input matInput placeholder="Search Order"/>
                     <mat-icon matSuffix>
                         <i-tabler name="search" class="icon-20"></i-tabler>
                     </mat-icon>
                 </mat-form-field>
             </div>
             <div class="col-5">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Order Date</mat-label>
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Enter Order Date</mat-label>
                     <mat-date-range-input [rangePicker]="picker">
                         <input matStartDate placeholder="Start date">
                         <input matEndDate placeholder="End date">
@@ -41,15 +42,15 @@
     <mat-card-content class="p-24">
         <div style="align-items: baseline;" class="row">
             <div class="col-4">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-select #dropdown placeholder="Select a unit">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-select #dropdown placeholder="Enter a unit">
                         <mat-option value="ABC">ABC</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-4 ">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-select #dropdown placeholder="Select a kharch">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-select #dropdown placeholder="Enter a kharch">
                         <mat-option value="ABC">ABC</mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -60,7 +61,7 @@
         </div>
 
         <div class="table-responsive">
-            <table mat-table [dataSource]="khataListdataSource" class="w-100">
+            <table mat-table [dataSource]="khataListdataSource" class="w-100 m-t-10">
                 <ng-container matColumnDef="#">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
                     <td mat-cell *matCellDef="let element">{{ element.id }}</td>

@@ -3,8 +3,8 @@
   <form [formGroup]="kharchForm">
     <div class="row">
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-select formControlName="unit" placeholder="Select unit">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-select formControlName="unit" placeholder="Enter unit">
             <mat-option value="abc">abc</mat-option>
           </mat-select>
           <mat-hint *ngIf="kharchForm.get('unit')?.hasError('required') && kharchForm.get('unit')?.touched"
@@ -14,8 +14,8 @@
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-select formControlName="kharch" placeholder="Select kharch">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-select formControlName="kharch" placeholder="Enter kharch">
             <mat-option value="abc">abc</mat-option>
           </mat-select>
           <mat-hint *ngIf="kharchForm.get('kharch')?.hasError('required') && kharchForm.get('kharch')?.touched"
@@ -25,8 +25,8 @@
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Date" />
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Enter Date"/>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           <mat-hint *ngIf="kharchForm.get('date')?.hasError('required') && kharchForm.get('date')?.touched"
@@ -36,21 +36,24 @@
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <input type="text" matInput placeholder="Dec" formControlName="dec" />
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Dec</mat-label>
+          <input type="text" matInput placeholder="Enter dec" formControlName="dec"/>
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <input type="number" matInput placeholder="Chalan no" formControlName="chalanNo" />
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Chalan No</mat-label>
+          <input type="number" matInput placeholder="Enter chalan no" formControlName="chalanNo"/>
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <input type="number" matInput required placeholder="Amount" formControlName="amount" />
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Amount</mat-label>
+          <input type="number" matInput required placeholder="Enter amount" formControlName="amount"/>
           <mat-hint *ngIf="kharchForm.get('amount')?.hasError('required') && kharchForm.get('amount')?.touched"
             class="error-message error-color">
-            amount is required
+            Amount is required
           </mat-hint>
         </mat-form-field>
       </div>

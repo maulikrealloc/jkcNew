@@ -3,49 +3,55 @@
   <form [formGroup]="khatuForm">
     <div class="row">
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Name</mat-label>
           <input type="text" matInput required formControlName="name" placeholder="Name" />
           <mat-hint *ngIf="khatuForm.get('name')?.hasError('required') && khatuForm.get('name')?.touched"
             class="error-message color">
-            name is required
+            Name is required
           </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Owner Name</mat-label>
           <input type="text" matInput required formControlName="ownerName" placeholder="Owner name" />
           <mat-hint *ngIf="khatuForm.get('ownerName')?.hasError('required') && khatuForm.get('ownerName')?.touched"
             class="error-message color">
-            owner name is required
+            Owner name is required
           </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Address</mat-label>
           <input type="text" matInput required formControlName="address" placeholder="Address" />
           <mat-hint *ngIf="khatuForm.get('address')?.hasError('required') && khatuForm.get('address')?.touched"
             class="error-message color">
-            address is required
+            Address is required
           </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Mobile No</mat-label>
           <input type="number" matInput onKeyPress="if(this.value.length==10) return false;" required
             formControlName="mobileNo" placeholder="Mobile no" />
           <mat-hint *ngIf="khatuForm.get('mobileNo')?.hasError('required') && khatuForm.get('mobileNo')?.touched"
             class="error-message color">
-            mobile no is required
+            Mobile no is required
           </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Pan</mat-label>
           <input type="text" matInput formControlName="pan" placeholder="Pan" />
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Gst</mat-label>
           <input type="text" matInput formControlName="gst" placeholder="Gst" />
         </mat-form-field>
       </div>

@@ -4,11 +4,12 @@
             <div class="row">
                 <div class="col-4">
                     <mat-form-field appearance="outline" class="w-100">
-                        <input type="text" matInput required formControlName="name" placeholder="Enter Name" />
+                        <mat-label>Name</mat-label>
+                        <input type="text" matInput required formControlName="name" placeholder="Enter name" />
                         <mat-hint
                             *ngIf="kharchForm.get('name')?.hasError('required') && kharchForm.get('name')?.touched"
                             class="error-message error-color">
-                            name is required
+                            Name is required
                         </mat-hint>
                     </mat-form-field>
                 </div>

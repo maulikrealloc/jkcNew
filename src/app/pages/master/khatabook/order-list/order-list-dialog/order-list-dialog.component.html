@@ -4,28 +4,28 @@
         <div class="row">
             <div class="col-6">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-select #dropdown formControlName="party" placeholder="Select party">
+                    <mat-select #dropdown formControlName="party" placeholder="Enter party">
                         <mat-option value="abc">abc</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-6">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-select #dropdown formControlName="order" placeholder="Select order">
+                    <mat-select #dropdown formControlName="order" placeholder="Enter order">
                         <mat-option value="ABC">ABC</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-6">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-select #dropdown formControlName="khata" placeholder="Select khata">
+                    <mat-select #dropdown formControlName="khata" placeholder="Enter khata">
                         <mat-option value="ABC">ABC</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-6">
                 <mat-form-field appearance="outline" class="w-100">
-                    <input matInput [matDatepicker]="date" formControlName="date" placeholder="Select date" />
+                    <input matInput [matDatepicker]="date" formControlName="date" placeholder="Enter date"/>
                     <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
                     <mat-datepicker #date></mat-datepicker>
                 </mat-form-field>

@@ -19,27 +19,27 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Order',
-    iconName: 'mail',
+    iconName: 'truck-delivery',
     route: '/master/order',
   },
   {
     displayName: 'Chalan',
-    iconName: 'mail',
+    iconName: 'circle-plus',
     route: '/master/chalan',
   },
   {
     displayName: 'Chalan List',
-    iconName: 'mail',
+    iconName: 'list-check',
     route: '/master/chalanlist',
   },
   {
     displayName: 'Invoice',
-    iconName: 'mail',
+    iconName: 'circle-plus',
     route: '/master/invoice',
   },
   {
     displayName: 'Invoice List',
-    iconName: 'mail',
+    iconName: 'list-check',
     route: '/master/invoicelist',
   },
   {
@@ -68,12 +68,12 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Bonus List',
-    iconName: 'mail',
+    iconName: 'clipboard-list',
     route: '/master/bonuslist',
   },
   {
     displayName: 'Ex.Machine Salary List',
-    iconName: 'mail',
+    iconName: 'coin-rupee',
     route: '/master/machinesalarylist',
   },
 

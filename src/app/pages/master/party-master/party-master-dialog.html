@@ -3,17 +3,19 @@
   <form [formGroup]="partyForm">
     <div class="row">
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <input type="text" matInput required formControlName="partyName" placeholder="Party Name" />
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Party Name</mat-label>
+          <input type="text" matInput required formControlName="partyName" placeholder="Enter Party name" />
           <mat-hint *ngIf="partyForm.get('partyName')?.hasError('required') && partyForm.get('partyName')?.touched"
             class="error-message error-color">
-            party name is required
+            Party name is required
           </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <input type="text" matInput required formControlName="FirmAddress" placeholder="Party firm address" />
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Firm Address</mat-label>
+          <input type="text" matInput required formControlName="FirmAddress" placeholder="Enter party firm address" />
           <mat-hint *ngIf="partyForm.get('FirmAddress')?.hasError('required') && partyForm.get('FirmAddress')?.touched"
             class="error-message error-color">
             firm address is required
@@ -22,29 +24,33 @@
       </div>
 
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <input type="text" matInput formControlName="partyGSTIN" placeholder="Party GSTIN" />
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Party GSTIN</mat-label>
+          <input type="text" matInput formControlName="partyGSTIN" placeholder="Enter party GSTIN" />
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <input type="text" matInput required formControlName="chalanNoSeries" placeholder="Chalan no series" />
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Chalan No Series</mat-label>
+          <input type="text" matInput required formControlName="chalanNoSeries" placeholder="Enter chalan no series" />
           <mat-hint
             *ngIf="partyForm.get('chalanNoSeries')?.hasError('required') && partyForm.get('chalanNoSeries')?.touched"
             class="error-message error-color">
-            chalan no series is required
+            Chalan no series is required
           </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <input type="text" matInput formControlName="partyPanNo" placeholder="Party pan no" />
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Party Pan No</mat-label>
+          <input type="text" matInput formControlName="partyPanNo" placeholder="Enter Party Pan No" />
         </mat-form-field>
       </div>
       <div class="col-6">
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Party Mobile</mat-label>
           <input type="number" matInput onKeyPress="if(this.value.length==10) return false;"
-            formControlName="partyMobile" placeholder="Party mobile" />
+            formControlName="partyMobile" placeholder="Enter Party Mobile"/>
         </mat-form-field>
       </div>
     </div>

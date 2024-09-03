@@ -5,7 +5,7 @@
                 <mat-card-content class="p-24">
                     <div style="align-items: baseline;">
                         <div>
-                            <mat-form-field appearance="outline" class="w-100">
+                            <mat-form-field appearance="outline" class="w-100 m-t-10">
                                 <mat-select #dropdown formControlName="firm" placeholder="Select firm">
                                     <mat-option value="ABC">ABC</mat-option>
                                 </mat-select>
@@ -17,7 +17,7 @@
                             </mat-form-field>
                         </div>
                         <div>
-                            <mat-form-field appearance="outline" class="w-100">
+                            <mat-form-field appearance="outline" class="w-100 m-t-10">
                                 <mat-select #dropdown formControlName="party" placeholder="Select party">
                                     <mat-option value="ABC">ABC</mat-option>
                                 </mat-select>
@@ -29,7 +29,7 @@
                             </mat-form-field>
                         </div>
                         <div>
-                            <mat-form-field appearance="outline" class="w-100">
+                            <mat-form-field appearance="outline" class="w-100 m-t-10">
                                 <input matInput [matDatepicker]="chalanDate" formControlName="date"
                                     placeholder="Chalan date" />
                                 <mat-datepicker-toggle matSuffix [for]="chalanDate"></mat-datepicker-toggle>
@@ -37,13 +37,14 @@
                             </mat-form-field>
                         </div>
                         <div>
-                            <mat-form-field appearance="outline" class="w-100">
+                            <mat-form-field appearance="outline" class="w-100 m-t-10">
+                                <mat-label>Party Order</mat-label>
                                 <input type="text" matInput required formControlName="partyOrder"
                                     placeholder="Party order" />
                                 <mat-hint
                                     *ngIf="chalanForm.get('partyOrder')?.hasError('required') && chalanForm.get('partyOrder')?.touched"
                                     class="error-message error-color">
-                                    party order is required
+                                    Party order is required
                                 </mat-hint>
                             </mat-form-field>
                         </div>
@@ -56,57 +57,63 @@
                 <mat-card-content class="p-24">
                     <div style="align-items: baseline;" class="row">
                         <div class="col-6">
-                            <mat-form-field appearance="outline" class="w-100">
+                            <mat-form-field appearance="outline" class="w-100 m-t-10">
+                                <mat-label>Product Name</mat-label>
                                 <input type="text" matInput required formControlName="productName"
-                                    placeholder="Product name" />
+                                    placeholder="Enter product name" />
                                 <mat-hint
                                     *ngIf="chalanForm.get('productName')?.hasError('required') && chalanForm.get('productName')?.touched"
                                     class="error-message error-color">
-                                    name is required
+                                    Name is required
                                 </mat-hint>
                             </mat-form-field>
                         </div>
                         <div class="col-6">
-                            <mat-form-field appearance="outline" class="w-100">
+                            <mat-form-field appearance="outline" class="w-100 m-t-10">
+                                <mat-label>Sr No</mat-label>
                                 <input type="number" matInput formControlName="srNo" placeholder="Sr no" />
                             </mat-form-field>
                         </div>
                         <div class="col-6">
-                            <mat-form-field appearance="outline" class="w-100">
+                            <mat-form-field appearance="outline" class="w-100 m-t-10">
+                                <mat-label>Quantity</mat-label>
                                 <input type="number" matInput required formControlName="quantity"
-                                    placeholder="Quantity" />
+                                    placeholder="Enter quantity" />
                                 <mat-hint
                                     *ngIf="chalanForm.get('quantity')?.hasError('required') && chalanForm.get('quantity')?.touched"
                                     class="error-message error-color">
-                                    quantity is required
+                                    Quantity is required
                                 </mat-hint>
                             </mat-form-field>
                         </div>
                         <div class="col-6">
-                            <mat-form-field appearance="outline" class="w-100">
+                            <mat-form-field appearance="outline" class="w-100 m-t-10">
+                                <mat-label>Total Amount</mat-label>
                                 <input type="number" matInput formControlName="totalAmount"
                                     placeholder="Total amount" />
                             </mat-form-field>
                         </div>
                         <div class="col-6">
-                            <mat-form-field appearance="outline" class="w-100">
+                            <mat-form-field appearance="outline" class="w-100 m-t-10">
+                                <mat-label>Product Price</mat-label>
                                 <input type="number" matInput required formControlName="productPrice"
-                                    placeholder="Product price" />
+                                    placeholder="Enter product price" />
                                 <mat-hint
                                     *ngIf="chalanForm.get('productPrice')?.hasError('required') && chalanForm.get('productPrice')?.touched"
                                     class="error-message error-color">
-                                    price is required
+                                    Price is required
                                 </mat-hint>
                             </mat-form-field>
                         </div>
                         <div class="col-6">
-                            <mat-form-field appearance="outline" class="w-100">
+                            <mat-form-field appearance="outline" class="w-100 m-t-10">
+                                <mat-label>Chalan No</mat-label>
                                 <input type="number" matInput required formControlName="chalanNo"
-                                    placeholder="Chalan no" />
+                                    placeholder="Enter chalan no" />
                                 <mat-hint
                                     *ngIf="chalanForm.get('chalanNo')?.hasError('required') && chalanForm.get('chalanNo')?.touched"
                                     class="error-message error-color">
-                                    chalan no is required
+                                    Chalan no is required
                                 </mat-hint>
                             </mat-form-field>
                         </div>
@@ -134,7 +141,7 @@
 <mat-card class="cardWithShadow">
     <mat-card-content class="p-24">
         <div class="table-responsive">
-            <table mat-table [dataSource]="khataListdataSource" class="w-100">
+            <table mat-table [dataSource]="khataListdataSource" class="w-100 m-t-10">
                 <ng-container matColumnDef="#">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
                     <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>

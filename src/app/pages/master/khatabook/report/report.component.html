@@ -3,8 +3,8 @@
         <div style="align-items: baseline;" class="row">
             <div class="col-3">
                 <mat-form-field appearance="outline" class="w-100 hide-hint">
-                    <mat-label>Report</mat-label>
-                    <input matInput placeholder="Search Report" />
+                    <mat-label>Search Report</mat-label>
+                    <input matInput placeholder="Search report"/>
                     <mat-icon matSuffix>
                         <i-tabler name="search" class="icon-20"></i-tabler>
                     </mat-icon>
@@ -12,7 +12,7 @@
             </div>
             <div class="col-4">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Enter a date</mat-label>
+                    <mat-label>Enter Date</mat-label>
                     <mat-date-range-input [rangePicker]="picker">
                         <input matStartDate placeholder="Start date">
                         <input matEndDate placeholder="End date">
@@ -23,6 +23,7 @@
             </div>
             <div class="col-3">
                 <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Party</mat-label>
                     <mat-select #dropdown placeholder="Enter a party">
                         <mat-option value="ABC">ABC</mat-option>
                     </mat-select>

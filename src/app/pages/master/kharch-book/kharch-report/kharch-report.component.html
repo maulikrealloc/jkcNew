@@ -4,7 +4,7 @@
             <div class="col-5">
                 <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
                     <mat-label>Order</mat-label>
-                    <input matInput placeholder="Search Order"/>
+                    <input matInput placeholder="Search order"/>
                     <mat-icon matSuffix>
                         <i-tabler name="search" class="icon-20"></i-tabler>
                     </mat-icon>
@@ -12,7 +12,7 @@
             </div>
             <div class="col-5">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Enter Order Date</mat-label>
+                    <mat-label>Select Order Date</mat-label>
                     <mat-date-range-input [rangePicker]="picker">
                         <input matStartDate placeholder="Start date">
                         <input matEndDate placeholder="End date">
@@ -43,14 +43,16 @@
         <div style="align-items: baseline;" class="row">
             <div class="col-4">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-select #dropdown placeholder="Enter a unit">
+                    <mat-label>Select Unit</mat-label>
+                    <mat-select #dropdown placeholder="Select unit">
                         <mat-option value="ABC">ABC</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-4 ">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-select #dropdown placeholder="Enter a kharch">
+                    <mat-label>Select Kharch</mat-label>
+                    <mat-select #dropdown placeholder="Select kharch">
                         <mat-option value="ABC">ABC</mat-option>
                     </mat-select>
                 </mat-form-field>

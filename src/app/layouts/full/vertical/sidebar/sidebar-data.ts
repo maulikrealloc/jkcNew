@@ -129,7 +129,7 @@ export const navItems: NavItem[] = [
     route: '/master/khatamaster',
   },
   {
-    displayName: 'Row Material',
+    displayName: 'Raw Material',
     iconName: 'mail',
     route: '/master/rowmaterial',
   },

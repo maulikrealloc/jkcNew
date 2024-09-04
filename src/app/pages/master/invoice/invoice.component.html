@@ -4,44 +4,48 @@
             <div style="align-items: baseline;" class="row">
                 <div class="col-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
-                        <mat-select #dropdown formControlName="firm" placeholder="Enter firm">
+                        <mat-label>Select Firm</mat-label>
+                        <mat-select #dropdown formControlName="firm" placeholder="Select firm">
                             <mat-option value="ABC">ABC</mat-option>
                         </mat-select>
                         <mat-hint
                             *ngIf="invoiceForm.get('firm')?.hasError('required') && invoiceForm.get('firm')?.touched"
                             class="error-message error-color">
-                            firm is required
+                            Firm is required
                         </mat-hint>
                     </mat-form-field>
                 </div>
                 <div class="col-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
-                        <mat-select #dropdown formControlName="party" placeholder="Enter party">
+                        <mat-label>Select Party</mat-label>
+                        <mat-select #dropdown formControlName="party" placeholder="Select party">
                             <mat-option value="ABC">ABC</mat-option>
                         </mat-select>
                         <mat-hint
                             *ngIf="invoiceForm.get('party')?.hasError('required') && invoiceForm.get('party')?.touched"
                             class="error-message error-color">
-                            party is required
+                            Party is required
                         </mat-hint>
                     </mat-form-field>
                 </div>
                 <div class="col-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
+                        <mat-label>Chalan no</mat-label>
                         <mat-select #dropdown formControlName="chalanNo" placeholder="Enter chalan no">
                             <mat-option value="ABC">ABC</mat-option>
                         </mat-select>
                         <mat-hint
                             *ngIf="invoiceForm.get('chalanNo')?.hasError('required') && invoiceForm.get('chalanNo')?.touched"
                             class="error-message error-color">
-                            chalan no is required
+                            Chalan no is required
                         </mat-hint>
                     </mat-form-field>
                 </div>
                 <div class="col-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
+                        <mat-label>Select Invoice Date</mat-label>
                         <input matInput [matDatepicker]="Date" formControlName="date"
-                            placeholder="Enter Invoice date"/>
+                            placeholder="Enter invoice date"/>
                         <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
                         <mat-datepicker #Date></mat-datepicker>
                     </mat-form-field>
@@ -84,7 +88,7 @@
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Discount Ratio</mat-label>
                         <input type="number" matInput required formControlName="discountRatio"
-                            placeholder="Discount ratio (%)"/>
+                            placeholder="Enter discount ratio (%)"/>
                         <mat-hint
                             *ngIf="invoiceForm.get('discountRatio')?.hasError('required') && invoiceForm.get('discountRatio')?.touched"
                             class="error-message error-color">

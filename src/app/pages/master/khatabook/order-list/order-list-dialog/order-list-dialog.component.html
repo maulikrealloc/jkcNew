@@ -3,29 +3,33 @@
     <form [formGroup]="orderForm">
         <div class="row">
             <div class="col-6">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-select #dropdown formControlName="party" placeholder="Enter party">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Select Party</mat-label>
+                    <mat-select #dropdown formControlName="party" placeholder="Select party">
                         <mat-option value="abc">abc</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-6">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-select #dropdown formControlName="order" placeholder="Enter order">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Select Order</mat-label>
+                    <mat-select #dropdown formControlName="order" placeholder="Select order">
                         <mat-option value="ABC">ABC</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-6">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-select #dropdown formControlName="khata" placeholder="Enter khata">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Select Khata</mat-label>
+                    <mat-select #dropdown formControlName="khata" placeholder="Select khata">
                         <mat-option value="ABC">ABC</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-6">
-                <mat-form-field appearance="outline" class="w-100">
-                    <input matInput [matDatepicker]="date" formControlName="date" placeholder="Enter date"/>
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Select Date</mat-label>
+                    <input matInput [matDatepicker]="date" formControlName="date" placeholder="Select date"/>
                     <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
                     <mat-datepicker #date></mat-datepicker>
                 </mat-form-field>

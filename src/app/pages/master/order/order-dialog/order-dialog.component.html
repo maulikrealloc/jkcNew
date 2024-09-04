@@ -4,7 +4,8 @@
     <div class="row">
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
-          <mat-select #dropdown formControlName="party" placeholder="Enter Party">
+      <mat-label>Party List</mat-label>
+          <mat-select #dropdown formControlName="party" placeholder="Select party">
             <mat-option value="abc">abc</mat-option>
           </mat-select>
           <mat-hint *ngIf="orderForm.get('party')?.hasError('required') && orderForm.get('party')?.touched"
@@ -15,7 +16,8 @@
       </div>
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
-          <mat-select #dropdown formControlName="designNo" placeholder="Enter Design No">
+      <mat-label>Design No</mat-label>
+          <mat-select #dropdown formControlName="designNo" placeholder="Select design no">
             <mat-option value="ABC">ABC</mat-option>
           </mat-select>
           <mat-hint *ngIf="orderForm.get('designNo')?.hasError('required') && orderForm.get('designNo')?.touched"
@@ -26,8 +28,8 @@
       </div>
       <div class="col-4">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
-          <mat-label>Party Order</mat-label>
-          <input type="text" matInput required formControlName="partyOrder" placeholder="Enter Party Order" />
+          <mat-label>P-Order</mat-label>
+          <input type="text" matInput required formControlName="partyOrder" placeholder="Enter party order"/>
           <mat-hint *ngIf="orderForm.get('partyOrder')?.hasError('required') && orderForm.get('partyOrder')?.touched"
             class="error-message error-color">
             Party order is required
@@ -36,7 +38,8 @@
       </div>
       <div class="col-4">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
-          <input matInput [matDatepicker]="orderDate" formControlName="orderDate" placeholder="Order Date" />
+          <mat-label>Select Order Date</mat-label>
+          <input matInput [matDatepicker]="orderDate" formControlName="orderDate" placeholder="Order date"/>
           <mat-datepicker-toggle matSuffix [for]="orderDate"></mat-datepicker-toggle>
           <mat-datepicker #orderDate></mat-datepicker>
           <mat-hint *ngIf="orderForm.get('orderDate')?.hasError('required') && orderForm.get('orderDate')?.touched"
@@ -47,7 +50,8 @@
       </div>
       <div class="col-4">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
-          <input matInput [matDatepicker]="deliveryDate" formControlName="deliveryDate" placeholder="Delivery Date" />
+          <mat-label>Select Delivery Date</mat-label>
+          <input matInput [matDatepicker]="deliveryDate" formControlName="deliveryDate" placeholder="Delivery date"/>
           <mat-datepicker-toggle matSuffix [for]="deliveryDate"></mat-datepicker-toggle>
           <mat-datepicker #deliveryDate></mat-datepicker>
           <mat-hint
@@ -62,7 +66,7 @@
           <div class="col-4">
             <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Name</mat-label>
-              <input type="text" matInput required formControlName="productName" placeholder="Enter name" />
+              <input type="text" matInput required formControlName="productName" placeholder="Enter name"/>
               <mat-hint *ngIf="itme.get('productName')?.hasError('required') && itme.get('productName')?.touched"
                 class="error-message error-color">
                 Name is required
@@ -72,7 +76,7 @@
           <div class="col-4">
             <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Quantity</mat-label>
-              <input type="number" matInput required formControlName="productQuantity" placeholder="Enter quantity" />
+              <input type="number" matInput required formControlName="productQuantity" placeholder="Enter quantity"/>
               <mat-hint
                 *ngIf="itme.get('productQuantity')?.hasError('required') && itme.get('productQuantity')?.touched"
                 class="error-message error-color">
@@ -83,7 +87,7 @@
           <div class="col-3">
             <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Price</mat-label>
-              <input type="number" matInput required formControlName="productPrice" placeholder="Enter price" />
+              <input type="number" matInput required formControlName="productPrice" placeholder="Enter price"/>
               <mat-hint *ngIf="itme.get('productPrice')?.hasError('required') && itme.get('productPrice')?.touched"
                 class="error-message error-color">
                 Price is required

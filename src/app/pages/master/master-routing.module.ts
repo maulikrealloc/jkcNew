@@ -223,10 +223,10 @@ export const MasterRoutes: Routes = [
         path: 'rowmaterial',
         component: RowMaterialComponent,
         data: {
-          title: 'Row Material',
+          title: 'Raw Material',
           urls: [
             { title: 'Master', url: '/master/rowmaterial' },
-            { title: 'Row Material' },
+            { title: 'Raw Material' },
           ],
         },
       },

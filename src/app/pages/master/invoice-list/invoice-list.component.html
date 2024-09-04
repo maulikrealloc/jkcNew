@@ -4,7 +4,7 @@
             <div class="col-3">
                 <mat-form-field appearance="outline" class="w-100 hide-hint">
                     <mat-label>Invoice List</mat-label>
-                    <input matInput placeholder="Search Invoice List" />
+                    <input matInput placeholder="Search invoice list"/>
                     <mat-icon matSuffix>
                         <i-tabler name="search" class="icon-20"></i-tabler>
                     </mat-icon>
@@ -12,6 +12,7 @@
             </div>
             <div class="col-3">
                 <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Select</mat-label>
                     <mat-select #dropdown placeholder="Select">
                         <mat-option value="ABC">ABC</mat-option>
                     </mat-select>
@@ -19,7 +20,7 @@
             </div>
             <div class="col-3">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Enter Invoice Date</mat-label>
+                    <mat-label>Select Invoice Date</mat-label>
                     <mat-date-range-input [rangePicker]="picker">
                         <input matStartDate placeholder="Start date">
                         <input matEndDate placeholder="End date">

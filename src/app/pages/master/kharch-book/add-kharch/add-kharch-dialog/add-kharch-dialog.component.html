@@ -4,34 +4,37 @@
     <div class="row">
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
-          <mat-select formControlName="unit" placeholder="Enter unit">
+          <mat-label>Select Unit</mat-label>
+          <mat-select formControlName="unit" placeholder="Select unit">
             <mat-option value="abc">abc</mat-option>
           </mat-select>
           <mat-hint *ngIf="kharchForm.get('unit')?.hasError('required') && kharchForm.get('unit')?.touched"
             class="error-message error-color">
-            unit is required
+            Unit is required
           </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
-          <mat-select formControlName="kharch" placeholder="Enter kharch">
+          <mat-label>Select Kharch</mat-label>
+          <mat-select formControlName="kharch" placeholder="Select kharch">
             <mat-option value="abc">abc</mat-option>
           </mat-select>
           <mat-hint *ngIf="kharchForm.get('kharch')?.hasError('required') && kharchForm.get('kharch')?.touched"
             class="error-message error-color">
-            kharch is required
+            Kharch is required
           </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
-          <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Enter Date"/>
+          <mat-label>Select Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Enter date"/>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           <mat-hint *ngIf="kharchForm.get('date')?.hasError('required') && kharchForm.get('date')?.touched"
             class="error-message error-color">
-            date is required
+            Date is required
           </mat-hint>
         </mat-form-field>
       </div>

@@ -44,7 +44,7 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Kharch Book',
-    iconName: 'mail',
+    iconName: 'report-money',
     route: '/master/kharchbook',
   },
   {
@@ -58,7 +58,7 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Withdrawal List',
-    iconName: 'mail',
+    iconName: 'receipt-2',
     route: '/master/withdrawallist',
   },
    {
@@ -93,7 +93,7 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Design Master',
-    iconName: 'folder',
+    iconName: 'brush',
     route: '/master/designmaster',
   },
   {
@@ -109,7 +109,7 @@ export const navItems: NavItem[] = [
 
   {
     displayName: 'Employee',
-    iconName: 'mail',
+    iconName: 'users',
     route: '/master/employee',
   },
   

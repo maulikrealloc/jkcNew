@@ -32,8 +32,8 @@ export class AbsentDialogComponent {
   buildForm() {
     this.absentForm = this.fb.group({
       employeeList: [''],
-      day: new Date(),
-      date: ['']
+      day: [''],
+      date: new Date()
     })
   }
 

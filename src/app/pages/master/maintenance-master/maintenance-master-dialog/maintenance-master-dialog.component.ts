@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { designMasterDialogComponent } from '../../design-master/design-master.component';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-maintenance-master-dialog',
@@ -35,8 +35,8 @@ export class MaintenanceMasterDialogComponent implements OnInit {
 
   formBuild() {
     this.maintenanceForm = this.fb.group({
-      name: [''],
-      value: ['']
+      name: ['', Validators.required],
+      value: ['', Validators.required]
     })
   }
 

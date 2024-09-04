@@ -2,7 +2,7 @@
 <mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate">
   <form [formGroup]="employeeForm">
     <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Enter First Name</mat-label>
+      <mat-label>First Name</mat-label>
       <input type="text" matInput required placeholder="Enter first name" formControlName="firstName" />
       <mat-hint *ngIf="employeeForm.get('firstName')?.hasError('required') && employeeForm.get('firstName')?.touched"
         class="error-message error-color">
@@ -10,11 +10,11 @@
       </mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Enter Last Name</mat-label>
+      <mat-label>Last Name</mat-label>
       <input type="text" matInput placeholder="Enter last name" formControlName="lastName" />
     </mat-form-field>
     <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Enter Salary</mat-label>
+      <mat-label>Salary</mat-label>
       <input type="number" matInput required placeholder="Enter salary" formControlName="salary" />
       <mat-hint *ngIf="employeeForm.get('salary')?.hasError('required') && employeeForm.get('salary')?.touched"
         class="error-message error-color">
@@ -22,7 +22,7 @@
       </mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Enter Mobile No</mat-label>
+      <mat-label>Mobile No</mat-label>
       <input type="number" onKeyPress="if(this.value.length==10) return false;" matInput placeholder="Enter mobile no"
         formControlName="mobileNo" />
     </mat-form-field>

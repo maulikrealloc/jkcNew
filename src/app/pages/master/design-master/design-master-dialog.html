@@ -2,24 +2,27 @@
 <mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate">
   <form [formGroup]="designForm">
     <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Select A Party</mat-label>
-      <mat-select #dropdown formControlName="partyName" placeholder="Select a party">
+      <mat-label>Select Party</mat-label>
+      <mat-select #dropdown formControlName="partyName" placeholder="Select party">
         <mat-option value="ABC">ABC</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Enter Design No</mat-label>
-      <input type="text" matInput required formControlName="designNo" placeholder="Enter design no" />
+      <mat-label>Design No</mat-label>
+      <input type="text" matInput  formControlName="designNo" placeholder="Enter design no" />
     </mat-form-field>
     <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Enter Design Price</mat-label>
-      <input type="number" matInput required formControlName="designPrice" placeholder="Enter design price" />
+      <mat-label>Design Price</mat-label>
+      <input type="number" matInput  formControlName="designPrice" placeholder="Enter design price" />
     </mat-form-field>
-    <div class="d-flex align-items-center m-b-16">
-      <img class="mat-card-avatar" [src]="local_data.imagePath" class="rounded-circle" width="50" />
-      <button mat-flat-button color="primary" class="m-l-16 input-file-button">
-        <input type="file" (change)="selectFile($event)" #fileInput />
-      </button>
+    <div>
+      <mat-label>Image Upload</mat-label>
+      <div class="d-flex align-items-center m-b-16">
+        <img class="mat-card-avatar" [src]="local_data.imagePath" class="rounded-circle" width="50" />
+        <button mat-flat-button color="primary" class="m-l-16 input-file-button">
+          <input type="file" (change)="selectFile($event)" #fileInput />
+        </button>
+      </div>
     </div>
     <mat-divider></mat-divider>
     <mat-dialog-actions class="p-24">

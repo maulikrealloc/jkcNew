@@ -2,19 +2,19 @@
 <mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate">
   <form [formGroup]="companyForm">
     <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Enter Account Holder Name</mat-label>
-      <input type="text" matInput required placeholder="Enter account holder name" formControlName="accountName" />
+      <mat-label>Account Holder Name</mat-label>
+      <input type="text" matInput  placeholder="Enter account holder name" formControlName="accountName" />
     </mat-form-field>
     <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Enter Bank Name</mat-label>
-      <input type="text" matInput required placeholder="Enter bank name" formControlName="bankName" />
+      <mat-label>Bank Name</mat-label>
+      <input type="text" matInput  placeholder="Enter bank name" formControlName="bankName" />
     </mat-form-field>
     <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Enter Opening Balance</mat-label>
-      <input type="number" matInput required placeholder="Enter opening balance" formControlName="openingBalance" />
+      <mat-label>Opening Balance</mat-label>
+      <input type="number" matInput  placeholder="Enter opening balance" formControlName="openingBalance" />
     </mat-form-field>
     <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Select Date</mat-label>
+      <mat-label>Date</mat-label>
       <input matInput [matDatepicker]="date" formControlName="date" placeholder="Select date" />
       <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
       <mat-datepicker #date></mat-datepicker>

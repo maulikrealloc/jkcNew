@@ -4,6 +4,14 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { WithdrawalListDialogComponent } from './withdrawal-list-dialog/withdrawal-list-dialog.component';
 
+
+export interface withdrawalData {
+  id: number,
+  employeeList: string,
+  amount: string,
+  date: string,
+}
+
 @Component({
   selector: 'app-withdrawal-list',
   templateUrl: './withdrawal-list.component.html',
@@ -22,7 +30,7 @@ export class WithdrawalListComponent {
     {
       id: 1,
       employeeList: 'Jay',
-      amount: 565,
+      amount: '565',
       date: '04/01/2021',
     }
   ];
@@ -45,32 +53,44 @@ export class WithdrawalListComponent {
       data: obj,
     });
     dialogRef.afterClosed().subscribe((result) => {
-      console.log("result==============>>>", result);
-      if (result?.event === 'Add') {
-        this.employees.push({
-          id: result.data.length + 1,
-          employeeList: result.data.employeeList,
-          amount: result.data.amount,
-          date: result.data.date
-        })
-        this.dataSource = new MatTableDataSource(this.employees);
+      if (result.event === 'Add') {
+        this.addwithdrawalData(result.data);
+      } else if (result.event === 'Edit') {
+        this.updatewithdrawalData(result.data);
+      } else if (result.event === 'Delete') {
+        this.deletewithdrawalData(result.data);
       }
-      if (result?.event === 'Edit') {
-        this.employees.forEach((element: any) => {
-          if (element.id === result.data.id) {
-            element.id = result.data.id
-            element.employeeList = result.data.employeeList
-            element.amount = result.data.amount
-            element.date = result.data.date
-          }
-        });
-        this.dataSource = new MatTableDataSource(this.employees);
-      }
-      if (result?.event === 'Delete') {
-        const allEmployeesData = this.employees
-        this.employees = allEmployeesData.filter((id: any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.employees);
-      }
-    });
+    })
   }
+
+    addwithdrawalData(row_obj: withdrawalData){
+      this.employees.push({
+              id: this.employees.length + 1,
+              employeeList: row_obj.employeeList,
+              amount: row_obj.amount,
+              date: row_obj.date
+            })
+            this.dataSource = new MatTableDataSource(this.employees);
+            console.log('=====>>>> addwithdrawalData <<<<=====',this.employees);    
+    }
+
+    updatewithdrawalData(row_obj: withdrawalData){
+      this.dataSource.data = this.dataSource.data.filter((value: any) =>{
+        if (value.id === row_obj.id) {
+          value.employeeList = row_obj.employeeList,
+          value.amount = row_obj.amount,
+          value.date = row_obj.date
+        }
+        return true;
+      })
+      this.dataSource = new MatTableDataSource(this.employees);
+    }
+
+    deletewithdrawalData(row_obj: withdrawalData){
+      const allEmployeesData = this.employees
+    this.employees = allEmployeesData.filter((id:any) => id.id !== row_obj.id)
+    this.dataSource = new MatTableDataSource(this.employees)
+    }
+
+   
 }

@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, Inject, OnInit, Optional, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -111,9 +111,9 @@ export class designMasterDialogComponent implements OnInit {
 
   formBuild() {
     this.designForm = this.fb.group({
-      partyName: [''],
-      designNo: [''],
-      designPrice: ['']
+      partyName: ['',Validators.required],
+      designNo: ['',Validators.required],
+      designPrice: ['',Validators.required]
     })
   }
 

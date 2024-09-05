@@ -31,7 +31,7 @@ export class KharchMasterComponent {
 
   buildForm() {
     this.kharchForm = this.fb.group({
-      name: ['', Validators.required],
+      name: ['',[Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
       unitKharch: ['', Validators.required]
     })
   }

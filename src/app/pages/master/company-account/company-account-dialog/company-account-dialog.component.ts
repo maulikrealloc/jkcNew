@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { designMasterDialogComponent } from '../../design-master/design-master.component';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-company-account-dialog',
@@ -34,9 +34,9 @@ export class CompanyAccountDialogComponent implements OnInit {
 
   formBuild() {
     this.companyForm = this.fb.group({
-      accountName: [''],
-      bankName: [''],
-      openingBalance: [''],
+      accountName: ['',Validators.required],
+      bankName: ['',Validators.required],
+      openingBalance: ['',Validators.required],
       date: new Date(),
     })
   }

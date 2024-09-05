@@ -10,6 +10,10 @@
             class="error-message error-color">
             Header is required
           </mat-hint>
+          <mat-hint *ngIf="firmForm.get('header')?.hasError('pattern') && firmForm.get('header')?.touched"
+          class="error-message error-color">
+          Please enter a valid name
+          </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
@@ -19,6 +23,10 @@
             *ngIf="firmForm.get('subHeader')?.hasError('required') && firmForm.get('subHeader')?.touched"
             class="error-message error-color">
             Sub header is required
+          </mat-hint>
+          <mat-hint *ngIf="firmForm.get('subHeader')?.hasError('pattern') && firmForm.get('subHeader')?.touched"
+          class="error-message error-color">
+          Please enter a valid name
           </mat-hint>
         </mat-form-field>
       </div>
@@ -59,6 +67,10 @@
             class="error-message error-color">
             Mobile no is required
           </mat-hint>
+          <mat-hint *ngIf="firmForm.get('mobileNO')?.hasError('pattern') && firmForm.get('mobileNO')?.touched"
+            class="error-message error-color">
+            Please enter a valid 10-digit
+          </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
@@ -66,6 +78,14 @@
           <mat-label>Personal Mobile No</mat-label>
           <input type="number" matInput onKeyPress="if(this.value.length==10) return false;"
             formControlName="personalMobileNo" placeholder="Enter personal mobile no" />
+            <mat-hint *ngIf="firmForm.get('personalMobileNo')?.hasError('required') && firmForm.get('personalMobileNo')?.touched"
+            class="error-message error-color">
+            Mobile no is required
+          </mat-hint>
+          <mat-hint *ngIf="firmForm.get('personalMobileNo')?.hasError('pattern') && firmForm.get('personalMobileNo')?.touched"
+            class="error-message error-color">
+            Please enter a valid 10-digit
+          </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
@@ -90,7 +110,7 @@
     <mat-divider></mat-divider>
     <mat-dialog-actions class="p-24">
       <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-      <button mat-flat-button [mat-dialog-close]="true" [disabled]="" color="primary" (click)="doAction();">
+      <button mat-flat-button [mat-dialog-close]="true" [disabled]="firmForm.invalid" color="primary" (click)="doAction();">
         {{action}}
       </button>
     </mat-dialog-actions>

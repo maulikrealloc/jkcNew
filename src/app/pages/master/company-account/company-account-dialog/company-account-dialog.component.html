@@ -22,7 +22,7 @@
     <mat-divider></mat-divider>
     <mat-dialog-actions class="p-24">
       <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-      <button mat-flat-button [mat-dialog-close]="true" [disabled]="" color="primary" (click)="doAction();">
+      <button mat-flat-button [mat-dialog-close]="true" [disabled]="companyForm.invalid" color="primary" (click)="doAction();">
         {{action}}
       </button>
     </mat-dialog-actions>

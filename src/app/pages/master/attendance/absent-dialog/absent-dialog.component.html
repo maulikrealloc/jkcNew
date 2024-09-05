@@ -6,10 +6,18 @@
       <mat-select #dropdown formControlName="employeeList" placeholder="Enter employee">
         <mat-option value="abc">abc</mat-option>
       </mat-select>
+      <mat-hint *ngIf="absentForm.get('employeeList')?.hasError('required') && absentForm.get('employeeList')?.touched"
+      class="error-message error-color">
+      Employee list is required
+    </mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Day</mat-label>
       <input type="number" matInput placeholder="Enter day" formControlName="day" />
+      <mat-hint *ngIf="absentForm.get('day')?.hasError('required') && absentForm.get('day')?.touched"
+        class="error-message error-color">
+       Day is required
+      </mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Date</mat-label>
@@ -20,7 +28,7 @@
     <mat-divider></mat-divider>
     <mat-dialog-actions class="p-24">
       <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-      <button mat-flat-button [mat-dialog-close]="true" [disabled]="" color="primary" (click)="doAction();">
+      <button mat-flat-button [mat-dialog-close]="true" [disabled]="absentForm.invalid" color="primary" (click)="doAction();">
         {{action}}
       </button>
     </mat-dialog-actions>

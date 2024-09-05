@@ -150,14 +150,14 @@ export class firmMasterDialogComponent implements OnInit {
 
   formBuild() {
     this.firmForm = this.fb.group({
-      header: ['', Validators.required],
-      subHeader: [''],
-      address: [''],
+      header: ['', [Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
+      subHeader: ['',[Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
+      address: ['',Validators.required],
       GSTNo: [''],
       gstPercentage: [''],
       panNo: [''],
-      mobileNO: ['', [Validators.pattern("[0-9]{0-10}")]],
-      personalMobileNo: ['', [Validators.pattern("[0-9]{0-10}")]],
+      mobileNO: ['',[Validators.required,Validators.pattern('^[0-9]{10}$')]],
+      personalMobileNo: ['',[Validators.required,Validators.pattern('^[0-9]{10}$')]],
       bankName: [''],
       ifscCode: [''],
       bankAccountNo: [''],

@@ -35,7 +35,7 @@ export class MaintenanceMasterDialogComponent implements OnInit {
 
   formBuild() {
     this.maintenanceForm = this.fb.group({
-      name: ['', Validators.required],
+      name: ['',[Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
       value: ['', Validators.required]
     })
   }

@@ -11,6 +11,11 @@
                             class="error-message error-color">
                             Name is required
                         </mat-hint>
+                        <mat-hint
+                            *ngIf="kharchForm.get('name')?.hasError('pattern') && kharchForm.get('name')?.touched"
+                            class="error-message error-color">
+                            Please enter a valid name
+                        </mat-hint>
                     </mat-form-field>
                 </div>
                 <div class="col-4 selectUnit">
@@ -28,7 +33,8 @@
                     </div>
                 </div>
                 <div class="col-4 ">
-                    <button class="button" (click)="submit()" mat-flat-button color="primary">
+                    <button class="button" (click)="submit()" mat-flat-button color="primary"
+                        [disabled]="kharchForm.invalid">
                         Submit
                     </button>
                 </div>

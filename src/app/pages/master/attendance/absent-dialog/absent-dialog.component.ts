@@ -1,5 +1,5 @@
 import { Component, Inject, Optional } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -31,8 +31,8 @@ export class AbsentDialogComponent {
   }
   buildForm() {
     this.absentForm = this.fb.group({
-      employeeList: [''],
-      day: [''],
+      employeeList: ['',Validators.required],
+      day: ['',Validators.required],
       date: new Date()
     })
   }

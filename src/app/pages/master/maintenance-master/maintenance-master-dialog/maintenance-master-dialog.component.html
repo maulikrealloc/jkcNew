@@ -8,12 +8,15 @@
       class="error-message error-color">
       Name is required
     </mat-hint>
+    <mat-hint *ngIf="maintenanceForm.get('name')?.hasError('pattern') && maintenanceForm.get('name')?.touched"
+    class="error-message error-color">
+    Please enter a valid name
+    </mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Value</mat-label>
-      <input type="text" matInput  formControlName="value" placeholder="Enter value" />
-      <mat-hint
-        *ngIf="maintenanceForm.get('value')?.hasError('required') && maintenanceForm.get('value')?.touched"
+      <input type="number" matInput  formControlName="value" placeholder="Enter value" />
+      <mat-hint *ngIf="maintenanceForm.get('value')?.hasError('required') && maintenanceForm.get('value')?.touched"
       class="error-message error-color">
       Value is required
       </mat-hint>
@@ -21,7 +24,7 @@
     <mat-divider></mat-divider>
     <mat-dialog-actions class="p-24">
       <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-      <button mat-flat-button [mat-dialog-close]="true" [disabled]="" color="primary" (click)="doAction();">
+      <button mat-flat-button [mat-dialog-close]="true" [disabled]="maintenanceForm.invalid" color="primary" (click)="doAction();">
         {{action}}
       </button>
     </mat-dialog-actions>

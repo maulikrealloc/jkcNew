@@ -8,10 +8,22 @@
         class="error-message error-color">
         First name is required
       </mat-hint>
+      <mat-hint *ngIf="employeeForm.get('firstName')?.hasError('pattern') && employeeForm.get('firstName')?.touched"
+          class="error-message error-color">
+          Please enter a valid name
+          </mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Last Name</mat-label>
       <input type="text" matInput placeholder="Enter last name" formControlName="lastName" />
+      <mat-hint *ngIf="employeeForm.get('lastName')?.hasError('required') && employeeForm.get('lastName')?.touched"
+        class="error-message error-color">
+        First name is required
+      </mat-hint>
+      <mat-hint *ngIf="employeeForm.get('lastName')?.hasError('pattern') && employeeForm.get('lastName')?.touched"
+          class="error-message error-color">
+          Please enter a valid name
+          </mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Salary</mat-label>
@@ -25,11 +37,19 @@
       <mat-label>Mobile No</mat-label>
       <input type="number" onKeyPress="if(this.value.length==10) return false;" matInput placeholder="Enter mobile no"
         formControlName="mobileNo" />
+        <mat-hint *ngIf="employeeForm.get('mobileNo')?.hasError('required') && employeeForm.get('mobileNo')?.touched"
+        class="error-message error-color">
+        Mobile no is required
+      </mat-hint>
+      <mat-hint *ngIf="employeeForm.get('mobileNo')?.hasError('pattern') && employeeForm.get('mobileNo')?.touched"
+        class="error-message error-color">
+        Please enter a valid 10-digit
+      </mat-hint>
     </mat-form-field>
     <mat-divider></mat-divider>
     <mat-dialog-actions class="p-24">
       <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-      <button mat-flat-button [mat-dialog-close]="true" [disabled]="" color="primary" (click)="doAction();">
+      <button mat-flat-button [mat-dialog-close]="true" [disabled]="employeeForm.invalid" color="primary" (click)="doAction();">
         {{action}}
       </button>
     </mat-dialog-actions>

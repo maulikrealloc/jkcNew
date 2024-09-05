@@ -1,5 +1,5 @@
 import { Component, Inject, Optional } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BonusListDialogComponent } from '../../bonus-list/bonus-list-dialog/bonus-list-dialog.component';
 
@@ -32,8 +32,8 @@ export class MachineSalaryDialogComponent {
   }
   buildForm() {
     this.machineSalaryForm = this.fb.group({
-      employeeList: [''],
-      amount: [''],
+      employeeList: ['',Validators.required],
+      amount: ['',Validators.required],
       date: new Date(),
     })
   }

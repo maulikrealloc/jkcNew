@@ -6,10 +6,18 @@
       <mat-select #dropdown formControlName="employeeList" placeholder="Enter employee">
         <mat-option value="abc">abc</mat-option>
       </mat-select>
+      <mat-hint *ngIf="withdrawalForm.get('employeeList')?.hasError('required') && withdrawalForm.get('employeeList')?.touched"
+                class="error-message error-color">
+        Employee list is required
+      </mat-hint>
     </mat-form-field>
     <mat-form-field class="w-100 m-t-10" appearance="outline">
       <mat-label>Amount</mat-label>
-      <input type="email" matInput formControlName="amount" placeholder="Enter amount">
+      <input type="number" matInput formControlName="amount" placeholder="Enter amount">
+      <mat-hint *ngIf="withdrawalForm.get('amount')?.hasError('required') && withdrawalForm.get('amount')?.touched"
+            class="error-message error-color">
+            Amount no is required
+          </mat-hint>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
@@ -21,7 +29,7 @@
     <mat-divider></mat-divider>
     <mat-dialog-actions class="p-24">
       <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-      <button mat-flat-button [mat-dialog-close]="true" [disabled]="" color="primary" (click)="doAction();">
+      <button mat-flat-button [mat-dialog-close]="true" [disabled]="withdrawalForm.invalid" color="primary" (click)="doAction();">
         {{action}}
       </button>
     </mat-dialog-actions>

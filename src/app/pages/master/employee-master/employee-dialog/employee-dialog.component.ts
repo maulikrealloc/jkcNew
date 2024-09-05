@@ -37,10 +37,10 @@ export class EmployeeDialogComponent {
 
   formBuild() {
     this.employeeForm = this.fb.group({
-      firstName: [''],
-      lastName: [''],
-      salary: [''],
-      mobileNo: ['']
+      firstName: ['',[Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
+      lastName: ['',[Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
+      salary: ['',Validators.required],
+      mobileNo: ['',[Validators.required,Validators.pattern('^[0-9]{10}$')]]
     })
   }
 

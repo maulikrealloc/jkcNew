@@ -35,12 +35,12 @@ export class KhataMasterDialogComponent {
 
   formBuild() {
     this.khatuForm = this.fb.group({
-      name: ['', Validators.required],
-      ownerName: ['', Validators.required],
-      address: ['', Validators.required],
-      mobileNo: ['', [Validators.pattern("[0-9]{0-10}")]],
-      pan: [''],
-      gst: [''],
+      name: ['',[Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
+      ownerName: ['',[Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
+      address: ['',Validators.required],
+      mobileNo: ['',[Validators.required,Validators.pattern('^[0-9]{10}$')]],
+      pan: ['',Validators.required],
+      gst: ['',Validators.required],
     })
   }
 

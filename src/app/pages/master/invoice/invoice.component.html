@@ -98,7 +98,7 @@
                 </div>
                 <div class="col-1">
                     <div class="d-flex align-items-center justify-content-end">
-                        <button mat-flat-button color="primary" (click)="invoiceview()">
+                        <button mat-flat-button color="primary" [disabled]="invoiceForm.invalid" (click)="invoiceview()">
                             View
                         </button>
                     </div>

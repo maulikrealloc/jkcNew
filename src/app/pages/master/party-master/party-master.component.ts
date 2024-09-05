@@ -119,12 +119,12 @@ export class partyMasterDialogComponent implements OnInit {
 
   buildForm() {
     this.partyForm = this.fb.group({
-      partyName: [''],
+      partyName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
       FirmAddress: [''],
       partyGSTIN: [''],
       chalanNoSeries: [''],
       partyPanNo: [''],
-      partyMobile: ['', Validators.pattern("[0-9]{0-10}")],
+      partyMobile: [''],
     })
   }
 

@@ -37,7 +37,7 @@ export class OrderDialogComponent implements OnInit {
     this.orderForm = this.fb.group({
       party: ['', Validators.required],
       designNo: ['', Validators.required],
-      partyOrder: ['', Validators.required],
+      partyOrder: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
       orderDate: [new Date(), Validators.required],
       deliveryDate: [new Date(), Validators.required],
       products: this.fb.array([])
@@ -50,7 +50,7 @@ export class OrderDialogComponent implements OnInit {
 
   addProduct() {
     this.getProductsFormArry().push(this.fb.group({
-      productName: ['', Validators.required],
+      productName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
       productPrice: ['', Validators.required],
       productQuantity: ['', Validators.required],
     }))

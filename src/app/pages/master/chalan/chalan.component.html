@@ -49,6 +49,11 @@
                                     class="error-message error-color">
                                     Party order is required
                                 </mat-hint>
+                                <mat-hint
+                                *ngIf="chalanForm.get('partyOrder')?.hasError('pattern') && chalanForm.get('partyOrder')?.touched"
+                                class="error-message error-color">
+                                Please enter valid name
+                            </mat-hint>
                             </mat-form-field>
                         </div>
                     </div>
@@ -68,6 +73,11 @@
                                     *ngIf="chalanForm.get('productName')?.hasError('required') && chalanForm.get('productName')?.touched"
                                     class="error-message error-color">
                                     Name is required
+                                </mat-hint>
+                                <mat-hint
+                                    *ngIf="chalanForm.get('productName')?.hasError('pattern') && chalanForm.get('productName')?.touched"
+                                    class="error-message error-color">
+                                    Please enter valid name
                                 </mat-hint>
                             </mat-form-field>
                         </div>
@@ -122,14 +132,14 @@
                         </div>
                         <div class="col-6">
                             <div class="d-flex align-items-center justify-content-end">
-                                <button (click)="doAction()" mat-flat-button color="primary">
+                                <button (click)="doAction()" [disabled]="chalanForm.invalid" mat-flat-button color="primary">
                                     Add
                                 </button>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="d-flex align-items-center justify-content-end">
-                                <button style="margin-right: 80%;" mat-flat-button color="primary">
+                                <button style="margin-right: 80%;" [disabled]="chalanForm.invalid" mat-flat-button color="primary">
                                     View
                                 </button>
                             </div>

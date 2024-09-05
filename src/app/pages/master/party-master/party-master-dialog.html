@@ -10,6 +10,11 @@
             class="error-message error-color">
             Party name is required
           </mat-hint>
+          <mat-hint
+          *ngIf="partyForm.get('partyName')?.hasError('pattern') && partyForm.get('partyName')?.touched"
+          class="error-message error-color">
+          Please enter valid name
+      </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
@@ -57,7 +62,7 @@
     <mat-divider></mat-divider>
     <mat-dialog-actions class="p-24">
       <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-      <button mat-flat-button [mat-dialog-close]="true" [disabled]="" color="primary" (click)="doAction();">
+      <button mat-flat-button [mat-dialog-close]="true" [disabled]="partyForm.invalid" color="primary" (click)="doAction();">
         {{action}}
       </button>
     </mat-dialog-actions>

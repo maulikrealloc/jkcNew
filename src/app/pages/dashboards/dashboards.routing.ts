@@ -3,12 +3,11 @@ import { Routes } from '@angular/router';
 // dashboards
 import { AppDashboard1Component } from './dashboard1/dashboard1.component';
 import { AppDashboard2Component } from './dashboard2/dashboard2.component';
-import { FullComponent } from 'src/app/layouts/full/full.component';
 
 export const DashboardsRoutes: Routes = [
   {
     path: '',
-    component: FullComponent,
+    component: AppDashboard1Component,
     children: [
       {
         path: 'dashboard1',

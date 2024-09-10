@@ -52,6 +52,16 @@ interface quicklinks {
   imports: [RouterModule, CommonModule, NgScrollbarModule, TablerIconsModule, MaterialModule],
   templateUrl: './header.component.html',
   encapsulation: ViewEncapsulation.None,
+  styles: [
+    `
+    #google_translate_element .goog-te-gadget > span {
+      display: none !important;
+  }
+  #google_translate_element .goog-te-gadget {
+      font-size: 0 !important;
+  }
+`
+  ]
 })
 export class HeaderComponent {
   
@@ -100,8 +110,17 @@ export class HeaderComponent {
     private translate: TranslateService
   ) {
     translate.setDefaultLang('en');
+    this.loadGoogleTranslate();
   }
 
+  loadGoogleTranslate() {
+    const googleTranslateScript = document.createElement('script');
+    googleTranslateScript.type = 'text/javascript';
+    googleTranslateScript.src =
+      '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    document.body.appendChild(googleTranslateScript);
+  }
+  
   openDialog() {
     const dialogRef = this.dialog.open(AppSearchDialogComponent);
 

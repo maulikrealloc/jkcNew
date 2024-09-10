@@ -20,6 +20,7 @@ export class OrderComponent {
     'designNo',
     'p-Order',
     'chalanNo',
+    'status',
     'action',
   ];
   employees: any = [
@@ -30,7 +31,8 @@ export class OrderComponent {
       deliveryDate: "2024-04-22T18:30:00.000Z",
       designNo: "ABC",
       partyOrder: "dff",
-      chalanNo: "",
+      chalanNo: "-",
+      status: "",
       products: [
         {
           productName: "ffff",

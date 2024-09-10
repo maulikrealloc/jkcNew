@@ -14,19 +14,27 @@ export class OrderListComponent {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   orderColumns: string[] = [
     '#',
-    'selectparty',
-    'selectorder',
-    'selectkhata',
-    'selectdate',
+    'partyName',
+    'khataName',
+    'partyOrder',
+    'itemName',
+    'price',
+    'quantity',
+    'total',
+    'status',
     'action'
   ];
   order: any = [
     {
       id: 1,
-      party: 'Demo',
-      order: 'Test',
-      khata: 'adcc',
-      date: '02/21/2024'
+      partyName: 'Demo',
+      khataName: 'Test',
+      partyOrder: 'adcc',
+      itemName: 'adcc',
+      price: 'adcc',
+      quantity: 'adcc',
+      total: 'adcc',
+      status: 'adcc',
     }
   ];
 

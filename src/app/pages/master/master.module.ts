@@ -50,6 +50,14 @@ import { WithdrawalListDialogComponent } from './withdrawal-list/withdrawal-list
 import { BonusListDialogComponent } from './bonus-list/bonus-list-dialog/bonus-list-dialog.component';
 import { MachineSalaryDialogComponent } from './machine-salary-list/machine-salary-dialog/machine-salary-dialog.component';
 import { MaintenanceMasterComponent } from './maintenance-master/maintenance-master.component';
+import { ExpensesDialogComponent } from './account/expenses/expenses-dialog/expenses-dialog.component';
+import { ExpensesmasterDialogComponent } from './account/expenses/expensesmaster-dialog/expensesmaster-dialog.component';
+import { TransferDialogComponent } from './account/income/transfer-dialog/transfer-dialog.component';
+import { IncomeDialogComponent } from './account/income/income-dialog/income-dialog.component';
+import { ExpensesDataComponent } from './account/account-report/expenses-data/expenses-data.component';
+import { IncomeDataComponent } from './account/account-report/income-data/income-data.component';
+import { PaidByDataComponent } from './account/account-report/paid-by-data/paid-by-data.component';
+import { NetProfitDataComponent } from './account/account-report/net-profit-data/net-profit-data.component';
 
 
 
@@ -98,7 +106,15 @@ import { MaintenanceMasterComponent } from './maintenance-master/maintenance-mas
     MachineSalaryListComponent,
     WithdrawalListDialogComponent,
     BonusListDialogComponent,
-    MachineSalaryDialogComponent
+    MachineSalaryDialogComponent,
+    ExpensesDialogComponent,
+    ExpensesmasterDialogComponent,
+    TransferDialogComponent,
+    IncomeDialogComponent,
+    ExpensesDataComponent,
+    IncomeDataComponent,
+    PaidByDataComponent,
+    NetProfitDataComponent
   ],
   imports: [
     CommonModule,

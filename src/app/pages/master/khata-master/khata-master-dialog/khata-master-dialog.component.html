@@ -5,35 +5,35 @@
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Name</mat-label>
-          <input type="text" matInput  formControlName="name" placeholder="Enter name"/>
+          <input type="text" matInput formControlName="name" placeholder="Enter name" />
           <mat-hint *ngIf="khatuForm.get('name')?.hasError('required') && khatuForm.get('name')?.touched"
             class="error-message error-color">
             Name is required
           </mat-hint>
           <mat-hint *ngIf="khatuForm.get('name')?.hasError('pattern') && khatuForm.get('name')?.touched"
-          class="error-message error-color">
-          Please enter a valid name
+            class="error-message error-color">
+            Please enter a valid name
           </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Owner Name</mat-label>
-          <input type="text" matInput  formControlName="ownerName" placeholder="Enter owner name"/>
+          <input type="text" matInput formControlName="ownerName" placeholder="Enter owner name" />
           <mat-hint *ngIf="khatuForm.get('ownerName')?.hasError('required') && khatuForm.get('ownerName')?.touched"
-            class="error-message color">
+            class="error-message error-color">
             Owner name is required
           </mat-hint>
           <mat-hint *ngIf="khatuForm.get('ownerName')?.hasError('pattern') && khatuForm.get('ownerName')?.touched"
-          class="error-message error-color">
-          Please enter a valid name
+            class="error-message error-color">
+            Please enter a valid name
           </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Address</mat-label>
-          <input type="text" matInput  formControlName="address" placeholder="Enter address"/>
+          <input type="text" matInput formControlName="address" placeholder="Enter address" />
           <mat-hint *ngIf="khatuForm.get('address')?.hasError('required') && khatuForm.get('address')?.touched"
             class="error-message error-color">
             Address is required
@@ -43,15 +43,15 @@
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Mobile No</mat-label>
-          <input type="number" matInput onKeyPress="if(this.value.length==10) return false;" 
-            formControlName="mobileNo" placeholder="Enter mobile no"/>
+          <input type="number" matInput onKeyPress="if(this.value.length==10) return false;" formControlName="mobileNo"
+            placeholder="Enter mobile no" />
           <mat-hint *ngIf="khatuForm.get('mobileNo')?.hasError('required') && khatuForm.get('mobileNo')?.touched"
             class="error-message error-color">
             Mobile no is required
           </mat-hint>
           <mat-hint *ngIf="khatuForm.get('mobileNo')?.hasError('pattern') && khatuForm.get('mobileNo')?.touched"
             class="error-message error-color">
-            Please enter a valid 10-digit 
+            Please enter a valid 10-digit
           </mat-hint>
 
         </mat-form-field>
@@ -65,14 +65,15 @@
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Gst</mat-label>
-          <input type="text" matInput formControlName="gst" placeholder="Enter gst"/>
+          <input type="text" matInput formControlName="gst" placeholder="Enter gst" />
         </mat-form-field>
       </div>
     </div>
     <mat-divider></mat-divider>
     <mat-dialog-actions class="p-24">
       <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-      <button mat-flat-button [mat-dialog-close]="true" [disabled]="khatuForm.invalid" color="primary" (click)="doAction();">
+      <button mat-flat-button [mat-dialog-close]="true" [disabled]="khatuForm.invalid" color="primary"
+        (click)="doAction();">
         {{action}}
       </button>
     </mat-dialog-actions>

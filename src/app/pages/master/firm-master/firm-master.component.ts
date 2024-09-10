@@ -66,7 +66,7 @@ export class FirmMasterComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
         this.employees.push({
-          id: this.generateRandomNumber(2, 15),
+          id: result.data.length + 1,
           header: result.data.header,
           subHeader: result.data.subHeader,
           GSTNo: result.data.GSTNo,
@@ -83,7 +83,6 @@ export class FirmMasterComponent {
       }
       if (result?.event === 'Edit') {
         this.employees.forEach((element: any) => {
-
           if (element.id === result.data.id) {
             element.id = result.data.id
             element.header = result.data.header

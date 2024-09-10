@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, Inject, OnInit, Optional, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -20,7 +19,7 @@ export class DesignMasterComponent {
     'partyName',
     'action',
   ];
-  employees: any = [
+  designMaster: any = [
     {
       id: 1,
       designNo: 56,
@@ -29,7 +28,8 @@ export class DesignMasterComponent {
       imagePath: 'assets/images/profile/user-5.jpg',
     }
   ];
-  dataSource = new MatTableDataSource(this.employees);
+
+  dataSource = new MatTableDataSource(this.designMaster);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog) { }
@@ -45,17 +45,17 @@ export class DesignMasterComponent {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
-        this.employees.push({
+        this.designMaster.push({
           id: result.data.length + 1,
           designNo: result.data.designNo,
           designPrice: result.data.designPrice,
           partyName: result.data.partyName,
           imagePath: result.data.imagePath,
         })
-        this.dataSource = new MatTableDataSource(this.employees);
+        this.dataSource = new MatTableDataSource(this.designMaster);
       }
       if (result?.event === 'Edit') {
-        this.employees.forEach((element: any) => {
+        this.designMaster.forEach((element: any) => {
           if (element.id === result.data.id) {
             element.id = result.data.id
             element.designNo = result.data.designNo
@@ -64,16 +64,15 @@ export class DesignMasterComponent {
             element.imagePath = result.data.imagePath
           }
         });
-        this.dataSource = new MatTableDataSource(this.employees);
+        this.dataSource = new MatTableDataSource(this.designMaster);
       }
       if (result?.event === 'Delete') {
-        const allEmployeesData = this.employees
-        this.employees = allEmployeesData.filter((id: any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.employees);
+        const allEmployeesData = this.designMaster
+        this.designMaster = allEmployeesData.filter((id: any) => id.id !== result.data.id)
+        this.dataSource = new MatTableDataSource(this.designMaster);
       }
     });
   }
-
 }
 
 @Component({

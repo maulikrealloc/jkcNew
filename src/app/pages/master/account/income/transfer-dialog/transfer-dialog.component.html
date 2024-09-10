@@ -1,0 +1,43 @@
+<h2 mat-dialog-title class="m-b-24">Transfer</h2>
+<mat-dialog-content class="mat-typography" style="max-width: 600px" >
+    <form [formGroup]="transferForm">
+
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+            <mat-label>From</mat-label>
+            <mat-select #dropdown formControlName="from" placeholder="Select from">
+              <mat-option value="abc">abc</mat-option>
+            </mat-select>
+            <mat-hint *ngIf="transferForm.get('from')?.hasError('required') && transferForm.get('from')?.touched"
+            class="error-message error-color">
+            Select from is required
+          </mat-hint>
+          </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+            <mat-label>To</mat-label>
+            <mat-select #dropdown formControlName="to" placeholder="Select to">
+              <mat-option value="abc">abc</mat-option>
+            </mat-select>
+            <mat-hint *ngIf="transferForm.get('to')?.hasError('required') && transferForm.get('to')?.touched"
+            class="error-message error-color">
+            Select to is required
+          </mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100 m-t-10">
+            <mat-label>Amount</mat-label>
+            <input type="number" matInput placeholder="Enter amount" formControlName="amount" />
+            <mat-hint *ngIf="transferForm.get('amount')?.hasError('required') && transferForm.get('amount')?.touched"
+              class="error-message error-color">
+              Amount is required
+            </mat-hint>
+          </mat-form-field>
+          <mat-divider></mat-divider>
+          <mat-dialog-actions class="p-24">
+            <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
+            <button mat-flat-button [mat-dialog-close]="true" [disabled]="transferForm.invalid" color="primary" >
+                Add
+            </button>
+          </mat-dialog-actions>
+    </form>
+</mat-dialog-content>

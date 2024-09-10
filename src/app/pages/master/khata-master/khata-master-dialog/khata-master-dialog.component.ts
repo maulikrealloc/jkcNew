@@ -39,8 +39,8 @@ export class KhataMasterDialogComponent {
       ownerName: ['',[Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
       address: ['',Validators.required],
       mobileNo: ['',[Validators.required,Validators.pattern('^[0-9]{10}$')]],
-      pan: ['',Validators.required],
-      gst: ['',Validators.required],
+      pan: [''],
+      gst: [''],
     })
   }
 

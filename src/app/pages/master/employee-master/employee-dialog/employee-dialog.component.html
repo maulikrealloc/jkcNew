@@ -18,7 +18,7 @@
       <input type="text" matInput placeholder="Enter last name" formControlName="lastName" />
       <mat-hint *ngIf="employeeForm.get('lastName')?.hasError('required') && employeeForm.get('lastName')?.touched"
         class="error-message error-color">
-        First name is required
+        Last name is required
       </mat-hint>
       <mat-hint *ngIf="employeeForm.get('lastName')?.hasError('pattern') && employeeForm.get('lastName')?.touched"
           class="error-message error-color">

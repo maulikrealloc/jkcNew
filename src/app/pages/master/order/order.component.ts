@@ -62,7 +62,7 @@ export class OrderComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
         this.employees.push({
-          id: result.data.length + 1,
+          id: this.employees.length + 1,
           party: result.data.party,
           designNo: result.data.designNo,
           partyOrder: result.data.partyOrder,

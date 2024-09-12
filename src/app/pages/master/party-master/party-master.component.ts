@@ -14,6 +14,7 @@ export class PartyMasterComponent implements AfterViewInit {
   displayedColumns: string[] = [
     'srno',
     'PartyName',
+    // 'LastName',
     'PartyGSTIN',
     'ChalanNo',
     'Address',
@@ -25,7 +26,8 @@ export class PartyMasterComponent implements AfterViewInit {
   employees: any = [
     {
       id: 1,
-      partyName: 'Johnathan Deo',
+      firstName: 'Johnathan',
+      // lastName: 'Deo',
       partyGSTIN: 'gstin343',
       chalanNoSeries: '22',
       FirmAddress: 'Royal plaza Simada Gam Surat',
@@ -51,8 +53,9 @@ export class PartyMasterComponent implements AfterViewInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
         this.employees.push({
-          id: result.data.length + 1,
-          partyName: result.data.partyName,
+          id: this.employees.length + 1,
+          firstName: result.data.firstName,
+          lastName: result.data.lastName,
           partyGSTIN: result.data.partyGSTIN,
           chalanNoSeries: result.data.chalanNoSeries,
           FirmAddress: result.data.FirmAddress,
@@ -60,12 +63,15 @@ export class PartyMasterComponent implements AfterViewInit {
           partyMobile: result.data.partyMobile
         })
         this.dataSource = new MatTableDataSource(this.employees);
+        console.log(this.employees);
+        
       }
       if (result?.event === 'Edit') {
         this.employees.forEach((element: any) => {
           if (element.id === result.data.id) {
             element.id = result.data.id
-            element.partyName = result.data.partyName
+            element.firstName = result.data.firstName
+            element.lastName = result.data.lastName
             element.partyGSTIN = result.data.partyGSTIN
             element.chalanNoSeries = result.data.chalanNoSeries
             element.FirmAddress = result.data.FirmAddress
@@ -108,7 +114,8 @@ export class partyMasterDialogComponent implements OnInit {
   ngOnInit(): void {
     this.buildForm()
     if (this.action === 'Edit') {
-      this.partyForm.controls['partyName'].setValue(this.local_data.partyName)
+      this.partyForm.controls['firstName'].setValue(this.local_data.firstName)
+      this.partyForm.controls['lastName'].setValue(this.local_data.lastName)
       this.partyForm.controls['FirmAddress'].setValue(this.local_data.FirmAddress)
       this.partyForm.controls['partyGSTIN'].setValue(this.local_data.partyGSTIN)
       this.partyForm.controls['chalanNoSeries'].setValue(this.local_data.chalanNoSeries)
@@ -119,7 +126,8 @@ export class partyMasterDialogComponent implements OnInit {
 
   buildForm() {
     this.partyForm = this.fb.group({
-      partyName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      firstName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      lastName: [''],
       FirmAddress: [''],
       partyGSTIN: [''],
       chalanNoSeries: [''],
@@ -131,7 +139,8 @@ export class partyMasterDialogComponent implements OnInit {
   doAction(): void {
     const payload = {
       id: this.local_data.id ? this.local_data.id : '',
-      partyName: this.partyForm.value.partyName,
+      firstName: this.partyForm.value.firstName,
+      lastName: this.partyForm.value.lastName,
       FirmAddress: this.partyForm.value.FirmAddress,
       partyGSTIN: this.partyForm.value.partyGSTIN,
       chalanNoSeries: this.partyForm.value.chalanNoSeries,

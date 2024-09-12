@@ -1,20 +1,26 @@
-<h2 mat-dialog-title class="m-b-24">{{action}} Party</h2>
+<h2 mat-dialog-title class="m-b-24 b-b-1 p-b-20">{{action}} Party</h2>
 <mat-dialog-content class="mat-typography" *ngIf="action !== 'Delete'; else elseTemplate" style="max-width: 600px">
   <form [formGroup]="partyForm">
     <div class="row">
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
-          <mat-label>Party Name</mat-label>
-          <input type="text" matInput required formControlName="partyName" placeholder="Enter party name"/>
-          <mat-hint *ngIf="partyForm.get('partyName')?.hasError('required') && partyForm.get('partyName')?.touched"
+          <mat-label>First Name</mat-label>
+          <input type="text" matInput required formControlName="firstName" placeholder="Enter first name"/>
+          <mat-hint *ngIf="partyForm.get('firstName')?.hasError('required') && partyForm.get('firstName')?.touched"
             class="error-message error-color">
-            Party name is required
+            First name is required
           </mat-hint>
           <mat-hint
-          *ngIf="partyForm.get('partyName')?.hasError('pattern') && partyForm.get('partyName')?.touched"
+          *ngIf="partyForm.get('firstName')?.hasError('pattern') && partyForm.get('firstName')?.touched"
           class="error-message error-color">
           Please enter valid name
       </mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Last Name</mat-label>
+          <input type="text" matInput formControlName="lastName" placeholder="Enter first name"/>
         </mat-form-field>
       </div>
       <div class="col-6">
@@ -27,22 +33,21 @@
           </mat-hint>
         </mat-form-field>
       </div>
-
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
-          <mat-label>Party GSTIN</mat-label>
-          <input type="text" matInput formControlName="partyGSTIN" placeholder="Enter party GSTIN"/>
+          <mat-label>Party Mobile</mat-label>
+          <input type="number" matInput required onKeyPress="if(this.value.length==10) return false;"
+            formControlName="partyMobile" placeholder="Enter party mobile"/>
+            <mat-hint *ngIf="partyForm.get('partyMobile')?.hasError('required') && partyForm.get('partyMobile')?.touched"
+            class="error-message error-color">
+            Mobile no is required
+          </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
-          <mat-label>Chalan No Series</mat-label>
-          <input type="text" matInput required formControlName="chalanNoSeries" placeholder="Enter chalan no series"/>
-          <mat-hint
-            *ngIf="partyForm.get('chalanNoSeries')?.hasError('required') && partyForm.get('chalanNoSeries')?.touched"
-            class="error-message error-color">
-            Chalan no series is required
-          </mat-hint>
+          <mat-label>Party GSTIN</mat-label>
+          <input type="text" matInput formControlName="partyGSTIN" placeholder="Enter party GSTIN"/>
         </mat-form-field>
       </div>
       <div class="col-6">
@@ -53,30 +58,34 @@
       </div>
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
-          <mat-label>Party Mobile</mat-label>
-          <input type="number" matInput onKeyPress="if(this.value.length==10) return false;"
-            formControlName="partyMobile" placeholder="Enter party mobile"/>
+          <mat-label>Chalan No Series</mat-label>
+          <input type="text" matInput formControlName="chalanNoSeries" placeholder="Enter chalan no series"/>
+          <!-- <mat-hint
+            *ngIf="partyForm.get('chalanNoSeries')?.hasError('required') && partyForm.get('chalanNoSeries')?.touched"
+            class="error-message error-color">
+            Chalan no series is required
+          </mat-hint> -->
         </mat-form-field>
       </div>
     </div>
-    <mat-divider></mat-divider>
-    <mat-dialog-actions class="p-24">
-      <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-      <button mat-flat-button [mat-dialog-close]="true" [disabled]="partyForm.invalid" color="primary" (click)="doAction();">
-        {{action}}
-      </button>
-    </mat-dialog-actions>
   </form>
 </mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions class="p-24 justify-content-end">
+  <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
+  <button mat-flat-button [mat-dialog-close]="true" [disabled]="action !== 'Delete' && partyForm.invalid" color="primary" (click)="doAction();">
+    {{action}}
+  </button>
+</mat-dialog-actions>
 <ng-template #elseTemplate>
   <div class="p-x-24">
     <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
   </div>
   <mat-divider></mat-divider>
-  <div mat-dialog-actions class="p-x-24 p-b-24 m-t-10 justify-content-end">
+  <!-- <div mat-dialog-actions class="p-x-24 p-b-24 m-t-10 justify-content-end">
     <button mat-button (click)="doAction()" mat-flat-button color="warn">
       {{action}}
     </button>
     <button mat-stroked-button color="warn" (click)="closeDialog()" class="m-l-8">Cancel</button>
-  </div>
+  </div> -->
 </ng-template>

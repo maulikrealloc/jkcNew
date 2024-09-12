@@ -57,7 +57,7 @@ export class AddKharchComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
         this.khataList.push({
-          id: result.data.length + 1,
+          id: this.khataList.length + 1,
           unit: result.data.unit,
           kharch: result.data.kharch,
           dec: result.data.dec,

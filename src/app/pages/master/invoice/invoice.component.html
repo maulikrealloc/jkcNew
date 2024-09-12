@@ -89,7 +89,7 @@
                         <mat-label>Discount Ratio</mat-label>
                         <input type="number" matInput required formControlName="discountRatio"
                             placeholder="Enter discount ratio (%)"/>
-                        <mat-hint
+                        <mat-hint style="min-width: 100%;"
                             *ngIf="invoiceForm.get('discountRatio')?.hasError('required') && invoiceForm.get('discountRatio')?.touched"
                             class="error-message error-color">
                             Discount is required

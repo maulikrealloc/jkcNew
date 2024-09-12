@@ -36,7 +36,7 @@ export class KhataMasterComponent {
     }
   ];
 
-  khataListdataSource = new MatTableDataSource(this.khataList);
+  dataSource = new MatTableDataSource(this.khataList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog) { }
@@ -45,7 +45,7 @@ export class KhataMasterComponent {
 
 
   ngAfterViewInit(): void {
-    this.khataListdataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.paginator;
 
   }
 
@@ -58,7 +58,7 @@ export class KhataMasterComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
         this.khataList.push({
-          id: result.data.legth + 1,
+          id: this.khataList.length + 1,
           name: result.data.name,
           ownerName: result.data.ownerName,
           address: result.data.address,
@@ -66,7 +66,9 @@ export class KhataMasterComponent {
           pan: result.data.pan,
           mobileNo: result.data.mobileNo
         })
-        this.khataListdataSource = new MatTableDataSource(this.khataList);
+        this.dataSource = new MatTableDataSource(this.khataList);
+        console.log('khataList========',this.khataList);
+        
       }
       if (result?.event === 'Edit') {
         this.khataList.forEach((element: any) => {
@@ -80,12 +82,12 @@ export class KhataMasterComponent {
             element.mobileNo = result.data.mobileNo
           }
         });
-        this.khataListdataSource = new MatTableDataSource(this.khataList);
+        this.dataSource = new MatTableDataSource(this.khataList);
       }
       if (result?.event === 'Delete') {
         const allKhataListData = this.khataList
         this.khataList = allKhataListData.filter((id: any) => id.id !== result.data.id)
-        this.khataListdataSource = new MatTableDataSource(this.khataList);
+        this.dataSource = new MatTableDataSource(this.khataList);
       }
     });
   }

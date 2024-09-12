@@ -12,19 +12,20 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 })
 export class DesignMasterComponent {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
+  
   displayedColumns: string[] = [
     '#',
     'designNumber',
     'designPrice',
-    'partyName',
+    'noStiching',
     'action',
   ];
   designMaster: any = [
     {
       id: 1,
       designNo: 56,
-      designPrice: '120/-',
-      partyName: 'Party Name',
+      designPrice: 120,
+      noStiching:87,
       imagePath: 'assets/images/profile/user-5.jpg',
     }
   ];
@@ -46,10 +47,10 @@ export class DesignMasterComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
         this.designMaster.push({
-          id: result.data.length + 1,
+          id: this.designMaster.length + 1,
           designNo: result.data.designNo,
           designPrice: result.data.designPrice,
-          partyName: result.data.partyName,
+          noStiching: result.data.noStiching,
           imagePath: result.data.imagePath,
         })
         this.dataSource = new MatTableDataSource(this.designMaster);
@@ -60,7 +61,7 @@ export class DesignMasterComponent {
             element.id = result.data.id
             element.designNo = result.data.designNo
             element.designPrice = result.data.designPrice
-            element.partyName = result.data.partyName
+            element.noStiching = result.data.noStiching
             element.imagePath = result.data.imagePath
           }
         });
@@ -73,6 +74,7 @@ export class DesignMasterComponent {
       }
     });
   }
+ 
 }
 
 @Component({
@@ -102,26 +104,27 @@ export class designMasterDialogComponent implements OnInit {
   ngOnInit(): void {
     this.formBuild()
     if (this.action === 'Edit') {
-      this.designForm.controls['partyName'].setValue(this.local_data.partyName)
       this.designForm.controls['designNo'].setValue(this.local_data.designNo)
       this.designForm.controls['designPrice'].setValue(this.local_data.designPrice)
+      this.designForm.controls['noStiching'].setValue(this.local_data.noStiching)
     }
   }
 
   formBuild() {
     this.designForm = this.fb.group({
-      partyName: ['',Validators.required],
       designNo: ['',Validators.required],
-      designPrice: ['',Validators.required]
+      designPrice: ['',Validators.required],
+      noStiching: ['',Validators.required]
     })
   }
 
   doAction(): void {
     const payload = {
       id: this.local_data.id ? this.local_data.id : '',
-      partyName: this.designForm.value.partyName,
       designNo: this.designForm.value.designNo,
       designPrice: this.designForm.value.designPrice,
+      noStiching: this.designForm.value.noStiching,
+      imagePath: this.local_data.imagePath
     }
     this.dialogRef.close({ event: this.action, data: payload });
     console.log("designForm==============>>>>>>>>>>>>>>>>", payload);
@@ -134,20 +137,15 @@ export class designMasterDialogComponent implements OnInit {
 
   selectFile(event: any): void {
     if (!event.target.files[0] || event.target.files[0].length === 0) {
-      // this.msg = 'You must select an image';
       return;
     }
     const mimeType = event.target.files[0].type;
     if (mimeType.match(/image\/*/) == null) {
-      // this.msg = "Only images are supported";
       return;
     }
-    // tslint:disable-next-line - Disables all
     const reader = new FileReader();
     reader.readAsDataURL(event.target.files[0]);
-    // tslint:disable-next-line - Disables all
     reader.onload = (_event) => {
-      // tslint:disable-next-line - Disables all
       this.local_data.imagePath = reader.result;
     };
   }

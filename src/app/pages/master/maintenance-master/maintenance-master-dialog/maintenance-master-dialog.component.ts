@@ -20,8 +20,6 @@ export class MaintenanceMasterDialogComponent implements OnInit {
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
-    console.log('localData===>>', this.local_data);
-
   }
   ngOnInit(): void {
     this.formBuild()

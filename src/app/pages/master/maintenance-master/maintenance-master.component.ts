@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -9,7 +9,7 @@ import { MaintenanceMasterDialogComponent } from './maintenance-master-dialog/ma
   templateUrl: './maintenance-master.component.html',
   styleUrls: ['./maintenance-master.component.scss']
 })
-export class MaintenanceMasterComponent {
+export class MaintenanceMasterComponent implements OnInit {
 
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   displayedColumns: string[] = [
@@ -30,24 +30,26 @@ export class MaintenanceMasterComponent {
   dataSource = new MatTableDataSource(this.employees);
 
   constructor(private dialog: MatDialog) { }
-
-
+  ngOnInit(): void {
+  }
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 
   addMaintenance(action: string, obj: any) {
     obj.action = action;
-    const dialogRef = this.dialog.open(MaintenanceMasterDialogComponent, { data: obj });
+    const dialogRef = this.dialog.open(MaintenanceMasterDialogComponent, {
+      data: obj,
+    });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
         this.employees.push({
-          id: result.data.length + 1,
+          id: this.employees.length + 1,
           name: result.data.name,
           value: result.data.value,
         })
-        this.dataSource = new MatTableDataSource(this.employees);
+        this.dataSource = new MatTableDataSource(this.employees);        
       }
       if (result?.event === 'Edit') {
         this.employees.forEach((element: any) => {
@@ -65,5 +67,6 @@ export class MaintenanceMasterComponent {
         this.dataSource = new MatTableDataSource(this.employees);
       }
     });
-  }
+  } 
 }
+

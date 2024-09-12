@@ -26,7 +26,7 @@ export class WithdrawalListComponent {
     'date',
     'action',
   ];
-  employees: any = [
+  withdrawalList: any = [
     {
       id: 1,
       employeeList: 'Jay',
@@ -35,7 +35,7 @@ export class WithdrawalListComponent {
     }
   ];
 
-  dataSource = new MatTableDataSource(this.employees);
+  dataSource = new MatTableDataSource(this.withdrawalList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog) { }
@@ -54,43 +54,30 @@ export class WithdrawalListComponent {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.addwithdrawalData(result.data);
-      } else if (result.event === 'Edit') {
-        this.updatewithdrawalData(result.data);
-      } else if (result.event === 'Delete') {
-        this.deletewithdrawalData(result.data);
+        this.withdrawalList.push({
+          id: this.withdrawalList.length + 1,
+          employeeList: result.data.employeeList,
+          amount: result.data.amount,
+          date: result.data.date
+        })
+        this.dataSource = new MatTableDataSource(this.withdrawalList);
       }
-    })
-  }
-
-    addwithdrawalData(row_obj: withdrawalData){
-      this.employees.push({
-              id: this.employees.length + 1,
-              employeeList: row_obj.employeeList,
-              amount: row_obj.amount,
-              date: row_obj.date
-            })
-            this.dataSource = new MatTableDataSource(this.employees);
-            console.log('=====>>>> addwithdrawalData <<<<=====',this.employees);    
-    }
-
-    updatewithdrawalData(row_obj: withdrawalData){
-      this.dataSource.data = this.dataSource.data.filter((value: any) =>{
-        if (value.id === row_obj.id) {
-          value.employeeList = row_obj.employeeList,
-          value.amount = row_obj.amount,
-          value.date = row_obj.date
-        }
-        return true;
-      })
-      this.dataSource = new MatTableDataSource(this.employees);
-    }
-
-    deletewithdrawalData(row_obj: withdrawalData){
-      const allEmployeesData = this.employees
-    this.employees = allEmployeesData.filter((id:any) => id.id !== row_obj.id)
-    this.dataSource = new MatTableDataSource(this.employees)
-    }
-
-   
+      if (result.event === 'Edit') {
+        this.withdrawalList.forEach((element: any) => {
+          if (element.id === result.data.id) {
+            element.id = result.data.id
+            element.employeeList = result.data.employeeList
+            element.amount = result.data.amount
+            element.date = result.data.date
+          }
+        });
+        this.dataSource = new MatTableDataSource(this.withdrawalList);
+      }
+      if (result.event === 'Delete') {
+        const allEmployeesData = this.withdrawalList
+        this.withdrawalList = allEmployeesData.filter((id: any) => id.id !== result.data.id)
+        this.dataSource = new MatTableDataSource(this.withdrawalList);
+      }
+    });   
+}
 }

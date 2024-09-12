@@ -18,7 +18,7 @@ export class MachineSalaryListComponent {
     'date',
     'action',
   ];
-  employees: any = [
+  machineSalaryList: any = [
     {
       id: 1,
       employeeList: 'Deep',
@@ -27,7 +27,7 @@ export class MachineSalaryListComponent {
     }
   ];
 
-  dataSource = new MatTableDataSource(this.employees);
+  dataSource = new MatTableDataSource(this.machineSalaryList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog) { }
@@ -46,16 +46,16 @@ export class MachineSalaryListComponent {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
-        this.employees.push({
-          id: result.data.length + 1,
+        this.machineSalaryList.push({
+          id: this.machineSalaryList.length + 1,
           employeeList: result.data.employeeList,
           amount: result.data.amount,
           date: result.data.date
         })
-        this.dataSource = new MatTableDataSource(this.employees);
+        this.dataSource = new MatTableDataSource(this.machineSalaryList);
       }
       if (result?.event === 'Edit') {
-        this.employees.forEach((element: any) => {
+        this.machineSalaryList.forEach((element: any) => {
 
           if (element.id === result.data.id) {
             element.id = result.data.id
@@ -64,12 +64,12 @@ export class MachineSalaryListComponent {
             element.date = result.data.date
           }
         });
-        this.dataSource = new MatTableDataSource(this.employees);
+        this.dataSource = new MatTableDataSource(this.machineSalaryList);
       }
       if (result?.event === 'Delete') {
-        const allEmployeesData = this.employees
-        this.employees = allEmployeesData.filter((id: any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.employees);
+        const allEmployeesData = this.machineSalaryList
+        this.machineSalaryList = allEmployeesData.filter((id: any) => id.id !== result.data.id)
+        this.dataSource = new MatTableDataSource(this.machineSalaryList);
       }
     });
   }

@@ -21,13 +21,14 @@ export class FirmMasterComponent {
     'PanNo',
     'MobileNo',
     'PersonalMobileNo',
+    'email',
     'BankName',
     'BankIFSC',
     'BankAccountNo',
     'Address',
     'action',
   ];
-  employees: any = [
+  firmList: any = [
     {
       id: 1,
       header: 'Johnathan Deo',
@@ -37,6 +38,7 @@ export class FirmMasterComponent {
       panNo: 'gerwrer12000',
       mobileNO: '0987654321',
       personalMobileNo: '0987654321',
+      email:'Johnathan@gmail.com',
       bankName: 'SBI',
       ifscCode: 'vracha10e',
       bankAccountNo: 123332230,
@@ -44,7 +46,7 @@ export class FirmMasterComponent {
     }
   ];
 
-  dataSource = new MatTableDataSource(this.employees);
+  dataSource = new MatTableDataSource(this.firmList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog) { }
@@ -64,9 +66,9 @@ export class FirmMasterComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event === 'Add') {
-        this.employees.push({
-          id: result.data.length + 1,
+      if (result.event === 'Add') {
+        this.firmList.push({
+          id: this.firmList.length + 1,
           header: result.data.header,
           subHeader: result.data.subHeader,
           GSTNo: result.data.GSTNo,
@@ -74,15 +76,18 @@ export class FirmMasterComponent {
           panNo: result.data.panNo,
           mobileNO: result.data.mobileNO,
           personalMobileNo: result.data.personalMobileNo,
+          email: result.data.email,
           bankName: result.data.bankName,
           ifscCode: result.data.ifscCode,
           bankAccountNo: result.data.bankAccountNo,
           address: result.data.address
         })
-        this.dataSource = new MatTableDataSource(this.employees);
+        this.dataSource = new MatTableDataSource(this.firmList);
+        console.log('this.firmList=========>>>>>>>',this.firmList);
+        
       }
-      if (result?.event === 'Edit') {
-        this.employees.forEach((element: any) => {
+      if (result.event === 'Edit') {
+        this.firmList.forEach((element: any) => {
           if (element.id === result.data.id) {
             element.id = result.data.id
             element.header = result.data.header
@@ -92,18 +97,19 @@ export class FirmMasterComponent {
             element.panNo = result.data.panNo
             element.mobileNO = result.data.mobileNO
             element.personalMobileNo = result.data.personalMobileNo
+            element.email = result.data.email
             element.bankName = result.data.bankName
             element.ifscCode = result.data.ifscCode
             element.bankAccountNo = result.data.bankAccountNo
             element.address = result.data.address
           }
         });
-        this.dataSource = new MatTableDataSource(this.employees);
+        this.dataSource = new MatTableDataSource(this.firmList);
       }
-      if (result?.event === 'Delete') {
-        const allEmployeesData = this.employees
-        this.employees = allEmployeesData.filter((id: any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.employees);
+      if (result.event === 'Delete') {
+        const allEmployeesData = this.firmList
+        this.firmList = allEmployeesData.filter((id: any) => id.id !== result.data.id)
+        this.dataSource = new MatTableDataSource(this.firmList);
       }
     });
   }
@@ -141,6 +147,7 @@ export class firmMasterDialogComponent implements OnInit {
       this.firmForm.controls['panNo'].setValue(this.local_data.panNo)
       this.firmForm.controls['mobileNO'].setValue(this.local_data.mobileNO)
       this.firmForm.controls['personalMobileNo'].setValue(this.local_data.personalMobileNo)
+      this.firmForm.controls['email'].setValue(this.local_data.email)
       this.firmForm.controls['bankName'].setValue(this.local_data.bankName)
       this.firmForm.controls['ifscCode'].setValue(this.local_data.ifscCode)
       this.firmForm.controls['bankAccountNo'].setValue(this.local_data.bankAccountNo)
@@ -157,6 +164,7 @@ export class firmMasterDialogComponent implements OnInit {
       panNo: [''],
       mobileNO: ['',[Validators.required,Validators.pattern('^[0-9]{10}$')]],
       personalMobileNo: ['',[Validators.required,Validators.pattern('^[0-9]{10}$')]],
+      email:[''],
       bankName: [''],
       ifscCode: [''],
       bankAccountNo: [''],
@@ -174,6 +182,7 @@ export class firmMasterDialogComponent implements OnInit {
       panNo: this.firmForm.value.panNo,
       mobileNO: this.firmForm.value.mobileNO,
       personalMobileNo: this.firmForm.value.personalMobileNo,
+      email: this.firmForm.value.email,
       bankName: this.firmForm.value.bankName,
       ifscCode: this.firmForm.value.ifscCode,
       bankAccountNo: this.firmForm.value.bankAccountNo

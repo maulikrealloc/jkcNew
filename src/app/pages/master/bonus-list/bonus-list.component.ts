@@ -18,7 +18,7 @@ export class BonusListComponent {
     'date',
     'action',
   ];
-  employees: any = [
+  bonusList: any = [
     {
       id: 1,
       employeeList: 'Deep',
@@ -26,7 +26,7 @@ export class BonusListComponent {
       date: '02/08/2022',
     }
   ];
-  dataSource = new MatTableDataSource(this.employees);
+  dataSource = new MatTableDataSource(this.bonusList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog) { }
@@ -46,16 +46,16 @@ export class BonusListComponent {
       console.log("result==============>>>", result);
 
       if (result.event === 'Add') {
-        this.employees.push({
-          id: result.data.lenth + 1,
+        this.bonusList.push({
+          id: this.bonusList.length + 1,
           employeeList: result.data.employeeList,
           amount: result.data.amount,
           date: result.data.date
         })
-        this.dataSource = new MatTableDataSource(this.employees);
+        this.dataSource = new MatTableDataSource(this.bonusList);
       }
       if (result.event === 'Edit') {
-        this.employees.forEach((element: any) => {
+        this.bonusList.forEach((element: any) => {
 
           if (element.id === result.data.id) {
             element.id = result.data.id
@@ -64,12 +64,12 @@ export class BonusListComponent {
             element.date = result.data.date
           }
         });
-        this.dataSource = new MatTableDataSource(this.employees);
+        this.dataSource = new MatTableDataSource(this.bonusList);
       }
       if (result.event === 'Delete') {
-        const allEmployeesData = this.employees
-        this.employees = allEmployeesData.filter((id: any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.employees);
+        const allEmployeesData = this.bonusList
+        this.bonusList = allEmployeesData.filter((id: any) => id.id !== result.data.id)
+        this.dataSource = new MatTableDataSource(this.bonusList);
       }
     });
   }

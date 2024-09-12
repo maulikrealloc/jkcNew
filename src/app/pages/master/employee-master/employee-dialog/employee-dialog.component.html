@@ -1,69 +1,97 @@
-<h2 mat-dialog-title class="m-b-24">{{action}} Employee</h2>
+<h2 mat-dialog-title class="m-b-24 b-b-1 p-b-20"><strong>{{action}} Employee</strong></h2>
 <mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate">
   <form [formGroup]="employeeForm">
-    <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>First Name</mat-label>
-      <input type="text" matInput required placeholder="Enter first name" formControlName="firstName" />
-      <mat-hint *ngIf="employeeForm.get('firstName')?.hasError('required') && employeeForm.get('firstName')?.touched"
-        class="error-message error-color">
-        First name is required
-      </mat-hint>
-      <mat-hint *ngIf="employeeForm.get('firstName')?.hasError('pattern') && employeeForm.get('firstName')?.touched"
-          class="error-message error-color">
-          Please enter a valid name
+    <div class="row">
+      <div class="col-6">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>First Name</mat-label>
+          <input type="text" matInput  placeholder="Enter first name" formControlName="firstName" />
+          <mat-hint *ngIf="employeeForm.get('firstName')?.hasError('required') && employeeForm.get('firstName')?.touched"
+            class="error-message error-color">
+            First name is required
           </mat-hint>
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Last Name</mat-label>
-      <input type="text" matInput placeholder="Enter last name" formControlName="lastName" />
-      <mat-hint *ngIf="employeeForm.get('lastName')?.hasError('required') && employeeForm.get('lastName')?.touched"
-        class="error-message error-color">
-        Last name is required
-      </mat-hint>
-      <mat-hint *ngIf="employeeForm.get('lastName')?.hasError('pattern') && employeeForm.get('lastName')?.touched"
-          class="error-message error-color">
-          Please enter a valid name
+          <mat-hint *ngIf="employeeForm.get('firstName')?.hasError('pattern') && employeeForm.get('firstName')?.touched"
+              class="error-message error-color">
+              Please enter a valid name
+              </mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Last Name</mat-label>
+          <input type="text" matInput placeholder="Enter last name" formControlName="lastName" />
+          <mat-hint *ngIf="employeeForm.get('lastName')?.hasError('required') && employeeForm.get('lastName')?.touched"
+            class="error-message error-color">
+            Last name is required
           </mat-hint>
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Salary</mat-label>
-      <input type="number" matInput required placeholder="Enter salary" formControlName="salary" />
-      <mat-hint *ngIf="employeeForm.get('salary')?.hasError('required') && employeeForm.get('salary')?.touched"
-        class="error-message error-color">
-        Salary is required
-      </mat-hint>
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Mobile No</mat-label>
-      <input type="number" onKeyPress="if(this.value.length==10) return false;" matInput placeholder="Enter mobile no"
-        formControlName="mobileNo" />
-        <mat-hint *ngIf="employeeForm.get('mobileNo')?.hasError('required') && employeeForm.get('mobileNo')?.touched"
-        class="error-message error-color">
-        Mobile no is required
-      </mat-hint>
-      <mat-hint *ngIf="employeeForm.get('mobileNo')?.hasError('pattern') && employeeForm.get('mobileNo')?.touched"
-        class="error-message error-color">
-        Please enter a valid 10-digit
-      </mat-hint>
-    </mat-form-field>
-    <mat-divider></mat-divider>
-    <mat-dialog-actions class="p-24">
+          <mat-hint *ngIf="employeeForm.get('lastName')?.hasError('pattern') && employeeForm.get('lastName')?.touched"
+              class="error-message error-color">
+              Please enter a valid name
+              </mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Salary</mat-label>
+          <input type="number" matInput  placeholder="Enter salary" formControlName="salary" />
+          <mat-hint *ngIf="employeeForm.get('salary')?.hasError('required') && employeeForm.get('salary')?.touched"
+            class="error-message error-color">
+            Salary is required
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Mobile No</mat-label>
+          <input type="number" onKeyPress="if(this.value.length==10) return false;" matInput placeholder="Enter mobile no"
+            formControlName="mobileNo" />
+            <mat-hint *ngIf="employeeForm.get('mobileNo')?.hasError('required') && employeeForm.get('mobileNo')?.touched"
+            class="error-message error-color">
+            Mobile no is required
+          </mat-hint>
+          <mat-hint *ngIf="employeeForm.get('mobileNo')?.hasError('pattern') && employeeForm.get('mobileNo')?.touched"
+            class="error-message error-color">
+            Please enter a valid 10-digit
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Bank Name</mat-label>
+          <input type="text" matInput  placeholder="Enter bank name" formControlName="bankName" />
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Bank IFSC</mat-label>
+          <input type="text" matInput  placeholder="Enter bank IFSC" formControlName="ifscCode" />
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Bank AccountNo</mat-label>
+          <input type="text" matInput  placeholder="Enter bank accountno" formControlName="bankAccountNo" />
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+    <mat-dialog-actions class="p-24 justify-content-end">
       <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-      <button mat-flat-button [mat-dialog-close]="true" [disabled]="employeeForm.invalid" color="primary" (click)="doAction();">
+      <button mat-flat-button [mat-dialog-close]="true" [disabled]="action !=='Delete' && !employeeForm.valid" color="primary" (click)="doAction();">
         {{action}}
       </button>
     </mat-dialog-actions>
-  </form>
-</mat-dialog-content>
 <ng-template #elseTemplate>
   <div class="p-x-24">
     <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
   </div>
-  <mat-divider></mat-divider>
+  <!-- <mat-divider></mat-divider>
   <div mat-dialog-actions class="p-x-24 p-b-24 m-t-10 justify-content-end">
     <button mat-button (click)="doAction()" mat-flat-button color="warn">
       {{action}}
     </button>
     <button mat-stroked-button color="warn" (click)="closeDialog()" class="m-l-8">Cancel</button>
-  </div>
+  </div> -->
 </ng-template>

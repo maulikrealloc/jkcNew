@@ -18,7 +18,7 @@ export class AttendanceComponent {
     'date',
     'action',
   ];
-  employees: any = [
+  attendance: any = [
     {
       id: 1,
       employeeList: 'Man',
@@ -26,7 +26,7 @@ export class AttendanceComponent {
       date: '02/12/2023',
     }
   ];
-  dataSource = new MatTableDataSource(this.employees);
+  dataSource = new MatTableDataSource(this.attendance);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog) { }
@@ -48,17 +48,16 @@ export class AttendanceComponent {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.employees.push({
-          // id:  this.generateRandomNumber(2 , 15),
-          id: result.data.length + 1,
+        this.attendance.push({
+          id: this.attendance.length + 1,
           employeeList: result.data.employeeList,
           day: result.data.day,
           date: result.data.date
         })
-        this.dataSource = new MatTableDataSource(this.employees);
+        this.dataSource = new MatTableDataSource(this.attendance);
       }
       if (result.event === 'Edit') {
-        this.employees.forEach((element: any) => {
+        this.attendance.forEach((element: any) => {
           if (element.id === result.data.id) {
             element.id = result.data.id
             element.employeeList = result.data.employeeList
@@ -66,12 +65,12 @@ export class AttendanceComponent {
             element.date = result.data.date
           }
         });
-        this.dataSource = new MatTableDataSource(this.employees);
+        this.dataSource = new MatTableDataSource(this.attendance);
       }
       if (result.event === 'Delete') {
-        const allEmployeesData = this.employees
-        this.employees = allEmployeesData.filter((id: any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.employees);
+        const allEmployeesData = this.attendance
+        this.attendance = allEmployeesData.filter((id: any) => id.id !== result.data.id)
+        this.dataSource = new MatTableDataSource(this.attendance);
       }
     });
   }

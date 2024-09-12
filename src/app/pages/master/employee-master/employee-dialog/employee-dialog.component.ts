@@ -32,6 +32,9 @@ export class EmployeeDialogComponent {
       this.employeeForm.controls['lastName'].setValue(this.local_data.lastName)
       this.employeeForm.controls['salary'].setValue(this.local_data.salary)
       this.employeeForm.controls['mobileNo'].setValue(this.local_data.mobileNo)
+      this.employeeForm.controls['bankName'].setValue(this.local_data.bankName)
+      this.employeeForm.controls['ifscCode'].setValue(this.local_data.ifscCode)
+      this.employeeForm.controls['bankAccountNo'].setValue(this.local_data.bankAccountNo)
     }
   }
 
@@ -39,8 +42,11 @@ export class EmployeeDialogComponent {
     this.employeeForm = this.fb.group({
       firstName: ['',[Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
       lastName: ['',[Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
-      salary: ['',Validators.required],
-      mobileNo: ['',[Validators.required,Validators.pattern('^[0-9]{10}$')]]
+      salary: [''],
+      mobileNo: ['',[Validators.required,Validators.pattern('^[0-9]{10}$')]],
+      bankName:[''],
+      ifscCode:[''],
+      bankAccountNo:[''],
     })
   }
 
@@ -51,6 +57,9 @@ export class EmployeeDialogComponent {
       lastName: this.employeeForm.value.lastName,
       salary: this.employeeForm.value.salary,
       mobileNo: this.employeeForm.value.mobileNo,
+      bankName: this.employeeForm.value.bankName,
+      ifscCode: this.employeeForm.value.ifscCode,
+      bankAccountNo: this.employeeForm.value.bankAccountNo
     }
     this.dialogRef.close({ event: this.action, data: payload });
 

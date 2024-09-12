@@ -8,6 +8,7 @@ import { EmployeeDialogComponent } from './employee-dialog/employee-dialog.compo
   templateUrl: './employee-master.component.html',
   styleUrls: ['./employee-master.component.scss']
 })
+
 export class EmployeeMasterComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   displayedColumns: string[] = [
@@ -16,7 +17,10 @@ export class EmployeeMasterComponent implements OnInit {
     'lastName',
     'salary',
     'phoneNo',
-    'action',
+    'bankName',
+    'ifscCode',
+    'bankAccountNo',
+    'action'
   ];
 
   employees: any = [
@@ -26,6 +30,9 @@ export class EmployeeMasterComponent implements OnInit {
       lastName: 'Test',
       salary: 2000,
       mobileNo: 9876543210,
+      bankName:'SBI',
+      ifscCode:'vracha10e',
+      bankAccountNo:'23332230'
     }
   ];
 
@@ -46,11 +53,14 @@ export class EmployeeMasterComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
         this.employees.push({
-          id: result.data.length + 1,
+          id: this.employees.length + 1,
           firstName: result.data.firstName,
           lastName: result.data.lastName,
           salary: result.data.salary,
-          mobileNo: result.data.mobileNo
+          mobileNo: result.data.mobileNo,
+          bankName: result.data.bankName,
+          ifscCode: result.data.ifscCode,
+          bankAccountNo: result.data.bankAccountNo,
         })
         this.dataSource = new MatTableDataSource(this.employees);
       }
@@ -62,6 +72,9 @@ export class EmployeeMasterComponent implements OnInit {
             element.lastName = result.data.lastName
             element.salary = result.data.salary
             element.mobileNo = result.data.mobileNo
+            element.bankName = result.data.bankName
+            element.ifscCode = result.data.ifscCode
+            element.bankAccountNo = result.data.bankAccountNo
           }
         });
         this.dataSource = new MatTableDataSource(this.employees);
@@ -73,5 +86,4 @@ export class EmployeeMasterComponent implements OnInit {
       }
     });
   }
-
 }

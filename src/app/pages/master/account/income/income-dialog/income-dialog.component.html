@@ -1,13 +1,13 @@
-<h2 mat-dialog-title class="m-b-24">Add Income</h2>
-<mat-dialog-content class="mat-typography" style="max-width: 600px" >
+<h2 mat-dialog-title class="m-b-24 b-b-1 p-b-20"><strong> {{action}} Income </strong></h2>
+<mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate" >
     <form [formGroup]="incomeForm">
 
         <mat-form-field appearance="outline" class="w-100 m-t-10">
             <mat-label>Party</mat-label>
-            <mat-select #dropdown formControlName="party" placeholder="Select party">
+            <mat-select #dropdown formControlName="partyName" placeholder="Select party">
               <mat-option value="abc">abc</mat-option>
             </mat-select>
-            <mat-hint *ngIf="incomeForm.get('party')?.hasError('required') && incomeForm.get('party')?.touched"
+            <mat-hint *ngIf="incomeForm.get('partyName')?.hasError('required') && incomeForm.get('partyName')?.touched"
             class="error-message error-color">
             Select party is required
           </mat-hint>
@@ -37,14 +37,14 @@
 
           <mat-form-field appearance="outline" class="w-100 m-t-10">
             <mat-label>Invoice Date</mat-label>
-            <input matInput [matDatepicker]="Date" formControlName="invoicedate" placeholder="Select invoice date" />
+            <input matInput [matDatepicker]="Date" formControlName="invoiceDate" placeholder="Select invoice date" />
             <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
             <mat-datepicker #Date></mat-datepicker>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="w-100 m-t-10">
             <mat-label>CreditDate</mat-label>
-            <input matInput [matDatepicker]="creditDate" formControlName="creditdate" placeholder="Select creditdate" />
+            <input matInput [matDatepicker]="creditDate" formControlName="creditDate" placeholder="Select creditdate" />
             <mat-datepicker-toggle matSuffix [for]="creditDate"></mat-datepicker-toggle>
             <mat-datepicker #creditDate></mat-datepicker>
           </mat-form-field>
@@ -57,13 +57,17 @@
               Amount is required
             </mat-hint>
           </mat-form-field>
-
-          <mat-divider></mat-divider>
-          <mat-dialog-actions class="p-24">
-            <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-            <button mat-flat-button [mat-dialog-close]="true" [disabled]="incomeForm.invalid" color="primary" >
-                Add
-            </button>
-          </mat-dialog-actions>
     </form>
 </mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions class="p-24 justify-content-end">
+  <button mat-stroked-button color="warn" mat-dialog-close (click)="closeDialog()">Cancel</button>
+  <button mat-flat-button [mat-dialog-close]="true" [disabled]="action !== 'Delete' && !incomeForm.valid" color="primary" (click)="doAction()" >
+    {{action}}
+  </button>
+</mat-dialog-actions>
+<ng-template #elseTemplate>
+  <div class="p-x-24">
+    <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
+  </div>
+</ng-template>

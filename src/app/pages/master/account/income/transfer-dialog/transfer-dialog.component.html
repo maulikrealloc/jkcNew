@@ -1,4 +1,4 @@
-<h2 mat-dialog-title class="m-b-24">Transfer</h2>
+<h2 mat-dialog-title class="m-b-24 b-b-1 p-b-20"><strong>Transfer</strong></h2>
 <mat-dialog-content class="mat-typography" style="max-width: 600px" >
     <form [formGroup]="transferForm">
 
@@ -32,12 +32,12 @@
               Amount is required
             </mat-hint>
           </mat-form-field>
-          <mat-divider></mat-divider>
-          <mat-dialog-actions class="p-24">
-            <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-            <button mat-flat-button [mat-dialog-close]="true" [disabled]="transferForm.invalid" color="primary" >
-                Add
-            </button>
-          </mat-dialog-actions>
     </form>
 </mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions class="p-24 justify-content-end">
+  <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
+  <button mat-flat-button [mat-dialog-close]="true" [disabled]="transferForm.invalid" color="primary" >
+      Add
+  </button>
+</mat-dialog-actions>

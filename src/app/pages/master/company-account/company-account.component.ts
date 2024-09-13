@@ -21,7 +21,8 @@ export class CompanyAccountComponent {
     'date',
     'action',
   ];
-  employees: any = [
+  
+  companyAccount: any = [
     {
       id: 1,
       accountName: 'demo',
@@ -32,7 +33,7 @@ export class CompanyAccountComponent {
   ];
 
 
-  dataSource = new MatTableDataSource(this.employees);
+  dataSource = new MatTableDataSource(this.companyAccount);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog) { }
@@ -50,18 +51,18 @@ export class CompanyAccountComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.employees.push({
-          id: result.data.length + 1,
+        this.companyAccount.push({
+          id: this.companyAccount.length + 1,
           accountName: result.data.accountName,
           bankName: result.data.bankName,
           openingBalance: result.data.openingBalance,
           date: result.data.date,
         })
-        this.dataSource = new MatTableDataSource(this.employees);
+        this.dataSource = new MatTableDataSource(this.companyAccount);
 
       }
       if (result.event === 'Edit') {
-        this.employees.forEach((element: any) => {
+        this.companyAccount.forEach((element: any) => {
 
           if (element.id === result.data.id) {
             element.id = result.data.id
@@ -71,12 +72,12 @@ export class CompanyAccountComponent {
             element.date = result.data.date
           }
         });
-        this.dataSource = new MatTableDataSource(this.employees);
+        this.dataSource = new MatTableDataSource(this.companyAccount);
       }
       if (result.event === 'Delete') {
-        const allEmployeesData = this.employees
-        this.employees = allEmployeesData.filter((id: any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.employees);
+        const allEmployeesData = this.companyAccount
+        this.companyAccount = allEmployeesData.filter((id: any) => id.id !== result.data.id)
+        this.dataSource = new MatTableDataSource(this.companyAccount);
       }
     });
   }

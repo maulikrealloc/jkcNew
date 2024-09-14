@@ -15,7 +15,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Value</mat-label>
-      <input type="number" matInput  formControlName="value" placeholder="Enter value" />
+      <input type="number" matInput  formControlName="value" placeholder="Enter value" min="0" />
       <mat-hint *ngIf="maintenanceForm.get('value')?.hasError('required') && maintenanceForm.get('value')?.touched"
       class="error-message error-color">
       Value is required

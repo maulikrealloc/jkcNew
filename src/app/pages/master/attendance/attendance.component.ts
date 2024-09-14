@@ -22,7 +22,7 @@ export class AttendanceComponent {
     {
       id: 1,
       employeeList: 'Man',
-      day: 'Saturday',
+      day: 2,
       date: '02/12/2023',
     }
   ];

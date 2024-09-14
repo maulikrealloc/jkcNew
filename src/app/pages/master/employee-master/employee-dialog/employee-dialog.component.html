@@ -33,7 +33,7 @@
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Salary</mat-label>
-          <input type="number" matInput  placeholder="Enter salary" formControlName="salary" />
+          <input type="number" matInput  placeholder="Enter salary" formControlName="salary"  min="0"/>
           <mat-hint *ngIf="employeeForm.get('salary')?.hasError('required') && employeeForm.get('salary')?.touched"
             class="error-message error-color">
             Salary is required
@@ -44,7 +44,7 @@
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Mobile No</mat-label>
           <input type="number" onKeyPress="if(this.value.length==10) return false;" matInput placeholder="Enter mobile no"
-            formControlName="mobileNo" />
+            formControlName="mobileNo" min="0" />
             <mat-hint *ngIf="employeeForm.get('mobileNo')?.hasError('required') && employeeForm.get('mobileNo')?.touched"
             class="error-message error-color">
             Mobile no is required
@@ -70,7 +70,7 @@
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Bank AccountNo</mat-label>
-          <input type="text" matInput  placeholder="Enter bank accountno" formControlName="bankAccountNo" />
+          <input type="number" matInput  placeholder="Enter bank accountno" formControlName="bankAccountNo" min="0"/>
         </mat-form-field>
       </div>
     </div>

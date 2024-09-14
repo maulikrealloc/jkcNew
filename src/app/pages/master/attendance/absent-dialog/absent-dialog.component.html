@@ -13,7 +13,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Day</mat-label>
-      <input type="number" matInput placeholder="Enter day" formControlName="day" />
+      <input type="number" matInput placeholder="Enter day" formControlName="day" min="0" />
       <mat-hint *ngIf="absentForm.get('day')?.hasError('required') && absentForm.get('day')?.touched"
         class="error-message error-color">
        Day is required

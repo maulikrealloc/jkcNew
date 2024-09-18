@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { BonusListDialogComponent } from './bonus-list-dialog/bonus-list-dialog.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-bonus-list',
@@ -10,7 +11,10 @@ import { BonusListDialogComponent } from './bonus-list-dialog/bonus-list-dialog.
   styleUrls: ['./bonus-list.component.scss']
 })
 export class BonusListComponent {
+  dateBonusForm:FormGroup
+
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
+
   displayedColumns: string[] = [
     '#',
     'employee',
@@ -18,6 +22,7 @@ export class BonusListComponent {
     'date',
     'action',
   ];
+
   bonusList: any = [
     {
       id: 1,
@@ -26,17 +31,30 @@ export class BonusListComponent {
       date: '02/08/2022',
     }
   ];
+
   dataSource = new MatTableDataSource(this.bonusList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private dialog: MatDialog) { }
+  constructor(
+    private fb:FormBuilder,
+    private dialog: MatDialog) { }
+
   ngOnInit(): void {
+    const today = new Date();
+    const startDate = new Date(today.getFullYear(), today.getMonth(), 1); 
+    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0); 
+
+    this.dateBonusForm = this.fb.group({
+      start:[startDate],
+      end:[endDate]
+    })
   }
 
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
+  
   addDesign(action: string, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(BonusListDialogComponent, {

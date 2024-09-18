@@ -128,7 +128,6 @@ export class designMasterDialogComponent implements OnInit {
     }
     this.dialogRef.close({ event: this.action, data: payload });
     console.log("designForm==============>>>>>>>>>>>>>>>>", payload);
-
   }
 
   closeDialog(): void {

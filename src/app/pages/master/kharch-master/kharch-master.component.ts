@@ -2,12 +2,6 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 
-const employee = [
-  {
-    id: 1,
-    name: 'Demo',
-  }
-];
 @Component({
   selector: 'app-kharch-master',
   templateUrl: './kharch-master.component.html',
@@ -15,29 +9,86 @@ const employee = [
 })
 export class KharchMasterComponent {
   kharchForm: FormGroup;
-  khataColumns: string[] = [
+  isEditMode = false;
+  currentEditIndex: number | null = null;
+  currentListType: string = '';
+
+  displayedColumns: string[] = [
     '#',
     'name',
     'action',
   ];
 
-  dataSource = new MatTableDataSource(employee);
+  kharchData: any = [
+    {
+      id: 1,
+      name: 'Demo'
+    }
+  ];
+
+  unitData: any = [
+    {
+      id: 1,
+      name: 'Demo'
+    }
+  ];
+
+  unitDataSource = new MatTableDataSource(this.unitData);
+  kharchDataSource = new MatTableDataSource(this.kharchData);
 
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.buildForm()
+    this.buildForm();
   }
 
   buildForm() {
     this.kharchForm = this.fb.group({
-      name: ['',[Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
+      name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
       unitKharch: ['', Validators.required]
-    })
+    });
   }
 
   submit() {
+    if (this.kharchForm.valid) {
+      const Value = this.kharchForm.value;
 
+      if (Value.unitKharch === 'unit') {
+        this.unitData.push({
+          id: this.unitData.length + 1,
+          name: Value.name
+        });
+
+        this.unitDataSource.data = this.unitData;
+      } else if (Value.unitKharch === 'kharch') {
+        this.kharchData.push({
+          id: this.kharchData.length + 1,
+          name: Value.name
+        });
+
+        this.kharchDataSource.data = this.kharchData;
+      }
+
+      this.kharchForm.reset();
+      console.log('Value=====>>>>>',Value);
+    }
+    
   }
 
+  
+  editData(element: any, index: number, listType: string){
+    this.kharchForm.patchValue({
+      id:element.id,
+      name: element.name,
+      unitKharch: listType
+    });
+    this.isEditMode = true;
+    this.currentEditIndex = index;
+    this.currentListType = listType;
+  }
+  
+  deleteData(){
+    
+  }
+  
 }

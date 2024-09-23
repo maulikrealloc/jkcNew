@@ -23,14 +23,7 @@ export class BonusListComponent {
     'action',
   ];
 
-  bonusList: any = [
-    {
-      id: 1,
-      employeeList: 'Deep',
-      amount: 'Thursday',
-      date: '02/08/2022',
-    }
-  ];
+  bonusList: any = [];
 
   dataSource = new MatTableDataSource(this.bonusList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -74,7 +67,6 @@ export class BonusListComponent {
       }
       if (result.event === 'Edit') {
         this.bonusList.forEach((element: any) => {
-
           if (element.id === result.data.id) {
             element.id = result.data.id
             element.employeeList = result.data.employeeList

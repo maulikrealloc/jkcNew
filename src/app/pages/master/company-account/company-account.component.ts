@@ -22,15 +22,7 @@ export class CompanyAccountComponent {
     'action',
   ];
   
-  companyAccount: any = [
-    {
-      id: 1,
-      accountName: 'demo',
-      bankName: 'SBI',
-      openingBalance: 2000,
-      date: '04/01/2023',
-    }
-  ];
+  companyAccount: any = [];
 
 
   dataSource = new MatTableDataSource(this.companyAccount);

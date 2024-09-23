@@ -26,18 +26,7 @@ export class ExpensesComponent implements OnInit {
     'action',
   ];
 
-  expenses:any =[
-    {
-      id: 1,
-      expensesType :'ABC',
-      date :'06/09/24',
-      description :'ABC',
-      chalanNo :767,
-      amount :8989,
-      paidBy :'ABC',
-      status :'Paid'
-    }
-  ]
+  expenses:any =[]
 
   dataSource = new MatTableDataSource(this.expenses);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);

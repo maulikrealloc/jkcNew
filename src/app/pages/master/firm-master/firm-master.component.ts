@@ -28,23 +28,7 @@ export class FirmMasterComponent {
     'Address',
     'action',
   ];
-  firmList: any = [
-    {
-      id: 1,
-      header: 'Johnathan Deo',
-      subHeader: 'SeoExpert',
-      GSTNo: '09876543',
-      gstPercentage: '2.8%',
-      panNo: 'gerwrer12000',
-      mobileNO: '0987654321',
-      personalMobileNo: '0987654321',
-      email:'Johnathan@gmail.com',
-      bankName: 'SBI',
-      ifscCode: 'vracha10e',
-      bankAccountNo: 123332230,
-      address: 'Silver Trade Mota Varacha Surat',
-    }
-  ];
+  firmList: any = [];
 
   dataSource = new MatTableDataSource(this.firmList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -82,9 +66,7 @@ export class FirmMasterComponent {
           bankAccountNo: result.data.bankAccountNo,
           address: result.data.address
         })
-        this.dataSource = new MatTableDataSource(this.firmList);
-        console.log('this.firmList=========>>>>>>>',this.firmList);
-        
+        this.dataSource = new MatTableDataSource(this.firmList);        
       }
       if (result.event === 'Edit') {
         this.firmList.forEach((element: any) => {

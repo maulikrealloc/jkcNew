@@ -23,18 +23,7 @@ export class EmployeeMasterComponent implements OnInit {
     'action'
   ];
 
-  employees: any = [
-    {
-      id: 1,
-      firstName: 'Demo',
-      lastName: 'Test',
-      salary: 2000,
-      mobileNo: 9876543210,
-      bankName:'SBI',
-      ifscCode:'vracha10e',
-      bankAccountNo:'23332230'
-    }
-  ];
+  employees: any = [];
 
   dataSource = new MatTableDataSource(this.employees);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);

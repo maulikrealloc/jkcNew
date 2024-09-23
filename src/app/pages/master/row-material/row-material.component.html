@@ -20,7 +20,7 @@
 </mat-card>
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
-    <div class="table-responsive">
+    <div class="table-responsive" *ngIf="namelist && namelist.length > 0; else noRecordsTemplate">
       <table mat-table [dataSource]="dataSource" class="w-100">
 
         <ng-container matColumnDef="#">
@@ -74,5 +74,12 @@
       </table>
       <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div> 
+    <ng-template #noRecordsTemplate>
+      <div class="no-records text-center">
+          <span>
+              No Records Found
+          </span>
+      </div>
+  </ng-template>
   </mat-card-content>
 </mat-card>

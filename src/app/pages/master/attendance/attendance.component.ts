@@ -23,14 +23,7 @@ export class AttendanceComponent {
     'action',
   ];
 
-  attendance: any = [
-    {
-      id: 1,
-      employeeList: 'Man',
-      day: 2,
-      date: '02/12/2023',
-    }
-  ];
+  attendance: any = [];
 
   dataSource = new MatTableDataSource(this.attendance);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);

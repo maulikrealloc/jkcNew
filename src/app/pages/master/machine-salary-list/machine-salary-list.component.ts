@@ -23,14 +23,7 @@ export class MachineSalaryListComponent {
     'action',
   ];
 
-  machineSalaryList: any = [
-    {
-      id: 1,
-      employeeList: 'Deep',
-      amount: 'Thursday',
-      date: '02/08/2022',
-    }
-  ];
+  machineSalaryList: any = [];
 
   dataSource = new MatTableDataSource(this.machineSalaryList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -72,7 +65,6 @@ export class MachineSalaryListComponent {
       }
       if (result?.event === 'Edit') {
         this.machineSalaryList.forEach((element: any) => {
-
           if (element.id === result.data.id) {
             element.id = result.data.id
             element.employeeList = result.data.employeeList

@@ -20,7 +20,7 @@
 </mat-card>
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
-    <div class="table-responsive">
+    <div class="table-responsive" *ngIf="maintenanceMaster && maintenanceMaster.length > 0; else noRecordsTemplate">
       <table mat-table [dataSource]="dataSource" class="w-100">
         <ng-container matColumnDef="#">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
@@ -63,13 +63,20 @@
       </table>
     </div>
     <mat-divider></mat-divider>
-    <div class="row m-t-10">
-      <div class="col-6">
+    <div class="row m-t-10" >
+      <div class="col-5">
         <label>Total:-</label>
       </div>
-      <div class="col-6">
-        <span>20</span>
+      <div class="col-7">
+        <span>{{ getTotal() }}</span>
       </div>
     </div>
+    <ng-template #noRecordsTemplate>
+      <div class="no-records text-center">
+          <span>
+              No Records Found
+          </span>
+      </div>
+  </ng-template>
   </mat-card-content>
 </mat-card>

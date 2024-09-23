@@ -1,6 +1,6 @@
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
-    <div class="table-responsive">
+    <div class="table-responsive" *ngIf="expensesData && expensesData.length > 0; else noRecordsTemplate">
       <table mat-table [dataSource]="dataSource" class="w-100">
 
         <ng-container matColumnDef="expensesType">
@@ -34,13 +34,20 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>
+    <ng-template #noRecordsTemplate>
+      <div class="no-records text-center">
+          <span>
+              No Records Found
+          </span>
+      </div>
+  </ng-template>
     <mat-divider></mat-divider>
     <div class="row m-t-10">
       <div class="col-6">
-        <label>PendingTotal:-<span>2300</span></label>
+        <label>PendingTotal:-<span></span></label>
       </div>
       <div class="col-6">
-        <label>PaidTotal:-<span>2300</span></label>
+        <label>PaidTotal:-<span></span></label>
       </div>
     </div>
   </mat-card-content>

@@ -45,10 +45,10 @@
         <div class="col-6">
             <mat-card class="cardWithShadow">
                 <mat-card-content class="p-24">
-                    <div class="table-responsive">
-                        <div class="col-12">
-                            <mat-label class="mat-subtitle-2 f-w-700 m-b-8 d-block"> Unit List :- </mat-label>
-                        </div>
+                    <div class="col-12">
+                        <mat-label class="mat-subtitle-2 f-w-700 m-b-8 d-block"> Unit List :- </mat-label>
+                    </div>
+                    <div class="table-responsive" *ngIf="unitData && unitData.length > 0; else noRecordsTemplate">
                         <table mat-table [dataSource]="unitDataSource" class="w-100">
                             <ng-container matColumnDef="#">
                                 <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
@@ -82,6 +82,13 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                         </table>
                     </div>
+                    <ng-template #noRecordsTemplate>
+                        <div class="no-records text-center">
+                            <span>
+                                No Records Found
+                            </span>
+                        </div>
+                    </ng-template>
                 </mat-card-content>
             </mat-card>
         </div>
@@ -89,10 +96,10 @@
         <div class="col-6">
             <mat-card class="cardWithShadow">
                 <mat-card-content class="p-24">
-                    <div class="table-responsive">
-                        <div class="col-12">
-                            <mat-label class="mat-subtitle-2 f-w-700 m-b-8 d-block"> Kharch List :- </mat-label>
-                        </div>
+                    <div class="col-12">
+                        <mat-label class="mat-subtitle-2 f-w-700 m-b-8 d-block"> Kharch List :- </mat-label>
+                    </div>
+                    <div class="table-responsive" *ngIf="kharchData && kharchData.length > 0; else noRecordsTemplate"> 
                         <table mat-table [dataSource]="kharchDataSource" class="w-100">
                             <ng-container matColumnDef="#">
                                 <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
@@ -126,6 +133,13 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                         </table>
                     </div>
+                    <ng-template #noRecordsTemplate>
+                        <div class="no-records text-center">
+                            <span>
+                                No Records Found
+                            </span>
+                        </div>
+                    </ng-template>
                 </mat-card-content>
             </mat-card>
         </div>

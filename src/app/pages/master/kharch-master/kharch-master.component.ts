@@ -19,19 +19,9 @@ export class KharchMasterComponent {
     'action',
   ];
 
-  kharchData: any = [
-    {
-      id: 1,
-      name: 'Demo'
-    }
-  ];
+  unitData: any = [];
+  kharchData: any = [];
 
-  unitData: any = [
-    {
-      id: 1,
-      name: 'Demo'
-    }
-  ];
 
   unitDataSource = new MatTableDataSource(this.unitData);
   kharchDataSource = new MatTableDataSource(this.kharchData);
@@ -70,7 +60,6 @@ export class KharchMasterComponent {
       }
 
       this.kharchForm.reset();
-      console.log('Value=====>>>>>',Value);
     }
     
   }

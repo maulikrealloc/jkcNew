@@ -32,14 +32,7 @@ export class WithdrawalListComponent {
     'action',
   ];
 
-  withdrawalList: any = [
-    {
-      id: 1,
-      employeeList: 'Jay',
-      amount: '565',
-      date: '04/01/2021',
-    }
-  ];
+  withdrawalList: any = [];
 
   dataSource = new MatTableDataSource(this.withdrawalList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);

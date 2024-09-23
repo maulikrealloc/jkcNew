@@ -23,17 +23,7 @@ export class IncomeComponent implements OnInit {
     'action',
   ];
 
-  incomedata:any =[
-    {
-      id: 1,
-      partyName :'ABC',
-      account:'ABC',
-      invoiceNo :767,
-      invoiceDate :'09/07/24',
-      creditDate :'09/07/24',
-      amount :8989
-    }
-  ]
+  incomedata:any =[]
 
   dataSource = new MatTableDataSource(this.incomedata);
 

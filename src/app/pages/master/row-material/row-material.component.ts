@@ -47,7 +47,6 @@ export class RowMaterialComponent implements OnInit {
           price: result.data.price
         })
         this.dataSource = new MatTableDataSource(this.namelist);
-        console.log('this.namelist======>>>>>>',this.namelist);
       }
       if(result?.event === 'Edit'){
         this.namelist.forEach((element:any) =>{

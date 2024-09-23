@@ -12,12 +12,7 @@ export class IncomeDataComponent implements OnInit {
     'totalAmount'
   ]
 
-  incomeData: any = [
-    {
-      partyName:'abc',
-      totalAmount:3400
-    }
-  ]
+  incomeData: any = []
 
   dataSource = new MatTableDataSource(this.incomeData)
   constructor(){}

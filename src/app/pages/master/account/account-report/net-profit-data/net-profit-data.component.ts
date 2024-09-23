@@ -13,13 +13,7 @@ export class NetProfitDataComponent {
     'netProfit'
   ]
 
-  netProfitData: any = [
-    {
-      totalIncome:20000,
-      totalExpenses:15000,
-      netProfit:5000
-    }
-  ]
+  netProfitData: any = []
 
   dataSource = new MatTableDataSource(this.netProfitData)
 

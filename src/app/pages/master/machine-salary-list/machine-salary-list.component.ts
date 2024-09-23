@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MachineSalaryDialogComponent } from './machine-salary-dialog/machine-salary-dialog.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-machine-salary-list',
@@ -10,7 +11,10 @@ import { MachineSalaryDialogComponent } from './machine-salary-dialog/machine-sa
   styleUrls: ['./machine-salary-list.component.scss']
 })
 export class MachineSalaryListComponent {
+  dateMachinesalaryForm:FormGroup
+
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
+
   displayedColumns: string[] = [
     '#',
     'employee',
@@ -18,20 +22,25 @@ export class MachineSalaryListComponent {
     'date',
     'action',
   ];
-  machineSalaryList: any = [
-    {
-      id: 1,
-      employeeList: 'Deep',
-      amount: 'Thursday',
-      date: '02/08/2022',
-    }
-  ];
+
+  machineSalaryList: any = [];
 
   dataSource = new MatTableDataSource(this.machineSalaryList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private dialog: MatDialog) { }
+  constructor(
+    private fb:FormBuilder,
+    private dialog: MatDialog) { }
+
   ngOnInit(): void {
+    const today = new Date();
+    const startDate = new Date(today.getFullYear(), today.getMonth(), 1); 
+    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0); 
+    
+    this.dateMachinesalaryForm = this.fb.group({
+      start:[startDate],
+      end:[endDate]
+    })
   }
 
 
@@ -56,7 +65,6 @@ export class MachineSalaryListComponent {
       }
       if (result?.event === 'Edit') {
         this.machineSalaryList.forEach((element: any) => {
-
           if (element.id === result.data.id) {
             element.id = result.data.id
             element.employeeList = result.data.employeeList

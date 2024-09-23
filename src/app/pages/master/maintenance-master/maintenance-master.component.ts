@@ -18,22 +18,21 @@ export class MaintenanceMasterComponent implements OnInit {
     'value',
     'action',
   ];
-  employees: any = [
-    {
-      id: 1,
-      name: 'ABC Fashion',
-      value: 20,
-    }
-  ];
+  
+  maintenanceMaster: any = [];
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
-  dataSource = new MatTableDataSource(this.employees);
+  dataSource = new MatTableDataSource(this.maintenanceMaster);
 
   constructor(private dialog: MatDialog) { }
   ngOnInit(): void {
   }
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+  }
+
+  getTotal(): number {
+    return this.maintenanceMaster.reduce((acc: number, curr: { value: number; }) => acc + curr.value, 0);
   }
 
   addMaintenance(action: string, obj: any) {
@@ -44,27 +43,27 @@ export class MaintenanceMasterComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
-        this.employees.push({
-          id: this.employees.length + 1,
+        this.maintenanceMaster.push({
+          id: this.maintenanceMaster.length + 1,
           name: result.data.name,
           value: result.data.value,
         })
-        this.dataSource = new MatTableDataSource(this.employees);        
+        this.dataSource = new MatTableDataSource(this.maintenanceMaster);        
       }
       if (result?.event === 'Edit') {
-        this.employees.forEach((element: any) => {
+        this.maintenanceMaster.forEach((element: any) => {
           if (element.id === result.data.id) {
             element.name = result.data.name
             element.value = result.data.value
             element.id = result.data.id
           }
         });
-        this.dataSource = new MatTableDataSource(this.employees);
+        this.dataSource = new MatTableDataSource(this.maintenanceMaster);
       }
       if (result?.event === 'Delete') {
-        const allEmployeesData = this.employees
-        this.employees = allEmployeesData.filter((id: any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.employees);
+        const allEmployeesData = this.maintenanceMaster
+        this.maintenanceMaster = allEmployeesData.filter((id: any) => id.id !== result.data.id)
+        this.dataSource = new MatTableDataSource(this.maintenanceMaster);
       }
     });
   } 

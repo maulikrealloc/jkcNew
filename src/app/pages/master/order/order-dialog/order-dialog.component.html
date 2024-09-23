@@ -84,7 +84,7 @@
           <div class="col-4">
             <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Quantity</mat-label>
-              <input type="number" matInput required formControlName="productQuantity" placeholder="Enter quantity"/>
+              <input type="number" matInput required formControlName="productQuantity" placeholder="Enter quantity" min="0"/>
               <mat-hint
                 *ngIf="itme.get('productQuantity')?.hasError('required') && itme.get('productQuantity')?.touched"
                 class="error-message error-color">
@@ -95,7 +95,7 @@
           <div class="col-3">
             <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Price</mat-label>
-              <input type="number" matInput required formControlName="productPrice" placeholder="Enter price"/>
+              <input type="number" matInput required formControlName="productPrice" placeholder="Enter price" min="0"/>
               <mat-hint *ngIf="itme.get('productPrice')?.hasError('required') && itme.get('productPrice')?.touched"
                 class="error-message error-color">
                 Price is required

@@ -84,14 +84,14 @@
                         <div class="col-6">
                             <mat-form-field appearance="outline" class="w-100 m-t-10">
                                 <mat-label>Sr No</mat-label>
-                                <input type="number" matInput formControlName="srNo" placeholder="Enter sr no"/>
+                                <input type="number" matInput formControlName="srNo" placeholder="Enter sr no" min="0"/>
                             </mat-form-field>
                         </div>
                         <div class="col-6">
                             <mat-form-field appearance="outline" class="w-100 m-t-10">
                                 <mat-label>Quantity</mat-label>
                                 <input type="number" matInput required formControlName="quantity"
-                                    placeholder="Enter quantity" />
+                                    placeholder="Enter quantity" min="0">
                                 <mat-hint
                                     *ngIf="chalanForm.get('quantity')?.hasError('required') && chalanForm.get('quantity')?.touched"
                                     class="error-message error-color">
@@ -103,14 +103,14 @@
                             <mat-form-field appearance="outline" class="w-100 m-t-10">
                                 <mat-label>Total Amount</mat-label>
                                 <input type="number" matInput formControlName="totalAmount"
-                                    placeholder="Enter total amount"/>
+                                    placeholder="Enter total amount" min="0">
                             </mat-form-field>
                         </div>
                         <div class="col-6">
                             <mat-form-field appearance="outline" class="w-100 m-t-10">
                                 <mat-label>Product Price</mat-label>
                                 <input type="number" matInput required formControlName="productPrice"
-                                    placeholder="Enter product price"/>
+                                    placeholder="Enter product price"min="0">
                                 <mat-hint
                                     *ngIf="chalanForm.get('productPrice')?.hasError('required') && chalanForm.get('productPrice')?.touched"
                                     class="error-message error-color">
@@ -122,7 +122,7 @@
                             <mat-form-field appearance="outline" class="w-100 m-t-10">
                                 <mat-label>Chalan No</mat-label>
                                 <input type="number" matInput required formControlName="chalanNo"
-                                    placeholder="Enter chalan no">
+                                    placeholder="Enter chalan no" min="0">
                                 <mat-hint
                                     *ngIf="chalanForm.get('chalanNo')?.hasError('required') && chalanForm.get('chalanNo')?.touched"
                                     class="error-message error-color">

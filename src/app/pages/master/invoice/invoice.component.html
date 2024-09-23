@@ -54,7 +54,7 @@
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Invoice No</mat-label>
                         <input type="number" matInput required formControlName="invoiceNo"
-                            placeholder="Enter invoice no"/>
+                            placeholder="Enter invoice no" min="0">
                         <mat-hint
                             *ngIf="invoiceForm.get('invoiceNo')?.hasError('required') && invoiceForm.get('invoiceNo')?.touched"
                             class="error-message error-color">
@@ -88,7 +88,7 @@
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Discount Ratio</mat-label>
                         <input type="number" matInput required formControlName="discountRatio"
-                            placeholder="Enter discount ratio (%)"/>
+                            placeholder="Enter discount ratio (%)" min="0">
                         <mat-hint style="min-width: 100%;"
                             *ngIf="invoiceForm.get('discountRatio')?.hasError('required') && invoiceForm.get('discountRatio')?.touched"
                             class="error-message error-color">

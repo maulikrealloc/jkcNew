@@ -37,7 +37,7 @@
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Party Mobile</mat-label>
           <input type="number" matInput required onKeyPress="if(this.value.length==10) return false;"
-            formControlName="partyMobile" placeholder="Enter party mobile"/>
+            formControlName="partyMobile" placeholder="Enter party mobile" min="0">
             <mat-hint *ngIf="partyForm.get('partyMobile')?.hasError('required') && partyForm.get('partyMobile')?.touched"
             class="error-message error-color">
             Mobile no is required

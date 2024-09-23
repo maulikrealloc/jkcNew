@@ -20,15 +20,7 @@ export class DesignMasterComponent {
     'noStiching',
     'action',
   ];
-  designMaster: any = [
-    {
-      id: 1,
-      designNo: 56,
-      designPrice: 120,
-      noStiching:87,
-      imagePath: 'assets/images/profile/user-5.jpg',
-    }
-  ];
+  designMaster: any = [];
 
   dataSource = new MatTableDataSource(this.designMaster);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -127,8 +119,6 @@ export class designMasterDialogComponent implements OnInit {
       imagePath: this.local_data.imagePath
     }
     this.dialogRef.close({ event: this.action, data: payload });
-    console.log("designForm==============>>>>>>>>>>>>>>>>", payload);
-
   }
 
   closeDialog(): void {

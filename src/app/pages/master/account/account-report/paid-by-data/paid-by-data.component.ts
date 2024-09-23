@@ -12,12 +12,7 @@ export class PaidByDataComponent implements OnInit {
     'totalAmount'
   ]
 
-  PaidByData: any = [
-    {
-      paidBy:'abc',
-      totalAmount:3400
-    }
-  ]
+  PaidByData: any = []
 
   dataSource = new MatTableDataSource(this.PaidByData)
   constructor(){}

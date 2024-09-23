@@ -17,17 +17,9 @@ export class PassbookComponent implements OnInit {
     'credit',
     'balance'
   ];
-  Passbook: any = [
-    {
-      id:1,
-      passbook:1,
-      name:'Opening Balance',
-      date:'01/24/2023',
-      debit: '- ',
-      credit: 1000,
-      balance:1000
-    }
-  ]
+
+  Passbook: any = []
+  
   dataSource = new MatTableDataSource(this.Passbook);
   constructor() { }
 

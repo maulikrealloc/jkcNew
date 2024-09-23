@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { AbsentDialogComponent } from './absent-dialog/absent-dialog.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-attendance',
@@ -10,7 +11,10 @@ import { AbsentDialogComponent } from './absent-dialog/absent-dialog.component';
   styleUrls: ['./attendance.component.scss']
 })
 export class AttendanceComponent {
+  dateAttendanceForm: FormGroup
+
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
+
   displayedColumns: string[] = [
     '#',
     'employee',
@@ -18,28 +22,31 @@ export class AttendanceComponent {
     'date',
     'action',
   ];
-  attendance: any = [
-    {
-      id: 1,
-      employeeList: 'Man',
-      day: 'Saturday',
-      date: '02/12/2023',
-    }
-  ];
+
+  attendance: any = [];
+
   dataSource = new MatTableDataSource(this.attendance);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private dialog: MatDialog) { }
+  constructor(
+    private fb: FormBuilder,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
+    const today = new Date();
+    const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    this.dateAttendanceForm = this.fb.group({
+      start: [startDate],
+      end: [endDate]
+    })
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
-  // generateRandomNumber(min: number, max: number): number {
-  //   return Math.floor(Math.random() * (max - min + 1)) + min;
-  // }
+ 
 
   addDesign(action: string, obj: any) {
     obj.action = action;

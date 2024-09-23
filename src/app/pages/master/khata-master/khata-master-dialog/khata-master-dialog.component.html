@@ -44,7 +44,7 @@
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Mobile No</mat-label>
           <input type="number" matInput onKeyPress="if(this.value.length==10) return false;" formControlName="mobileNo"
-            placeholder="Enter mobile no" />
+            placeholder="Enter mobile no" min="0">
           <mat-hint *ngIf="khatuForm.get('mobileNo')?.hasError('required') && khatuForm.get('mobileNo')?.touched"
             class="error-message error-color">
             Mobile no is required

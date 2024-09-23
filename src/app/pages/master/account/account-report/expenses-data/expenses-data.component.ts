@@ -13,13 +13,7 @@ export class ExpensesDataComponent implements OnInit {
     'totalAmount',
   ]
 
-  expensesData: any = [
-    {
-      expensesType:'abc',
-      paymentType:'abc',
-      totalAmount:3400
-    }
-  ]
+  expensesData: any = []
 
   dataSource = new MatTableDataSource(this.expensesData)
 

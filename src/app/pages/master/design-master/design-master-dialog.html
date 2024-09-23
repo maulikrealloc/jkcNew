@@ -4,17 +4,17 @@
 
        <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Design No</mat-label>
-      <input type="number" matInput  formControlName="designNo" placeholder="Enter design no" />
+      <input type="number" matInput  formControlName="designNo" placeholder="Enter design no" min="0" />
     </mat-form-field>
 
        <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>No Of Stiching</mat-label>
-      <input type="number" matInput  formControlName="noStiching" placeholder="Enter Stiching" />
+      <input type="number" matInput  formControlName="noStiching" placeholder="Enter Stiching" min="0" />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Design Price</mat-label>
-      <input type="number" matInput  formControlName="designPrice" placeholder="Enter design price" />
+      <input type="number" matInput  formControlName="designPrice" placeholder="Enter design price" min="0" />
     </mat-form-field>
     <div>
 
@@ -40,15 +40,3 @@
         <p>Are You Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
     </div>
 </ng-template>
-<!-- <mat-divider></mat-divider>
-<mat-dialog-actions class="p-24 justify-content-end">
-  <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-  <button mat-flat-button [mat-dialog-close]="true" [disabled]="designForm.invalid" color="primary" (click)="doAction();">
-    {{action}}
-  </button>
-</mat-dialog-actions>
-<ng-template #elseTemplate>
-  <div class="p-x-24">
-    <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
-  </div>
-</ng-template> -->

@@ -31,7 +31,6 @@ export class IncomeDialogComponent implements OnInit {
       this.incomeForm.controls['creditDate'].setValue(this.local_data.creditDate)
       this.incomeForm.controls['amount'].setValue(this.local_data.amount)
     }
-    console.log('data====>>>',this.data);
   }
 
   incomegroup(){

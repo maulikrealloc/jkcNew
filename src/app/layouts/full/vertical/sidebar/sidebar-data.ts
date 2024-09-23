@@ -52,6 +52,11 @@ export const navItems: NavItem[] = [
     iconName: 'books',
     route: '/master/khatabook',
   },
+  {
+    displayName: 'Daman Costing',
+    iconName: 'calculator',
+    route: '/master/costing',
+  },
 
   {
     navCap: 'Employee',

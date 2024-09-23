@@ -58,6 +58,7 @@ import { ExpensesDataComponent } from './account/account-report/expenses-data/ex
 import { IncomeDataComponent } from './account/account-report/income-data/income-data.component';
 import { PaidByDataComponent } from './account/account-report/paid-by-data/paid-by-data.component';
 import { NetProfitDataComponent } from './account/account-report/net-profit-data/net-profit-data.component';
+import { DamanCostingComponent } from './daman-costing/daman-costing.component';
 
 
 
@@ -114,7 +115,8 @@ import { NetProfitDataComponent } from './account/account-report/net-profit-data
     ExpensesDataComponent,
     IncomeDataComponent,
     PaidByDataComponent,
-    NetProfitDataComponent
+    NetProfitDataComponent,
+    DamanCostingComponent
   ],
   imports: [
     CommonModule,

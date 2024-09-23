@@ -1,0 +1,36 @@
+.main-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.main-table th, .main-table td {
+    border: 1px solid #ccc;
+    padding: 6px;
+}
+
+.thirdTabel{
+    text-align: center;
+}
+
+.bg{
+    background: #ecf2ff !important;
+}
+
+.disableBg{
+    background: #0000001f;
+}
+
+.input{
+    width: 100%;
+    height: 34px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.inputNo{
+    width: 100%;
+    height: 34px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+

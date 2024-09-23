@@ -22,6 +22,7 @@ import { RowMaterialComponent } from './row-material/row-material.component';
 import { WithdrawalListComponent } from './withdrawal-list/withdrawal-list.component';
 import { BonusListComponent } from './bonus-list/bonus-list.component';
 import { MachineSalaryListComponent } from './machine-salary-list/machine-salary-list.component';
+import { DamanCostingComponent } from './daman-costing/daman-costing.component';
 
 export const MasterRoutes: Routes = [
   {
@@ -113,6 +114,17 @@ export const MasterRoutes: Routes = [
           urls: [
             { title: 'Master', url: '/master/khatabook' },
             { title: 'Khatabook' },
+          ],
+        },
+      },
+      {
+        path: 'costing',
+        component: DamanCostingComponent,
+        data: {
+          title: 'Daman Costing',
+          urls: [
+            { title: 'Master', url: '/master/costing' },
+            { title: 'Daman Costing' },
           ],
         },
       },

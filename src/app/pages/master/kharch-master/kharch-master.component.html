@@ -5,7 +5,7 @@
                 <div class="col-4">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>Name</mat-label>
-                        <input type="text" matInput required formControlName="name" placeholder="Enter name" />
+                        <input type="text" matInput required formControlName="name" placeholder="Enter name">
                         <mat-hint
                             *ngIf="kharchForm.get('name')?.hasError('required') && kharchForm.get('name')?.touched"
                             class="error-message error-color">
@@ -48,7 +48,7 @@
                     <div class="col-12">
                         <mat-label class="mat-subtitle-2 f-w-700 m-b-8 d-block"> Unit List :- </mat-label>
                     </div>
-                    <div class="table-responsive" *ngIf="unitData && unitData.length > 0; else noRecordsTemplate">
+                    <div class="table-responsive">
                         <table mat-table [dataSource]="unitDataSource" class="w-100">
                             <ng-container matColumnDef="#">
                                 <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
@@ -78,17 +78,25 @@
                                 </td>
                             </ng-container>
 
-                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            <tr mat-header-row *matHeaderRowDef="kharchMasterColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: kharchMasterColumns"></tr>
+                            <tr class="mat-row" style="text-align: center;" *matNoDataRow>
+                                <td class="mat-cell" [attr.colspan]="kharchMasterColumns.length">
+                                    No record found
+                                </td>
+                            </tr>
+
+                            <!-- <tr mat-header-row *matHeaderRowDef="kharchMasterColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: kharchMasterColumns"></tr> -->
                         </table>
                     </div>
-                    <ng-template #noRecordsTemplate>
+                    <!-- <ng-template #noRecordsTemplate>
                         <div class="no-records text-center">
                             <span>
                                 No Records Found
                             </span>
                         </div>
-                    </ng-template>
+                    </ng-template> -->
                 </mat-card-content>
             </mat-card>
         </div>
@@ -99,7 +107,7 @@
                     <div class="col-12">
                         <mat-label class="mat-subtitle-2 f-w-700 m-b-8 d-block"> Kharch List :- </mat-label>
                     </div>
-                    <div class="table-responsive" *ngIf="kharchData && kharchData.length > 0; else noRecordsTemplate"> 
+                    <div class="table-responsive">
                         <table mat-table [dataSource]="kharchDataSource" class="w-100">
                             <ng-container matColumnDef="#">
                                 <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
@@ -129,17 +137,25 @@
                                 </td>
                             </ng-container>
 
-                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            <tr mat-header-row *matHeaderRowDef="kharchMasterColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: kharchMasterColumns"></tr>
+                            <tr class="mat-row" style="text-align: center;" *matNoDataRow>
+                                <td class="mat-cell" [attr.colspan]="kharchMasterColumns.length">
+                                    No record found
+                                </td>
+                            </tr>
+
+                            <!-- <tr mat-header-row *matHeaderRowDef="kharchMasterColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: kharchMasterColumns"></tr> -->
                         </table>
                     </div>
-                    <ng-template #noRecordsTemplate>
+                    <!-- <ng-template #noRecordsTemplate>
                         <div class="no-records text-center">
                             <span>
                                 No Records Found
                             </span>
                         </div>
-                    </ng-template>
+                    </ng-template> -->
                 </mat-card-content>
             </mat-card>
         </div>

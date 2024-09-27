@@ -4,7 +4,7 @@
             <div class="col-5">
                 <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
                     <mat-label>Order</mat-label>
-                    <input matInput placeholder="Search order"/>
+                    <input matInput placeholder="Search order">
                     <mat-icon matSuffix>
                         <i-tabler name="search" class="icon-20"></i-tabler>
                     </mat-icon>
@@ -123,8 +123,8 @@
                     </td>
                 </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="khataColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: khataColumns"></tr>
+                <tr mat-header-row *matHeaderRowDef="kharchReportColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: kharchReportColumns"></tr>
             </table>
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>

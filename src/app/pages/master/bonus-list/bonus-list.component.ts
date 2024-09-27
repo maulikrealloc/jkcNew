@@ -15,7 +15,7 @@ export class BonusListComponent {
 
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  displayedColumns: string[] = [
+  bounsListColumns: string[] = [
     '#',
     'employee',
     'amount',

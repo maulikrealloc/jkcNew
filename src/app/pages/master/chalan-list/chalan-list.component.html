@@ -4,7 +4,7 @@
       <div class="col-3">
         <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
           <mat-label>Chalan</mat-label>
-          <input matInput placeholder="Search chalan" />
+          <input matInput placeholder="Search chalan">
           <mat-icon matSuffix>
             <i-tabler name="search" class="icon-20"></i-tabler>
           </mat-icon>
@@ -12,7 +12,7 @@
       </div>
       <div class="col-3">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Select Firm</mat-label>
+          <mat-label>Select Firm</mat-label>
           <mat-select #dropdown placeholder="Select firm">
             <mat-option value="ABC">ABC</mat-option>
           </mat-select>
@@ -20,7 +20,7 @@
       </div>
       <div class="col-3">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Select Party</mat-label>
+          <mat-label>Select Party</mat-label>
           <mat-select #dropdown placeholder="Select party">
             <mat-option value="ABC">ABC</mat-option>
           </mat-select>
@@ -85,8 +85,8 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="chalanListColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: chalanListColumns"></tr>
       </table>
       <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div>

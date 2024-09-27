@@ -8,7 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class PassbookComponent implements OnInit {
 
-  displayedColumns: string[] = [
+  passbookColumns: string[] = [
     '#',
     'passbook',
     'name',

@@ -14,7 +14,7 @@ import { log } from 'console';
 export class ExpensesComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  displayedColumns: string[] = [
+  expensesColumns: string[] = [
     '#',
     'expensesType',
     'date',

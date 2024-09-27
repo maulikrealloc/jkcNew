@@ -34,7 +34,7 @@
                             <mat-form-field appearance="outline" class="w-100 m-t-10">
                                 <mat-label>Select Chalan Date</mat-label>
                                 <input matInput [matDatepicker]="chalanDate" formControlName="date"
-                                    placeholder="Chalan date" />
+                                    placeholder="Chalan date">
                                 <mat-datepicker-toggle matSuffix [for]="chalanDate"></mat-datepicker-toggle>
                                 <mat-datepicker #chalanDate></mat-datepicker>
                             </mat-form-field>
@@ -43,17 +43,17 @@
                             <mat-form-field appearance="outline" class="w-100 m-t-10">
                                 <mat-label>Party Order</mat-label>
                                 <input type="text" matInput required formControlName="partyOrder"
-                                    placeholder="Enter party order"/>
+                                    placeholder="Enter party order">
                                 <mat-hint
                                     *ngIf="chalanForm.get('partyOrder')?.hasError('required') && chalanForm.get('partyOrder')?.touched"
                                     class="error-message error-color">
                                     Party order is required
                                 </mat-hint>
                                 <mat-hint
-                                *ngIf="chalanForm.get('partyOrder')?.hasError('pattern') && chalanForm.get('partyOrder')?.touched"
-                                class="error-message error-color">
-                                Please enter valid name
-                            </mat-hint>
+                                    *ngIf="chalanForm.get('partyOrder')?.hasError('pattern') && chalanForm.get('partyOrder')?.touched"
+                                    class="error-message error-color">
+                                    Please enter valid name
+                                </mat-hint>
                             </mat-form-field>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                             <mat-form-field appearance="outline" class="w-100 m-t-10">
                                 <mat-label>Product Name</mat-label>
                                 <input type="text" matInput required formControlName="productName"
-                                    placeholder="Enter product name"/>
+                                    placeholder="Enter product name">
                                 <mat-hint
                                     *ngIf="chalanForm.get('productName')?.hasError('required') && chalanForm.get('productName')?.touched"
                                     class="error-message error-color">
@@ -84,7 +84,7 @@
                         <div class="col-6">
                             <mat-form-field appearance="outline" class="w-100 m-t-10">
                                 <mat-label>Sr No</mat-label>
-                                <input type="number" matInput formControlName="srNo" placeholder="Enter sr no" min="0"/>
+                                <input type="number" matInput formControlName="srNo" placeholder="Enter sr no" min="0">
                             </mat-form-field>
                         </div>
                         <div class="col-6">
@@ -110,7 +110,7 @@
                             <mat-form-field appearance="outline" class="w-100 m-t-10">
                                 <mat-label>Product Price</mat-label>
                                 <input type="number" matInput required formControlName="productPrice"
-                                    placeholder="Enter product price"min="0">
+                                    placeholder="Enter product price" min="0">
                                 <mat-hint
                                     *ngIf="chalanForm.get('productPrice')?.hasError('required') && chalanForm.get('productPrice')?.touched"
                                     class="error-message error-color">
@@ -132,14 +132,16 @@
                         </div>
                         <div class="col-6">
                             <div class="d-flex align-items-center justify-content-end">
-                                <button (click)="doAction()" [disabled]="chalanForm.invalid" mat-flat-button color="primary">
+                                <button (click)="doAction()" [disabled]="chalanForm.invalid" mat-flat-button
+                                    color="primary">
                                     Add
                                 </button>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="d-flex align-items-center justify-content-end">
-                                <button style="margin-right: 80%;" [disabled]="chalanForm.invalid" mat-flat-button color="primary">
+                                <button style="margin-right: 80%;" [disabled]="chalanForm.invalid" mat-flat-button
+                                    color="primary">
                                     View
                                 </button>
                             </div>
@@ -228,8 +230,14 @@
                     </td>
                 </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="khataColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: khataColumns"></tr>
+                <tr mat-header-row *matHeaderRowDef="chalanColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: chalanColumns"></tr>
+                <tr class="mat-row" style="text-align: center;" *matNoDataRow>
+                    <td class="mat-cell" [attr.colspan]="chalanColumns.length">
+                        No record found
+                    </td>
+                </tr>
+
             </table>
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>

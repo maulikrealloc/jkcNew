@@ -14,7 +14,7 @@ export class ChalanComponent {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   chalanForm: FormGroup;
-  khataColumns: string[] = [
+  chalanColumns: string[] = [
     '#',
     'partyOrder',
     'productName',

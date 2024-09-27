@@ -23,7 +23,7 @@ export class KharchReportComponent {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
 
-  khataColumns: string[] = [
+  kharchReportColumns: string[] = [
     '#',
     'unitname',
     'kharchname',

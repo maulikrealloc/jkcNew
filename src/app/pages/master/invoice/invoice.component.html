@@ -44,8 +44,7 @@
                 <div class="col-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Select Invoice Date</mat-label>
-                        <input matInput [matDatepicker]="Date" formControlName="date"
-                            placeholder="Enter invoice date"/>
+                        <input matInput [matDatepicker]="Date" formControlName="date" placeholder="Enter invoice date">
                         <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
                         <mat-datepicker #Date></mat-datepicker>
                     </mat-form-field>
@@ -65,7 +64,7 @@
                 <div class="col-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>C.G.S.T</mat-label>
-                        <input type="text" matInput required formControlName="cgst" placeholder="Enter C.G.S.T"/>
+                        <input type="text" matInput required formControlName="cgst" placeholder="Enter C.G.S.T">
                         <mat-hint
                             *ngIf="invoiceForm.get('cgst')?.hasError('required') && invoiceForm.get('cgst')?.touched"
                             class="error-message error-color">
@@ -76,7 +75,7 @@
                 <div class="col-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>S.G.S.T</mat-label>
-                        <input type="text" matInput required formControlName="sgst" placeholder="Enter S.G.S.T"/>
+                        <input type="text" matInput required formControlName="sgst" placeholder="Enter S.G.S.T">
                         <mat-hint
                             *ngIf="invoiceForm.get('sgst')?.hasError('required') && invoiceForm.get('sgst')?.touched"
                             class="error-message error-color">
@@ -98,7 +97,8 @@
                 </div>
                 <div class="col-1">
                     <div class="d-flex align-items-center justify-content-end">
-                        <button mat-flat-button color="primary" [disabled]="invoiceForm.invalid" (click)="invoiceview()">
+                        <button mat-flat-button color="primary" [disabled]="invoiceForm.invalid"
+                            (click)="invoiceview()">
                             View
                         </button>
                     </div>
@@ -182,8 +182,8 @@
                     </td>
                 </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="khataColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: khataColumns"></tr>
+                <tr mat-header-row *matHeaderRowDef="invoiceColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: invoiceColumns"></tr>
             </table>
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>

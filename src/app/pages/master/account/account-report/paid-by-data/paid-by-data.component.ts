@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./paid-by-data.component.scss']
 })
 export class PaidByDataComponent implements OnInit {
-  displayedColumns: string[] = [
+  paidByDataColumns: string[] = [
     'paidBy',
     'totalAmount'
   ]

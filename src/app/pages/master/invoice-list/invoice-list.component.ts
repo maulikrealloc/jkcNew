@@ -29,7 +29,7 @@ export class InvoiceListComponent {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
 
-  khataColumns: string[] = [
+  invoiceListColumns: string[] = [
     '#',
     'no',
     'date',

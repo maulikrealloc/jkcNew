@@ -13,7 +13,7 @@ export class KhataMasterComponent {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
 
-  khataColumns: string[] = [
+  khataMasterColumns: string[] = [
     '#',
     'name',
     'ownerName',

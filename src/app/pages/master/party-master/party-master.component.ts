@@ -11,10 +11,9 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 })
 export class PartyMasterComponent implements AfterViewInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-  displayedColumns: string[] = [
+  partyColumns: string[] = [
     'srno',
     'PartyName',
-    // 'LastName',
     'PartyGSTIN',
     'ChalanNo',
     'Address',
@@ -27,7 +26,6 @@ export class PartyMasterComponent implements AfterViewInit {
     {
       id: 1,
       firstName: 'Johnathan',
-      // lastName: 'Deo',
       partyGSTIN: 'gstin343',
       chalanNoSeries: '22',
       FirmAddress: 'Royal plaza Simada Gam Surat',

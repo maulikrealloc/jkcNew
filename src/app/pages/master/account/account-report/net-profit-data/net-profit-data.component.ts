@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./net-profit-data.component.scss']
 })
 export class NetProfitDataComponent {
-  displayedColumns: string[] = [
+  netProfitDataColumns: string[] = [
     'totalIncome',
     'totalExpenses',
     'netProfit'

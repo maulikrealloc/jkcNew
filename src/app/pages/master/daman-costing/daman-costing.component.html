@@ -39,8 +39,8 @@
 
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
- <div class="row">
-  <div class="col-lg-6">
+    <div class="row">
+      <div class="col-lg-6">
         <table class="main-table">
           <thead>
             <tr>
@@ -74,42 +74,43 @@
             </tr>
           </tbody>
         </table>
-  </div>
-  <div class="col-lg-6">
-    <table class="main-table">
-    <tr>
-      <td>Machine Stiches</td>
-      <input [(ngModel)]="machineStichesValue" (ngModelChange)="machineDesignStich()" class="input" type="text">
-    </tr>
-    <tr>
-      <td>Design Stich</td>
-      <td class="disableBg">105871</td>
-    </tr>
-    <tr>
-      <td>Frames/Day</td>
-      <td class="disableBg">{{ framesDayTotal }}</td>
-    </tr>
-    <tr>
-      <td>Mtr/Frame</td>
-      <input class="input" [(ngModel)]="mtrFrameValue" (ngModelChange)="framesDayMtrFrame()" type="text">
-    </tr>
-    <tr>
-      <td>Final Meter</td>
-      <td class="disableBg">{{ finalMeter }}</td>
-    </tr>
-    <tr>
-      <td>Employee-Salary</td>
-      <input class="input" [(ngModel)]="employeeSalaryValue" (ngModelChange)="employeeSalaryFinalMeter()" type="text">
-    </tr>
-    <tr>
-      <td>Emp Salary/mt</td>
-      <td class="disableBg">{{ empSalarymt }}</td>
-    </tr>
-    </table>
-  </div>
-  </div>
-  
-  <!-- <div class="row m-t-20">
+      </div>
+      <div class="col-lg-6">
+        <table class="main-table">
+          <tr>
+            <td>Machine Stiches</td>
+            <input [(ngModel)]="machineStichesValue" (ngModelChange)="machineDesignStich()" class="input" type="text">
+          </tr>
+          <tr>
+            <td>Design Stich</td>
+            <td class="disableBg">105871</td>
+          </tr>
+          <tr>
+            <td>Frames/Day</td>
+            <td class="disableBg">{{ framesDayTotal }}</td>
+          </tr>
+          <tr>
+            <td>Mtr/Frame</td>
+            <input class="input" [(ngModel)]="mtrFrameValue" (ngModelChange)="framesDayMtrFrame()" type="text">
+          </tr>
+          <tr>
+            <td>Final Meter</td>
+            <td class="disableBg">{{ finalMeter }}</td>
+          </tr>
+          <tr>
+            <td>Employee-Salary</td>
+            <input class="input" [(ngModel)]="employeeSalaryValue" (ngModelChange)="employeeSalaryFinalMeter()"
+              type="text">
+          </tr>
+          <tr>
+            <td>Emp Salary/mt</td>
+            <td class="disableBg">{{ empSalarymt }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- <div class="row m-t-20">
     <div class="col-lg-12">
           <table class="main-table">
             <thead>
@@ -242,61 +243,61 @@
           </table>
     </div>
   </div> -->
- 
-<div class="row m-t-20">
-    <div class="col-lg-12">
-          <table class="main-table">
-            <thead>
-              <tr>
-                <th class="bg" colspan="6">Design Estimate</th>
-              </tr>
-              <tr>
-                <th>Name</th>
-                <th style="width: 12%;">No</th>
-                <th style="width: 12%;">Price</th>
-                <th style="width: 12%;">Item</th>
-                <th>Total</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of designEstimate">
-                <td>{{ item.name }}</td>
-                <td><input class="inputNo" type="text" [(ngModel)]="item.no"></td>
-                <td><input class="inputNo" type="text" [(ngModel)]="item.price"></td>
-                <td><input class="inputNo" type="text" [(ngModel)]="item.item"></td>
-                <td class="disableBg">17,015.00</td>
-                <td class="disableBg">4.91</td>
-              </tr>
-            </tbody>
-          </table>
+
+    <div class="row m-t-20">
+      <div class="col-lg-12">
+        <table class="main-table">
+          <thead>
+            <tr>
+              <th class="bg" colspan="6">Design Estimate</th>
+            </tr>
+            <tr>
+              <th>Name</th>
+              <th style="width: 12%;">No</th>
+              <th style="width: 12%;">Price</th>
+              <th style="width: 12%;">Item</th>
+              <th>Total</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of designEstimate">
+              <td style="padding: 0;padding-left: 6px;">{{ item.name }}</td>
+              <td style="padding: 0;"><input class="inputNo" type="text" [(ngModel)]="item.no"></td>
+              <td style="padding: 0;"><input class="inputNo" type="text" [(ngModel)]="item.price"></td>
+              <td style="padding: 0;"><input class="inputNo" type="text" [(ngModel)]="item.item"></td>
+              <td class="disableBg">17,015.00</td>
+              <td class="disableBg">4.91</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-  <table class="main-table m-t-20">
-    <thead>
-      <tr>
-        <th>Total</th>
-        <th>Rs/Meter</th>
-        <th>Cut %</th>
-        <th>Tax Amt</th>
-        <th>Total Price</th>
-        <th>Net Profit</th>
-        <th>Profit</th>
-        <th>Final Price</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="thirdTabel bg">102.00</td>
-        <td class="thirdTabel disableBg">164.3</td>
-        <td class="thirdTabel">6</td>
-        <td class="thirdTabel disableBg">9.86</td>
-        <td class="thirdTabel disableBg">174.16</td>
-        <td class="thirdTabel disableBg">62.30</td>
-        <td class="thirdTabel disableBg">37.92</td>
-        <td class="thirdTabel bg">174</td>
-      </tr>
-    </tbody>
-  </table>
-</mat-card-content>
-</mat-card> 
+    <table class="main-table m-t-20">
+      <thead>
+        <tr>
+          <th>Total</th>
+          <th>Rs/Meter</th>
+          <th>Cut %</th>
+          <th>Tax Amt</th>
+          <th>Total Price</th>
+          <th>Net Profit</th>
+          <th>Profit</th>
+          <th>Final Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="thirdTabel bg">102.00</td>
+          <td class="thirdTabel disableBg">164.3</td>
+          <td class="thirdTabel">6</td>
+          <td class="thirdTabel disableBg">9.86</td>
+          <td class="thirdTabel disableBg">174.16</td>
+          <td class="thirdTabel disableBg">62.30</td>
+          <td class="thirdTabel disableBg">37.92</td>
+          <td class="thirdTabel bg">174</td>
+        </tr>
+      </tbody>
+    </table>
+  </mat-card-content>
+</mat-card>

@@ -12,7 +12,7 @@ import { MaintenanceMasterDialogComponent } from './maintenance-master-dialog/ma
 export class MaintenanceMasterComponent implements OnInit {
 
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-  displayedColumns: string[] = [
+  maintenanceMasterColumns: string[] = [
     '#',
     'name',
     'value',

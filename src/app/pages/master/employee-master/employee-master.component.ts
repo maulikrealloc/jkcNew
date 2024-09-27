@@ -11,7 +11,7 @@ import { EmployeeDialogComponent } from './employee-dialog/employee-dialog.compo
 
 export class EmployeeMasterComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-  displayedColumns: string[] = [
+  employeeMasterColumns: string[] = [
     '#',
     'firstName',
     'lastName',

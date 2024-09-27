@@ -15,7 +15,7 @@ export class MachineSalaryListComponent {
 
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  displayedColumns: string[] = [
+  machineSalaryColumns: string[] = [
     '#',
     'employee',
     'amount',

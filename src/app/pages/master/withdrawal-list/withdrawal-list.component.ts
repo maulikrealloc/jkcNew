@@ -24,7 +24,7 @@ export class WithdrawalListComponent {
 
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  displayedColumns: string[] = [
+  withdrawalListColumns: string[] = [
     '#',
     'employee',
     'amount',

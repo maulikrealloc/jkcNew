@@ -15,7 +15,7 @@ export class AttendanceComponent {
 
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  displayedColumns: string[] = [
+  absentColumns: string[] = [
     '#',
     'employee',
     'day',

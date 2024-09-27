@@ -4,7 +4,7 @@
             <div class="col-3">
                 <mat-form-field appearance="outline" class="w-100 hide-hint">
                     <mat-label>Invoice List</mat-label>
-                    <input matInput placeholder="Search invoice list"/>
+                    <input matInput placeholder="Search invoice list">
                     <mat-icon matSuffix>
                         <i-tabler name="search" class="icon-20"></i-tabler>
                     </mat-icon>
@@ -147,8 +147,8 @@
                     </td>
                 </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="khataColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: khataColumns"></tr>
+                <tr mat-header-row *matHeaderRowDef="invoiceListColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: invoiceListColumns"></tr>
             </table>
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>

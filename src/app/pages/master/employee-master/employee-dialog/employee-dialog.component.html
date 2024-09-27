@@ -5,35 +5,36 @@
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>First Name</mat-label>
-          <input type="text" matInput  placeholder="Enter first name" formControlName="firstName" />
-          <mat-hint *ngIf="employeeForm.get('firstName')?.hasError('required') && employeeForm.get('firstName')?.touched"
+          <input type="text" matInput placeholder="Enter first name" formControlName="firstName">
+          <mat-hint
+            *ngIf="employeeForm.get('firstName')?.hasError('required') && employeeForm.get('firstName')?.touched"
             class="error-message error-color">
             First name is required
           </mat-hint>
           <mat-hint *ngIf="employeeForm.get('firstName')?.hasError('pattern') && employeeForm.get('firstName')?.touched"
-              class="error-message error-color">
-              Please enter a valid name
-              </mat-hint>
+            class="error-message error-color">
+            Please enter a valid name
+          </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Last Name</mat-label>
-          <input type="text" matInput placeholder="Enter last name" formControlName="lastName" />
+          <input type="text" matInput placeholder="Enter last name" formControlName="lastName">
           <mat-hint *ngIf="employeeForm.get('lastName')?.hasError('required') && employeeForm.get('lastName')?.touched"
             class="error-message error-color">
             Last name is required
           </mat-hint>
           <mat-hint *ngIf="employeeForm.get('lastName')?.hasError('pattern') && employeeForm.get('lastName')?.touched"
-              class="error-message error-color">
-              Please enter a valid name
-              </mat-hint>
+            class="error-message error-color">
+            Please enter a valid name
+          </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Salary</mat-label>
-          <input type="number" matInput  placeholder="Enter salary" formControlName="salary"  min="0"/>
+          <input type="number" matInput placeholder="Enter salary" formControlName="salary" min="0">
           <mat-hint *ngIf="employeeForm.get('salary')?.hasError('required') && employeeForm.get('salary')?.touched"
             class="error-message error-color">
             Salary is required
@@ -43,9 +44,9 @@
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Mobile No</mat-label>
-          <input type="number" onKeyPress="if(this.value.length==10) return false;" matInput placeholder="Enter mobile no"
-            formControlName="mobileNo" min="0" />
-            <mat-hint *ngIf="employeeForm.get('mobileNo')?.hasError('required') && employeeForm.get('mobileNo')?.touched"
+          <input type="number" onKeyPress="if(this.value.length==10) return false;" matInput
+            placeholder="Enter mobile no" formControlName="mobileNo" min="0">
+          <mat-hint *ngIf="employeeForm.get('mobileNo')?.hasError('required') && employeeForm.get('mobileNo')?.touched"
             class="error-message error-color">
             Mobile no is required
           </mat-hint>
@@ -58,31 +59,32 @@
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Bank Name</mat-label>
-          <input type="text" matInput  placeholder="Enter bank name" formControlName="bankName" />
+          <input type="text" matInput placeholder="Enter bank name" formControlName="bankName">
         </mat-form-field>
       </div>
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Bank IFSC</mat-label>
-          <input type="text" matInput  placeholder="Enter bank IFSC" formControlName="ifscCode" />
+          <input type="text" matInput placeholder="Enter bank IFSC" formControlName="ifscCode">
         </mat-form-field>
       </div>
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Bank AccountNo</mat-label>
-          <input type="number" matInput  placeholder="Enter bank accountno" formControlName="bankAccountNo" min="0"/>
+          <input type="number" matInput placeholder="Enter bank accountno" formControlName="bankAccountNo" min="0">
         </mat-form-field>
       </div>
     </div>
   </form>
 </mat-dialog-content>
 <mat-divider></mat-divider>
-    <mat-dialog-actions class="p-24 justify-content-end">
-      <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-      <button mat-flat-button [mat-dialog-close]="true" [disabled]="action !=='Delete' && !employeeForm.valid" color="primary" (click)="doAction();">
-        {{action}}
-      </button>
-    </mat-dialog-actions>
+<mat-dialog-actions class="p-24 justify-content-end">
+  <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
+  <button mat-flat-button [mat-dialog-close]="true" [disabled]="action !=='Delete' && !employeeForm.valid"
+    color="primary" (click)="doAction();">
+    {{action}}
+  </button>
+</mat-dialog-actions>
 <ng-template #elseTemplate>
   <div class="p-x-24">
     <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>

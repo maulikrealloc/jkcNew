@@ -12,7 +12,7 @@ import { IncomeDialogComponent } from './income-dialog/income-dialog.component';
 export class IncomeComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  displayedColumns: string[] = [
+  incomeColumns: string[] = [
     '#',
     'partyName',
     'account',

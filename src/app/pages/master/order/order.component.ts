@@ -12,7 +12,7 @@ import { OrderDialogComponent } from './order-dialog/order-dialog.component';
 export class OrderComponent {
 
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-  displayedColumns: string[] = [
+  orderColumns: string[] = [
     '#',
     'partyName',
     'orderDate',
@@ -40,7 +40,7 @@ export class OrderComponent {
           productPrice: "5868"
         }
       ]
-    }
+    },
   ]
 
   dataSource = new MatTableDataSource(this.employees);

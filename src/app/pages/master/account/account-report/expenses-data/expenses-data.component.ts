@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./expenses-data.component.scss']
 })
 export class ExpensesDataComponent implements OnInit {
-  displayedColumns: string[] = [
+  expensesDataColumns: string[] = [
     'expensesType',
     'paymentType',
     'totalAmount',

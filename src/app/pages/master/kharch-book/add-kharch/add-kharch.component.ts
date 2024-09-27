@@ -13,7 +13,7 @@ export class AddKharchComponent {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
 
-  khataColumns: string[] = [
+  kharchColumns: string[] = [
     '#',
     'unitname',
     'kharchname',

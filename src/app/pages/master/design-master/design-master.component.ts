@@ -13,7 +13,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 export class DesignMasterComponent {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   
-  displayedColumns: string[] = [
+  designMasterColumns: string[] = [
     '#',
     'designNumber',
     'designPrice',

@@ -23,20 +23,20 @@
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Date</mat-label>
-      <input matInput [matDatepicker]="Date" formControlName="date" placeholder="Select date" />
+      <input matInput [matDatepicker]="Date" formControlName="date" placeholder="Select date">
       <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
       <mat-datepicker #Date></mat-datepicker>
     </mat-form-field>
   </form>
 </mat-dialog-content>
 <mat-divider></mat-divider>
-    <mat-dialog-actions class="p-24 justify-content-end">
-      <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-      <button mat-flat-button [mat-dialog-close]="true" [disabled]="action !=='Delete' && !withdrawalForm.valid" color="primary"
-        (click)="doAction();">
-        {{action}}
-      </button>
-    </mat-dialog-actions>
+<mat-dialog-actions class="p-24 justify-content-end">
+  <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
+  <button mat-flat-button [mat-dialog-close]="true" [disabled]="action !=='Delete' && !withdrawalForm.valid"
+    color="primary" (click)="doAction();">
+    {{action}}
+  </button>
+</mat-dialog-actions>
 <ng-template #elseTemplate>
   <div class="p-x-24">
     <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>

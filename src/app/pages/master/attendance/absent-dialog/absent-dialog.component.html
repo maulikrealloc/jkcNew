@@ -7,21 +7,21 @@
         <mat-option value="abc">abc</mat-option>
       </mat-select>
       <mat-hint *ngIf="absentForm.get('employeeList')?.hasError('required') && absentForm.get('employeeList')?.touched"
-      class="error-message error-color">
-      Employee list is required
-    </mat-hint>
+        class="error-message error-color">
+        Employee list is required
+      </mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Day</mat-label>
-      <input type="number" matInput placeholder="Enter day" formControlName="day" min="0" />
+      <input type="number" matInput placeholder="Enter day" formControlName="day" min="0">
       <mat-hint *ngIf="absentForm.get('day')?.hasError('required') && absentForm.get('day')?.touched"
         class="error-message error-color">
-       Day is required
+        Day is required
       </mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Date</mat-label>
-      <input matInput [matDatepicker]="Date" formControlName="date" placeholder="Select date" />
+      <input matInput [matDatepicker]="Date" formControlName="date" placeholder="Select date">
       <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
       <mat-datepicker #Date></mat-datepicker>
     </mat-form-field>
@@ -30,7 +30,8 @@
 <mat-divider></mat-divider>
 <mat-dialog-actions class="p-24 justify-content-end">
   <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-  <button mat-flat-button [mat-dialog-close]="true" [disabled]="action !=='Delete' && !absentForm.valid" color="primary" (click)="doAction();">
+  <button mat-flat-button [mat-dialog-close]="true" [disabled]="action !=='Delete' && !absentForm.valid" color="primary"
+    (click)="doAction();">
     {{action}}
   </button>
 </mat-dialog-actions>

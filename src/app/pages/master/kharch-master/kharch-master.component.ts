@@ -13,7 +13,7 @@ export class KharchMasterComponent {
   currentEditIndex: number | null = null;
   currentListType: string = '';
 
-  displayedColumns: string[] = [
+  kharchMasterColumns: string[] = [
     '#',
     'name',
     'action',

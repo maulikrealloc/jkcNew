@@ -29,7 +29,7 @@
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Select Date</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Enter date"/>
+          <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Enter date">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           <mat-hint *ngIf="kharchForm.get('date')?.hasError('required') && kharchForm.get('date')?.touched"
@@ -41,7 +41,7 @@
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Dec</mat-label>
-          <input type="text" matInput placeholder="Enter dec" formControlName="dec"/>
+          <input type="text" matInput placeholder="Enter dec" formControlName="dec">
         </mat-form-field>
       </div>
       <div class="col-6">
@@ -66,7 +66,8 @@
 <mat-divider></mat-divider>
 <mat-dialog-actions class="p-24 justify-content-end">
   <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-  <button mat-flat-button [mat-dialog-close]="true" [disabled]="action !== 'Delete' && kharchForm.invalid" color="primary" (click)="doAction();">
+  <button mat-flat-button [mat-dialog-close]="true" [disabled]="action !== 'Delete' && kharchForm.invalid"
+    color="primary" (click)="doAction();">
     {{action}}
   </button>
 </mat-dialog-actions>

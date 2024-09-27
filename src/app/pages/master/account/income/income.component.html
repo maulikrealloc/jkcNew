@@ -1,128 +1,135 @@
 <mat-card class="cardWithShadow">
-    <mat-card-content class="p-24">
-            <div style="align-items: baseline;" class="row">
-                <div class="col-4">
-                    <mat-form-field appearance="outline" class="w-100 hide-hint">
-                        <input matInput placeholder="Search expenses" />
-                        <mat-icon matSuffix>
-                            <i-tabler name="search" class="icon-20"></i-tabler>
-                        </mat-icon>
-                    </mat-form-field>
-                </div>
-                <div class="col-3">
-                    <mat-form-field appearance="outline" class="w-100">
-                      <mat-label>Party</mat-label>
-                        <mat-select #dropdown placeholder="Select party">
-                            <mat-option value="ABC">ABC</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-2">
-                    <button mat-flat-button color="primary" class="transferbutton" (click)="openTransfer()">
-                       Transfer
-                    </button>
-                </div>
-                <div class="col-2">
-                     <button mat-flat-button color="primary" (click)="openaddIncome('Add',{})">
-                        Add Income
-                    </button>
-              </div>
-              <div class="col-1">
-                <a class="m-r-10 cursor-pointer"><i-tabler name="file-download" 
-                    class="icon-18"></i-tabler></a>
-            </div>
-            </div>
-    </mat-card-content>
+  <mat-card-content class="p-24">
+    <div style="align-items: baseline;" class="row">
+      <div class="col-4">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
+          <input matInput placeholder="Search Income">
+          <mat-icon matSuffix>
+            <i-tabler name="search" class="icon-20"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+      <div class="col-3">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Party</mat-label>
+          <mat-select #dropdown placeholder="Select party">
+            <mat-option value="ABC">ABC</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-2">
+        <button mat-flat-button color="primary" class="transferbutton" (click)="openTransfer()">
+          Transfer
+        </button>
+      </div>
+      <div class="col-2">
+        <button mat-flat-button color="primary" (click)="openaddIncome('Add',{})">
+          Add Income
+        </button>
+      </div>
+      <div class="col-1">
+        <a class="m-r-10 cursor-pointer"><i-tabler name="file-download" class="icon-18"></i-tabler></a>
+      </div>
+    </div>
+  </mat-card-content>
 </mat-card>
 
 <mat-card class="cardWithShadow">
-    <mat-card-content class="p-24">
-      <div class="table-responsive" *ngIf="incomedata && incomedata.length > 0; else noRecordsTemplate">
-        <table mat-table [dataSource]="dataSource" class="w-100">
-          <ng-container matColumnDef="#">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
-            <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
-          </ng-container>
-  
-          <ng-container matColumnDef="partyName">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                Party Name
-            </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">
-              {{ element.partyName }}
-            </td>
-          </ng-container>
+  <mat-card-content class="p-24">
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" class="w-100">
+        <ng-container matColumnDef="#">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
+          <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="account">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              Account
-            </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">
-              {{ element.account }}
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="partyName">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Party Name
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.partyName }}
+          </td>
+        </ng-container>
 
-          <ng-container matColumnDef="invoiceNo">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                Invoice No
-            </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">
-              {{ element.invoiceNo }}
-            </td>
-          </ng-container>
-  
-          <ng-container matColumnDef="invoiceDate">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                Invoice Date
-            </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">
-              {{ element.invoiceDate | date : "mediumDate" }}
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="account">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Account
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.account }}
+          </td>
+        </ng-container>
 
-          <ng-container matColumnDef="creditDate">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                Credit Date
-            </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">
-              {{ element.creditDate | date : "mediumDate" }}
-            </td>
-          </ng-container>
-  
-          <ng-container matColumnDef="amount">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                Amount
-            </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">
-              {{ element.amount }}
-            </td>
-          </ng-container>
-  
-          <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              Action
-            </th>
-            <td mat-cell *matCellDef="let element" class="action-link">
-              <a class="m-r-10 cursor-pointer">
-                <i-tabler name="edit" class="icon-18" (click)="openaddIncome('Edit',element)" ></i-tabler>
-              </a>
-              <a class="m-r-10 cursor-pointer">
-                <i-tabler name="trash"  class="icon-18" (click)="openaddIncome('Delete',element)" ></i-tabler>
-              </a>
-            </td>
-          </ng-container>
-  
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        </table>
-        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-      </div>
-      <ng-template #noRecordsTemplate>
+        <ng-container matColumnDef="invoiceNo">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Invoice No
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.invoiceNo }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="invoiceDate">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Invoice Date
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.invoiceDate | date : "mediumDate" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="creditDate">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Credit Date
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.creditDate | date : "mediumDate" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Amount
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.amount }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Action
+          </th>
+          <td mat-cell *matCellDef="let element" class="action-link">
+            <a class="m-r-10 cursor-pointer">
+              <i-tabler name="edit" class="icon-18" (click)="openaddIncome('Edit',element)"></i-tabler>
+            </a>
+            <a class="m-r-10 cursor-pointer">
+              <i-tabler name="trash" class="icon-18" (click)="openaddIncome('Delete',element)"></i-tabler>
+            </a>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="incomeColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: incomeColumns"></tr>
+        <tr class="mat-row" style="text-align: center;" *matNoDataRow>
+          <td class="mat-cell" [attr.colspan]="incomeColumns.length">
+            No record found
+          </td>
+        </tr>
+
+        <!-- <tr mat-header-row *matHeaderRowDef="incomeColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: incomeColumns"></tr> -->
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+    <!-- <ng-template #noRecordsTemplate>
         <div class="no-records text-center">
             <span>
                 No Records Found
             </span>
         </div>
-    </ng-template>
-    </mat-card-content>
-  </mat-card>
+    </ng-template> -->
+  </mat-card-content>
+</mat-card>

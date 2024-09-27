@@ -4,7 +4,7 @@
             <div class="col-lg-4">
                 <mat-form-field appearance="outline" class="w-100 hide-hint">
                     <mat-label>Search Khatu</mat-label>
-                    <input matInput placeholder="Search khatu" />
+                    <input matInput placeholder="Search khatu">
                     <mat-icon matSuffix>
                         <i-tabler name="search" class="icon-20"></i-tabler>
                     </mat-icon>
@@ -94,8 +94,14 @@
                     </td>
                 </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="khataColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: khataColumns"></tr>
+                <tr mat-header-row *matHeaderRowDef="khataMasterColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: khataMasterColumns"></tr>
+                <tr class="mat-row" style="text-align: center;" *matNoDataRow>
+                    <td class="mat-cell" [attr.colspan]="khataMasterColumns.length">
+                        No record found
+                    </td>
+                </tr>
+
             </table>
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>

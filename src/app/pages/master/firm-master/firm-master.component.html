@@ -4,7 +4,7 @@
       <div class="col-lg-4">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <mat-label>Firm</mat-label>
-          <input matInput placeholder="Search firm"/>
+          <input matInput placeholder="Search firm">
           <mat-icon matSuffix>
             <i-tabler name="search" class="icon-20"></i-tabler>
           </mat-icon>
@@ -20,7 +20,7 @@
 </mat-card>
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
-    <div class="table-responsive" *ngIf="firmList && firmList.length > 0; else noRecordsTemplate">
+    <div class="table-responsive">
       <table style="min-width: 215%;" mat-table [dataSource]="dataSource" class="w-100">
         <ng-container matColumnDef="#">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">SR No</th>
@@ -151,17 +151,25 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="firmMasterColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: firmMasterColumns"></tr>
+        <tr class="mat-row" style="text-align: center;" *matNoDataRow>
+          <td class="mat-cell" [attr.colspan]="firmMasterColumns.length">
+            No record found
+          </td>
+        </tr>
+
+        <!-- <tr mat-header-row *matHeaderRowDef="firmMasterColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: firmMasterColumns"></tr> -->
       </table>
       <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div>
-    <ng-template #noRecordsTemplate>
+    <!-- <ng-template #noRecordsTemplate>
       <div class="no-records text-center">
           <span>
               No Records Found
           </span>
       </div>
-  </ng-template>
+  </ng-template> -->
   </mat-card-content>
 </mat-card>

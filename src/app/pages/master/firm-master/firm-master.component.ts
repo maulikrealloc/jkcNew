@@ -12,7 +12,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 })
 export class FirmMasterComponent {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-  displayedColumns: string[] = [
+  firmMasterColumns: string[] = [
     '#',
     'header',
     'Subheader',

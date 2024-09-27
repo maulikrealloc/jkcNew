@@ -1,6 +1,6 @@
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
-    <div class="table-responsive" *ngIf="netProfitData && netProfitData.length > 0; else noRecordsTemplate">
+    <div class="table-responsive">
       <table mat-table [dataSource]="dataSource" class="w-100">
 
         <ng-container matColumnDef="totalIncome">
@@ -30,17 +30,25 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="netProfitDataColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: netProfitDataColumns"></tr>
+        <tr class="mat-row" style="text-align: center;" *matNoDataRow>
+          <td class="mat-cell" [attr.colspan]="netProfitDataColumns.length">
+            No record found
+          </td>
+        </tr>
+        zs
+        <!-- <tr mat-header-row *matHeaderRowDef="netProfitDataColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: netProfitDataColumns"></tr> -->
       </table>
     </div>
-    <ng-template #noRecordsTemplate>
+    <!-- <ng-template #noRecordsTemplate>
       <div class="no-records text-center">
           <span>
               No Records Found
           </span>
       </div>
-  </ng-template>
+  </ng-template> -->
     <mat-divider></mat-divider>
   </mat-card-content>
 </mat-card>

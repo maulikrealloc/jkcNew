@@ -33,12 +33,9 @@ export class ExpensesComponent implements OnInit {
 
   constructor(private dialog: MatDialog) { }
 
-  ngOnInit(): void {}
-
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+  ngOnInit(): void {
+    this.loadBillData()
   }
-
   
   openExpenses(action: string, obj: any){
     obj.action = action;
@@ -57,7 +54,7 @@ export class ExpensesComponent implements OnInit {
           paidBy:result.data.paidBy,
           status:result.data.status
         })
-        this.dataSource = new MatTableDataSource(this.expenses)
+        this.updateDataStorage()
       }
       if(result.event === 'Edit'){
         this.expenses.forEach((value : any) => {
@@ -72,12 +69,12 @@ export class ExpensesComponent implements OnInit {
             value.status = result.data.status;
           }
         })
-        this.dataSource = new MatTableDataSource(this.expenses)        
+        this.updateDataStorage()
       }
       if(result.event === 'Delete'){
         const expensesData = this.expenses
         this.expenses = expensesData.filter((id:any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.expenses)
+        this.updateDataStorage()
        }
     })
   }
@@ -86,5 +83,18 @@ export class ExpensesComponent implements OnInit {
     const dialogRef = this.dialog.open(ExpensesmasterDialogComponent,{
 
     })
+  }
+
+  private updateDataStorage(){
+    this.dataSource = new MatTableDataSource(this.expenses);
+    localStorage.setItem('expensesnewdata',JSON.stringify(this.expenses));
+  }
+
+  private loadBillData(){
+    const savedData = localStorage.getItem('expensesnewdata');
+    if(savedData){
+    this.expenses = JSON.parse(savedData)
+    this.dataSource = new MatTableDataSource(this.expenses);
+    }   
   }
 }

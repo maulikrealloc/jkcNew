@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
@@ -7,6 +7,8 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./income-data.component.scss']
 })
 export class IncomeDataComponent implements OnInit {
+  totalAmount: number = 0;
+  
   incomeDataColumns: string[] = [
     'partyName',
     'totalAmount'
@@ -15,7 +17,23 @@ export class IncomeDataComponent implements OnInit {
   incomeData: any = []
 
   dataSource = new MatTableDataSource(this.incomeData)
+
   constructor(){}
-  ngOnInit(): void {}
+ 
+  ngOnInit(): void { 
+    const incomedatanewdata = localStorage.getItem('incomedatanewdata');
+    if (incomedatanewdata) {
+      const parsed = JSON.parse(incomedatanewdata);
+      this.incomeData = parsed;   
+      this.dataSource.data = this.incomeData;
+    }
+    this.calculateTotalAmount();
+  }
+
+  calculateTotalAmount() {
+    if (this.incomeData && this.incomeData.length > 0) {
+      this.totalAmount = this.incomeData.reduce((acc: any, item: { amount: any; }) => acc + item.amount, 0);
+    }
+  }
 
 }

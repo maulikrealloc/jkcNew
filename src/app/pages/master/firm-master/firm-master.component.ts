@@ -54,7 +54,7 @@ export class FirmMasterComponent {
         this.dataSource = new MatTableDataSource(this.firmList);
       } else {
         this.firmList = [];
-        this.dataSource = new MatTableDataSource(this.firmList); // Ensure empty table if no data
+        this.dataSource = new MatTableDataSource(this.firmList);
       }
     }).catch((error) => {
       console.error('Error fetching firms:', error);
@@ -68,7 +68,6 @@ export class FirmMasterComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.dataSource = new MatTableDataSource(this.firmList);
         this.firebaseCollectionService.addDocument('CompanyList', result.data, 'FirmList');
         this.getFirmData()
       }

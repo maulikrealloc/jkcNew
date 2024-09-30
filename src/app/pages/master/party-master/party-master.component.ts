@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-party-master',
@@ -22,26 +23,31 @@ export class PartyMasterComponent implements AfterViewInit {
     'action',
   ];
 
-  employees: any = [
-    {
-      id: 1,
-      firstName: 'Johnathan',
-      partyGSTIN: 'gstin343',
-      chalanNoSeries: '22',
-      FirmAddress: 'Royal plaza Simada Gam Surat',
-      partyPanNo: 'ASDS2323',
-      partyMobile: '0987654321'
-    }
-  ]
+  partyList:any = []
 
-  dataSource: any = new MatTableDataSource(this.employees);
+  dataSource: any = new MatTableDataSource(this.partyList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog , private firebaseCollectionService : FirebaseCollectionService) { }
 
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.getPartyData()
+  }
+
+  getPartyData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
+      this.partyList = party
+      if (party && party.length > 0) {
+        this.dataSource = new MatTableDataSource(this.partyList);
+      } else {
+        this.partyList = [];
+        this.dataSource = new MatTableDataSource(this.partyList);
+      }
+    }).catch((error) => {
+      console.error('Error fetching party:', error);
+    });
   }
 
   addParty(action: string, obj: any) {
@@ -50,39 +56,20 @@ export class PartyMasterComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
-        this.employees.push({
-          id: this.employees.length + 1,
-          firstName: result.data.firstName,
-          lastName: result.data.lastName,
-          partyGSTIN: result.data.partyGSTIN,
-          chalanNoSeries: result.data.chalanNoSeries,
-          FirmAddress: result.data.FirmAddress,
-          partyPanNo: result.data.partyPanNo,
-          partyMobile: result.data.partyMobile
-        })
-        this.dataSource = new MatTableDataSource(this.employees);
-        console.log(this.employees);
-        
+        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'PartyList');
+        this.getPartyData()
       }
       if (result?.event === 'Edit') {
-        this.employees.forEach((element: any) => {
-          if (element.id === result.data.id) {
-            element.id = result.data.id
-            element.firstName = result.data.firstName
-            element.lastName = result.data.lastName
-            element.partyGSTIN = result.data.partyGSTIN
-            element.chalanNoSeries = result.data.chalanNoSeries
-            element.FirmAddress = result.data.FirmAddress
-            element.partyPanNo = result.data.partyPanNo
-            element.partyMobile = result.data.partyMobile
+        this.partyList.forEach((element: any) => {
+          if (obj.id === element.id) {
+            this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'PartyList');
+            this.getPartyData()
           }
         });
-        this.dataSource = new MatTableDataSource(this.employees);
       }
       if (result?.event === 'Delete') {
-        const allEmployeesData = this.employees
-        this.employees = allEmployeesData.filter((id: any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.employees);
+        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'PartyList');
+        this.getPartyData()
       }
     });
   }
@@ -136,7 +123,7 @@ export class partyMasterDialogComponent implements OnInit {
 
   doAction(): void {
     const payload = {
-      id: this.local_data.id ? this.local_data.id : '',
+      // id: this.local_data.id ? this.local_data.id : '',
       firstName: this.partyForm.value.firstName,
       lastName: this.partyForm.value.lastName,
       FirmAddress: this.partyForm.value.FirmAddress,

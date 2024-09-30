@@ -80,7 +80,7 @@ export class ChalanComponent {
       productPrice: this.chalanForm.value.productPrice,
       chalanNo: this.chalanForm.value.chalanNo
     }
-
+    console.log(payload, "payload===========>>>>>>>>>>>");
     this.employee.push(payload)
     this.khataListdataSource = new MatTableDataSource(this.employee);
 

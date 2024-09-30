@@ -49,6 +49,8 @@ export class CompanyAccountDialogComponent implements OnInit {
       openingBalance: this.companyForm.value.openingBalance,
       date: this.companyForm.value.date,
     }
+    console.log(payload, "payload=============>>>>>>>>>>>>");
+    
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

@@ -47,6 +47,7 @@ export class RowMaterialDialogComponent {
         quantity: this.rowMaterialForm.value.quantity,
         price: this.rowMaterialForm.value.price,
     }
+    console.log(payload, "payload==============>>>>>>>>>>>>>"); 
     this.dialogRef.close({event: this.action, data: payload})
   }
 }

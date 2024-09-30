@@ -26,16 +26,13 @@
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">SR No</th>
           <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
         </ng-container>
+
         <ng-container matColumnDef="header">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Header</th>
-          <td mat-cell *matCellDef="let element">
-            <div class="d-flex align-items-center">
-              <div class="m-l-16">
-                <p class="mat-subtitle-1 f-s-16 m-t-0">
-                  {{ element.header }}
-                </p>
-              </div>
-            </div>
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Header
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.header }}
           </td>
         </ng-container>
 
@@ -158,18 +155,8 @@
             No record found
           </td>
         </tr>
-
-        <!-- <tr mat-header-row *matHeaderRowDef="firmMasterColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: firmMasterColumns"></tr> -->
       </table>
       <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div>
-    <!-- <ng-template #noRecordsTemplate>
-      <div class="no-records text-center">
-          <span>
-              No Records Found
-          </span>
-      </div>
-  </ng-template> -->
   </mat-card-content>
 </mat-card>

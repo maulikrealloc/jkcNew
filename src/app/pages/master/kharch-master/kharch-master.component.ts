@@ -42,26 +42,21 @@ export class KharchMasterComponent {
   submit() {
     if (this.kharchForm.valid) {
       const Value = this.kharchForm.value;
-
       if (Value.unitKharch === 'unit') {
         this.unitData.push({
           id: this.unitData.length + 1,
           name: Value.name
         });
-
         this.unitDataSource.data = this.unitData;
       } else if (Value.unitKharch === 'kharch') {
         this.kharchData.push({
           id: this.kharchData.length + 1,
           name: Value.name
         });
-
         this.kharchDataSource.data = this.kharchData;
       }
-
       this.kharchForm.reset();
     }
-    
   }
 
   

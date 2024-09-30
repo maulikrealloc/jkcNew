@@ -145,7 +145,8 @@ export class partyMasterDialogComponent implements OnInit {
       partyPanNo: this.partyForm.value.partyPanNo,
       partyMobile: this.partyForm.value.partyMobile
     }
-    this.dialogRef.close({ event: this.action, data: payload });
+    console.log(payload, "payload================>>>>>>>>>>>>>>");
+    this.dialogRef.close({ event: this.action, data: payload });  
   }
 
   closeDialog(): void {

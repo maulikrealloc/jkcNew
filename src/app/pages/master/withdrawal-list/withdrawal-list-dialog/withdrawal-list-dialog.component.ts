@@ -44,6 +44,8 @@ export class WithdrawalListDialogComponent {
       amount: this.withdrawalForm.value.amount,
       date: this.withdrawalForm.value.date
     }
+    console.log(payload, "payload========>>>>>>>>>");
+    
     this.dialogRef.close({ event: this.action, data: payload });
   }
   closeDialog(): void {

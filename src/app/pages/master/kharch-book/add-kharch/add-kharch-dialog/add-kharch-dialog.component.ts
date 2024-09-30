@@ -55,6 +55,8 @@ export class AddKharchDialogComponent {
       chalanNo: this.kharchForm.value.chalanNo,
       amount: this.kharchForm.value.amount,
     }
+    console.log(payload,"payload==========>>>>>>>>>>>>>>");
+    
     this.dialogRef.close({ event: this.action, data: payload });
 
   }

@@ -67,6 +67,15 @@ export const AuthenticationRoutes: Routes = [
         path: 'side-login',
         component: AppSideLoginComponent,
       },
+      {
+        path: 'side-register',
+        component: AppSideRegisterComponent,
+      },
+      {
+        path: 'side-forgot-pwd',
+        component: AppSideForgotPasswordComponent
+      }
+      
     ]
   }
 ];

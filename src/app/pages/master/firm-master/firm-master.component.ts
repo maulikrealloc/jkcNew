@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
+import { SpinnerService } from 'src/app/services/spinner.service';
 
 
 @Component({
@@ -33,16 +35,27 @@ export class FirmMasterComponent {
   dataSource = new MatTableDataSource(this.firmList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog,private firebaseCollectionService : FirebaseCollectionService) { }
 
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.paginator; 
+    this.getFirmData() 
   }
+
   generateRandomNumber(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
+getFirmData(){
+  this.firebaseCollectionService.getFirmsFromCompany().then((firms) => {
+    console.log('Firms:', firms);
+    this.firmList = firms
+    this.dataSource = new MatTableDataSource(this.firmList);
+  }).catch((error) => {
+    console.error('Error fetching firms:', error);
+  });
+}
   addFirm(action: string, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(firmMasterDialogComponent, {
@@ -51,47 +64,21 @@ export class FirmMasterComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.firmList.push({
-          id: this.firmList.length + 1,
-          header: result.data.header,
-          subHeader: result.data.subHeader,
-          GSTNo: result.data.GSTNo,
-          gstPercentage: result.data.gstPercentage,
-          panNo: result.data.panNo,
-          mobileNO: result.data.mobileNO,
-          personalMobileNo: result.data.personalMobileNo,
-          email: result.data.email,
-          bankName: result.data.bankName,
-          ifscCode: result.data.ifscCode,
-          bankAccountNo: result.data.bankAccountNo,
-          address: result.data.address
-        })
-        this.dataSource = new MatTableDataSource(this.firmList);        
+        this.dataSource = new MatTableDataSource(this.firmList);
+        this.firebaseCollectionService.addFirmToCompany(result.data)
+        this.getFirmData()
       }
       if (result.event === 'Edit') {
         this.firmList.forEach((element: any) => {
-          if (element.id === result.data.id) {
-            element.id = result.data.id
-            element.header = result.data.header
-            element.subHeader = result.data.subHeader
-            element.GSTNo = result.data.GSTNo
-            element.gstPercentage = result.data.gstPercentage
-            element.panNo = result.data.panNo
-            element.mobileNO = result.data.mobileNO
-            element.personalMobileNo = result.data.personalMobileNo
-            element.email = result.data.email
-            element.bankName = result.data.bankName
-            element.ifscCode = result.data.ifscCode
-            element.bankAccountNo = result.data.bankAccountNo
-            element.address = result.data.address
+          if (obj.id === element.id) {
+            this.firebaseCollectionService.updateFirmInCompany(obj.id , result.data)
+            this.getFirmData()
           }
         });
-        this.dataSource = new MatTableDataSource(this.firmList);
       }
       if (result.event === 'Delete') {
-        const allEmployeesData = this.firmList
-        this.firmList = allEmployeesData.filter((id: any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.firmList);
+       this.firebaseCollectionService.deleteFirmInCompany(obj.id) 
+       this.getFirmData()
       }
     });
   }
@@ -155,7 +142,6 @@ export class firmMasterDialogComponent implements OnInit {
 
   doAction(): void {
     const payload = {
-      id: this.local_data.id ? this.local_data.id : '',
       header: this.firmForm.value.header,
       subHeader: this.firmForm.value.subHeader,
       address: this.firmForm.value.address,

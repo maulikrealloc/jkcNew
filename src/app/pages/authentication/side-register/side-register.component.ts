@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } 
 import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { NgIf } from '@angular/common';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-side-register',
@@ -14,12 +15,16 @@ import { NgIf } from '@angular/common';
 export class AppSideRegisterComponent {
   options = this.settings.getOptions();
 
-  constructor(private settings: CoreService, private router: Router) {}
+  constructor(private settings: CoreService, private router: Router , private authServie : AuthService) {}
 
   form = new FormGroup({
-    uname: new FormControl('', [Validators.required, Validators.minLength(6)]),
     email: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
+    firstName: new FormControl('', [Validators.required]),
+    lastName: new FormControl('', [Validators.required]),
+    companyName: new FormControl('', [Validators.required]),
+    mobileNo: new FormControl('', [Validators.required]),
+
   });
 
   get f() {
@@ -27,7 +32,18 @@ export class AppSideRegisterComponent {
   }
 
   submit() {
-    // console.log(this.form.value);
-    this.router.navigate(['/dashboards/dashboard1']);
+    const payload = {
+      email : this.form.value.email,
+      password : this.form.value.password,
+      firstName : this.form.value.firstName,
+      lastName : this.form.value.lastName,
+      companyName : this.form.value.companyName,
+      mobileNo : this.form.value.mobileNo,
+    }
+    const registerSuccess:any = this.authServie.signUp(payload)
+    if (registerSuccess) {
+      this.form.reset()
+    }
   }
+
 }

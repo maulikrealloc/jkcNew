@@ -77,7 +77,7 @@ export class InvoiceComponent {
       sgst: this.invoiceForm.value.sgst,
       discountRatio: this.invoiceForm.value.discountRatio
     }
-    console.log(this.invoiceForm.value);
-
+    console.log(payload, "payload===========>>>>>>>>>");
+    
   }
 }

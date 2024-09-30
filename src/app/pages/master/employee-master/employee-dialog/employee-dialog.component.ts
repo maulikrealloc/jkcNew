@@ -61,6 +61,8 @@ export class EmployeeDialogComponent {
       ifscCode: this.employeeForm.value.ifscCode,
       bankAccountNo: this.employeeForm.value.bankAccountNo
     }
+    console.log(payload, "payload==========>>>>>>>>>>");
+    
     this.dialogRef.close({ event: this.action, data: payload });
 
   }

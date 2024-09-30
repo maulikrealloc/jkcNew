@@ -118,6 +118,8 @@ export class designMasterDialogComponent implements OnInit {
       noStiching: this.designForm.value.noStiching,
       imagePath: this.local_data.imagePath
     }
+    console.log(payload, "payload===========>>>>>>>>>>");
+    
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

@@ -1,1 +1,9 @@
-<router-outlet></router-outlet>
+<ng-container *ngIf="isOnline">
+    <router-outlet></router-outlet>
+</ng-container>
+
+<ng-container *ngIf="!isOnline">
+    <div style="text-align: center;">
+        <img src="../assets/images/logos/Screenshot from 2024-09-30 14-55-41.png" alt="">
+    </div>
+</ng-container>

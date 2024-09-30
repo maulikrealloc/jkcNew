@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 import { Router, NavigationEnd } from '@angular/router';
-import { SpinnerService } from './services/spinner.service';
+import { OnlineStatusService } from './services/online-status.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
 })
 export class AppComponent {
-
-  constructor(public translate: TranslateService,private router: Router,private spinnerService :SpinnerService) {
+  isOnline :boolean = false
+  constructor(public translate: TranslateService,private router: Router,private onlineStatusService :OnlineStatusService) {
     translate.addLangs(['en', 'fr','es','de']);
     translate.setDefaultLang('en');   
 
@@ -19,6 +19,10 @@ export class AppComponent {
         if (!localStorage.getItem('uid') && event.url.split('/')[1] != 'authentication') {
           this.router.navigate(['/authentication/side-login'])
         }
+    });
+
+    this.onlineStatusService.onlineStatus$.subscribe(status => {
+      this.isOnline = status;
     });
  }
 }

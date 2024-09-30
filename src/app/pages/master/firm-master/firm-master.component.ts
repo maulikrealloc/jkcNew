@@ -35,27 +35,31 @@ export class FirmMasterComponent {
   dataSource = new MatTableDataSource(this.firmList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private dialog: MatDialog,private firebaseCollectionService : FirebaseCollectionService) { }
+  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator; 
-    this.getFirmData() 
+    this.dataSource.paginator = this.paginator;
+    this.getFirmData()
   }
 
   generateRandomNumber(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-getFirmData(){
-  this.firebaseCollectionService.getFirmsFromCompany().then((firms) => {
-    console.log('Firms:', firms);
-    this.firmList = firms
-    this.dataSource = new MatTableDataSource(this.firmList);
-  }).catch((error) => {
-    console.error('Error fetching firms:', error);
-  });
-}
+  getFirmData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'FirmList').then((firms) => {
+      this.firmList = firms
+      if (firms && firms.length > 0) {
+        this.dataSource = new MatTableDataSource(this.firmList);
+      } else {
+        this.firmList = [];
+        this.dataSource = new MatTableDataSource(this.firmList); // Ensure empty table if no data
+      }
+    }).catch((error) => {
+      console.error('Error fetching firms:', error);
+    });
+  }
   addFirm(action: string, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(firmMasterDialogComponent, {
@@ -65,20 +69,20 @@ getFirmData(){
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
         this.dataSource = new MatTableDataSource(this.firmList);
-        this.firebaseCollectionService.addFirmToCompany(result.data)
+        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'FirmList');
         this.getFirmData()
       }
       if (result.event === 'Edit') {
         this.firmList.forEach((element: any) => {
           if (obj.id === element.id) {
-            this.firebaseCollectionService.updateFirmInCompany(obj.id , result.data)
+            this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'FirmList');
             this.getFirmData()
           }
         });
       }
       if (result.event === 'Delete') {
-       this.firebaseCollectionService.deleteFirmInCompany(obj.id) 
-       this.getFirmData()
+        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'FirmList');
+        this.getFirmData()
       }
     });
   }
@@ -125,15 +129,15 @@ export class firmMasterDialogComponent implements OnInit {
 
   formBuild() {
     this.firmForm = this.fb.group({
-      header: ['', [Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
-      subHeader: ['',[Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
-      address: ['',Validators.required],
+      header: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      subHeader: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      address: ['', Validators.required],
       GSTNo: [''],
       gstPercentage: [''],
       panNo: [''],
-      mobileNO: ['',[Validators.required,Validators.pattern('^[0-9]{10}$')]],
-      personalMobileNo: ['',[Validators.required,Validators.pattern('^[0-9]{10}$')]],
-      email:[''],
+      mobileNO: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      personalMobileNo: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      email: [''],
       bankName: [''],
       ifscCode: [''],
       bankAccountNo: [''],

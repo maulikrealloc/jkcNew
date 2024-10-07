@@ -22,8 +22,8 @@
   <mat-card-content class="p-24">
     <div class="table-responsive">
       <table mat-table [dataSource]="dataSource" class="w-100">
-        <ng-container matColumnDef="#">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
+        <ng-container matColumnDef="srNo">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
           <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
         </ng-container>
 
@@ -32,7 +32,7 @@
             Party Name
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.party }}
+            {{ getPartyName(element.partyId) }}
           </td>
         </ng-container>
 
@@ -41,7 +41,8 @@
             Order Date
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.orderDate | date : "mediumDate" }}
+            {{ convertTimestampToDate(element.orderDate) | date : "mediumDate" }}
+
           </td>
         </ng-container>
 
@@ -50,7 +51,7 @@
             Delivery Date
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.deliveryDate | date : "mediumDate" }}
+            {{ convertTimestampToDate(element.deliveryDate) | date : "mediumDate" }}
           </td>
         </ng-container>
 
@@ -86,7 +87,7 @@
             Status
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.status }}
+            {{ element.orderStatus }}
           </td>
         </ng-container>
 

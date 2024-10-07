@@ -1,34 +1,33 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 
-const khataList = [
-  {
-    id: 1,
-    productName: 'Demo',
-    productPrice: 'Test',
-    quantity: 2000,
-    chalanNo: 9876543210,
-    totalAmount: 9876543210,
-    finalAmount: 9876543210
-  }
-];
 @Component({
   selector: 'app-invoice',
   templateUrl: './invoice.component.html',
   styleUrls: ['./invoice.component.scss']
 })
-export class InvoiceComponent {
+export class InvoiceComponent implements OnInit {
 
+  invoiceList = [
+    {
+      id: 1,
+      productName: 'Demo',
+      productPrice: 'Test',
+      quantity: 2000,
+      chalanNo: 9876543210,
+      totalAmount: 9876543210,
+      finalAmount: 9876543210
+    }
+  ];
   invoiceForm: FormGroup;
+
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-
-  
   invoiceColumns: string[] = [
-    '#',
+    'srNo',
     'productName',
     'productPrice',
     'quantity',
@@ -38,15 +37,13 @@ export class InvoiceComponent {
     'action',
   ];
 
-
-
-  khataListdataSource = new MatTableDataSource(khataList);
+  invoiceListdataSource = new MatTableDataSource(this.invoiceList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.buildForm()
+    this.buildForm();
   }
 
   buildForm() {
@@ -63,7 +60,7 @@ export class InvoiceComponent {
   }
 
   ngAfterViewInit(): void {
-    this.khataListdataSource.paginator = this.paginator;
+    this.invoiceListdataSource.paginator = this.paginator;
 
   }
   invoiceview() {
@@ -78,6 +75,5 @@ export class InvoiceComponent {
       discountRatio: this.invoiceForm.value.discountRatio
     }
     console.log(payload, "payload===========>>>>>>>>>");
-    
   }
 }

@@ -22,9 +22,8 @@ export class KharchReportComponent {
 
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-
   kharchReportColumns: string[] = [
-    '#',
+    'srNo',
     'unitname',
     'kharchname',
     'dec',
@@ -33,19 +32,17 @@ export class KharchReportComponent {
     'amount'
   ];
 
-
-
   khataListdataSource = new MatTableDataSource(khataList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor() { }
-  ngOnInit(): void {
-  }
 
+  ngOnInit(): void {
+    
+  }
 
   ngAfterViewInit(): void {
     this.khataListdataSource.paginator = this.paginator;
-
   }
 
 }

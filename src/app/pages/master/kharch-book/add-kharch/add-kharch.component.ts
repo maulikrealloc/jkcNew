@@ -14,7 +14,7 @@ export class AddKharchComponent {
 
 
   kharchColumns: string[] = [
-    '#',
+    'srNo',
     'unitname',
     'kharchname',
     'dec',
@@ -46,7 +46,6 @@ export class AddKharchComponent {
 
   ngAfterViewInit(): void {
     this.khataListdataSource.paginator = this.paginator;
-
   }
 
   addkhatu(action: string, obj: any) {

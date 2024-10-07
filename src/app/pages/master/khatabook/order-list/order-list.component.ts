@@ -13,7 +13,7 @@ export class OrderListComponent {
 
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   orderColumns: string[] = [
-    '#',
+    'srNo',
     'partyName',
     'khataName',
     'partyOrder',
@@ -24,7 +24,7 @@ export class OrderListComponent {
     'status',
     'action'
   ];
-  order: any = [
+  orderList: any = [
     {
       id: 1,
       partyName: 'Demo',
@@ -38,14 +38,15 @@ export class OrderListComponent {
     }
   ];
 
-  orderDataSource = new MatTableDataSource(this.order);
+  orderDataSource = new MatTableDataSource(this.orderList);
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog) { }
-  ngOnInit(): void {
-  }
 
+  ngOnInit(): void {
+    
+  }
 
   ngAfterViewInit(): void {
     this.orderDataSource.paginator = this.paginator;
@@ -59,17 +60,17 @@ export class OrderListComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
-        this.order.push({
+        this.orderList.push({
           id: result.data.legth + 1,
           party: result.data.party,
           order: result.data.order,
           khata: result.data.khata,
           date: result.data.date
         })
-        this.orderDataSource = new MatTableDataSource(this.order);
+        this.orderDataSource = new MatTableDataSource(this.orderList);
       }
       if (result?.event === 'Edit') {
-        this.order.forEach((element: any) => {
+        this.orderList.forEach((element: any) => {
           if (element.id === result.data.id) {
             element.party = result.data.party
             element.order = result.data.order
@@ -78,12 +79,12 @@ export class OrderListComponent {
             element.id = result.data.id
           }
         });
-        this.orderDataSource = new MatTableDataSource(this.order);
+        this.orderDataSource = new MatTableDataSource(this.orderList);
       }
       if (result?.event === 'Delete') {
-        const allOrderData = this.order
-        this.order = allOrderData.filter((id: any) => id.id !== result.data.id)
-        this.orderDataSource = new MatTableDataSource(this.order);
+        const allOrderData = this.orderList
+        this.orderList = allOrderData.filter((id: any) => id.id !== result.data.id)
+        this.orderDataSource = new MatTableDataSource(this.orderList);
       }
     });
   }

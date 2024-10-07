@@ -10,17 +10,17 @@ import firebase from 'firebase/compat/app';
 })
 export class AuthService {
 
-  constructor(private afAuth: AngularFireAuth,private snackBar: MatSnackBar,private firestore: AngularFirestore,private router: Router) { }
+  constructor(private afAuth: AngularFireAuth, private snackBar: MatSnackBar, private firestore: AngularFirestore, private router: Router) { }
 
   // Sign in with email and password
   async signIn(email: any, password: any) {
     try {
-      const result:any = await this.afAuth.signInWithEmailAndPassword(email, password);
-      
+      const result: any = await this.afAuth.signInWithEmailAndPassword(email, password);
+
       // Fetch user data from Firestore
-      const userDoc = await this.firestore.collection('users').doc(result.user?.uid).get().toPromise();
-      const userData :any = userDoc?.data();
-      
+      const userDoc = await this.firestore.collection('CompanyList').doc(result.user?.uid).get().toPromise();
+      const userData: any = userDoc?.data();
+
       if (userData?.isDisabled) {
         this.snackBar.open('This account is not active!!', 'Close', {
           duration: 3000,
@@ -29,8 +29,9 @@ export class AuthService {
         });
         throw new Error("This account is not active.");
       }
-      localStorage.setItem('uid' , result.user._delegate.uid)
-      localStorage.setItem('userEmail' , result.user._delegate.email)
+      localStorage.setItem('authToken', result.user._delegate.accessToken)
+      localStorage.setItem('uid', result.user._delegate.uid)
+      localStorage.setItem('userEmail', result.user._delegate.email)
       this.router.navigate(['/dashboards/dashboard1']);
       this.snackBar.open('Login successful', 'Close', {
         duration: 3000,
@@ -49,20 +50,20 @@ export class AuthService {
     }
   }
 
-   async signUp(signUpData :any) {
+  async signUp(signUpData: any) {
     try {
-      const result:any = await this.afAuth.createUserWithEmailAndPassword(signUpData.email, signUpData.password);
+      const result: any = await this.afAuth.createUserWithEmailAndPassword(signUpData.email, signUpData.password);
 
       await this.firestore.collection('CompanyList').doc(result.user?.uid).set({
         email: signUpData.email,
         password: signUpData.password,
-        firstName : signUpData.firstName,
-        lastName : signUpData.lastName,
-        companyName : signUpData.companyName,
-        mobileNo : signUpData.mobileNo,
+        firstName: signUpData.firstName,
+        lastName: signUpData.lastName,
+        companyName: signUpData.companyName,
+        mobileNo: signUpData.mobileNo,
         isDisabled: true
       });
-      
+
       this.snackBar.open(`Account created: ${result.user._delegate.email}`, 'Close', {
         duration: 3000,
         horizontalPosition: 'right',
@@ -95,24 +96,24 @@ export class AuthService {
     }
   }
 
-// Forgot Password
-async forgotPassword(email: any) {
-  try {
-    await this.afAuth.sendPasswordResetEmail(email);
-    this.snackBar.open('Password reset email sent. Please check your inbox.', 'Close', {
-      duration: 3000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-    });
-  } catch (error) {
-    console.error('Error sending password reset email', error);
-    this.snackBar.open(`Failed to send password reset email: ${error}`, 'Close', {
-      duration: 3000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-    });
-    throw error;
+  // Forgot Password
+  async forgotPassword(email: any) {
+    try {
+      await this.afAuth.sendPasswordResetEmail(email);
+      this.snackBar.open('Password reset email sent. Please check your inbox.', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+    } catch (error) {
+      console.error('Error sending password reset email', error);
+      this.snackBar.open(`Failed to send password reset email: ${error}`, 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+      throw error;
+    }
   }
-}
 
 }

@@ -22,7 +22,7 @@ export class MaintenanceMasterDialogComponent implements OnInit {
     this.action = this.local_data.action;
   }
   ngOnInit(): void {
-    this.formBuild()
+    this.formBuild();
 
     if (this.action === 'Edit') {
       this.maintenanceForm.controls['name'].setValue(this.local_data.name)
@@ -33,7 +33,7 @@ export class MaintenanceMasterDialogComponent implements OnInit {
 
   formBuild() {
     this.maintenanceForm = this.fb.group({
-      name: ['',[Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
+      name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
       value: ['', Validators.required]
     })
   }
@@ -41,7 +41,6 @@ export class MaintenanceMasterDialogComponent implements OnInit {
   doAction(): void {
 
     const payload = {
-      id: this.local_data.id ? this.local_data.id : '',
       name: this.maintenanceForm.value.name,
       value: this.maintenanceForm.value.value
     }

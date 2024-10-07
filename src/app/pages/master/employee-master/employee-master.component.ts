@@ -1,15 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { EmployeeDialogComponent } from './employee-dialog/employee-dialog.component';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
+
 @Component({
   selector: 'app-employee-master',
   templateUrl: './employee-master.component.html',
   styleUrls: ['./employee-master.component.scss']
 })
 
-export class EmployeeMasterComponent implements OnInit {
+export class EmployeeMasterComponent implements AfterViewInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   employeeMasterColumns: string[] = [
     '#',
@@ -23,14 +25,31 @@ export class EmployeeMasterComponent implements OnInit {
     'action'
   ];
 
-  employees: any = [];
+  employeesList: any = [];
 
-  dataSource = new MatTableDataSource(this.employees);
+  dataSource = new MatTableDataSource(this.employeesList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
-  ngOnInit(): void {
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.getEmployeeData();
+  }
+
+  getEmployeeData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'EmployeeList').then((employee) => {
+      this.employeesList = employee
+      if (employee && employee.length > 0) {
+        this.dataSource = new MatTableDataSource(this.employeesList);
+      } else {
+        this.employeesList = [];
+        this.dataSource = new MatTableDataSource(this.employeesList);
+      }
+    }).catch((error) => {
+      console.error('Error fetching employee:', error);
+    });
   }
 
   addDesign(action: string, obj: any) {
@@ -41,37 +60,20 @@ export class EmployeeMasterComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.employees.push({
-          id: this.employees.length + 1,
-          firstName: result.data.firstName,
-          lastName: result.data.lastName,
-          salary: result.data.salary,
-          mobileNo: result.data.mobileNo,
-          bankName: result.data.bankName,
-          ifscCode: result.data.ifscCode,
-          bankAccountNo: result.data.bankAccountNo,
-        })
-        this.dataSource = new MatTableDataSource(this.employees);
+        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'EmployeeList');
+        this.getEmployeeData();
       }
       if (result.event === 'Edit') {
-        this.employees.forEach((element: any) => {
-          if (element.id === result.data.id) {
-            element.id = result.data.id
-            element.firstName = result.data.firstName
-            element.lastName = result.data.lastName
-            element.salary = result.data.salary
-            element.mobileNo = result.data.mobileNo
-            element.bankName = result.data.bankName
-            element.ifscCode = result.data.ifscCode
-            element.bankAccountNo = result.data.bankAccountNo
+        this.employeesList.forEach((element: any) => {
+          if (obj.id === element.id) {
+            this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'EmployeeList');
+            this.getEmployeeData();
           }
         });
-        this.dataSource = new MatTableDataSource(this.employees);
       }
       if (result.event === 'Delete') {
-        const allEmployeesData = this.employees
-        this.employees = allEmployeesData.filter((id: any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.employees);
+        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'EmployeeList');
+        this.getEmployeeData();
       }
     });
   }

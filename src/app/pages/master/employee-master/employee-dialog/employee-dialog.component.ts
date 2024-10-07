@@ -10,7 +10,6 @@ import { designMasterDialogComponent } from '../../design-master/design-master.c
 })
 export class EmployeeDialogComponent {
 
-
   employeeForm: FormGroup;
   action: string;
   local_data: any;
@@ -40,19 +39,18 @@ export class EmployeeDialogComponent {
 
   formBuild() {
     this.employeeForm = this.fb.group({
-      firstName: ['',[Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
-      lastName: ['',[Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
+      firstName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      lastName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
       salary: [''],
-      mobileNo: ['',[Validators.required,Validators.pattern('^[0-9]{10}$')]],
-      bankName:[''],
-      ifscCode:[''],
-      bankAccountNo:[''],
+      mobileNo: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      bankName: [''],
+      ifscCode: [''],
+      bankAccountNo: [''],
     })
   }
 
   doAction(): void {
     const payload = {
-      id: this.local_data.id ? this.local_data.id : '',
       firstName: this.employeeForm.value.firstName,
       lastName: this.employeeForm.value.lastName,
       salary: this.employeeForm.value.salary,
@@ -61,8 +59,6 @@ export class EmployeeDialogComponent {
       ifscCode: this.employeeForm.value.ifscCode,
       bankAccountNo: this.employeeForm.value.bankAccountNo
     }
-    console.log(payload, "payload==========>>>>>>>>>>");
-    
     this.dialogRef.close({ event: this.action, data: payload });
 
   }

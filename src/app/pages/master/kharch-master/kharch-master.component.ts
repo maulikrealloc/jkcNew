@@ -14,7 +14,7 @@ export class KharchMasterComponent {
   currentListType: string = '';
 
   kharchMasterColumns: string[] = [
-    '#',
+    'srNo',
     'name',
     'action',
   ];
@@ -59,10 +59,10 @@ export class KharchMasterComponent {
     }
   }
 
-  
-  editData(element: any, index: number, listType: string){
+
+  editData(element: any, index: number, listType: string) {
     this.kharchForm.patchValue({
-      id:element.id,
+      id: element.id,
       name: element.name,
       unitKharch: listType
     });
@@ -70,9 +70,9 @@ export class KharchMasterComponent {
     this.currentEditIndex = index;
     this.currentListType = listType;
   }
-  
-  deleteData(){
-    
+
+  deleteData() {
+
   }
-  
+
 }

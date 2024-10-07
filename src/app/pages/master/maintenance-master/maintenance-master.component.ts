@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MaintenanceMasterDialogComponent } from './maintenance-master-dialog/maintenance-master-dialog.component';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-maintenance-master',
@@ -18,21 +19,39 @@ export class MaintenanceMasterComponent implements OnInit {
     'value',
     'action',
   ];
-  
-  maintenanceMaster: any = [];
+
+  maintenanceMasterList: any = [];
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
-  dataSource = new MatTableDataSource(this.maintenanceMaster);
+  dataSource = new MatTableDataSource(this.maintenanceMasterList);
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
+
   ngOnInit(): void {
+
   }
+
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.getMaintenanceData();
+  }
+
+  getMaintenanceData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'MaintenanceList').then((maintenance) => {
+      this.maintenanceMasterList = maintenance
+      if (maintenance && maintenance.length > 0) {
+        this.dataSource = new MatTableDataSource(this.maintenanceMasterList);
+      } else {
+        this.maintenanceMasterList = [];
+        this.dataSource = new MatTableDataSource(this.maintenanceMasterList);
+      }
+    }).catch((error) => {
+      console.error('Error fetching maintenance:', error);
+    });
   }
 
   getTotal(): number {
-    return this.maintenanceMaster.reduce((acc: number, curr: { value: number; }) => acc + curr.value, 0);
+    return this.maintenanceMasterList.reduce((acc: number, curr: { value: number; }) => acc + curr.value, 0);
   }
 
   addMaintenance(action: string, obj: any) {
@@ -43,29 +62,22 @@ export class MaintenanceMasterComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
-        this.maintenanceMaster.push({
-          id: this.maintenanceMaster.length + 1,
-          name: result.data.name,
-          value: result.data.value,
-        })
-        this.dataSource = new MatTableDataSource(this.maintenanceMaster);        
+        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'MaintenanceList');
+        this.getMaintenanceData();
       }
       if (result?.event === 'Edit') {
-        this.maintenanceMaster.forEach((element: any) => {
-          if (element.id === result.data.id) {
-            element.name = result.data.name
-            element.value = result.data.value
-            element.id = result.data.id
+        this.maintenanceMasterList.forEach((element: any) => {
+          if (obj.id === element.id) {
+            this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'MaintenanceList');
+            this.getMaintenanceData();
           }
         });
-        this.dataSource = new MatTableDataSource(this.maintenanceMaster);
       }
       if (result?.event === 'Delete') {
-        const allEmployeesData = this.maintenanceMaster
-        this.maintenanceMaster = allEmployeesData.filter((id: any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.maintenanceMaster);
+        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'MaintenanceList');
+        this.getMaintenanceData();
       }
     });
-  } 
+  }
 }
 

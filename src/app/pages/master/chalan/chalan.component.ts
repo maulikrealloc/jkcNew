@@ -33,7 +33,8 @@ export class ChalanComponent {
   quantityValue: any = 0;
   productPriceValue: any = 0;
   totalProductPrices : any;
-
+  selectedPartyChalanNo : number = 0
+  selectedProduct : any = []
   chalanListdataSource = new MatTableDataSource(this.chalanList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
@@ -51,17 +52,11 @@ export class ChalanComponent {
 
   formBuild() {
     this.chalanForm = this.fb.group({
-      id: [''],
       firm: ['', Validators.required],
       party: ['', Validators.required],
       date: new Date(),
       partyOrder: ['', Validators.required],
-      productName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
-      srNo: [''],
-      quantity: ['', Validators.required],
-      totalAmount: [''],
-      productPrice: ['', Validators.required],
-      chalanNo: ['', Validators.required],
+      product : [this.selectedProduct]
     })
   }
 
@@ -85,9 +80,13 @@ export class ChalanComponent {
     });
   }
 
+  viewpdf(){
+    console.log('=====chalanForm>>' ,this.chalanForm.value);
+    
+  }
+
   partyChange(event: any) {
-    const chalanNo = this.partyList.find((partyObj: any) => partyObj.id === event.value).chalanNoSeries
-    this.chalanForm.controls['chalanNo'].setValue(chalanNo)
+    this.selectedPartyChalanNo = this.partyList.find((partyObj: any) => partyObj.id === event.value).chalanNoSeries
 
     this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
       if (order && order.length > 0) {
@@ -101,28 +100,34 @@ export class ChalanComponent {
   }
 
   orderChange(event: any) {
-    this.chalanList = [];
+    this.chalanList = []
     this.chalanListdataSource = new MatTableDataSource(this.chalanList);
-    event.value.forEach((element: any) => {
-      const seletedOrderProducts = this.orderList.find((id: any) => id.id === element)
+    const seletedOrderProducts = this.orderList.find((id: any) => id.id === event.value)
       seletedOrderProducts.products.forEach((element: any) => {
         const payload = {
-          id: this.chalanList.length + 1,
           firm: this.chalanForm.value.firm,
           partyId: this.chalanForm.value.party,
           date: this.chalanForm.value.date,
           partyOrder: seletedOrderProducts.partyOrder,
-          productName: element.productName,
-          srNo: this.chalanForm.value.srNo,
-          quantity: element.productQuantity,
-          totalAmount: element.productQuantity * element.productPrice,
-          productPrice: element.productPrice,
-          chalanNo: this.chalanForm.value.chalanNo
+          chalanNo: this.selectedPartyChalanNo,
+          productName : element.productName,
+          quantity : element.productQuantity,
+          productPrice : element.productPrice,
+          totalAmount :  element.productQuantity * element.productPrice,
+          productID : seletedOrderProducts.id
         }
+        const product = {
+          productName : element.productName,
+          quantity : element.productQuantity,
+          productPrice : element.productPrice,
+          totalAmount :  element.productQuantity * element.productPrice,
+          productID : seletedOrderProducts.id,
+          chalanNo: this.selectedPartyChalanNo
+        }
+        this.selectedProduct.push(product)
         this.chalanList.push(payload)
         this.chalanListdataSource = new MatTableDataSource(this.chalanList);
       });
-    });
   }
 
   ngAfterViewInit(): void {
@@ -131,17 +136,16 @@ export class ChalanComponent {
 
   doAction() {
     const payload = {
-      id: this.chalanList.length + 1,
       firm: this.chalanForm.value.firm,
       partyId: this.chalanForm.value.party,
       date: this.chalanForm.value.date,
       partyOrder: this.chalanForm.value.partyOrder,
-      productName: this.chalanForm.value.productName,
-      srNo: this.chalanForm.value.srNo,
-      quantity: this.chalanForm.value.quantity,
-      totalAmount: this.chalanForm.value.totalAmount,
-      productPrice: this.chalanForm.value.productPrice,
-      chalanNo: this.chalanForm.value.chalanNo
+      // productName: this.chalanForm.value.productName,
+      // srNo: this.chalanForm.value.srNo,
+      // quantity: this.chalanForm.value.quantity,
+      // totalAmount: this.chalanForm.value.totalAmount,
+      // productPrice: this.chalanForm.value.productPrice,
+      // chalanNo: this.chalanForm.value.chalanNo
     }
     this.chalanList.push(payload)
     this.chalanListdataSource = new MatTableDataSource(this.chalanList);
@@ -152,24 +156,25 @@ export class ChalanComponent {
     });
   }
 
-  updateData(data: any, i: number) {
-    this.chalanForm.patchValue(data)
-    this.chalanForm.controls['id'].setValue(data.id)
-    this.chalanForm.controls['partyOrder'].setValue(data.partyOrder)
-    this.chalanForm.controls['productName'].setValue(data.productName)
-    this.chalanForm.controls['quantity'].setValue(data.quantity)
-    this.chalanForm.controls['productPrice'].setValue(data.productPrice)
-    this.chalanForm.controls['chalanNo'].setValue(data.chalanNo)
-    this.chalanForm.controls['totalAmount'].setValue(data.totalAmount)
-    this.chalanList.splice(i, 1);
-    this.chalanListdataSource = new MatTableDataSource(this.chalanList);
-  }
+  // updateData(data: any, i: number) {
+  //   this.chalanForm.patchValue(data)
+  //   this.chalanForm.controls['id'].setValue(data.id)
+  //   this.chalanForm.controls['partyOrder'].setValue(data.partyOrder)
+  //   this.chalanForm.controls['productName'].setValue(data.productName)
+  //   this.chalanForm.controls['quantity'].setValue(data.quantity)
+  //   this.chalanForm.controls['productPrice'].setValue(data.productPrice)
+  //   this.chalanForm.controls['chalanNo'].setValue(data.chalanNo)
+  //   this.chalanForm.controls['totalAmount'].setValue(data.totalAmount)
+  //   this.chalanList.splice(i, 1);
+  //   this.chalanListdataSource = new MatTableDataSource(this.chalanList);
+  // }
   getPartyName(partyId: string): string {
     return this.partyList.find((partyObj: any) => partyObj.id === partyId)?.firstName
   }
 
   deleteData(index: number) {
     this.chalanList.splice(index, 1);
+    this.selectedProduct.splice(index ,1)
     this.chalanListdataSource = new MatTableDataSource(this.chalanList);
   }
 

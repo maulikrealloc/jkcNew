@@ -25,14 +25,10 @@
       <div class="col-4">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>P-Order</mat-label>
-          <input type="text" matInput required formControlName="partyOrder" placeholder="Enter party order">
+          <input type="number" matInput required formControlName="partyOrder" placeholder="Enter party order">
           <mat-hint *ngIf="orderForm.get('partyOrder')?.hasError('required') && orderForm.get('partyOrder')?.touched"
             class="error-message error-color">
             Party order is required
-          </mat-hint>
-          <mat-hint *ngIf="orderForm.get('partyOrder')?.hasError('pattern') && orderForm.get('partyOrder')?.touched"
-            class="error-message error-color">
-            Please enter valid name
           </mat-hint>
         </mat-form-field>
       </div>
@@ -100,7 +96,7 @@
             </mat-form-field>
           </div>
           <div class="col-1">
-            <a *ngIf="i === 0 && getProductsFormArry().length < 5" (click)="addProduct()"><i-tabler name="plus"
+            <a *ngIf="i === 0 && getProductsFormArry().length < 11" (click)="addProduct()"><i-tabler name="plus"
                 class="icon-18"></i-tabler></a>
             <a *ngIf="i !== 0" (click)="removeProduct(i)"><i-tabler name="trash" class="icon-18"></i-tabler></a>
           </div>

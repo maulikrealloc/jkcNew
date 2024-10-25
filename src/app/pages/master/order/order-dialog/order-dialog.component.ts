@@ -35,6 +35,8 @@ export class OrderDialogComponent implements OnInit {
       this.orderForm.controls['orderDate'].setValue(this.convertTimestampToDate(this.local_data.orderDate))
       this.orderForm.controls['deliveryDate'].setValue(this.convertTimestampToDate(this.local_data.deliveryDate))
       this.orderForm.controls['products'].setValue(this.local_data.products)
+      this.orderForm.controls['orderStatus'].setValue(this.local_data.orderStatus)
+
     }
     this.getPartyData();
   }
@@ -50,10 +52,11 @@ export class OrderDialogComponent implements OnInit {
     this.orderForm = this.fb.group({
       party: ['', Validators.required],
       designNo: [''],
-      partyOrder: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      partyOrder: ['', [Validators.required]],
       orderDate: [new Date(), Validators.required],
-      deliveryDate: [new Date(), Validators.required],
-      products: this.fb.array([])
+      deliveryDate: [new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), Validators.required],
+      products: this.fb.array([]),
+      orderStatus:['']
     })
   }
 
@@ -63,7 +66,7 @@ export class OrderDialogComponent implements OnInit {
 
   addProduct() {
     this.getProductsFormArry().push(this.fb.group({
-      productName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      productName: ['', [Validators.required]],
       productPrice: ['', Validators.required],
       productQuantity: ['', Validators.required],
     }))
@@ -93,7 +96,7 @@ export class OrderDialogComponent implements OnInit {
       orderDate: this.orderForm.value.orderDate,
       deliveryDate: this.orderForm.value.deliveryDate,
       products: this.orderForm.value.products,
-      orderStatus: 'Pending'
+      orderStatus: this.orderForm.value.orderStatus ?? 'Pending'
     }
     this.dialogRef.close({ event: this.action, data: payload });
   }

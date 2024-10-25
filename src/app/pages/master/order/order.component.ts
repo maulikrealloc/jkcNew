@@ -27,6 +27,7 @@ export class OrderComponent {
   ];
   orderList: any = [];
   partyList: any = [];
+  stausList: any =["Pending", "In Progress", "Rejected", "Cancelled", "Done"]
 
   dataSource = new MatTableDataSource(this.orderList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -68,6 +69,7 @@ export class OrderComponent {
       console.error('Error fetching order:', error);
     });
   }
+
   addDesign(action: string, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(OrderDialogComponent, {
@@ -80,12 +82,8 @@ export class OrderComponent {
         this.getOrderData();
       }
       if (result?.event === 'Edit') {
-        this.orderList.forEach((element: any) => {
-          if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'OrderList');
-            this.getOrderData();
-          }
-        });
+        this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'OrderList');
+        this.getOrderData();
       }
       if (result?.event === 'Delete') {
         this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'OrderList');
@@ -96,6 +94,12 @@ export class OrderComponent {
 
   getPartyName(partyId: string): string {  
     return this.partyList.find((partyObj: any) => partyObj.id === partyId)?.firstName
+  }
+
+  changeStatus(status: string, element: any): any {
+    element.orderStatus = status;
+    this.firebaseCollectionService.updateDocument('CompanyList', element.id, element, 'OrderList');
+    this.getOrderData();
   }
 
 }

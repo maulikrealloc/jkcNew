@@ -49,6 +49,8 @@ export class ChalanComponent {
   firmDetails: any
   partyOrder: any
   imageUrl: string | ArrayBuffer | null = null;
+  updateProductsData : any
+  netAmount :number = 0
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(
@@ -97,9 +99,19 @@ export class ChalanComponent {
     this.getPartyDetails(this.chalanForm.value.party)
     this.getFirmDetails(this.chalanForm.value.firm)
     this.generatePDF()
-
-    
+    this.firebaseCollectionService.updateDocument('CompanyList', this.updateProductsData.id, this.updateProductsData, 'OrderList');
+    const payload = {
+      firmId : this.chalanForm.value.firm,
+      partyId : this.chalanForm.value.party,
+      partyOrderId : this.chalanForm.value.partyOrder,
+      chalanDate : this.chalanForm.value.date,
+      chalanNo : this.selectedPartyChalanNo,
+      netAmount : this.netAmount,
+      isCreated : false,
+    }
+    this.firebaseCollectionService.addDocument('CompanyList', payload , 'ChalanList');
   }
+
   getPartyDetails(partyId :any) {
     this.partyDetails = this.partyList.find((id: any) => id.id === partyId)
   }
@@ -218,14 +230,14 @@ export class ChalanComponent {
         ...emptyRows
       ];
 
-      const netAmount = products.reduce((sum:any, p:any) => sum + p.totalAmount, 0);
+       this.netAmount = products.reduce((sum:any, p:any) => sum + p.totalAmount, 0);
 
       tableData.push([
         '',                
         'Net Amount',     
         '',                 
         '',                
-        netAmount.toFixed(2) + '/-'
+        this.netAmount.toFixed(2) + '/-'
       ]);
       
       autoTable(doc, {
@@ -260,7 +272,6 @@ export class ChalanComponent {
         },
         didParseCell: function (data) {
           const rowIndex = data.row.index;
-          console.log('rowIndex', rowIndex);
           
           if (data.section === 'body' && data.column.index === 4) {
             if (rowIndex === 10) {
@@ -275,7 +286,7 @@ export class ChalanComponent {
       autoTable(doc, {
         head: [['GST', 'In Word']],
         body: [
-          [this.firmDetails.GSTNo, this.toWords.convert(netAmount)],
+          [this.firmDetails.GSTNo, this.toWords.convert(this.netAmount)],
         ],
         startY: firstTableY + 3,
         styles: {
@@ -474,7 +485,6 @@ export class ChalanComponent {
         },
         didParseCell: function (data) {
           const rowIndex = data.row.index;
-          console.log('rowIndex', rowIndex);
           
           if (data.section === 'body' && data.column.index === 4) {
             if (rowIndex === 10) {
@@ -549,6 +559,9 @@ export class ChalanComponent {
     const blob = doc.output('blob');
     const url = URL.createObjectURL(blob);
     window.open(url);
+    this.imageUrl = ''
+    this.chalanForm.reset()
+    this.chalanList = ''
   }
 
   textHexToRgb(hex:any) {
@@ -573,14 +586,26 @@ export class ChalanComponent {
 
 
   partyChange(event: any) {
-    this.selectedPartyChalanNo = this.partyList.find((partyObj: any) => partyObj.id === event.value).chalanNoSeries
+    this.firebaseCollectionService
+      .getDocuments('CompanyList', 'ChalanList')
+      .then((chalan) => {
+        const chalanData = chalan.filter(
+          (chalanObj: any) => chalanObj.partyId === event.value
+        );
+        const maxChalanNo =
+          chalanData.length > 0
+            ? Math.max(...chalanData.map((chalanObj: any) => Number(chalanObj.chalanNo) || 0)) + 1
+            : Number(this.partyList.find((partyObj: any) => partyObj.id === event.value).chalanNoSeries) || 0;
 
+        this.selectedPartyChalanNo = maxChalanNo;
+      })
+      .catch((error) => {
+        console.error('Error fetching chalan:', error);
+      });  
     this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
       if (order && order.length > 0) {
         this.orderList = order.filter(id => id.partyId === event?.value)
       }
-      console.log(this.orderList);
-
     }).catch((error) => {
       console.error('Error fetching order:', error);
     });
@@ -590,8 +615,9 @@ export class ChalanComponent {
     this.chalanList = []
     this.partyOrder = ''
     this.chalanListdataSource = new MatTableDataSource(this.chalanList);
-    const seletedOrderProducts = this.orderList.find((id: any) => id.id === event.value)
+    const seletedOrderProducts = this.orderList.find((id: any) => id.id === event.value)    
     seletedOrderProducts.products.forEach((element: any) => {
+      element.productChalanNo = this.selectedPartyChalanNo
       this.partyOrder = seletedOrderProducts.partyOrder
         const payload = {
           firm: this.chalanForm.value.firm,
@@ -617,6 +643,8 @@ export class ChalanComponent {
         this.chalanList.push(payload)
         this.chalanListdataSource = new MatTableDataSource(this.chalanList);
       });
+      this.updateProductsData = seletedOrderProducts
+
   }
 
   ngAfterViewInit(): void {
@@ -629,12 +657,6 @@ export class ChalanComponent {
       partyId: this.chalanForm.value.party,
       date: this.chalanForm.value.date,
       partyOrder: this.chalanForm.value.partyOrder,
-      // productName: this.chalanForm.value.productName,
-      // srNo: this.chalanForm.value.srNo,
-      // quantity: this.chalanForm.value.quantity,
-      // totalAmount: this.chalanForm.value.totalAmount,
-      // productPrice: this.chalanForm.value.productPrice,
-      // chalanNo: this.chalanForm.value.chalanNo
     }
     this.chalanList.push(payload)
     this.chalanListdataSource = new MatTableDataSource(this.chalanList);
@@ -645,18 +667,6 @@ export class ChalanComponent {
     });
   }
 
-  // updateData(data: any, i: number) {
-  //   this.chalanForm.patchValue(data)
-  //   this.chalanForm.controls['id'].setValue(data.id)
-  //   this.chalanForm.controls['partyOrder'].setValue(data.partyOrder)
-  //   this.chalanForm.controls['productName'].setValue(data.productName)
-  //   this.chalanForm.controls['quantity'].setValue(data.quantity)
-  //   this.chalanForm.controls['productPrice'].setValue(data.productPrice)
-  //   this.chalanForm.controls['chalanNo'].setValue(data.chalanNo)
-  //   this.chalanForm.controls['totalAmount'].setValue(data.totalAmount)
-  //   this.chalanList.splice(i, 1);
-  //   this.chalanListdataSource = new MatTableDataSource(this.chalanList);
-  // }
   getPartyName(partyId: string): string {
     return this.partyList.find((partyObj: any) => partyObj.id === partyId)?.firstName
   }

@@ -41,7 +41,6 @@ export class OrderComponent {
     return null;
   }
 
-
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.getOrderData();

@@ -27,16 +27,18 @@ export class OrderDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.buildForm()
-    this.addProduct()
     if (this.action === 'Edit') {
       this.orderForm.controls['party'].setValue(this.local_data.partyId)
       this.orderForm.controls['designNo'].setValue(this.local_data.designNo)
       this.orderForm.controls['partyOrder'].setValue(this.local_data.partyOrder)
       this.orderForm.controls['orderDate'].setValue(this.convertTimestampToDate(this.local_data.orderDate))
       this.orderForm.controls['deliveryDate'].setValue(this.convertTimestampToDate(this.local_data.deliveryDate))
-      this.orderForm.controls['products'].setValue(this.local_data.products)
       this.orderForm.controls['orderStatus'].setValue(this.local_data.orderStatus)
-
+      this.local_data.products.forEach((element: any) => {
+        this.addProduct(element);
+      });
+    } else {
+      this.addProduct()
     }
     this.getPartyData();
   }
@@ -64,17 +66,19 @@ export class OrderDialogComponent implements OnInit {
     return this.orderForm.get('products') as FormArray
   }
 
-  addProduct() {
-    this.getProductsFormArry().push(this.fb.group({
-      productName: ['', [Validators.required]],
-      productPrice: ['', Validators.required],
-      productQuantity: ['', Validators.required],
-    }))
+  addProduct(product?: any) {
+    this.getProductsFormArry().push(
+      this.fb.group({
+        productName: [product?.productName || '', [Validators.required]],
+        productPrice: [product?.productPrice || '', Validators.required],
+        productQuantity: [product?.productQuantity || '', Validators.required],
+        productChalanNo: [product?.productChalanNo || ''],
+      })
+    );
   }
 
   removeProduct(index: any) {
     this.getProductsFormArry().removeAt(index)
-
   }
 
   getPartyData() {
@@ -87,7 +91,6 @@ export class OrderDialogComponent implements OnInit {
     });
   }
 
-
   doAction(): void {
     const payload = {
       partyId: this.orderForm.value.party,
@@ -96,7 +99,7 @@ export class OrderDialogComponent implements OnInit {
       orderDate: this.orderForm.value.orderDate,
       deliveryDate: this.orderForm.value.deliveryDate,
       products: this.orderForm.value.products,
-      orderStatus: this.orderForm.value.orderStatus ?? 'Pending'
+      orderStatus: this.orderForm.value.orderStatus ? this.orderForm.value.orderStatus : 'Pending'
     }
     this.dialogRef.close({ event: this.action, data: payload });
   }

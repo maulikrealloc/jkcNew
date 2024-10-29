@@ -1,0 +1,12 @@
+.menu-item {
+    padding: 8px 16px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 3px;
+    color: black;
+}
+
+.menu-item:hover {
+    background-color: #5d87ff;
+    color: #e5ecff;
+}

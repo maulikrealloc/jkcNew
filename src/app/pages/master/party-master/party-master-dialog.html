@@ -24,11 +24,11 @@
       </div>
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
-          <mat-label>Firm Address</mat-label>
-          <input type="text" matInput required formControlName="FirmAddress" placeholder="Enter party firm address">
-          <mat-hint *ngIf="partyForm.get('FirmAddress')?.hasError('required') && partyForm.get('FirmAddress')?.touched"
+          <mat-label>Party Address</mat-label>
+          <input type="text" matInput required formControlName="partyAddress" placeholder="Enter party firm address">
+          <mat-hint *ngIf="partyForm.get('partyAddress')?.hasError('required') && partyForm.get('partyAddress')?.touched"
             class="error-message error-color">
-            Firm address is required
+            Party address is required
           </mat-hint>
         </mat-form-field>
       </div>
@@ -65,6 +65,32 @@
             Chalan no series is required
           </mat-hint> -->
         </mat-form-field>
+      </div>
+      <div class="col-6" *ngIf="action !== 'Edit'">
+        <mat-form-field appearance="outline" class="w-100 m-t-10">
+          <mat-label>Select Color</mat-label>
+          <mat-select #dropdown required formControlName="partyColorCode" placeholder="Select color">
+            <mat-option [value]="item" *ngFor="let item of colorCode">
+              <div style="display: flex;">
+                <div style="width: 20px; height: 20px;border-radius: 10px;" [style.background-color]="item.bgColor">
+                </div>
+                <div style="margin-left: 10px;">
+                  {{ item.bgColor }}
+                </div>
+              </div>
+            </mat-option>
+          </mat-select>
+          <mat-hint
+                      *ngIf="partyForm.get('partyColorCode')?.hasError('required') && partyForm.get('partyColorCode')?.touched"
+                      class="error-message error-color">
+                      Party color code is required
+                    </mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="col-6"  *ngIf="action === 'Edit'">
+        <div style="width: 20px; height: 20px;border-radius: 10px;">
+          
+        </div>
       </div>
     </div>
   </form>

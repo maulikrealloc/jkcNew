@@ -59,6 +59,7 @@ import { IncomeDataComponent } from './account/account-report/income-data/income
 import { PaidByDataComponent } from './account/account-report/paid-by-data/paid-by-data.component';
 import { NetProfitDataComponent } from './account/account-report/net-profit-data/net-profit-data.component';
 import { DamanCostingComponent } from './daman-costing/daman-costing.component';
+import { ProductDialogComponent } from './chalan-list/product-dialog/product-dialog.component';
 
 
 
@@ -116,7 +117,8 @@ import { DamanCostingComponent } from './daman-costing/daman-costing.component';
     IncomeDataComponent,
     PaidByDataComponent,
     NetProfitDataComponent,
-    DamanCostingComponent
+    DamanCostingComponent,
+    ProductDialogComponent
   ],
   imports: [
     CommonModule,

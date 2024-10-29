@@ -1,0 +1,37 @@
+.menu-item {
+    padding: 8px 16px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 3px;
+    color: #fff;
+}
+.statustable {
+    padding: 4px 10px;
+    border-radius: 3px;
+    color: #fff;
+}
+
+.pending-status {
+    background-color: #f0ad4e;
+}
+
+.in-progress-status {
+    background-color: #5bc0de;
+}
+
+.rejected-status {
+    background-color: #d9534f;
+}
+
+.cancelled-status {
+    background-color: #6c757d;
+}
+
+.done-status {
+    background-color: #5cb85c;
+}
+
+.menu-item:hover {
+    background-color: #5d87ff;
+    color: #e5ecff;
+}

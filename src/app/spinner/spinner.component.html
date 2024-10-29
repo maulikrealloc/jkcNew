@@ -1,16 +1,10 @@
-<!-- <ng-container >
-    <div class="spinner">
-      <div></div>   
-      <div></div>    
-      <div></div>    
-      <div></div>    
-      <div></div>    
-      <div></div>    
-      <div></div>    
-      <div></div>    
-      <div></div>    
-      <div></div>    
-    </div>
-</ng-container> -->
-
-<div class="loader" *ngIf="spinner"></div>
+<div class="loader-container" *ngIf="spinner">
+  <div class="loader">
+    <div class="loader__bar"></div>
+    <div class="loader__bar"></div>
+    <div class="loader__bar"></div>
+    <div class="loader__bar"></div>
+    <div class="loader__bar"></div>
+    <div class="loader__ball"></div>
+  </div>
+</div>

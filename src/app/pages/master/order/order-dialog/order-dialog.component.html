@@ -6,7 +6,7 @@
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Party List</mat-label>
           <mat-select #dropdown formControlName="party" placeholder="Select party">
-            <mat-option value="abc">abc</mat-option>
+            <mat-option [value]="item.id" *ngFor="let item of partyList">{{item.firstName}}</mat-option>
           </mat-select>
           <mat-hint *ngIf="orderForm.get('party')?.hasError('required') && orderForm.get('party')?.touched"
             class="error-message error-color">
@@ -20,23 +20,15 @@
           <mat-select #dropdown formControlName="designNo" placeholder="Select design no">
             <mat-option value="ABC">ABC</mat-option>
           </mat-select>
-          <mat-hint *ngIf="orderForm.get('designNo')?.hasError('required') && orderForm.get('designNo')?.touched"
-            class="error-message error-color">
-            Design no is required
-          </mat-hint>
         </mat-form-field>
       </div>
       <div class="col-4">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>P-Order</mat-label>
-          <input type="text" matInput required formControlName="partyOrder" placeholder="Enter party order">
+          <input type="number" matInput required formControlName="partyOrder" placeholder="Enter party order">
           <mat-hint *ngIf="orderForm.get('partyOrder')?.hasError('required') && orderForm.get('partyOrder')?.touched"
             class="error-message error-color">
             Party order is required
-          </mat-hint>
-          <mat-hint *ngIf="orderForm.get('partyOrder')?.hasError('pattern') && orderForm.get('partyOrder')?.touched"
-            class="error-message error-color">
-            Please enter valid name
           </mat-hint>
         </mat-form-field>
       </div>
@@ -104,7 +96,7 @@
             </mat-form-field>
           </div>
           <div class="col-1">
-            <a *ngIf="i === 0 && getProductsFormArry().length < 5" (click)="addProduct()"><i-tabler name="plus"
+            <a *ngIf="i === 0 && getProductsFormArry().length < 11" (click)="addProduct()"><i-tabler name="plus"
                 class="icon-18"></i-tabler></a>
             <a *ngIf="i !== 0" (click)="removeProduct(i)"><i-tabler name="trash" class="icon-18"></i-tabler></a>
           </div>
@@ -126,10 +118,4 @@
     <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
   </div>
   <mat-divider></mat-divider>
-  <!-- <div mat-dialog-actions class="p-x-24 p-b-24 m-t-10 justify-content-end">
-    <button mat-button (click)="doAction()" mat-flat-button color="warn">
-      {{action}}
-    </button>
-    <button mat-stroked-button color="warn" (click)="closeDialog()" class="m-l-8">Cancel</button>
-  </div> -->
 </ng-template>

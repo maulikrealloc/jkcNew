@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { KhataMasterDialogComponent } from './khata-master-dialog/khata-master-dialog.component';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-khata-master',
@@ -14,8 +15,8 @@ export class KhataMasterComponent {
 
 
   khataMasterColumns: string[] = [
-    '#',
-    'name',
+    'srNo',
+    'companyName',
     'ownerName',
     'address',
     'gstNo',
@@ -24,29 +25,35 @@ export class KhataMasterComponent {
     'action',
   ];
 
-  khataList: any = [
-    {
-      id: 1,
-      name: 'Demo',
-      ownerName: 'Test',
-      address: 2000,
-      gst: 9876543210,
-      pan: 9876543210,
-      mobileNo: 9876543210
-    }
-  ];
+  khataList: any = [];
 
   dataSource = new MatTableDataSource(this.khataList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private dialog: MatDialog) { }
-  ngOnInit(): void {
-  }
+  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
+  ngOnInit(): void {
+
+  }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.getKhataData();
+  }
 
+
+  getKhataData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'KhataList').then((khata) => {
+      this.khataList = khata
+      if (khata && khata.length > 0) {
+        this.dataSource = new MatTableDataSource(this.khataList);
+      } else {
+        this.khataList = [];
+        this.dataSource = new MatTableDataSource(this.khataList);
+      }
+    }).catch((error) => {
+      console.error('Error fetching party:', error);
+    });
   }
 
   addkhatu(action: string, obj: any) {
@@ -57,37 +64,21 @@ export class KhataMasterComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
-        this.khataList.push({
-          id: this.khataList.length + 1,
-          name: result.data.name,
-          ownerName: result.data.ownerName,
-          address: result.data.address,
-          gst: result.data.gst,
-          pan: result.data.pan,
-          mobileNo: result.data.mobileNo
-        })
-        this.dataSource = new MatTableDataSource(this.khataList);
-        console.log('khataList========',this.khataList);
-        
+        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'KhataList');
+        this.getKhataData();
       }
       if (result?.event === 'Edit') {
         this.khataList.forEach((element: any) => {
-          if (element.id === result.data.id) {
-            element.id = result.data.id
-            element.name = result.data.name
-            element.ownerName = result.data.ownerName
-            element.address = result.data.address
-            element.gst = result.data.gst
-            element.pan = result.data.pan
-            element.mobileNo = result.data.mobileNo
+          if (obj.id === element.id) {
+            this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'KhataList');
+            this.getKhataData();
           }
         });
         this.dataSource = new MatTableDataSource(this.khataList);
       }
       if (result?.event === 'Delete') {
-        const allKhataListData = this.khataList
-        this.khataList = allKhataListData.filter((id: any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.khataList);
+        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'KhataList');
+        this.getKhataData();
       }
     });
   }

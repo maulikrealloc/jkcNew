@@ -23,6 +23,7 @@ export class PartyMasterComponent implements AfterViewInit {
     'action',
   ];
 
+
   partyList:any = []
 
   dataSource: any = new MatTableDataSource(this.partyList);
@@ -86,6 +87,50 @@ export class partyMasterDialogComponent implements OnInit {
   partyForm: FormGroup;
   action: string;
   local_data: any;
+  colorCode: any = [
+   {
+      bgColor: '#9370DB',
+      fontColor: '#ffffff',
+   },
+   {
+     bgColor: '#00008B',
+     fontColor: '#ffffff',
+   },
+   {
+     bgColor: '#008B8B',
+     fontColor: '#ffffff',
+   },
+   {
+     bgColor: '#8B008B',
+     fontColor: '#ffffff',
+   },
+   {
+     bgColor: '#483D8B',
+     fontColor: '#ffffff',
+   },
+   {
+     bgColor: '#20B2AA',
+     fontColor: '#ffffff',
+   },
+   {
+     bgColor: '#DDA0DD',
+     fontColor: '#020202',
+   },
+   {
+     bgColor: '#87CEEB',
+     fontColor: '#020202',
+   },
+   {
+     bgColor: '#40E0D0',
+      fontColor: '#020202',
+   },
+   {
+     bgColor: '#9ACD32',
+      fontColor: '#020202',
+   },
+    
+  ]
+
 
   constructor(
     private fb: FormBuilder,
@@ -101,11 +146,12 @@ export class partyMasterDialogComponent implements OnInit {
     if (this.action === 'Edit') {
       this.partyForm.controls['firstName'].setValue(this.local_data.firstName)
       this.partyForm.controls['lastName'].setValue(this.local_data.lastName)
-      this.partyForm.controls['FirmAddress'].setValue(this.local_data.FirmAddress)
+      this.partyForm.controls['partyAddress'].setValue(this.local_data.partyAddress)
       this.partyForm.controls['partyGSTIN'].setValue(this.local_data.partyGSTIN)
       this.partyForm.controls['chalanNoSeries'].setValue(this.local_data.chalanNoSeries)
       this.partyForm.controls['partyPanNo'].setValue(this.local_data.partyPanNo)
       this.partyForm.controls['partyMobile'].setValue(this.local_data.partyMobile)
+      this.partyForm.controls['partyColorCode'].setValue(this.local_data.partyColorCode)
     }
   }
 
@@ -113,11 +159,12 @@ export class partyMasterDialogComponent implements OnInit {
     this.partyForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
       lastName: [''],
-      FirmAddress: [''],
+      partyAddress: [''],
       partyGSTIN: [''],
       chalanNoSeries: [''],
       partyPanNo: [''],
       partyMobile: [''],
+      partyColorCode: ['']
     })
   }
 
@@ -126,13 +173,14 @@ export class partyMasterDialogComponent implements OnInit {
       // id: this.local_data.id ? this.local_data.id : '',
       firstName: this.partyForm.value.firstName,
       lastName: this.partyForm.value.lastName,
-      FirmAddress: this.partyForm.value.FirmAddress,
+      partyAddress: this.partyForm.value.partyAddress,
       partyGSTIN: this.partyForm.value.partyGSTIN,
       chalanNoSeries: this.partyForm.value.chalanNoSeries,
       partyPanNo: this.partyForm.value.partyPanNo,
-      partyMobile: this.partyForm.value.partyMobile
+      partyMobile: this.partyForm.value.partyMobile,
+      partyColorCode: this.partyForm.value.partyColorCode
     }
-    console.log(payload, "payload================>>>>>>>>>>>>>>");
+    
     this.dialogRef.close({ event: this.action, data: payload });  
   }
 

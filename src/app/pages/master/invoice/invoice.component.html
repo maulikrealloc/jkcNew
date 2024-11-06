@@ -5,8 +5,8 @@
                 <div class="col-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Select Firm</mat-label>
-                        <mat-select #dropdown formControlName="firm" placeholder="Select firm">
-                            <mat-option value="ABC">ABC</mat-option>
+                        <mat-select #dropdown formControlName="firm" placeholder="Select firm" (selectionChange)="firmChange($event)">
+                            <mat-option [value]="item.id" *ngFor="let item of firmList">{{ item.header }}</mat-option>
                         </mat-select>
                         <mat-hint
                             *ngIf="invoiceForm.get('firm')?.hasError('required') && invoiceForm.get('firm')?.touched"
@@ -18,8 +18,8 @@
                 <div class="col-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Select Party</mat-label>
-                        <mat-select #dropdown formControlName="party" placeholder="Select party">
-                            <mat-option value="ABC">ABC</mat-option>
+                        <mat-select #dropdown formControlName="party" placeholder="Select party" (selectionChange)="partyChange($event)">
+                            <mat-option  *ngFor="let item of partyList" [value]="item.id">{{ item.firstName }}</mat-option>
                         </mat-select>
                         <mat-hint
                             *ngIf="invoiceForm.get('party')?.hasError('required') && invoiceForm.get('party')?.touched"
@@ -32,7 +32,7 @@
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Chalan no</mat-label>
                         <mat-select #dropdown formControlName="chalanNo" placeholder="Enter chalan no">
-                            <mat-option value="ABC">ABC</mat-option>
+                            <mat-option *ngFor="let item of chalanList" [value]="item.id">{{item.chalanNo}}</mat-option>
                         </mat-select>
                         <mat-hint
                             *ngIf="invoiceForm.get('chalanNo')?.hasError('required') && invoiceForm.get('chalanNo')?.touched"
@@ -110,9 +110,9 @@
 <mat-card class="cardWithShadow">
     <mat-card-content class="p-24">
         <div class="table-responsive">
-            <table mat-table [dataSource]="khataListdataSource" class="w-100 m-t-10">
-                <ng-container matColumnDef="#">
-                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
+            <table mat-table [dataSource]="invoiceListdataSource" class="w-100 m-t-10">
+                <ng-container matColumnDef="srNo">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
                     <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
                 </ng-container>
 

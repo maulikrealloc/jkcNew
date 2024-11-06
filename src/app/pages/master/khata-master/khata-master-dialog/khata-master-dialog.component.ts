@@ -22,9 +22,12 @@ export class KhataMasterDialogComponent {
     this.action = this.local_data.action;
   }
   ngOnInit(): void {
-    this.formBuild()
+    this.formBuild();
+
     if (this.action === 'Edit') {
-      this.khatuForm.controls['name'].setValue(this.local_data.name)
+      this.khatuForm.controls['firstName'].setValue(this.local_data.firstName)
+      this.khatuForm.controls['lastName'].setValue(this.local_data.lastName)
+      this.khatuForm.controls['companyName'].setValue(this.local_data.companyName)
       this.khatuForm.controls['ownerName'].setValue(this.local_data.ownerName)
       this.khatuForm.controls['address'].setValue(this.local_data.address)
       this.khatuForm.controls['mobileNo'].setValue(this.local_data.mobileNo)
@@ -35,10 +38,12 @@ export class KhataMasterDialogComponent {
 
   formBuild() {
     this.khatuForm = this.fb.group({
-      name: ['',[Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
-      ownerName: ['',[Validators.required,Validators.pattern('^[a-zA-Z ]+$')]],
-      address: ['',Validators.required],
-      mobileNo: ['',[Validators.required,Validators.pattern('^[0-9]{10}$')]],
+      firstName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      lastName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      companyName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      ownerName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      address: ['', Validators.required],
+      mobileNo: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       pan: [''],
       gst: [''],
     })
@@ -46,8 +51,9 @@ export class KhataMasterDialogComponent {
 
   doAction(): void {
     const payload = {
-      id: this.local_data.id ? this.local_data.id : '',
-      name: this.khatuForm.value.name,
+      firstName: this.khatuForm.value.firstName,
+      lastName: this.khatuForm.value.lastName,
+      companyName: this.khatuForm.value.companyName,
       ownerName: this.khatuForm.value.ownerName,
       address: this.khatuForm.value.address,
       mobileNo: this.khatuForm.value.mobileNo,
@@ -61,4 +67,5 @@ export class KhataMasterDialogComponent {
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
   }
+  
 }

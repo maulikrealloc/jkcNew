@@ -30,7 +30,7 @@ export class InvoiceListComponent {
 
 
   invoiceListColumns: string[] = [
-    '#',
+    'srNo',
     'no',
     'date',
     'party',
@@ -44,13 +44,13 @@ export class InvoiceListComponent {
     'action',
   ];
 
-
-
   khataListdataSource = new MatTableDataSource(khataList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor() { }
+
   ngOnInit(): void {
+    
   }
 
 
@@ -58,4 +58,5 @@ export class InvoiceListComponent {
     this.khataListdataSource.paginator = this.paginator;
 
   }
+
 }

@@ -39,10 +39,10 @@
 <mat-card class="cardWithShadow">
     <mat-card-content class="p-24">
         <div class="table-responsive">
-            <table mat-table [dataSource]="khataListdataSource" class="w-100">
+            <table mat-table [dataSource]="invoiceListDataSource" class="w-100">
                 <ng-container matColumnDef="srNo">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
-                    <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+                    <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="no">
@@ -50,7 +50,7 @@
                         No
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.no }}
+                        {{ element?.invoiceNo }}
                     </td>
                 </ng-container>
 
@@ -59,7 +59,7 @@
                         Date
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.date | date : "mediumDate" }}
+                        {{ getFormattedDate(element?.date) }}
                     </td>
                 </ng-container>
 
@@ -68,7 +68,7 @@
                         Party
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.party }}
+                        {{ getPartyName(element?.partyId) }}
                     </td>
                 </ng-container>
 
@@ -77,7 +77,7 @@
                         Gross
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.gross }}
+                        {{ element.grossTotal }}
                     </td>
                 </ng-container>
 
@@ -86,7 +86,7 @@
                         Discount
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.discount }}
+                        {{ element.discountRatio }}
                     </td>
                 </ng-container>
 
@@ -95,7 +95,7 @@
                         Net
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.net }}
+                        {{ element.netAmount }}
                     </td>
                 </ng-container>
 
@@ -104,7 +104,7 @@
                         CGST
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.CGST }}
+                        {{ element.cgst }}
                     </td>
                 </ng-container>
 
@@ -113,7 +113,7 @@
                         SGST
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.SGST }}
+                        {{ element.sgst }}
                     </td>
                 </ng-container>
 
@@ -122,7 +122,7 @@
                         Final
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.final }}
+                        {{ element.finalAmount }}
                     </td>
                 </ng-container>
 
@@ -139,16 +139,45 @@
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
                         Action
                     </th>
-                    <td mat-cell *matCellDef="let element" class="action-link">
+                    <!-- <td mat-cell *matCellDef="let element" class="action-link">
                         <a class="m-r-10 cursor-pointer"><i-tabler name="edit" class="icon-18"></i-tabler></a>
                         <a class="m-r-10 cursor-pointer">
                             <i-tabler name="trash" class="icon-18"></i-tabler>
                         </a>
+                    </td> -->
+                    <td mat-cell *matCellDef="let element" class="action-link">
+                        <a [matMenuTriggerFor]="menu">
+                            <i-tabler name="dots-vertical" class="icon-18"></i-tabler>
+                        </a>
+                        <mat-menu #menu="matMenu">
+                            <ng-container>
+                                <div class="menu-item" (click)="generatePDF(element)">
+                                    <div class="statustable">
+                                        <span>Download</span>
+                                    </div>
+                                </div>
+                                <div class="menu-item" (click)="getPaymentList('Add Payment', element)">
+                                    <div class="statustable">
+                                        <span>Payment Update</span>
+                                    </div>
+                                </div>
+                                <div class="menu-item" (click)="getPaymentList('Delete', element)">
+                                    <div class="statustable">
+                                        <span>Delete</span>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </mat-menu>
                     </td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="invoiceListColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: invoiceListColumns"></tr>
+                <tr class="mat-row" style="text-align: center;" *matNoDataRow>
+                    <td class="mat-cell" [attr.colspan]="invoiceListColumns.length">
+                        No record found
+                    </td>
+                </tr>
             </table>
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>

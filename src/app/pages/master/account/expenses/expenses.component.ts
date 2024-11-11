@@ -28,7 +28,7 @@ export class ExpensesComponent implements OnInit {
 
   expenses:any =[]
 
-  dataSource = new MatTableDataSource(this.expenses);
+  expensesListDataSource = new MatTableDataSource(this.expenses);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog) { }
@@ -36,7 +36,7 @@ export class ExpensesComponent implements OnInit {
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.expensesListDataSource.paginator = this.paginator;
   }
 
   
@@ -57,7 +57,7 @@ export class ExpensesComponent implements OnInit {
           paidBy:result.data.paidBy,
           status:result.data.status
         })
-        this.dataSource = new MatTableDataSource(this.expenses)
+        this.expensesListDataSource = new MatTableDataSource(this.expenses)
       }
       if(result.event === 'Edit'){
         this.expenses.forEach((value : any) => {
@@ -72,12 +72,12 @@ export class ExpensesComponent implements OnInit {
             value.status = result.data.status;
           }
         })
-        this.dataSource = new MatTableDataSource(this.expenses)        
+        this.expensesListDataSource = new MatTableDataSource(this.expenses)        
       }
       if(result.event === 'Delete'){
         const expensesData = this.expenses
         this.expenses = expensesData.filter((id:any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.expenses)
+        this.expensesListDataSource = new MatTableDataSource(this.expenses)
        }
     })
   }

@@ -27,14 +27,14 @@ export class EmployeeMasterComponent implements AfterViewInit {
 
   employeesList: any = [];
 
-  dataSource = new MatTableDataSource(this.employeesList);
+  employeeListDataSource = new MatTableDataSource(this.employeesList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.employeeListDataSource.paginator = this.paginator;
     this.getEmployeeData();
   }
 
@@ -42,10 +42,10 @@ export class EmployeeMasterComponent implements AfterViewInit {
     this.firebaseCollectionService.getDocuments('CompanyList', 'EmployeeList').then((employee) => {
       this.employeesList = employee
       if (employee && employee.length > 0) {
-        this.dataSource = new MatTableDataSource(this.employeesList);
+        this.employeeListDataSource = new MatTableDataSource(this.employeesList);
       } else {
         this.employeesList = [];
-        this.dataSource = new MatTableDataSource(this.employeesList);
+        this.employeeListDataSource = new MatTableDataSource(this.employeesList);
       }
     }).catch((error) => {
       console.error('Error fetching employee:', error);

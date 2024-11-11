@@ -25,7 +25,7 @@ export class BonusListComponent {
 
   bonusList: any = [];
 
-  dataSource = new MatTableDataSource(this.bonusList);
+  bonusListDataSource = new MatTableDataSource(this.bonusList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(
@@ -45,7 +45,7 @@ export class BonusListComponent {
 
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.bonusListDataSource.paginator = this.paginator;
   }
   
   addDesign(action: string, obj: any) {
@@ -54,7 +54,6 @@ export class BonusListComponent {
       data: obj,
     });
     dialogRef.afterClosed().subscribe((result) => {
-      console.log("result==============>>>", result);
 
       if (result.event === 'Add') {
         this.bonusList.push({
@@ -63,7 +62,7 @@ export class BonusListComponent {
           amount: result.data.amount,
           date: result.data.date
         })
-        this.dataSource = new MatTableDataSource(this.bonusList);
+        this.bonusListDataSource = new MatTableDataSource(this.bonusList);
       }
       if (result.event === 'Edit') {
         this.bonusList.forEach((element: any) => {
@@ -74,12 +73,12 @@ export class BonusListComponent {
             element.date = result.data.date
           }
         });
-        this.dataSource = new MatTableDataSource(this.bonusList);
+        this.bonusListDataSource = new MatTableDataSource(this.bonusList);
       }
       if (result.event === 'Delete') {
         const allEmployeesData = this.bonusList
         this.bonusList = allEmployeesData.filter((id: any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.bonusList);
+        this.bonusListDataSource = new MatTableDataSource(this.bonusList);
       }
     });
   }

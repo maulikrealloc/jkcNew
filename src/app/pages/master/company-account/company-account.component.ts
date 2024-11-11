@@ -25,14 +25,14 @@ export class CompanyAccountComponent {
   companyAccount: any = [];
 
 
-  dataSource = new MatTableDataSource(this.companyAccount);
+  companyAccountListDataSource = new MatTableDataSource(this.companyAccount);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog) { }
 
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.companyAccountListDataSource.paginator = this.paginator;
   }
 
   addDesign(action: string, obj: any) {
@@ -50,7 +50,7 @@ export class CompanyAccountComponent {
           openingBalance: result.data.openingBalance,
           date: result.data.date,
         })
-        this.dataSource = new MatTableDataSource(this.companyAccount);
+        this.companyAccountListDataSource = new MatTableDataSource(this.companyAccount);
 
       }
       if (result.event === 'Edit') {
@@ -64,12 +64,12 @@ export class CompanyAccountComponent {
             element.date = result.data.date
           }
         });
-        this.dataSource = new MatTableDataSource(this.companyAccount);
+        this.companyAccountListDataSource = new MatTableDataSource(this.companyAccount);
       }
       if (result.event === 'Delete') {
         const allEmployeesData = this.companyAccount
         this.companyAccount = allEmployeesData.filter((id: any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.companyAccount);
+        this.companyAccountListDataSource = new MatTableDataSource(this.companyAccount);
       }
     });
   }

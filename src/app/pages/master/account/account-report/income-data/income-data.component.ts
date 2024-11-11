@@ -14,7 +14,7 @@ export class IncomeDataComponent implements OnInit {
 
   incomeData: any = []
 
-  dataSource = new MatTableDataSource(this.incomeData)
+  incomeListDataSource = new MatTableDataSource(this.incomeData)
   constructor(){}
   ngOnInit(): void {}
 

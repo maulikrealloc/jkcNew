@@ -14,7 +14,7 @@ export class PaidByDataComponent implements OnInit {
 
   PaidByData: any = []
 
-  dataSource = new MatTableDataSource(this.PaidByData)
+  paidByDataListSource = new MatTableDataSource(this.PaidByData)
   constructor(){}
   ngOnInit(): void {}
 

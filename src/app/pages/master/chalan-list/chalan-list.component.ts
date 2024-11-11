@@ -36,6 +36,7 @@ export class ChalanListComponent implements OnInit {
   chalanListColumns: string[] = [
     'srNo',
     'partyName',
+    'partyOrder',
     'chalanNo',
     'chalanDate',
     'netAmount',
@@ -43,7 +44,7 @@ export class ChalanListComponent implements OnInit {
   ];
 
   chalanList :any
-  chalanListdataSource: any;
+  chalanListDataSource: any;
   netAmount: number = 0
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -68,15 +69,18 @@ export class ChalanListComponent implements OnInit {
     return this.partyList.find((partyObj: any) => partyObj.id === partyId)?.firstName
   }
   
+  getOrderNo(partyOrderId: string): string {
+    return this.orderList.find((orderObj: any) => orderObj.id === partyOrderId)?.partyOrder
+  }
+  
   getChalanData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'ChalanList').then((chalan) => {
       this.chalanList = chalan
-
       if (chalan && chalan.length > 0) {
-        this.chalanListdataSource = new MatTableDataSource(this.chalanList);
+        this.chalanListDataSource = new MatTableDataSource(this.chalanList);
       } else {
         this.chalanList = [];
-        this.chalanListdataSource = new MatTableDataSource(this.chalanList);
+        this.chalanListDataSource = new MatTableDataSource(this.chalanList);
       }
     }).catch((error) => {
       console.error('Error fetching chalan:', error);
@@ -84,7 +88,7 @@ export class ChalanListComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.chalanListdataSource.paginator = this.paginator;
+    this.chalanListDataSource.paginator = this.paginator;
   }
 
   getFirmData() {
@@ -100,7 +104,7 @@ export class ChalanListComponent implements OnInit {
   getOrderData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
       if (order && order.length > 0) {
-        this.orderList = order
+        this.orderList = order        
       }
     }).catch((error) => {
       console.error('Error fetching order:', error);

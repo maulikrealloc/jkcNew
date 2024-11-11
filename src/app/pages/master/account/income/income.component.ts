@@ -25,7 +25,7 @@ export class IncomeComponent implements OnInit {
 
   incomedata:any =[]
 
-  dataSource = new MatTableDataSource(this.incomedata);
+  incomeListDataSource = new MatTableDataSource(this.incomedata);
 
   constructor(private dialog: MatDialog){}
 
@@ -48,7 +48,7 @@ export class IncomeComponent implements OnInit {
           creditDate:result.data.creditDate,
           amount:result.data.amount
         })
-        this.dataSource = new MatTableDataSource(this.incomedata)
+        this.incomeListDataSource = new MatTableDataSource(this.incomedata)
       }
       if(result.event === 'Edit'){
         this.incomedata.forEach((value : any) => {
@@ -62,12 +62,12 @@ export class IncomeComponent implements OnInit {
             value.amount = result.data.amount;
           }
         })
-        this.dataSource = new MatTableDataSource(this.incomedata)
+        this.incomeListDataSource = new MatTableDataSource(this.incomedata)
       }
       if(result.event === 'Delete'){
         const allincomeData = this.incomedata
         this.incomedata = allincomeData.filter((id:any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.incomedata)
+        this.incomeListDataSource = new MatTableDataSource(this.incomedata)
       }
     })
   }

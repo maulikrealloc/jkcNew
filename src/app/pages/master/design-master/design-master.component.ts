@@ -22,14 +22,14 @@ export class DesignMasterComponent {
   ];
   designMaster: any = [];
 
-  dataSource = new MatTableDataSource(this.designMaster);
+  designMasterListDataSource = new MatTableDataSource(this.designMaster);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog) { }
 
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.designMasterListDataSource.paginator = this.paginator;
   }
   addDesign(action: string, obj: any) {
     obj.action = action;
@@ -45,7 +45,7 @@ export class DesignMasterComponent {
           noStiching: result.data.noStiching,
           imagePath: result.data.imagePath,
         })
-        this.dataSource = new MatTableDataSource(this.designMaster);
+        this.designMasterListDataSource = new MatTableDataSource(this.designMaster);
       }
       if (result?.event === 'Edit') {
         this.designMaster.forEach((element: any) => {
@@ -57,12 +57,12 @@ export class DesignMasterComponent {
             element.imagePath = result.data.imagePath
           }
         });
-        this.dataSource = new MatTableDataSource(this.designMaster);
+        this.designMasterListDataSource = new MatTableDataSource(this.designMaster);
       }
       if (result?.event === 'Delete') {
         const allEmployeesData = this.designMaster
         this.designMaster = allEmployeesData.filter((id: any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.designMaster);
+        this.designMasterListDataSource = new MatTableDataSource(this.designMaster);
       }
     });
   }
@@ -118,8 +118,6 @@ export class designMasterDialogComponent implements OnInit {
       noStiching: this.designForm.value.noStiching,
       imagePath: this.local_data.imagePath
     }
-    console.log(payload, "payload===========>>>>>>>>>>");
-    
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

@@ -25,7 +25,7 @@ export class AttendanceComponent {
 
   attendance: any = [];
 
-  dataSource = new MatTableDataSource(this.attendance);
+  attendanceListDataSource = new MatTableDataSource(this.attendance);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(
@@ -44,7 +44,7 @@ export class AttendanceComponent {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.attendanceListDataSource.paginator = this.paginator;
   }
  
 
@@ -61,7 +61,7 @@ export class AttendanceComponent {
           day: result.data.day,
           date: result.data.date
         })
-        this.dataSource = new MatTableDataSource(this.attendance);
+        this.attendanceListDataSource = new MatTableDataSource(this.attendance);
       }
       if (result.event === 'Edit') {
         this.attendance.forEach((element: any) => {
@@ -72,12 +72,12 @@ export class AttendanceComponent {
             element.date = result.data.date
           }
         });
-        this.dataSource = new MatTableDataSource(this.attendance);
+        this.attendanceListDataSource = new MatTableDataSource(this.attendance);
       }
       if (result.event === 'Delete') {
         const allEmployeesData = this.attendance
         this.attendance = allEmployeesData.filter((id: any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.attendance);
+        this.attendanceListDataSource = new MatTableDataSource(this.attendance);
       }
     });
   }

@@ -15,7 +15,7 @@ export class ExpensesDataComponent implements OnInit {
 
   expensesData: any = []
 
-  dataSource = new MatTableDataSource(this.expensesData)
+  expensesListDataSource = new MatTableDataSource(this.expensesData)
 
   constructor() { }
 

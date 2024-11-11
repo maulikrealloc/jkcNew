@@ -45,7 +45,6 @@ export class BonusListDialogComponent {
       amount: this.bonusForm.value.amount,
       date: this.bonusForm.value.date
     }
-    console.log(payload, "payload===========>>>>>>>>>>>");
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

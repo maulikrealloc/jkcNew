@@ -141,15 +141,15 @@ export class InvoiceListComponent {
       width: action !== 'Delete' ? '700px' : ''
     });
     dialogRef.afterClosed().subscribe((result) => {
-      if (action === 'Add') {
-          this.firebaseCollectionService.addDocument('CompanyList', result.data, 'InvoiceList');
-          this.getInvoiceData();
+      if (result?.event === 'Add') {
+        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'InvoiceList');
+        this.getInvoiceData();
       }
-      if (action === 'Delete') {
-          this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'InvoiceList');
-          this.getInvoiceData()
-        }
-      })
+      if (result && action === 'Delete') {
+        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'InvoiceList');
+        this.getInvoiceData()
+      }
+    })
   }
 
   // deleteChalan(action: any, obj: any) {

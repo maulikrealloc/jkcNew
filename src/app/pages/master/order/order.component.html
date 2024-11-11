@@ -115,14 +115,14 @@
             </a>
             <mat-menu #menu="matMenu">
               <ng-container *ngFor="let status of stausList">
-                <div *ngIf="element.orderStatus !== status" class="menu-item" [ngClass]="{
+                <div *ngIf="element.orderStatus !== status" (click)="changeStatus(status,element)" class="menu-item" [ngClass]="{
                         'pending-status': status === 'Pending',
                         'in-progress-status': status === 'In Progress',
                         'rejected-status': status === 'Rejected',
                         'cancelled-status': status === 'Cancelled',
                         'done-status': status === 'Done'
                       }">
-                  <span (click)="changeStatus(status,element)">{{status}}</span><br>
+                  <span>{{status}}</span><br>
                 </div>
               </ng-container>
             </mat-menu>

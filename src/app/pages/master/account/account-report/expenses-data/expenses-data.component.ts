@@ -18,7 +18,7 @@ export class ExpensesDataComponent implements OnInit {
 
   expensesData: any = []
 
-  dataSource = new MatTableDataSource(this.expensesData)
+  expensesListDataSource = new MatTableDataSource(this.expensesData)
 
   constructor() { }
 
@@ -27,13 +27,13 @@ export class ExpensesDataComponent implements OnInit {
     if (expensessavedData) {
       const parsedData = JSON.parse(expensessavedData);
       this.expensesData = parsedData;   
-      this.dataSource.data = this.expensesData;	
+      this.expensesListDataSource.data = this.expensesData;	
     }
     this.calculateTotalAmount()
   }
 
   calculateTotalAmount() {
-    if (this.expensesData && this.expensesData.length > 0) {
+    if (this.expensesData &&   this.expensesData.length > 0) {
       this.pendingTotal = this.expensesData
         .filter((item: { status: any }) => item.status === 'pending')
         .reduce((acc: any, item: { amount: any }) => acc + item.amount, 0);

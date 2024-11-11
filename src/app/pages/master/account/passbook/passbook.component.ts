@@ -20,7 +20,7 @@ export class PassbookComponent implements OnInit {
 
   Passbook: any = []
   
-  dataSource = new MatTableDataSource(this.Passbook);
+  passbookListDataSource = new MatTableDataSource(this.Passbook);
   constructor() { }
 
   ngOnInit(): void { }

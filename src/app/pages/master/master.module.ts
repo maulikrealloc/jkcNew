@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { MasterRoutes, MasterRoutingModule } from './master-routing.module';
 import { PartyMasterComponent, partyMasterDialogComponent } from './party-master/party-master.component';
@@ -60,6 +60,7 @@ import { PaidByDataComponent } from './account/account-report/paid-by-data/paid-
 import { NetProfitDataComponent } from './account/account-report/net-profit-data/net-profit-data.component';
 import { DamanCostingComponent } from './daman-costing/daman-costing.component';
 import { ProductDialogComponent } from './chalan-list/product-dialog/product-dialog.component';
+import { PaymentListComponent } from './invoice-list/payment-list/payment-list.component';
 
 
 
@@ -118,7 +119,8 @@ import { ProductDialogComponent } from './chalan-list/product-dialog/product-dia
     PaidByDataComponent,
     NetProfitDataComponent,
     DamanCostingComponent,
-    ProductDialogComponent
+    ProductDialogComponent,
+    PaymentListComponent
   ],
   imports: [
     CommonModule,
@@ -132,5 +134,6 @@ import { ProductDialogComponent } from './chalan-list/product-dialog/product-dia
     MatNativeDateModule,
     NgApexchartsModule,
   ],
+  providers: [DatePipe]
 })
 export class MasterModule { }

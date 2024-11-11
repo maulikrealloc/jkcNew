@@ -32,7 +32,7 @@ export class KharchReportComponent {
     'amount'
   ];
 
-  khataListdataSource = new MatTableDataSource(khataList);
+  kharchListdataSource = new MatTableDataSource(khataList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor() { }
@@ -42,7 +42,7 @@ export class KharchReportComponent {
   }
 
   ngAfterViewInit(): void {
-    this.khataListdataSource.paginator = this.paginator;
+    this.kharchListdataSource.paginator = this.paginator;
   }
 
 }

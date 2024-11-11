@@ -28,13 +28,15 @@ export class ExpensesComponent implements OnInit {
 
   expenses:any =[]
 
-  dataSource = new MatTableDataSource(this.expenses);
+  expensesListDataSource = new MatTableDataSource(this.expenses);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog) { }
 
-  ngOnInit(): void {
-    this.loadBillData()
+  ngOnInit(): void {}
+
+  ngAfterViewInit(): void {
+    this.expensesListDataSource.paginator = this.paginator;
   }
   
   openExpenses(action: string, obj: any){
@@ -54,7 +56,7 @@ export class ExpensesComponent implements OnInit {
           paidBy:result.data.paidBy,
           status:result.data.status
         })
-        this.updateDataStorage()
+        this.expensesListDataSource = new MatTableDataSource(this.expenses)
       }
       if(result.event === 'Edit'){
         this.expenses.forEach((value : any) => {
@@ -69,12 +71,12 @@ export class ExpensesComponent implements OnInit {
             value.status = result.data.status;
           }
         })
-        this.updateDataStorage()
+        this.expensesListDataSource = new MatTableDataSource(this.expenses)        
       }
       if(result.event === 'Delete'){
         const expensesData = this.expenses
         this.expenses = expensesData.filter((id:any) => id.id !== result.data.id)
-        this.updateDataStorage()
+        this.expensesListDataSource = new MatTableDataSource(this.expenses)
        }
     })
   }
@@ -86,7 +88,7 @@ export class ExpensesComponent implements OnInit {
   }
 
   private updateDataStorage(){
-    this.dataSource = new MatTableDataSource(this.expenses);
+    this.expensesListDataSource = new MatTableDataSource(this.expenses);
     localStorage.setItem('expensesnewdata',JSON.stringify(this.expenses));
   }
 
@@ -94,7 +96,7 @@ export class ExpensesComponent implements OnInit {
     const savedData = localStorage.getItem('expensesnewdata');
     if(savedData){
     this.expenses = JSON.parse(savedData)
-    this.dataSource = new MatTableDataSource(this.expenses);
+      this.expensesListDataSource = new MatTableDataSource(this.expenses);
     }   
   }
 }

@@ -27,7 +27,7 @@ export class KhataMasterComponent {
 
   khataList: any = [];
 
-  dataSource = new MatTableDataSource(this.khataList);
+  khataListdataSource = new MatTableDataSource(this.khataList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
@@ -37,7 +37,7 @@ export class KhataMasterComponent {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.khataListdataSource.paginator = this.paginator;
     this.getKhataData();
   }
 
@@ -46,10 +46,10 @@ export class KhataMasterComponent {
     this.firebaseCollectionService.getDocuments('CompanyList', 'KhataList').then((khata) => {
       this.khataList = khata
       if (khata && khata.length > 0) {
-        this.dataSource = new MatTableDataSource(this.khataList);
+        this.khataListdataSource = new MatTableDataSource(this.khataList);
       } else {
         this.khataList = [];
-        this.dataSource = new MatTableDataSource(this.khataList);
+        this.khataListdataSource = new MatTableDataSource(this.khataList);
       }
     }).catch((error) => {
       console.error('Error fetching party:', error);
@@ -74,7 +74,7 @@ export class KhataMasterComponent {
             this.getKhataData();
           }
         });
-        this.dataSource = new MatTableDataSource(this.khataList);
+        this.khataListdataSource = new MatTableDataSource(this.khataList);
       }
       if (result?.event === 'Delete') {
         this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'KhataList');

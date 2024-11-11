@@ -23,7 +23,7 @@ export class AddKharchComponent {
     'amount',
     'action',
   ];
-  khataList: any = [
+  kharchList: any = [
     {
       id: 1,
       unit: 'Demo',
@@ -35,7 +35,7 @@ export class AddKharchComponent {
     }
   ];
 
-  khataListdataSource = new MatTableDataSource(this.khataList);
+  kharchListdataSource = new MatTableDataSource(this.kharchList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog) { }
@@ -45,7 +45,7 @@ export class AddKharchComponent {
 
 
   ngAfterViewInit(): void {
-    this.khataListdataSource.paginator = this.paginator;
+    this.kharchListdataSource.paginator = this.paginator;
   }
 
   addkhatu(action: string, obj: any) {
@@ -55,8 +55,8 @@ export class AddKharchComponent {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.khataList.push({
-          id: this.khataList.length + 1,
+        this.kharchList.push({
+          id: this.kharchList.length + 1,
           unit: result.data.unit,
           kharch: result.data.kharch,
           dec: result.data.dec,
@@ -64,10 +64,10 @@ export class AddKharchComponent {
           chalanNo: result.data.chalanNo,
           amount: result.data.amount
         })
-        this.khataListdataSource = new MatTableDataSource(this.khataList);
+        this.kharchListdataSource = new MatTableDataSource(this.kharchList);
       }
       if (result.event === 'Edit') {
-        this.khataList.forEach((element: any) => {
+        this.kharchList.forEach((element: any) => {
           if (element.id === result.data.id) {
             element.unit = result.data.unit
             element.kharch = result.data.kharch
@@ -78,12 +78,12 @@ export class AddKharchComponent {
             element.id = result.data.id
           }
         });
-        this.khataListdataSource = new MatTableDataSource(this.khataList);
+        this.kharchListdataSource = new MatTableDataSource(this.kharchList);
       }
       if (result.event === 'Delete') {
-        const allkhataListData = this.khataList
-        this.khataList = allkhataListData.filter((id: any) => id.id !== result.data.id)
-        this.khataListdataSource = new MatTableDataSource(this.khataList);
+        const allkhataListData = this.kharchList
+        this.kharchList = allkhataListData.filter((id: any) => id.id !== result.data.id)
+        this.kharchListdataSource = new MatTableDataSource(this.kharchList);
       }
     });
   }

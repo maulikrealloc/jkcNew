@@ -23,15 +23,13 @@ export class IncomeComponent implements OnInit {
     'action',
   ];
 
-  income:any =[]
+  incomedata:any =[]
 
-  dataSource = new MatTableDataSource(this.income);
+  incomeListDataSource = new MatTableDataSource(this.incomedata);
 
   constructor(private dialog: MatDialog){}
 
-  ngOnInit(): void {
-    this.loadBillData()
-  }
+  ngOnInit(): void {}
 
 
   openaddIncome(action:string, obj:any){
@@ -41,8 +39,8 @@ export class IncomeComponent implements OnInit {
     })
     dialogRef.afterClosed().subscribe((result) =>{
       if(result.event === 'Add'){
-        this.income.push({
-          id:this.income.length + 1,
+        this.incomedata.push({
+          id:this.incomedata.length + 1,
           partyName:result.data.partyName,
           account:result.data.account,
           invoiceNo:result.data.invoiceNo,
@@ -50,10 +48,10 @@ export class IncomeComponent implements OnInit {
           creditDate:result.data.creditDate,
           amount:result.data.amount
         })
-        this.updateDataStorage()
+        this.incomeListDataSource = new MatTableDataSource(this.incomedata)
       }
       if(result.event === 'Edit'){
-        this.income.forEach((value : any) => {
+        this.incomedata.forEach((value : any) => {
           if(value.id === result.data.id){
             value.id = result.data.id;
             value.partyName = result.data.partyName;
@@ -64,12 +62,12 @@ export class IncomeComponent implements OnInit {
             value.amount = result.data.amount;
           }
         })
-        this.updateDataStorage()
+        this.incomeListDataSource = new MatTableDataSource(this.incomedata)
       }
       if(result.event === 'Delete'){
-        const allincomeData = this.income
-        this.income = allincomeData.filter((id:any) => id.id !== result.data.id)
-        this.updateDataStorage()
+        const allincomeData = this.incomedata
+        this.incomedata = allincomeData.filter((id:any) => id.id !== result.data.id)
+        this.incomeListDataSource = new MatTableDataSource(this.incomedata)
       }
     })
   }
@@ -78,16 +76,5 @@ export class IncomeComponent implements OnInit {
     const dialogRef = this.dialog.open(TransferDialogComponent,{})
   }
 
-  private updateDataStorage(){
-    this.dataSource = new MatTableDataSource(this.income);
-    localStorage.setItem('incomedatanewdata',JSON.stringify(this.income));
-  }
-
-  private loadBillData(){
-    const savedData = localStorage.getItem('incomedatanewdata');
-    if(savedData){
-    this.income = JSON.parse(savedData)
-    this.dataSource = new MatTableDataSource(this.income);
-    }
-  } 
+  
 }

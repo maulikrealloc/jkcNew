@@ -16,8 +16,7 @@ export class IncomeDataComponent implements OnInit {
 
   incomeData: any = []
 
-  dataSource = new MatTableDataSource(this.incomeData)
-
+  incomeListDataSource = new MatTableDataSource(this.incomeData)
   constructor(){}
  
   ngOnInit(): void { 
@@ -25,7 +24,7 @@ export class IncomeDataComponent implements OnInit {
     if (incomedatanewdata) {
       const parsed = JSON.parse(incomedatanewdata);
       this.incomeData = parsed;   
-      this.dataSource.data = this.incomeData;
+      this.incomeListDataSource.data = this.incomeData;
     }
     this.calculateTotalAmount();
   }

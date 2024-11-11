@@ -15,7 +15,7 @@ export class NetProfitDataComponent {
 
   netProfitData: any = []
 
-  dataSource = new MatTableDataSource(this.netProfitData)
+  netProfitListDataSource = new MatTableDataSource(this.netProfitData)
 
   constructor() { }
 

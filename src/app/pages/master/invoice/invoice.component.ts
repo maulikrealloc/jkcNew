@@ -53,7 +53,7 @@ export class InvoiceComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private firebaseCollectionService: FirebaseCollectionService,
-    private datePipe : DatePipe
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
@@ -93,7 +93,7 @@ export class InvoiceComponent implements OnInit {
       console.error('Error fetching firms:', error);
     });
   }
-  
+
   getPartyData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
       if (party && party.length > 0) {
@@ -124,7 +124,7 @@ export class InvoiceComponent implements OnInit {
     });
   }
 
-  firmChange(event : any) {
+  firmChange(event: any) {
     this.chalanList = this.chalanData.filter((obj: any) => obj.firmId === event.value)
     this.firebaseCollectionService
       .getDocuments('CompanyList', 'InvoiceList')
@@ -143,13 +143,52 @@ export class InvoiceComponent implements OnInit {
       });
   }
 
-  partyChange(event : any) {
-    this.chalanList = this.chalanData.filter((id: any) => id.partyId === event.value)    
+  partyChange(event: any) {
+    this.chalanList = this.chalanData.filter((id: any) => id.partyId === event.value)
   }
 
-  chalanChange(event : any) {
+  chalanChange(event: any) {
     const selectedChalanPartyOrderId = this.chalanList.find((id: any) => id.id === event.value).partyOrderId
-    this.selectedChalanList = this.orderList.find((id: any) => id.id === selectedChalanPartyOrderId)  
+    this.selectedChalanList = this.orderList.find((id: any) => id.id === selectedChalanPartyOrderId)
+  }
+
+  invoiceSubmitData() {
+    const grossTotal = this.selectedChalanList.products.map((id: any) => id.productQuantity * id.productPrice).reduce((a: any, b: any) => { return a + b }).toFixed(2);
+    const discountAmount: any = Number((grossTotal * this.invoiceForm.value.discountRatio) / 100).toFixed(2);
+    const netAmount: any = Number(grossTotal - discountAmount).toFixed(2);
+    const cgst = Number((netAmount * Number(this.invoiceForm.value.cgst)) / 100).toFixed(2);
+    const sgst = Number((netAmount * Number(this.invoiceForm.value.sgst)) / 100).toFixed(2);
+    const finalAmount = (Number(netAmount) + Number(cgst) + Number(sgst)).toFixed(2);
+
+    const payload = {
+      firmId: this.invoiceForm.value.firm,
+      partyId: this.invoiceForm.value.party,
+      chalanId: this.invoiceForm.value.chalanNo,
+      date: this.invoiceForm.value.date,
+      invoiceNo: this.invoiceForm.value.invoiceNo,
+      cgst: Number(this.invoiceForm.value.cgst),
+      sgst: Number(this.invoiceForm.value.sgst),
+      discountRatio: this.invoiceForm.value.discountRatio,
+      grossTotal: grossTotal,
+      netAmount: netAmount,
+      finalAmount: finalAmount
+    }
+
+    this.updateChalanIsCreated(payload.chalanId)
+    this.firebaseCollectionService.addDocument('CompanyList', payload, 'InvoiceList');
+    this.invoiceForm.patchValue({
+      firm: '',
+      party: '',
+      chalanNo: '',
+      date: new Date(), 
+      invoiceNo: null,
+      discountRatio: 0,
+      cgst: 0,
+      sgst: 0
+    });
+    this.selectedChalanList = [];
+    this.invoiceListdataSource = new MatTableDataSource(this.selectedChalanList);
+
   }
 
   invoiceview() {
@@ -173,21 +212,17 @@ export class InvoiceComponent implements OnInit {
       netAmount: netAmount,
       finalAmount: finalAmount
     }
-
     this.getPartyDetails(payload.partyId)
     this.getFirmDetails(payload.firmId)
     this.getChalanDetails(payload.chalanId)
-    this.updateChalanIsCreated(payload.chalanId)
-    this.firebaseCollectionService.addDocument('CompanyList', payload, 'InvoiceList');
-
     this.generatePDF(payload);
-  }
+    }
 
-  updateChalanIsCreated(chalanId :any) {
+  updateChalanIsCreated(chalanId: any) {
     const findChalanData = this.chalanList.find((id: any) => id.id === chalanId)
     findChalanData.isCreated = true
     this.firebaseCollectionService.updateDocument('CompanyList', findChalanData.id, findChalanData, 'ChalanList');
-      
+
   }
 
   getInvoiceData() {
@@ -206,7 +241,6 @@ export class InvoiceComponent implements OnInit {
     const sgst = this.invoiceForm.value.sgst || 0;
     const cgst = this.invoiceForm.value.cgst || 0;
 
-    
     const sgstAmount = (netAmount * sgst) / 100;
     const cgstAmount = (netAmount * cgst) / 100;
 
@@ -214,10 +248,10 @@ export class InvoiceComponent implements OnInit {
     return finalAmount;
   }
 
-  deleteInvoiceData(index :number) {
+  deleteInvoiceData(index: number) {
     this.selectedChalanList?.products.splice(index, 1);
   }
-  
+
   generatePDF(invoiceData: any) {
     const doc: any = new jsPDF();
     const header = (doc: any) => {
@@ -230,13 +264,13 @@ export class InvoiceComponent implements OnInit {
       doc.rect(0, yPosition - rowHeight, doc.internal.pageSize.width, rowHeight, 'F');
 
       doc.setFontSize(10); doc.setTextColor(0, 0, 0); const verticalCenter = yPosition - rowHeight / 2 + 6;
-      const phoneNumberLeft = `Mo. : ${this.firmDetails.personalMobileNo}` ; const leftXPosition = 10;
+      const phoneNumberLeft = `Mo. : ${this.firmDetails.personalMobileNo}`; const leftXPosition = 10;
       doc.text(phoneNumberLeft, leftXPosition, verticalCenter, { align: 'left' });
 
       const phoneNumberMiddle = "Jay Shree Ganesh"; const middleXPosition = doc.internal.pageSize.width / 2;
       doc.text(phoneNumberMiddle, middleXPosition, verticalCenter, { align: 'center' });
 
-      const phoneNumberRight = `Mo. : ${this.firmDetails.mobileNO}` ; const rightXPosition = doc.internal.pageSize.width - 10;
+      const phoneNumberRight = `Mo. : ${this.firmDetails.mobileNO}`; const rightXPosition = doc.internal.pageSize.width - 10;
       doc.text(phoneNumberRight, rightXPosition, verticalCenter, { align: 'right' });
 
       const borderYPosition = yPosition + 1;
@@ -344,7 +378,7 @@ export class InvoiceComponent implements OnInit {
     doc.rect(box2XPosition - 25, boxYPosition, box2Width, boxHeight, 'F');
 
     const fieldsRight = ["Invoice:", "Date:", "P.CH:", "Date:"];
-    const fieldsRightValues = [invoiceData.invoiceNo, `${this.datePipe.transform(invoiceData?.date, 'dd-MM-yyyy')}`, `${this.partyDetails.chalanNoSeries}`, "------------"]; // Corresponding values
+    const fieldsRightValues = [invoiceData.invoiceNo, `${this.datePipe.transform(invoiceData?.date, 'dd-MM-yyyy')}`, `${this.partyDetails.chalanNoSeries}`, "------------"]; 
     const rightYPosition = boxYPosition + 5;
 
     fieldsRight.forEach((field, index) => {
@@ -354,7 +388,7 @@ export class InvoiceComponent implements OnInit {
       const textWidth = doc.getTextWidth(field);
 
       const valueXPosition = (box2XPosition - 28) + textWidth + 5;
-      const valueYPosition = yPosition; // Position value above the line
+      const valueYPosition = yPosition;
       doc.text(fieldsRightValues[index], valueXPosition, valueYPosition);
 
       const lineYPosition = valueYPosition + 1;
@@ -383,7 +417,7 @@ export class InvoiceComponent implements OnInit {
     const bankDetails = ["Date:", "Amount:"];
     const bankLeftYPosition = 204 + 5;
     const bankBoxWidth = doc.internal.pageSize.width * 0.25;
-    const fontSize = 9; // Desired font size
+    const fontSize = 9;
 
     bankDetails.forEach((field, index) => {
       const yPosition = bankLeftYPosition + (index * 7);
@@ -412,7 +446,7 @@ export class InvoiceComponent implements OnInit {
 
     const grossTotal = data.map((id: any) => id.total).reduce((a: any, b: any) => { return a + b }).toFixed(2);
     const discountAmount: any = Number((grossTotal * invoiceData?.discountRatio) / 100).toFixed(2);
-    const netAmount:any = Number(grossTotal - discountAmount).toFixed(2);
+    const netAmount: any = Number(grossTotal - discountAmount).toFixed(2);
     const cgst = Number((netAmount * invoiceData?.cgst) / 100).toFixed(2);
     const sgst = Number((netAmount * invoiceData?.sgst) / 100).toFixed(2);
     const finalAmount = (Number(netAmount) + Number(cgst) + Number(sgst)).toFixed(2);
@@ -420,12 +454,11 @@ export class InvoiceComponent implements OnInit {
 
     body.push(
       ['', '', '', '', { content: 'Gross Total', styles: { halign: 'left' } }, `${grossTotal}`],
-      // ['', '', '', '', { content: 'Discount 10%', styles: { halign: 'left' } }, `${discountAmount}`],
       ['', '', '', '', { content: `Discount ${invoiceData.discountRatio}%`, styles: { halign: 'left' } }, `${discountAmount}`],
       [{ content: `${finalAmountInWords}`, rowSpan: 2, colSpan: 4, styles: { halign: 'left', fontStyle: 'bold', valign: 'middle' } }, 'Net Amount', `${netAmount}`],
       [`CGST ${invoiceData?.cgst}%`, `${cgst}`],
       [{ content: '', rowSpan: 2, colSpan: 4, styles: { halign: 'center', fontStyle: 'bold' } }, `SGST ${invoiceData?.sgst}%`, `${sgst}`],
-       ['Final Amount', `${finalAmount}`, { styles: { FontFace: 'left' } }],
+      ['Final Amount', `${finalAmount}`, { styles: { FontFace: 'left' } }],
       [
         { content: `Bank Name: ${this.firmDetails.bankName}`, styles: { fontStyle: 'bold' }, colSpan: 2 },
         { content: `IFSC Code: ${this.firmDetails.ifscCode}`, styles: { fontStyle: 'bold' }, colSpan: 2 },
@@ -445,7 +478,7 @@ export class InvoiceComponent implements OnInit {
       body: body,
       startY: 80,
       theme: 'plain',
-      margin: { top: 0, right: 10, bottom: 0, left: 10 }, // No margins
+      margin: { top: 0, right: 10, bottom: 0, left: 10 },
       tableWidth: 'auto',
       headStyles: {
         fillColor: '#ffbb00',
@@ -547,6 +580,3 @@ export class InvoiceComponent implements OnInit {
   }
 
 }
-
-
-

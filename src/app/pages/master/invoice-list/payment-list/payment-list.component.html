@@ -1,27 +1,71 @@
 <h2 mat-dialog-title class="m-b-24 b-b-1 p-b-20">{{action}} </h2>
 <mat-dialog-content class="mat-typography" style="max-width: 750px" *ngIf="action !== 'Delete'; else elseTemplate">
-    <form [formGroup]="paymentList">
+    <form [formGroup]="paymentReceiveList">
         <div class="row align-items-baseline">
             <div class="col-4">
-                <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
-                    <mat-label>Payment Receive</mat-label>
-                    <input type="number" formControlName="paymentReceive" matInput placeholder="Payment receive">
-                </mat-form-field>
+                <div>
+                    <mat-label class="f-s-13 f-w-600">
+                        Final Total : <span class="f-s-13 f-w-600">{{ data?.finalAmount }}</span>
+                    </mat-label>
+                </div>
             </div>
             <div class="col-4">
+                <div *ngIf="+pendingAmount() > 0">
+                    <mat-label class="f-s-13 f-w-600">
+                        Pending Payment : {{ pendingAmount() }}
+                    </mat-label>
+                </div>
+                <div class="d-flex" style="color:green;" *ngIf="+pendingAmount() === 0">
+                    <div>
+                        <span class="f-w-600 f-s-15">Payment Successful</span>
+                    </div>
+                    <div class="m-l-8">
+                        <i-tabler name="checkbox" class="icon-18"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-baseline m-t-15">
+            <div class="col-5">
+                <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
+                    <mat-label>Payment Receive</mat-label>
+                    <input type="number" formControlName="paymentReceive" matInput placeholder="Payment receive"  [max]="pendingAmount()" >
+                    <mat-hint
+                        *ngIf="paymentReceiveList.get('paymentReceive')?.hasError('required') && paymentReceiveList.get('paymentReceive')?.touched"
+                        class="error-message error-color">
+                        Payment receive is required
+                    </mat-hint>
+                    <!-- Error: Maximum value exceeded -->
+                    <mat-hint
+                        *ngIf="paymentReceiveList.get('paymentReceive')?.hasError('max') && paymentReceiveList.get('paymentReceive')?.touched"
+                        class="error-message error-color" style="text-align: start;">
+                        Payment receive cannot exceed <span>{{pendingAmount()}}</span> .
+                    </mat-hint>
+                </mat-form-field>
+            </div>
+            <div class="col-3">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Payment Date</mat-label>
-                    <input matInput formControlName="paymentDate" [matDatepicker]="Date" placeholder="Enter payment date">
+                    <input matInput formControlName="paymentDate" [matDatepicker]="Date"
+                        placeholder="Enter payment date">
+                    <mat-hint
+                        *ngIf="paymentReceiveList.get('paymentDate')?.hasError('required') && paymentReceiveList.get('paymentDate')?.touched"
+                        class="error-message error-color">
+                        Payment date is required
+                    </mat-hint>
                     <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
                     <mat-datepicker #Date></mat-datepicker>
                 </mat-form-field>
             </div>
             <div class="col-4">
-                <button mat-flat-button (click)="addPaymentData()" [mat-dialog-close]="true" color="primary">Add Payment</button>
+                <button mat-flat-button (click)="addPaymentData()"
+                    [disabled]="paymentReceiveList.invalid || +pendingAmount() === 0" color="primary">
+                    Add Payment
+                </button>
             </div>
         </div>
     </form>
-    <mat-card class="cardWithShadow">
+    <mat-card class="cardWithShadow m-t-20">
         <mat-card-content class="p-24">
             <div class="table-responsive">
                 <table mat-table [dataSource]="paymentListDataSource" class="w-100">
@@ -29,29 +73,35 @@
                         <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No.</th>
                         <td mat-cell *matCellDef="let element; let i = index" class="f-s-14">{{ i + 1 }}</td>
                     </ng-container>
-    
+
                     <ng-container matColumnDef="productPrice">
                         <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Receive Amount</th>
-                        <td mat-cell *matCellDef="let element" class="f-s-14">{{element.productPrice}}</td>
+                        <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.paymentReceive }}</td>
                     </ng-container>
-    
+
                     <ng-container matColumnDef="totalAmount">
                         <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Payment Date</th>
-                        <td mat-cell *matCellDef="let element" class="f-s-14">{{element.productQuantity}}</td>
+                        <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.paymentDate }}</td>
                     </ng-container>
-                    
+
                     <ng-container matColumnDef="action">
-                        <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                            Action
-                        </th>
-                        <td mat-cell *matCellDef="let element" class="action-link">
-                            <a class="m-r-10 cursor-pointer"><i-tabler name="edit" class="icon-18"></i-tabler>
+                        <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Action</th>
+                        <td mat-cell *matCellDef="let element; let i = index" class="action-link">
+                            <a class="m-r-10 cursor-pointer"><i-tabler name="edit" (click)="editData(i)"
+                                    class="icon-18"></i-tabler></a>
+                            <a class="m-r-10 cursor-pointer">
+                                <i-tabler name="trash" (click)="deleteData(i)" class="icon-18"></i-tabler>
                             </a>
                         </td>
                     </ng-container>
-    
+
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr class="mat-row" style="text-align: center;" *matNoDataRow>
+                        <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+                            No record found
+                        </td>
+                    </tr>
                 </table>
             </div>
         </mat-card-content>
@@ -62,6 +112,9 @@
     <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
     <button mat-flat-button [mat-dialog-close]="true" *ngIf="action !== 'Add Payment'" color="primary">
         {{action}}
+    </button>
+    <button mat-flat-button [mat-dialog-close]="true" *ngIf="action !== 'Delete'" color="primary" (click)="submitPayment()">
+        Submit
     </button>
 </mat-dialog-actions>
 <ng-template #elseTemplate>

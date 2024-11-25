@@ -1,24 +1,24 @@
 <mat-card class="cardWithShadow">
     <mat-card-content class="p-24">
         <div style="align-items: baseline;" class="row">
-            <div class="col-3">
+            <div class="col-4">
                 <mat-form-field appearance="outline" class="w-100 hide-hint">
                     <mat-label>Invoice List</mat-label>
-                    <input matInput placeholder="Search invoice list">
+                    <input matInput placeholder="Search invoice" (keyup)="applyFilter($any($event.target).value)">
                     <mat-icon matSuffix>
                         <i-tabler name="search" class="icon-20"></i-tabler>
                     </mat-icon>
                 </mat-form-field>
             </div>
-            <div class="col-3">
+            <div class="col-4">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Select</mat-label>
-                    <mat-select #dropdown placeholder="Select">
-                        <mat-option value="ABC">ABC</mat-option>
+                    <mat-label>Select Firm</mat-label>
+                    <mat-select #dropdown placeholder="Select firm">
+                        <mat-option [value]="item.id" *ngFor="let item of firmList">{{ item.header }}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-3">
+            <div class="col-4">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Select Invoice Date</mat-label>
                     <mat-date-range-input [rangePicker]="picker">
@@ -28,10 +28,6 @@
                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-date-range-picker #picker></mat-date-range-picker>
                 </mat-form-field>
-            </div>
-            <div class="col-3">
-                <a class="m-r-10 cursor-pointer"><i-tabler name="file-text" class="icon-18"></i-tabler> </a>
-                <a class="m-r-10 cursor-pointer"><i-tabler name="pdf" class="icon-18"></i-tabler> </a>
             </div>
         </div>
     </mat-card-content>
@@ -131,7 +127,7 @@
                         Recived
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.recived }}
+                        {{ getPaymentReceiveAmount(element) }}
                     </td>
                 </ng-container>
 
@@ -139,12 +135,6 @@
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
                         Action
                     </th>
-                    <!-- <td mat-cell *matCellDef="let element" class="action-link">
-                        <a class="m-r-10 cursor-pointer"><i-tabler name="edit" class="icon-18"></i-tabler></a>
-                        <a class="m-r-10 cursor-pointer">
-                            <i-tabler name="trash" class="icon-18"></i-tabler>
-                        </a>
-                    </td> -->
                     <td mat-cell *matCellDef="let element" class="action-link">
                         <a [matMenuTriggerFor]="menu">
                             <i-tabler name="dots-vertical" class="icon-18"></i-tabler>
@@ -152,18 +142,33 @@
                         <mat-menu #menu="matMenu">
                             <ng-container>
                                 <div class="menu-item" (click)="generatePDF(element)">
-                                    <div class="statustable">
-                                        <span>Download</span>
+                                    <div class="d-flex">
+                                        <div>
+                                            <i-tabler name="download" class="icon-18"></i-tabler>
+                                        </div>
+                                        <div>
+                                            <span class="m-l-10">Download</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="menu-item" (click)="getPaymentList('Add Payment', element)">
-                                    <div class="statustable">
-                                        <span>Payment Update</span>
+                                    <div class="d-flex">
+                                        <div>
+                                            <i-tabler name="checkbox" class="icon-18"></i-tabler>
+                                        </div>
+                                        <div>
+                                            <span class="m-l-10">Payment Update</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="menu-item" (click)="getPaymentList('Delete', element)">
-                                    <div class="statustable">
-                                        <span>Delete</span>
+                                    <div class="d-flex">
+                                        <div>
+                                            <i-tabler name="trash" class="icon-18"></i-tabler>
+                                        </div>
+                                        <div>
+                                            <span class="m-l-10">Delete</span>
+                                        </div>
                                     </div>
                                 </div>
                             </ng-container>

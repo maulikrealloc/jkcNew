@@ -4,7 +4,7 @@
       <div class="col-lg-4">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <mat-label>Order</mat-label>
-          <input matInput placeholder="Search Order">
+          <input matInput placeholder="Search Order" (keyup)="applyFilter($any($event.target).value)">
           <mat-icon matSuffix>
             <i-tabler name="search" class="icon-20"></i-tabler>
           </mat-icon>

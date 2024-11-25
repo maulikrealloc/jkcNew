@@ -4,7 +4,7 @@
       <div class="col-3">
         <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
           <mat-label>Chalan</mat-label>
-          <input matInput placeholder="Search chalan">
+          <input matInput placeholder="Search chalan" (keyup)="applyFilter($any($event.target).value)">
           <mat-icon matSuffix>
             <i-tabler name="search" class="icon-20"></i-tabler>
           </mat-icon>
@@ -102,18 +102,33 @@
             <mat-menu #menu="matMenu">
               <ng-container>
                 <div class="menu-item" (click)="downloadPDF(element)">
-                  <div class="statustable" >
-                    <span>Download</span>
+                  <div class="d-flex">
+                    <div>
+                      <i-tabler name="download" class="icon-18"></i-tabler>
+                    </div>
+                    <div>
+                      <span class="m-l-10">Download</span>
+                    </div>
                   </div>
                 </div>
                 <div class="menu-item" (click)="getProductList('Product List', element)">
-                <div class="statustable">
-                  <span>Product View</span>
-                </div>
+                  <div class="d-flex">
+                    <div>
+                      <i-tabler name="eye" class="icon-18"></i-tabler>
+                    </div>
+                    <div>
+                      <span class="m-l-10">Product View</span>
+                    </div>
+                  </div>
                 </div>
                 <div class="menu-item" (click)="deleteChalan('Delete', element)">
-                  <div class="statustable">
-                    <span>Delete</span>
+                  <div class="d-flex">
+                    <div>
+                      <i-tabler name="trash" class="icon-18"></i-tabler>
+                    </div>
+                    <div>
+                      <span class="m-l-10">Delete</span>
+                    </div>
                   </div>
                 </div>
               </ng-container>

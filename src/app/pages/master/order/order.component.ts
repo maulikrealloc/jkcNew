@@ -41,6 +41,10 @@ export class OrderComponent {
     return null;
   }
 
+  applyFilter(filterValue: string): void{
+      this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+  
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.getOrderData();
@@ -60,10 +64,32 @@ export class OrderComponent {
       this.orderList = order
       if (order && order.length > 0) {
         this.dataSource = new MatTableDataSource(this.orderList);
+
+        this.dataSource.filterPredicate = (data: any, filter) => {
+          const partyName = this.getPartyName(data.partyId);
+          const orderDate = this.convertTimestampToDate(data.orderDate);
+          const deliveryDate = this.convertTimestampToDate(data.deliveryDate);
+          const chalanNo = data.products?.[0]?.productChalanNo || '';
+
+          // Combine all fields into a single string
+          const dataStr = `
+        ${partyName}
+        ${orderDate}
+        ${deliveryDate}
+        ${data.designNo}
+        ${data.partyOrder}
+        ${chalanNo}
+        ${data.orderStatus}
+      `.toLowerCase();
+
+          return dataStr.includes(filter);
+        };
       } else {
         this.orderList = [];
         this.dataSource = new MatTableDataSource(this.orderList);
       }
+      // Attach paginator after reinitializing dataSource
+      this.dataSource.paginator = this.paginator;
     }).catch((error) => {
       console.error('Error fetching order:', error);
     });

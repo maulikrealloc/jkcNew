@@ -41,16 +41,16 @@ export class ChalanComponent {
   });
   quantityValue: any = 0;
   productPriceValue: any = 0;
-  totalProductPrices : any;
-  selectedPartyChalanNo : number = 0
-  selectedProduct : any = []
+  totalProductPrices: any;
+  selectedPartyChalanNo: number = 0
+  selectedProduct: any = []
   chalanListDataSource = new MatTableDataSource(this.chalanList);
   partyDetails: any
   firmDetails: any
   partyOrder: any
   imageUrl: string | ArrayBuffer | null = null;
-  updateProductsData : any
-  netAmount :number = 0
+  updateProductsData: any
+  netAmount: number = 0
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(
@@ -71,7 +71,7 @@ export class ChalanComponent {
       party: ['', Validators.required],
       date: new Date(),
       partyOrder: ['', Validators.required],
-      product : [this.selectedProduct]
+      product: [this.selectedProduct]
     })
   }
 
@@ -99,28 +99,55 @@ export class ChalanComponent {
     this.getPartyDetails(this.chalanForm.value.party)
     this.getFirmDetails(this.chalanForm.value.firm)
     this.generatePDF()
-    const payload = {
-      firmId : this.chalanForm.value.firm,
-      partyId : this.chalanForm.value.party,
-      partyOrderId : this.chalanForm.value.partyOrder,
-      chalanDate : this.chalanForm.value.date,
-      chalanNo : this.selectedPartyChalanNo,
-      netAmount : this.netAmount,
-      isCreated : false,
-    }
-    this.firebaseCollectionService.updateDocument('CompanyList', this.updateProductsData.id, this.updateProductsData, 'OrderList');
+    // const payload = {
+    //   firmId : this.chalanForm.value.firm,
+    //   partyId : this.chalanForm.value.party,
+    //   partyOrderId : this.chalanForm.value.partyOrder,
+    //   chalanDate : this.chalanForm.value.date,
+    //   chalanNo : this.selectedPartyChalanNo,
+    //   netAmount : this.netAmount,
+    //   isCreated : false,
+    // }
+    // this.updateProductsData.isCreated = true
+    // this.firebaseCollectionService.updateDocument('CompanyList', this.updateProductsData.id, this.updateProductsData, 'OrderList');
 
-    this.firebaseCollectionService.addDocument('CompanyList', payload , 'ChalanList');
+    // this.firebaseCollectionService.addDocument('CompanyList', payload , 'ChalanList');
   }
 
-  getPartyDetails(partyId :any) {
+  submitData() {
+    const payload = {
+      firmId: this.chalanForm.value.firm,
+      partyId: this.chalanForm.value.party,
+      partyOrderId: this.chalanForm.value.partyOrder,
+      chalanDate: this.chalanForm.value.date,
+      chalanNo: this.selectedPartyChalanNo,
+      netAmount: this.netAmount,
+      isCreated: false,
+    }
+    this.updateProductsData.isCreated = true
+    this.firebaseCollectionService.updateDocument('CompanyList', this.updateProductsData.id, this.updateProductsData, 'OrderList');
+
+    this.firebaseCollectionService.addDocument('CompanyList', payload, 'ChalanList');
+    // this.chalanForm.reset();
+    this.chalanForm.patchValue({
+      firm: '',
+      party: '',
+      partyOrder: '',
+      date: new Date(),
+    });
+    this.chalanList = [];
+    this.chalanListDataSource = new MatTableDataSource(this.chalanList);
+
+  }
+
+  getPartyDetails(partyId: any) {
     this.partyDetails = this.partyList.find((id: any) => id.id === partyId)
   }
 
-  getFirmDetails(firmId :any) {
+  getFirmDetails(firmId: any) {
     this.firmDetails = this.firmList.find((id: any) => id.id === firmId)
   }
-  
+
   generatePDF() {
     const { tr, tg, tb } = this.textHexToRgb(this.partyDetails.partyColorCode.fontColor);
     const { br, bg, bb } = this.bgHexToRgb(this.partyDetails.partyColorCode.bgColor);
@@ -132,14 +159,14 @@ export class ChalanComponent {
       const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
 
-      doc.setLineWidth(0.5); 
-      doc.setDrawColor(0, 0, 0); 
-      doc.rect(margin, margin, pageWidth - 2 * margin, pageHeight - 2 * margin); 
+      doc.setLineWidth(0.5);
+      doc.setDrawColor(0, 0, 0);
+      doc.rect(margin, margin, pageWidth - 2 * margin, pageHeight - 2 * margin);
 
       doc.setFontSize(10);
-      doc.text(`MO: ${this.firmDetails?.mobileNO.toString()}`, margin + 8, margin + 8); 
+      doc.text(`MO: ${this.firmDetails?.mobileNO.toString()}`, margin + 8, margin + 8);
       if (this.firmDetails?.personalMobileNo) {
-        doc.text(`MO: ${this.firmDetails?.personalMobileNo.toString()}`, pageWidth - margin - 35, margin + 8);    
+        doc.text(`MO: ${this.firmDetails?.personalMobileNo.toString()}`, pageWidth - margin - 35, margin + 8);
       }
 
       doc.setTextColor(br, bg, bb);
@@ -148,28 +175,27 @@ export class ChalanComponent {
       doc.setFontSize(22);
       const titleWidth = doc.getTextWidth(title);
       const titleX = (pageWidth - titleWidth) / 2;
-      doc.text(title, titleX, margin + 20); 
+      doc.text(title, titleX, margin + 20);
 
       doc.setTextColor(0, 0, 0);
       doc.setFont('helvetica', 'normal');
 
       const address = this.firmDetails.address;
-      const addressY = margin + 38; 
+      const addressY = margin + 38;
       doc.setFontSize(10);
 
       const addressLines = doc.splitTextToSize(address, pageWidth - 2 * margin);
 
-      addressLines.forEach((line:any, index:number) => {
+      addressLines.forEach((line: any, index: number) => {
         const addressX = (pageWidth - doc.getTextWidth(line)) / 2;
         doc.text(line, addressX, addressY + (index * 5));
       });
 
       const details = this.firmDetails.subHeader;
       doc.setFontSize(10);
-      doc.setFont("helvetica", "bolditalic"); 
+      doc.setFont("helvetica", "bolditalic");
       const detailsWidth = doc.getTextWidth(details);
       const detailsX = (pageWidth - detailsWidth) / 2;
-      // 27
       doc.text(details, detailsX, addressY - 24 + addressLines.length * 5 + 10);
 
       const leftColumnX = margin + 5;
@@ -189,7 +215,7 @@ export class ChalanComponent {
       doc.setTextColor(0, 0, 0);
       doc.setFont('helvetica', 'normal');
 
-      partyaddressLines.forEach((line:any, index:number) => {
+      partyaddressLines.forEach((line: any, index: number) => {
         doc.text(line, leftColumnX + 4, startY + 5 + (index * 5));
       });
 
@@ -203,8 +229,8 @@ export class ChalanComponent {
       doc.setFontSize(12);
       doc.setFont('helvetica', 'normal');
       const formattedDate = moment(this.chalanForm.value.date).format('DD/MM/YYYY');
-      doc.text(`Date: ${formattedDate}`, rightColumnX + 5 , startChalanY + chalanSpacing);
-      doc.text(`PO No: ${this.partyOrder}`, rightColumnX + 5 , startChalanY + chalanSpacing * 2);
+      doc.text(`Date: ${formattedDate}`, rightColumnX + 5, startChalanY + chalanSpacing);
+      doc.text(`PO No: ${this.partyOrder}`, rightColumnX + 5, startChalanY + chalanSpacing * 2);
       doc.setFontSize(11);
 
       const products = this.chalanForm.value.product;
@@ -214,33 +240,33 @@ export class ChalanComponent {
 
       const emptyRows = Array.from({ length: emptyRowsNeeded }, (_, index) => [
         (products.length + index + 1).toString(),
-        '', 
-        '', 
-        '',   
+        '',
+        '',
+        '',
         ''
       ]);
 
       const tableData = [
-        ...products.map((p:any, index:number) => [
-          (index + 1).toString(), 
-          p.productName,          
-          p.quantity,            
-          p.productPrice,       
-          p.totalAmount         
+        ...products.map((p: any, index: number) => [
+          (index + 1).toString(),
+          p.productName,
+          p.quantity,
+          p.productPrice,
+          p.totalAmount
         ]),
         ...emptyRows
       ];
 
-       this.netAmount = products.reduce((sum:any, p:any) => sum + p.totalAmount, 0);
+      this.netAmount = products.reduce((sum: any, p: any) => sum + p.totalAmount, 0);
 
       tableData.push([
-        '',                
-        'Net Amount',     
-        '',                 
-        '',                
+        '',
+        'Net Amount',
+        '',
+        '',
         this.netAmount.toFixed(2) + '/-'
       ]);
-      
+
       autoTable(doc, {
         head: [['Sr.', 'Particulars', 'Pcs./Mts.', 'Rate', 'Amount']],
         body: tableData,
@@ -273,7 +299,6 @@ export class ChalanComponent {
         },
         didParseCell: function (data) {
           const rowIndex = data.row.index;
-          
           if (data.section === 'body' && data.column.index === 4) {
             if (rowIndex === 10) {
               data.cell.styles.fontSize = 15;
@@ -324,7 +349,7 @@ export class ChalanComponent {
       const signatureY = tableY + 5;
       const imgWidth = 100;
       const imgHeight = 50;
-      const imgData:any = this.imageUrl;
+      const imgData: any = this.imageUrl;
 
       doc.addImage(imgData, 'PNG', margin + 8, signatureY, imgWidth, imgHeight);
       doc.text('Signature', pageWidth - margin - 50, signatureY + 20 + imgHeight / 2);
@@ -345,14 +370,14 @@ export class ChalanComponent {
       const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
 
-      doc.setLineWidth(0.5); 
-      doc.setDrawColor(0, 0, 0); 
-      doc.rect(margin, margin, pageWidth - 2 * margin, pageHeight - 2 * margin); 
+      doc.setLineWidth(0.5);
+      doc.setDrawColor(0, 0, 0);
+      doc.rect(margin, margin, pageWidth - 2 * margin, pageHeight - 2 * margin);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(10);
-      doc.text(`MO: ${this.firmDetails?.mobileNO.toString()}`, margin + 8, margin + 8); 
+      doc.text(`MO: ${this.firmDetails?.mobileNO.toString()}`, margin + 8, margin + 8);
       if (this.firmDetails?.personalMobileNo) {
-        doc.text(`MO: ${this.firmDetails?.personalMobileNo.toString()}`, pageWidth - margin - 35, margin + 8);    
+        doc.text(`MO: ${this.firmDetails?.personalMobileNo.toString()}`, pageWidth - margin - 35, margin + 8);
       }
 
       doc.setTextColor(2, 2, 2);
@@ -361,25 +386,25 @@ export class ChalanComponent {
       doc.setFontSize(22);
       const titleWidth = doc.getTextWidth(title);
       const titleX = (pageWidth - titleWidth) / 2;
-      doc.text(title, titleX, margin + 20); 
+      doc.text(title, titleX, margin + 20);
 
       doc.setTextColor(0, 0, 0);
       doc.setFont('helvetica', 'normal');
 
       const address = this.firmDetails.address;
-      const addressY = margin + 38; 
+      const addressY = margin + 38;
       doc.setFontSize(10);
 
       const addressLines = doc.splitTextToSize(address, pageWidth - 2 * margin);
 
-      addressLines.forEach((line:any, index:number) => {
+      addressLines.forEach((line: any, index: number) => {
         const addressX = (pageWidth - doc.getTextWidth(line)) / 2;
         doc.text(line, addressX, addressY + (index * 5));
       });
 
       const details = this.firmDetails.subHeader;
       doc.setFontSize(10);
-      doc.setFont("helvetica", "bolditalic"); 
+      doc.setFont("helvetica", "bolditalic");
       const detailsWidth = doc.getTextWidth(details);
       const detailsX = (pageWidth - detailsWidth) / 2;
       // 27
@@ -402,7 +427,7 @@ export class ChalanComponent {
       doc.setTextColor(0, 0, 0);
       doc.setFont('helvetica', 'normal');
 
-      partyaddressLines.forEach((line:any, index:number) => {
+      partyaddressLines.forEach((line: any, index: number) => {
         doc.text(line, leftColumnX + 4, startY + 5 + (index * 5));
       });
 
@@ -416,8 +441,8 @@ export class ChalanComponent {
       doc.setFontSize(12);
       doc.setFont('helvetica', 'normal');
       const formattedDate = moment(this.chalanForm.value.date).format('DD/MM/YYYY');
-      doc.text(`Date: ${formattedDate}`, rightColumnX + 5 , startChalanY + chalanSpacing);
-      doc.text(`PO No: ${this.partyOrder}`, rightColumnX + 5 , startChalanY + chalanSpacing * 2);
+      doc.text(`Date: ${formattedDate}`, rightColumnX + 5, startChalanY + chalanSpacing);
+      doc.text(`PO No: ${this.partyOrder}`, rightColumnX + 5, startChalanY + chalanSpacing * 2);
       doc.setFontSize(11);
 
       const products = this.chalanForm.value.product;
@@ -427,33 +452,33 @@ export class ChalanComponent {
 
       const emptyRows = Array.from({ length: emptyRowsNeeded }, (_, index) => [
         (products.length + index + 1).toString(),
-        '', 
-        '', 
-        '',   
+        '',
+        '',
+        '',
         ''
       ]);
 
       const tableData = [
-        ...products.map((p:any, index:number) => [
-          (index + 1).toString(), 
-          p.productName,          
-          p.quantity,            
-          p.productPrice,       
-          p.totalAmount         
+        ...products.map((p: any, index: number) => [
+          (index + 1).toString(),
+          p.productName,
+          p.quantity,
+          p.productPrice,
+          p.totalAmount
         ]),
         ...emptyRows
       ];
 
-      const netAmount = products.reduce((sum:any, p:any) => sum + p.totalAmount, 0);
+      const netAmount = products.reduce((sum: any, p: any) => sum + p.totalAmount, 0);
 
       tableData.push([
-        '',                
-        'Net Amount',     
-        '',                 
-        '',                
+        '',
+        'Net Amount',
+        '',
+        '',
         netAmount.toFixed(2) + '/-'
       ]);
-      
+
       autoTable(doc, {
         head: [['Sr.', 'Particulars', 'Pcs./Mts.', 'Rate', 'Amount']],
         body: tableData,
@@ -469,7 +494,7 @@ export class ChalanComponent {
         },
         headStyles: {
           fillColor: [2, 2, 2],
-          textColor: [255, 255 ,255],
+          textColor: [255, 255, 255],
           fontSize: 12,
           font: 'helvetica',
           fontStyle: 'bold',
@@ -486,7 +511,6 @@ export class ChalanComponent {
         },
         didParseCell: function (data) {
           const rowIndex = data.row.index;
-          
           if (data.section === 'body' && data.column.index === 4) {
             if (rowIndex === 10) {
               data.cell.styles.fontSize = 15;
@@ -514,7 +538,7 @@ export class ChalanComponent {
         },
         headStyles: {
           fillColor: [2, 2, 2],
-          textColor: [255 ,255 ,255],
+          textColor: [255, 255, 255],
           fontSize: 9,
           font: 'helvetica',
           fontStyle: 'bold',
@@ -537,7 +561,7 @@ export class ChalanComponent {
       const signatureY = tableY + 5;
       const imgWidth = 100;
       const imgHeight = 50;
-      const imgData:any = this.imageUrl;
+      const imgData: any = this.imageUrl;
 
       doc.addImage(imgData, 'PNG', margin + 8, signatureY, imgWidth, imgHeight);
       doc.text('Signature', pageWidth - margin - 50, signatureY + 20 + imgHeight / 2);
@@ -563,26 +587,25 @@ export class ChalanComponent {
     this.imageUrl = ''
   }
 
-  textHexToRgb(hex:any) {
-  hex = hex.replace('#', '');
-  const bigint = parseInt(hex, 16);
-  const tr = (bigint >> 16) & 255; 
-  const tg = (bigint >> 8) & 255;
-  const tb = bigint & 255;
+  textHexToRgb(hex: any) {
+    hex = hex.replace('#', '');
+    const bigint = parseInt(hex, 16);
+    const tr = (bigint >> 16) & 255;
+    const tg = (bigint >> 8) & 255;
+    const tb = bigint & 255;
 
-  return { tr, tg, tb };
+    return { tr, tg, tb };
   }
 
- bgHexToRgb(hex:any) {
-  hex = hex.replace('#', '');
-  const bigint = parseInt(hex, 16);
-  const br = (bigint >> 16) & 255;
-  const bg = (bigint >> 8) & 255;
-  const bb = bigint & 255;
+  bgHexToRgb(hex: any) {
+    hex = hex.replace('#', '');
+    const bigint = parseInt(hex, 16);
+    const br = (bigint >> 16) & 255;
+    const bg = (bigint >> 8) & 255;
+    const bb = bigint & 255;
 
-  return { br, bg, bb };
+    return { br, bg, bb };
   }
-
 
   partyChange(event: any) {
     this.firebaseCollectionService
@@ -600,10 +623,10 @@ export class ChalanComponent {
       })
       .catch((error) => {
         console.error('Error fetching chalan:', error);
-      });  
+      });
     this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
       if (order && order.length > 0) {
-        this.orderList = order.filter(id => id.partyId === event?.value && id.orderStatus === 'Done')
+        this.orderList = order.filter(id => id.partyId === event?.value && id.orderStatus === 'Done' && id.isCreated === false)
       }
     }).catch((error) => {
       console.error('Error fetching order:', error);
@@ -614,36 +637,35 @@ export class ChalanComponent {
     this.chalanList = []
     this.partyOrder = ''
     this.chalanListDataSource = new MatTableDataSource(this.chalanList);
-    const seletedOrderProducts = this.orderList.find((id: any) => id.id === event.value)    
+    const seletedOrderProducts = this.orderList.find((id: any) => id.id === event.value)
     seletedOrderProducts.products.forEach((element: any) => {
       element.productChalanNo = this.selectedPartyChalanNo
       this.partyOrder = seletedOrderProducts.partyOrder
-        const payload = {
-          firm: this.chalanForm.value.firm,
-          partyId: this.chalanForm.value.party,
-          date: this.chalanForm.value.date,
-          partyOrder: seletedOrderProducts.partyOrder,
-          chalanNo: this.selectedPartyChalanNo,
-          productName : element.productName,
-          quantity : element.productQuantity,
-          productPrice : element.productPrice,
-          totalAmount :  element.productQuantity * element.productPrice,
-          productID : seletedOrderProducts.id
-        }
-        const product = {
-          productName : element.productName,
-          quantity : element.productQuantity,
-          productPrice : element.productPrice,
-          totalAmount :  element.productQuantity * element.productPrice,
-          productID : seletedOrderProducts.id,
-          chalanNo: this.selectedPartyChalanNo
-        }
-        this.selectedProduct.push(product)
-        this.chalanList.push(payload)
-        this.chalanListDataSource = new MatTableDataSource(this.chalanList);
-      });
-      this.updateProductsData = seletedOrderProducts
-
+      const payload = {
+        firm: this.chalanForm.value.firm,
+        partyId: this.chalanForm.value.party,
+        date: this.chalanForm.value.date,
+        partyOrder: seletedOrderProducts.partyOrder,
+        chalanNo: this.selectedPartyChalanNo,
+        productName: element.productName,
+        quantity: element.productQuantity,
+        productPrice: element.productPrice,
+        totalAmount: element.productQuantity * element.productPrice,
+        productID: seletedOrderProducts.id
+      }
+      const product = {
+        productName: element.productName,
+        quantity: element.productQuantity,
+        productPrice: element.productPrice,
+        totalAmount: element.productQuantity * element.productPrice,
+        productID: seletedOrderProducts.id,
+        chalanNo: this.selectedPartyChalanNo
+      }
+      this.selectedProduct.push(product)
+      this.chalanList.push(payload)
+      this.chalanListDataSource = new MatTableDataSource(this.chalanList);
+    });
+    this.updateProductsData = seletedOrderProducts                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
   }
 
   ngAfterViewInit(): void {
@@ -672,11 +694,11 @@ export class ChalanComponent {
 
   deleteData(index: number) {
     this.chalanList.splice(index, 1);
-    this.selectedProduct.splice(index ,1)
+    this.selectedProduct.splice(index, 1)
     this.chalanListDataSource = new MatTableDataSource(this.chalanList);
   }
 
-  productPriceTotal(){
+  productPriceTotal() {
     this.totalProductPrices = this.quantityValue * this.productPriceValue;
     this.chalanForm.get('totalAmount')?.setValue(this.totalProductPrices);
   }

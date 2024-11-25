@@ -43,10 +43,10 @@ export class ChalanListComponent implements OnInit {
     'action',
   ];
 
-  chalanList :any
-  chalanListDataSource: any;
+  chalanList :any = []
   netAmount: number = 0
 
+  chalanListDataSource = new MatTableDataSource(this.chalanList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
@@ -56,6 +56,9 @@ export class ChalanListComponent implements OnInit {
     this.getPartyData();
     this.getChalanData();
     this.getOrderData();
+  }
+  applyFilter(filterValue: string): void {
+    this.chalanListDataSource.filter = filterValue.trim().toLowerCase();
   }
 
   convertTimestampToDate(element: any): Date | null {
@@ -78,10 +81,33 @@ export class ChalanListComponent implements OnInit {
       this.chalanList = chalan
       if (chalan && chalan.length > 0) {
         this.chalanListDataSource = new MatTableDataSource(this.chalanList);
+        this.chalanListDataSource.filterPredicate = (data:any, filter) => {
+          // Fetch relevant fields for filtering
+          const srNo = (data.srNo || '').toString();
+          const partyName = this.getPartyName(data.partyId);
+          const partyOrder = this.getOrderNo(data.partyOrderId);
+          const chalanNo = (data.chalanNo || '').toString();
+          const chalanDate = this.convertTimestampToDate(data.chalanDate);
+          const netAmount = (data.netAmount || '').toString();
+
+          // Combine all fields into a single string for filtering
+          const dataStr = `
+    ${srNo}
+    ${partyName}
+    ${partyOrder}
+    ${chalanNo}
+    ${chalanDate}
+    ${netAmount}
+  `.toLowerCase();
+          return dataStr.includes(filter.trim().toLowerCase());
+        };
+
       } else {
         this.chalanList = [];
         this.chalanListDataSource = new MatTableDataSource(this.chalanList);
       }
+      
+      this.chalanListDataSource.paginator = this.paginator;
     }).catch((error) => {
       console.error('Error fetching chalan:', error);
     });

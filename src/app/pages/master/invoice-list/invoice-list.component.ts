@@ -22,6 +22,7 @@ export class InvoiceListComponent {
   firmList: any = [];
   orderList: any = []; 
   chalanData: any = [];
+  paymentReceiveData: any = [];
   invoiceListdataSource: any;
   firmDetails: any;
   orderDetails: any;
@@ -62,11 +63,15 @@ export class InvoiceListComponent {
     this.getChalanData();
     this.getOrderData();
     this.getFirmData();
+    this.getPaymentReceiveList()
   }
 
   ngAfterViewInit(): void {
     this.invoiceListDataSource.paginator = this.paginator;
+  }
 
+  applyFilter(filterValue: string): void {
+    this.invoiceListDataSource.filter = filterValue.trim().toLowerCase();
   }
 
   getInvoiceData() {
@@ -75,6 +80,34 @@ export class InvoiceListComponent {
       this.invoiceList = invoice
       if (invoice && invoice.length > 0) {
         this.invoiceListdataSource = new MatTableDataSource(this.invoiceList);
+        this.invoiceListDataSource.filterPredicate = (data: any, filter: string) => {
+          const srNo = (data.srNo || '').toString();
+          const invoiceNo = (data.invoiceNo || '').toString();
+          const date = this.getFormattedDate(data.date);
+          const partyName = this.getPartyName(data.partyId);
+          const gross = (data.grossTotal || '').toString();
+          const discount = (data.discountRatio || '').toString();
+          const netAmount = (data.netAmount || '').toString();
+          const cgst = (data.cgst || '').toString();
+          const sgst = (data.sgst || '').toString();
+          const finalAmount = (data.finalAmount || '').toString();
+          const received = this.getPaymentReceiveAmount(data);
+
+          const dataStr = `
+          ${srNo}
+          ${invoiceNo}
+          ${date}
+          ${partyName}
+          ${gross}
+          ${discount}
+          ${netAmount}
+          ${cgst}
+          ${sgst}
+          ${finalAmount}
+          ${received}
+        `.toLowerCase();
+          return dataStr.includes(filter.trim().toLowerCase());
+        };
       } else {
         this.invoiceList = [];
         this.invoiceListdataSource = new MatTableDataSource(this.invoiceList);
@@ -83,7 +116,15 @@ export class InvoiceListComponent {
       console.error('Error fetching chalan:', error);
     });
   }
-
+  getPaymentReceiveList() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'PaymentReceiveList').then((payment) => {
+      this.paymentReceiveData = payment
+    })
+  }
+  getPaymentReceiveAmount(data :any) {
+    const receiveData = this.paymentReceiveData?.find((obj: any) => obj.invoiceId === data.id)?.payments.map((id: any) => id.paymentReceive).reduce((a :any , b:any) => a + b)
+    return receiveData ?? 0
+  }
   getFormattedDate(value:any): string {
     const milliseconds = value?.seconds * 1000;
     const date = new Date(milliseconds);
@@ -134,6 +175,7 @@ export class InvoiceListComponent {
       console.error('Error fetching party:', error);
     });
   }
+
   getPaymentList(action: any, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(PaymentListComponent, {
@@ -141,10 +183,7 @@ export class InvoiceListComponent {
       width: action !== 'Delete' ? '700px' : ''
     });
     dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'InvoiceList');
-        this.getInvoiceData();
-      }
+      this.getPaymentReceiveList()
       if (result && action === 'Delete') {
         this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'InvoiceList');
         this.getInvoiceData()
@@ -152,24 +191,6 @@ export class InvoiceListComponent {
     })
   }
 
-  // deleteChalan(action: any, obj: any) {
-  //   obj.action = action;
-  //   const dialogRef = this.dialog.open(ProductDialogComponent, {
-  //     data: obj,
-  //   });
-
-  //   dialogRef.afterClosed().subscribe((result) => {
-  //     if (result?.event === 'Add') {
-  //       this.firebaseCollectionService.addDocument('CompanyList', result.data, 'InvoiceList');
-  //       this.getInvoiceData();
-  //     }
-  //     if (result?.event === 'Delete') {
-  //       this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'InvoiceList');
-  //       this.getInvoiceData()
-  //     }
-  //   })
-  // }
-  
   generatePDF(value: any) {
     const selectedChalanPartyOrderId = this.chalanData.find((id: any) => id.id === value.chalanId).partyOrderId
     this.selectedChalanList = this.orderList.find((id: any) => id.id === selectedChalanPartyOrderId);

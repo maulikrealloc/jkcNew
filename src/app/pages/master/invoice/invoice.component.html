@@ -5,7 +5,8 @@
                 <div class="col-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Select Firm</mat-label>
-                        <mat-select #dropdown formControlName="firm" placeholder="Select firm" (selectionChange)="firmChange($event)">
+                        <mat-select #dropdown formControlName="firm" placeholder="Select firm"
+                            (selectionChange)="firmChange($event)">
                             <mat-option [value]="item.id" *ngFor="let item of firmList">{{ item.header }}</mat-option>
                         </mat-select>
                         <mat-hint
@@ -18,8 +19,10 @@
                 <div class="col-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Select Party</mat-label>
-                        <mat-select #dropdown formControlName="party" placeholder="Select party" (selectionChange)="partyChange($event)">
-                            <mat-option  *ngFor="let item of partyList" [value]="item.id">{{ item.firstName }}</mat-option>
+                        <mat-select #dropdown formControlName="party" placeholder="Select party"
+                            (selectionChange)="partyChange($event)">
+                            <mat-option *ngFor="let item of partyList" [value]="item.id">{{ item.firstName
+                                }}</mat-option>
                         </mat-select>
                         <mat-hint
                             *ngIf="invoiceForm.get('party')?.hasError('required') && invoiceForm.get('party')?.touched"
@@ -31,8 +34,15 @@
                 <div class="col-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Chalan no</mat-label>
-                        <mat-select #dropdown formControlName="chalanNo" placeholder="Enter chalan no" (selectionChange)="chalanChange($event)">
-                            <mat-option *ngFor="let item of chalanList" [value]="item.id">{{item.chalanNo}}</mat-option>
+                        <mat-select #dropdown formControlName="chalanNo" placeholder="Enter chalan no"
+                            (selectionChange)="chalanChange($event)">
+                            <ng-container *ngIf="chalanList.length > 0; else noRecode">
+                                <mat-option *ngFor="let item of chalanList"
+                                    [value]="item.id">{{item.chalanNo}}</mat-option>
+                            </ng-container>
+                            <ng-template #noRecode>
+                                <mat-option class="text-center" disabled>No record found</mat-option>
+                            </ng-template>
                         </mat-select>
                         <mat-hint
                             *ngIf="invoiceForm.get('chalanNo')?.hasError('required') && invoiceForm.get('chalanNo')?.touched"
@@ -52,8 +62,8 @@
                 <div class="col-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Invoice No</mat-label>
-                        <input type="text" matInput required formControlName="invoiceNo"
-                            placeholder="Enter invoice no" min="0">
+                        <input type="text" matInput required formControlName="invoiceNo" placeholder="Enter invoice no"
+                            min="0">
                         <mat-hint
                             *ngIf="invoiceForm.get('invoiceNo')?.hasError('required') && invoiceForm.get('invoiceNo')?.touched"
                             class="error-message error-color">
@@ -61,7 +71,7 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
-                <div class="col-3">
+                <div class="col-2">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>C.G.S.T</mat-label>
                         <input type="text" matInput required formControlName="cgst" placeholder="Enter C.G.S.T">
@@ -72,7 +82,7 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
-                <div class="col-3">
+                <div class="col-2">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>S.G.S.T</mat-label>
                         <input type="text" matInput required formControlName="sgst" placeholder="Enter S.G.S.T">
@@ -103,6 +113,14 @@
                         </button>
                     </div>
                 </div>
+                <div class="col-1">
+                    <div class="d-flex align-items-center justify-content-end">
+                        <button mat-flat-button color="primary" [disabled]="invoiceForm.invalid"
+                            (click)="invoiceSubmitData()">
+                            Save
+                        </button>
+                    </div>
+                </div>
             </div>
         </form>
     </mat-card-content>
@@ -110,61 +128,62 @@
 <mat-card class="cardWithShadow">
     <mat-card-content class="p-24">
         <div class="table-responsive">
-        <table mat-table [dataSource]="selectedChalanList?.products" class="w-100 m-t-10"
-            *ngIf="selectedChalanList?.products?.length > 0; else noData">
-            <ng-container matColumnDef="srNo">
-                <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
-                <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
-            </ng-container>
-        
-            <ng-container matColumnDef="productName">
-                <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Product Name</th>
-                <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.productName }}</td>
-            </ng-container>
-        
-            <ng-container matColumnDef="productPrice">
-                <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Product Price</th>
-                <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.productPrice }}</td>
-            </ng-container>
-        
-            <ng-container matColumnDef="quantity">
-                <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Quantity</th>
-                <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.productQuantity }}</td>
-            </ng-container>
-        
-            <ng-container matColumnDef="chalanNo">
-                <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Chalan No</th>
-                <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.productChalanNo }}</td>
-            </ng-container>
-        
-            <ng-container matColumnDef="totalAmount">
-                <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Total Amount</th>
-                <td mat-cell *matCellDef="let element" class="f-s-14">
-                    {{ element.productQuantity * element.productPrice }}
-                </td>
-            </ng-container>
-        
-            <ng-container matColumnDef="finalAmount">
-                <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Final Amount ₹</th>
-                <td mat-cell *matCellDef="let element" class="f-s-14">
-                    {{ calculateFinalAmount(element.productQuantity * element.productPrice) | number: '1.2-2' }}
-                </td>
-            </ng-container>
-        
-            <ng-container matColumnDef="action">
-                <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Action</th>
-                <td mat-cell *matCellDef="let element; let i = index" class="action-link">
-                    <a class="m-r-10 cursor-pointer" (click)="deleteInvoiceData(i)"><i-tabler name="trash" class="icon-18"></i-tabler></a>
-                </td>
-            </ng-container>
-        
-            <tr mat-header-row *matHeaderRowDef="invoiceColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: invoiceColumns"></tr>
-        </table>
-        
-        <ng-template #noData>
-            <div class="f-s-16 f-w-600 text-center m-t-10">No record found</div>
-        </ng-template>
+            <table mat-table [dataSource]="selectedChalanList?.products" class="w-100 m-t-10"
+                *ngIf="selectedChalanList?.products?.length > 0; else noData">
+                <ng-container matColumnDef="srNo">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
+                    <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="productName">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Product Name</th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.productName }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="productPrice">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Product Price</th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.productPrice }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="quantity">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Quantity</th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.productQuantity }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="chalanNo">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Chalan No</th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.productChalanNo }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="totalAmount">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Total Amount</th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.productQuantity * element.productPrice }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="finalAmount">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Final Amount ₹</th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ calculateFinalAmount(element.productQuantity * element.productPrice) | number: '1.2-2' }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Action</th>
+                    <td mat-cell *matCellDef="let element; let i = index" class="action-link">
+                        <a class="m-r-10 cursor-pointer" (click)="deleteInvoiceData(i)"><i-tabler name="trash"
+                                class="icon-18"></i-tabler></a>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="invoiceColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: invoiceColumns"></tr>
+            </table>
+
+            <ng-template #noData>
+                <div class="f-s-16 f-w-600 text-center m-t-10">No record found</div>
+            </ng-template>
 
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>

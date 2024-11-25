@@ -61,6 +61,7 @@ import { NetProfitDataComponent } from './account/account-report/net-profit-data
 import { DamanCostingComponent } from './daman-costing/daman-costing.component';
 import { ProductDialogComponent } from './chalan-list/product-dialog/product-dialog.component';
 import { PaymentListComponent } from './invoice-list/payment-list/payment-list.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 
@@ -133,6 +134,7 @@ import { PaymentListComponent } from './invoice-list/payment-list/payment-list.c
     TablerIconsModule,
     MatNativeDateModule,
     NgApexchartsModule,
+    MatPaginatorModule
   ],
   providers: [DatePipe]
 })

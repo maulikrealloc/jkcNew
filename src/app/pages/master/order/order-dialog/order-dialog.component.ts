@@ -99,7 +99,8 @@ export class OrderDialogComponent implements OnInit {
       orderDate: this.orderForm.value.orderDate,
       deliveryDate: this.orderForm.value.deliveryDate,
       products: this.orderForm.value.products,
-      orderStatus: this.orderForm.value.orderStatus ? this.orderForm.value.orderStatus : 'Pending'
+      orderStatus: this.orderForm.value.orderStatus ? this.orderForm.value.orderStatus : 'Pending',
+      isCreated : false
     }
     this.dialogRef.close({ event: this.action, data: payload });
   }

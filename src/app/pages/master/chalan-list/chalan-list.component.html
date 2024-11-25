@@ -1,7 +1,7 @@
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
-    <div style="align-items: baseline;" class="row">
-      <div class="col-3">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-3">
         <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
           <mat-label>Chalan</mat-label>
           <input matInput placeholder="Search chalan" (keyup)="applyFilter($any($event.target).value)">
@@ -10,25 +10,25 @@
           </mat-icon>
         </mat-form-field>
       </div>
-      <div class="col-3">
-        <mat-form-field appearance="outline" class="w-100 m-t-10">
+      <div class="col-12 col-sm-12 col-md-3">
+        <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
           <mat-label>Select Firm</mat-label>
           <mat-select #dropdown placeholder="Select firm">
             <mat-option [value]="item.id" *ngFor="let item of firmList">{{item.header}}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
-      <div class="col-3">
-        <mat-form-field appearance="outline" class="w-100 m-t-10">
+      <div class="col-12 col-sm-12 col-md-3">
+        <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
           <mat-label>Select Party</mat-label>
           <mat-select #dropdown placeholder="Select party">
             <mat-option [value]="item.id" *ngFor="let item of partyList">{{item.firstName}}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
-      <div class="col-3">
-        <div class="d-flex align-items-center justify-content-end">
-          <button mat-flat-button color="primary" routerLink="/master/chalan">
+      <div class="col-12 col-sm-12 col-md-3">
+        <div class="d-flex align-items-center justify-content-end marginTop">
+          <button mat-flat-button class="w-100" color="primary" routerLink="/master/chalan">
             Add Chalan
           </button>
         </div>

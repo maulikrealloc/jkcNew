@@ -2,7 +2,7 @@
     <mat-card-content class="p-24">
         <form [formGroup]="chalanForm">
             <div style="align-items: baseline;" class="row">
-                <div class="col-4">
+                <div class="col-12 col-sm-12 col-md-4">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Select Firm</mat-label>
                         <mat-select #dropdown formControlName="firm" placeholder="Select firm">
@@ -16,7 +16,7 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
-                <div class="col-4">
+                <div class="col-12 col-sm-12 col-md-4">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Select Party</mat-label>
                         <mat-select #dropdown formControlName="party" placeholder="Select party"
@@ -31,7 +31,7 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
-                <div class="col-4">
+                <div class="col-12 col-sm-12 col-md-4">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Select Chalan Date</mat-label>
                         <input matInput [matDatepicker]="chalanDate" formControlName="date" placeholder="Chalan date">
@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div style="align-items: baseline;" class="row">
-                <div class="col-4">
+                <div class="col-12 col-sm-12 col-md-4">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Party Order</mat-label>
                         <mat-select #dropdown (selectionChange)="orderChange($event)" formControlName="partyOrder"
@@ -60,7 +60,7 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
-                <div class="col-2">
+                <div class="col-12 col-sm-12 col-md-2">
                     <div class="file-upload">
                         <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file" />
                         <button mat-flat-button color="primary" class="w-100" (click)="fileInput.click()">
@@ -68,18 +68,18 @@
                         </button>
                     </div>
                 </div>
-                <div class="col-1">
-                    <ng-container *ngIf="imageUrl">
+                <div class="col-12 col-sm-12 col-md-1 marginTop">
+                    <ng-container>
                         <div>
-                            <button style="margin-right: 80%;" (click)="viewpdf()" mat-flat-button color="primary">
+                            <button style="margin-right: 80%;" class="w-100" (click)="viewpdf()" mat-flat-button color="primary">
                                 View
                             </button>
                         </div>
                     </ng-container>
                 </div>
-                <div class="col-1">
+                <div class="col-12 col-sm-12 col-md-1 marginTop">
                     <div>
-                        <button (click)="submitData()" mat-flat-button color="primary" [disabled]="chalanForm.invalid">
+                        <button (click)="submitData()" class="w-100" mat-flat-button color="primary" [disabled]="chalanForm.invalid">
                             Save
                         </button>
                     </div>

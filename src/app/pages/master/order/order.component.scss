@@ -35,3 +35,9 @@
     background-color: #5d87ff;
     color: #e5ecff;
 }
+
+@media screen and (max-width: 768px) {
+    .margintop {
+        margin-top: 10px;
+    }
+}

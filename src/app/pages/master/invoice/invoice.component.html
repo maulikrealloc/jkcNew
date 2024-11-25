@@ -1,8 +1,8 @@
 <mat-card class="cardWithShadow">
     <mat-card-content class="p-24">
-        <form [formGroup]="invoiceForm">
+        <form [formGroup]="invoiceForm" class="responsivedesign">
             <div style="align-items: baseline;" class="row">
-                <div class="col-3">
+                <div class="col-12 col-sm-12 col-md-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Select Firm</mat-label>
                         <mat-select #dropdown formControlName="firm" placeholder="Select firm"
@@ -16,7 +16,7 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
-                <div class="col-3">
+                <div class="col-12 col-sm-12 col-md-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Select Party</mat-label>
                         <mat-select #dropdown formControlName="party" placeholder="Select party"
@@ -31,7 +31,7 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
-                <div class="col-3">
+                <div class="col-12 col-sm-12 col-md-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Chalan no</mat-label>
                         <mat-select #dropdown formControlName="chalanNo" placeholder="Enter chalan no"
@@ -51,7 +51,7 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
-                <div class="col-3">
+                <div class="col-12 col-sm-12 col-md-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Select Invoice Date</mat-label>
                         <input matInput [matDatepicker]="Date" formControlName="date" placeholder="Enter invoice date">
@@ -59,7 +59,7 @@
                         <mat-datepicker #Date></mat-datepicker>
                     </mat-form-field>
                 </div>
-                <div class="col-3">
+                <div class="col-12 col-sm-12 col-md-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Invoice No</mat-label>
                         <input type="text" matInput required formControlName="invoiceNo" placeholder="Enter invoice no"
@@ -71,7 +71,7 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
-                <div class="col-2">
+                <div class="col-12 col-sm-12 col-md-2">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>C.G.S.T</mat-label>
                         <input type="text" matInput required formControlName="cgst" placeholder="Enter C.G.S.T">
@@ -82,7 +82,7 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
-                <div class="col-2">
+                <div class="col-12 col-sm-12 col-md-2">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>S.G.S.T</mat-label>
                         <input type="text" matInput required formControlName="sgst" placeholder="Enter S.G.S.T">
@@ -93,7 +93,7 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
-                <div class="col-2">
+                <div class="col-12 col-sm-12 col-md-2">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Discount Ratio</mat-label>
                         <input type="number" matInput required formControlName="discountRatio"
@@ -105,17 +105,17 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
-                <div class="col-1">
+                <div class="col-12 col-sm-12 col-md-1">
                     <div class="d-flex align-items-center justify-content-end">
-                        <button mat-flat-button color="primary" [disabled]="invoiceForm.invalid"
+                        <button class="w-100" mat-flat-button color="primary" [disabled]="invoiceForm.invalid"
                             (click)="invoiceview()">
                             View
                         </button>
                     </div>
                 </div>
-                <div class="col-1">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <button mat-flat-button color="primary" [disabled]="invoiceForm.invalid"
+                <div class="col-12 col-sm-12 col-md-1">
+                    <div class="d-flex align-items-center justify-content-end marginTop">
+                        <button class="w-100" mat-flat-button color="primary" [disabled]="invoiceForm.invalid"
                             (click)="invoiceSubmitData()">
                             Save
                         </button>
@@ -185,7 +185,7 @@
                 <div class="f-s-16 f-w-600 text-center m-t-10">No record found</div>
             </ng-template>
 
-            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator *ngIf="selectedChalanList?.products?.length > 0" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>
     </mat-card-content>
 </mat-card>

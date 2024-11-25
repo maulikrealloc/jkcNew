@@ -5,3 +5,9 @@
     padding: 0;
     margin: 0;
 }
+
+@media (max-width: 768px) {
+    .marginTop {
+        margin-top: 10px;
+    }
+}

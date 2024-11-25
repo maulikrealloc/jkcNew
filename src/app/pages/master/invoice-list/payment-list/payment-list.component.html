@@ -2,14 +2,14 @@
 <mat-dialog-content class="mat-typography" style="max-width: 750px" *ngIf="action !== 'Delete'; else elseTemplate">
     <form [formGroup]="paymentReceiveList">
         <div class="row align-items-baseline">
-            <div class="col-4">
+            <div class="col-12 col-sm-12 col-md-4">
                 <div>
                     <mat-label class="f-s-13 f-w-600">
                         Final Total : <span class="f-s-13 f-w-600">{{ data?.finalAmount }}</span>
                     </mat-label>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-12 col-sm-12 col-md-4">
                 <div *ngIf="+pendingAmount() > 0">
                     <mat-label class="f-s-13 f-w-600">
                         Pending Payment : {{ pendingAmount() }}
@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="row align-items-baseline m-t-15">
-            <div class="col-5">
+            <div class="col-12 col-sm-12 col-md-5">
                 <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
                     <mat-label>Payment Receive</mat-label>
                     <input type="number" formControlName="paymentReceive" matInput placeholder="Payment receive"  [max]="pendingAmount()" >
@@ -43,7 +43,7 @@
                     </mat-hint>
                 </mat-form-field>
             </div>
-            <div class="col-3">
+            <div class="col-12 col-sm-12 col-md-3">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Payment Date</mat-label>
                     <input matInput formControlName="paymentDate" [matDatepicker]="Date"
@@ -57,7 +57,7 @@
                     <mat-datepicker #Date></mat-datepicker>
                 </mat-form-field>
             </div>
-            <div class="col-4">
+            <div class="col-12 col-sm-12 col-md-4">
                 <button mat-flat-button (click)="addPaymentData()"
                     [disabled]="paymentReceiveList.invalid || +pendingAmount() === 0" color="primary">
                     Add Payment

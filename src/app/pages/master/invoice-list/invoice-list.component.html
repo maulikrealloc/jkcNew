@@ -1,8 +1,8 @@
 <mat-card class="cardWithShadow">
     <mat-card-content class="p-24">
-        <div style="align-items: baseline;" class="row">
-            <div class="col-4">
-                <mat-form-field appearance="outline" class="w-100 hide-hint">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
                     <mat-label>Invoice List</mat-label>
                     <input matInput placeholder="Search invoice" (keyup)="applyFilter($any($event.target).value)">
                     <mat-icon matSuffix>
@@ -10,16 +10,16 @@
                     </mat-icon>
                 </mat-form-field>
             </div>
-            <div class="col-4">
-                <mat-form-field appearance="outline" class="w-100">
+            <div class="col-12 col-sm-12 col-md-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
                     <mat-label>Select Firm</mat-label>
                     <mat-select #dropdown placeholder="Select firm">
                         <mat-option [value]="item.id" *ngFor="let item of firmList">{{ item.header }}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-4">
-                <mat-form-field appearance="outline" class="w-100">
+            <div class="col-12 col-sm-12 col-md-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
                     <mat-label>Select Invoice Date</mat-label>
                     <mat-date-range-input [rangePicker]="picker">
                         <input matStartDate placeholder="Start date">

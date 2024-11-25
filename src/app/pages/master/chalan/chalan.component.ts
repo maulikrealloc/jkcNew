@@ -350,8 +350,9 @@ export class ChalanComponent {
       const imgWidth = 100;
       const imgHeight = 50;
       const imgData: any = this.imageUrl;
-
-      doc.addImage(imgData, 'PNG', margin + 8, signatureY, imgWidth, imgHeight);
+      if (this.imageUrl) {
+        doc.addImage(imgData, 'PNG', margin + 8, signatureY, imgWidth, imgHeight);
+      }
       doc.text('Signature', pageWidth - margin - 50, signatureY + 20 + imgHeight / 2);
 
       doc.setFontSize(11);
@@ -562,8 +563,9 @@ export class ChalanComponent {
       const imgWidth = 100;
       const imgHeight = 50;
       const imgData: any = this.imageUrl;
-
-      doc.addImage(imgData, 'PNG', margin + 8, signatureY, imgWidth, imgHeight);
+      if (this.imageUrl) {
+        doc.addImage(imgData, 'PNG', margin + 8, signatureY, imgWidth, imgHeight);
+      }
       doc.text('Signature', pageWidth - margin - 50, signatureY + 20 + imgHeight / 2);
 
       doc.setFontSize(11);

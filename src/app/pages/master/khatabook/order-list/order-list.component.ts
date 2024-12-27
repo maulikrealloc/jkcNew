@@ -1,16 +1,21 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { OrderListDialogComponent } from './order-list-dialog/order-list-dialog.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-order-list',
   templateUrl: './order-list.component.html',
   styleUrls: ['./order-list.component.scss']
 })
-export class OrderListComponent {
 
+export class OrderListComponent implements OnInit {
+
+  dateOrderListForm: FormGroup;
+  isChecked: boolean = false;
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   orderColumns: string[] = [
     'srNo',
@@ -24,32 +29,53 @@ export class OrderListComponent {
     'status',
     'action'
   ];
-  orderList: any = [
-    {
-      id: 1,
-      partyName: 'Demo',
-      khataName: 'Test',
-      partyOrder: 'adcc',
-      itemName: 'adcc',
-      price: 'adcc',
-      quantity: 'adcc',
-      total: 'adcc',
-      status: 'adcc',
-    }
-  ];
 
-  orderDataSource = new MatTableDataSource(this.orderList);
+  khataOrderList: any = [];
+  khataList: any = [];
+
+  orderDataSource = new MatTableDataSource(this.khataOrderList);
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private fb: FormBuilder, private firebaseCollectionService: FirebaseCollectionService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    
+    const today = new Date();
+    const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    this.dateOrderListForm = this.fb.group({
+      start: [startDate],
+      end: [endDate]
+    });
+    this.getKhataOrderData();
+    this.getKhataData();
   }
 
   ngAfterViewInit(): void {
     this.orderDataSource.paginator = this.paginator;
+  }
+
+  getKhataOrderData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'KhataOrderList').then((khataOrder) => {
+      this.khataOrderList = khataOrder
+      if (khataOrder && khataOrder.length > 0) {
+        this.orderDataSource = new MatTableDataSource(this.khataOrderList);
+      } else {
+        this.khataOrderList = [];
+        this.orderDataSource = new MatTableDataSource(this.khataOrderList);
+      }
+    }).catch((error) => {
+      console.error('Error fetching khataOrder:', error);
+    });
+  }
+
+  getKhataData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'KhataList').then((khata) => {
+      this.khataList = khata
+    }).catch((error) => {
+      console.error('Error fetching khata:', error);
+    });
   }
 
   transferOrder(action: string, obj: any) {
@@ -60,32 +86,19 @@ export class OrderListComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
-        this.orderList.push({
-          id: result.data.legth + 1,
-          party: result.data.party,
-          order: result.data.order,
-          khata: result.data.khata,
-          date: result.data.date
-        })
-        this.orderDataSource = new MatTableDataSource(this.orderList);
+        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'KhataOrderList');
+        this.getKhataOrderData();
       }
       if (result?.event === 'Edit') {
-        this.orderList.forEach((element: any) => {
-          if (element.id === result.data.id) {
-            element.party = result.data.party
-            element.order = result.data.order
-            element.khata = result.data.khata
-            element.date = result.data.date
-            element.id = result.data.id
-          }
-        });
-        this.orderDataSource = new MatTableDataSource(this.orderList);
+        this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'KhataOrderList');
+        this.getKhataOrderData();
       }
       if (result?.event === 'Delete') {
-        const allOrderData = this.orderList
-        this.orderList = allOrderData.filter((id: any) => id.id !== result.data.id)
-        this.orderDataSource = new MatTableDataSource(this.orderList);
+        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'KhataOrderList');
+        this.getKhataOrderData();
       }
     });
+
   }
+
 }

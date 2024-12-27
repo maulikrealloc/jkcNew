@@ -23,6 +23,7 @@ import { WithdrawalListComponent } from './withdrawal-list/withdrawal-list.compo
 import { BonusListComponent } from './bonus-list/bonus-list.component';
 import { MachineSalaryListComponent } from './machine-salary-list/machine-salary-list.component';
 import { DamanCostingComponent } from './daman-costing/daman-costing.component';
+import { EmployeeReportComponent } from './employee-report/employee-report.component';
 
 export const MasterRoutes: Routes = [
   {
@@ -261,6 +262,17 @@ export const MasterRoutes: Routes = [
           urls: [
             { title: 'Master', url: '/master/bonuslist' },
             { title: 'Bonus List' },
+          ],
+        },
+      },
+      {
+        path: 'employee-report',
+        component: EmployeeReportComponent,
+        data: {
+          title: 'Report List',
+          urls: [
+            { title: 'Master', url: '/master/employee-report' },
+            { title: 'Report List' },
           ],
         },
       },

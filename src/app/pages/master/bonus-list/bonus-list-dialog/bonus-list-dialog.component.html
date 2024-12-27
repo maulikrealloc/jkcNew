@@ -4,7 +4,7 @@
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Employee List</mat-label>
       <mat-select #dropdown formControlName="employeeList" placeholder="Enter employee">
-        <mat-option value="abc">abc</mat-option>
+        <mat-option [value]="item.id" *ngFor="let item of employeesList">{{item.firstName}}</mat-option>
       </mat-select>
       <mat-hint *ngIf="bonusForm.get('employeeList')?.hasError('required') && bonusForm.get('employeeList')?.touched"
         class="error-message error-color">

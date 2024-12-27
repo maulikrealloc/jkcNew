@@ -3,8 +3,8 @@
     <div class="row justify-content-between">
       <div class="col-lg-3">
         <mat-label>Design Type</mat-label><br>
-        <mat-radio-group [(ngModel)]="designType">
-          <mat-radio-button value="daman">Daman</mat-radio-button>
+        <mat-radio-group [(ngModel)]="designType" (ngModelChange)="designTypeChanges()">
+          <mat-radio-button [checked]='true' value="daman">Daman</mat-radio-button>
           <mat-radio-button value="choli">Choli</mat-radio-button>
           <mat-radio-button value="less">Less</mat-radio-button>
         </mat-radio-group>
@@ -12,7 +12,7 @@
       <div class="col-lg-3">
         <ng-container *ngIf="designType !== 'choli'">
           <mat-label>Area Head</mat-label><br>
-          <mat-radio-group [(ngModel)]="areaHead">
+          <mat-radio-group [(ngModel)]="areaHead" (ngModelChange)="areaHeadChanges()">
             <mat-radio-button value="250">250</mat-radio-button>
             <mat-radio-button value="400">400</mat-radio-button>
           </mat-radio-group>
@@ -22,7 +22,7 @@
         <ng-container *ngIf="designType === 'choli' || designType === 'less'">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>No</mat-label>
-            <input matInput type="number" placeholder="Enter no">
+            <input matInput [(ngModel)]="no" type="number" placeholder="Enter no">
           </mat-form-field>
         </ng-container>
       </div>
@@ -50,11 +50,11 @@
           <tbody>
             <tr>
               <td>Stitches</td>
-              <input class="input" [(ngModel)]="stitchesValue" (ngModelChange)="machineStitchesTotal()" type="text">
+              <input class="input" [(ngModel)]="stitchesValue" (ngModelChange)="getFinalStitches()" type="number">
             </tr>
             <tr>
               <td>Head</td>
-              <input class="input" [(ngModel)]="headValue" (ngModelChange)="machineStitchesTotal()" type="text">
+              <input class="input" [(ngModel)]="headValue" (ngModelChange)="getFinalStitches()" type="number" [ngClass]="{'disableBg': designType === 'choli'}" [disabled]="designType === 'choli'">
             </tr>
             <tr>
               <td></td>
@@ -62,11 +62,11 @@
             </tr>
             <tr>
               <td>Final Stitches</td>
-              <td class="disableBg" [(ngModel)]="finalStitchesValue" (ngModelChange)="perMeterTotal()">265</td>
+              <td class="disableBg">{{ finalStitches }}</td>
             </tr>
             <tr>
               <td>Price</td>
-              <input class="input" [(ngModel)]="priceValue" (ngModelChange)="perMeterTotal()" type="text">
+              <input class="input" [(ngModel)]="priceValue" (ngModelChange)="getPerMeter()" type="number">
             </tr>
             <tr>
               <td>Per/Meter</td>
@@ -79,19 +79,28 @@
         <table class="main-table">
           <tr>
             <td>Machine Stiches</td>
-            <input [(ngModel)]="machineStichesValue" (ngModelChange)="machineDesignStich()" class="input" type="text">
+            <input [(ngModel)]="machineStichesValue" (ngModelChange)="getFrameDay()" class="input" type="number">
           </tr>
           <tr>
             <td>Design Stich</td>
-            <td class="disableBg">105871</td>
+            <td class="disableBg">{{ stitchesValue }}</td>
           </tr>
           <tr>
             <td>Frames/Day</td>
             <td class="disableBg">{{ framesDayTotal }}</td>
           </tr>
           <tr>
-            <td>Mtr/Frame</td>
-            <input class="input" [(ngModel)]="mtrFrameValue" (ngModelChange)="framesDayMtrFrame()" type="text">
+            <ng-container *ngIf="designType === 'choli'; else mtrFrame">
+              <td>
+                Peace/Frame
+              </td>
+            </ng-container>
+            <ng-template #mtrFrame>
+              <td>
+                Mtr/Frame
+              </td>
+            </ng-template>
+            <input class="input" [(ngModel)]="mtrFrameValue" (ngModelChange)="getFinalMeter()" type="number">
           </tr>
           <tr>
             <td>Final Meter</td>
@@ -99,8 +108,7 @@
           </tr>
           <tr>
             <td>Employee-Salary</td>
-            <input class="input" [(ngModel)]="employeeSalaryValue" (ngModelChange)="employeeSalaryFinalMeter()"
-              type="text">
+            <input class="input" [(ngModel)]="employeeSalaryValue" (ngModelChange)="getEmpSalartMt()" type="number">
           </tr>
           <tr>
             <td>Emp Salary/mt</td>
@@ -109,141 +117,6 @@
         </table>
       </div>
     </div>
-
-    <!-- <div class="row m-t-20">
-    <div class="col-lg-12">
-          <table class="main-table">
-            <thead>
-              <tr>
-                <th class="bg" colspan="6">Design Estimate</th>
-              </tr>
-              <tr>
-                <th>Name</th>
-                <th>No</th>
-                <th>Price</th>
-                <th>Item</th>
-                <th>Total</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Sequance-3 MM</td>
-                <td>166500</td>
-                <td>48</td>
-                <td>6806</td>
-                <td class="disableBg">17,015.00</td>
-                <td class="disableBg">4.91</td>
-              </tr>
-              <tr>
-                <td>Sequance-5 MM</td>
-                <td>1530</td>
-                <td>90</td>
-                <td>0</td>
-                <td class="disableBg">0.00</td>
-                <td class="disableBg">0</td>
-              </tr>
-              <tr>
-                <td>Dhaga-Reco</td>
-                <td>1800</td>
-                <td>25</td>
-                <td>763</td>
-                <td class="disableBg">1,907.50</td>
-                <td class="disableBg">26.49</td>
-              </tr>
-              <tr>
-                <td>Dhaga-German</td>
-                <td>1800</td>
-                <td>17</td>
-                <td>0</td>
-                <td class="disableBg">0.00</td>
-                <td class="disableBg">0</td>
-              </tr>
-              <tr>
-                <td>Dhaga-viscos</td>
-                <td>1100</td>
-                <td>27.5</td>
-                <td>0</td>
-                <td class="disableBg">0.00</td>
-                <td class="disableBg">0</td>
-              </tr>
-              <tr>
-                <td>Bobin</td>
-                <td>1880</td>
-                <td>6</td>
-                <td>326</td>
-                <td class="disableBg">815.00</td>
-                <td class="disableBg">2.6</td>
-              </tr>
-              <tr>
-                <td>Jari</td>
-                <td>7000</td>
-                <td>70</td>
-                <td>0</td>
-                <td class="disableBg">0.00</td>
-                <td class="disableBg">0</td>
-              </tr>
-              <tr>
-                <td>Foil</td>
-                <td>2000</td>
-                <td>70</td>
-                <td>0</td>
-                <td class="disableBg">0.00</td>
-                <td class="disableBg">0</td>
-              </tr>
-              <tr>
-                <td>Col-12</td>
-                <td>650</td>
-                <td>120</td>
-                <td>0</td>
-                <td class="disableBg">0.00</td>
-                <td class="disableBg">0</td>
-              </tr>
-              <tr>
-                <td>Employee</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="disableBg">39.95</td>
-              </tr>
-              <tr>
-                <td>Light + Bhadu</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="disableBg">17.06</td>
-              </tr>
-              <tr>
-                <td>Dhaga Cutting</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="disableBg">1.5</td>
-              </tr>
-              <tr>
-                <td>Roll Pollice</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="disableBg">1</td>
-              </tr>
-              <tr>
-                <td>Maintenence</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="disableBg">8.82</td>
-              </tr>
-            </tbody>
-          </table>
-    </div>
-  </div> -->
-
     <div class="row m-t-20">
       <div class="col-lg-12">
         <table class="main-table">
@@ -263,11 +136,11 @@
           <tbody>
             <tr *ngFor="let item of designEstimate">
               <td style="padding: 0;padding-left: 6px;">{{ item.name }}</td>
-              <td style="padding: 0;"><input class="inputNo" type="text" [(ngModel)]="item.no"></td>
-              <td style="padding: 0;"><input class="inputNo" type="text" [(ngModel)]="item.price"></td>
-              <td style="padding: 0;"><input class="inputNo" type="text" [(ngModel)]="item.item"></td>
-              <td class="disableBg">17,015.00</td>
-              <td class="disableBg">4.91</td>
+              <td style="padding: 0;"><input class="inputNo" type="number" [(ngModel)]="item.no"></td>
+              <td style="padding: 0;"><input class="inputNo" type="number" [(ngModel)]="item.price"></td>
+              <td style="padding: 0;"><input class="inputNo" type="number" [(ngModel)]="item.item"></td>
+              <td class="disableBg">{{ designEstimateTotal(item) }}</td>
+              <td class="disableBg">{{ designEstimateAmount(item) }}</td>
             </tr>
           </tbody>
         </table>
@@ -288,14 +161,15 @@
       </thead>
       <tbody>
         <tr>
-          <td class="thirdTabel bg">102.00</td>
-          <td class="thirdTabel disableBg">164.3</td>
-          <td class="thirdTabel">6</td>
-          <td class="thirdTabel disableBg">9.86</td>
-          <td class="thirdTabel disableBg">174.16</td>
-          <td class="thirdTabel disableBg">62.30</td>
-          <td class="thirdTabel disableBg">37.92</td>
-          <td class="thirdTabel bg">174</td>
+          <td class="thirdTabel bg">{{ getTotalAmount() }}</td>
+          <td class="thirdTabel disableBg">{{ meterTotal }}</td>
+          <td style="padding: 0; width: 12%;"><input style="text-align: center;" class="inputNo" type="number"
+              [(ngModel)]="cut" (ngModelChange)="getFinalMeter()"></td>
+          <td class="thirdTabel disableBg">{{ taxAmount }} </td>
+          <td class="thirdTabel disableBg">{{ finalPrice }}</td>
+          <td class="thirdTabel disableBg">{{ getNetProfit() }}</td>
+          <td class="thirdTabel disableBg">{{ getProfitPercentage() }}</td>
+          <td class="thirdTabel bg">{{ finalPrice }}</td>
         </tr>
       </tbody>
     </table>

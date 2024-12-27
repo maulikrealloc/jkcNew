@@ -1,20 +1,22 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { AddKharchDialogComponent } from './add-kharch-dialog/add-kharch-dialog.component';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-add-kharch',
   templateUrl: './add-kharch.component.html',
   styleUrls: ['./add-kharch.component.scss']
 })
-export class AddKharchComponent {
+export class AddKharchComponent implements OnInit {
+  
+  dateKharchListForm: FormGroup;
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-
-
+  @Output() kharchListUpdated = new EventEmitter<any[]>();
   kharchColumns: string[] = [
     'srNo',
     'unitname',
@@ -26,12 +28,12 @@ export class AddKharchComponent {
     'action',
   ];
   KharchList: any = [];
-
+  kharchReportData: any = [];
   kharchListdataSource = new MatTableDataSource(this.KharchList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
-  
+  constructor(private fb:FormBuilder, private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
+
   convertTimestampToDate(element: any): Date | null {
     if (element instanceof Timestamp) {
       return element.toDate();
@@ -40,17 +42,30 @@ export class AddKharchComponent {
   }
 
   ngOnInit(): void {
+    const today = new Date();
+    const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    this.dateKharchListForm = this.fb.group({
+      start: [startDate],
+      end: [endDate]
+    })
     this.getKharchData();
   }
 
   ngAfterViewInit(): void {
     this.kharchListdataSource.paginator = this.paginator;
   }
-  
+
+  applyFilter(filterValue: string): void {
+    this.kharchListdataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   getKharchData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'KharchList').then((kharch) => {
       this.KharchList = kharch
       if (kharch && kharch.length > 0) {
+        this.kharchListUpdated.emit(kharch);
         this.kharchListdataSource = new MatTableDataSource(this.KharchList);
       } else {
         this.KharchList = [];
@@ -66,6 +81,7 @@ export class AddKharchComponent {
     const dialogRef = this.dialog.open(AddKharchDialogComponent, {
       data: obj,
     });
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
         this.firebaseCollectionService.addDocument('CompanyList', result.data, 'KharchList');

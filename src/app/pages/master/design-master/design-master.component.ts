@@ -3,14 +3,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-design-master',
   templateUrl: './design-master.component.html',
   styleUrls: ['./design-master.component.scss']
 })
-export class DesignMasterComponent {
+export class DesignMasterComponent implements OnInit {
+
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   
   designMasterColumns: string[] = [
@@ -25,48 +26,52 @@ export class DesignMasterComponent {
   designMasterListDataSource = new MatTableDataSource(this.designMaster);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
+  ngOnInit(): void {
+    this.getDesignMasterData();
+  }
 
   ngAfterViewInit(): void {
     this.designMasterListDataSource.paginator = this.paginator;
   }
+
+  getDesignMasterData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'DesignMasterList').then((designMasters) => {
+      this.designMaster = designMasters
+      if (designMasters && designMasters.length > 0) {
+        this.designMasterListDataSource = new MatTableDataSource(this.designMaster);
+      } else {
+        this.designMaster = [];
+        this.designMasterListDataSource = new MatTableDataSource(this.designMaster);
+      }
+    }).catch((error) => {
+      console.error('Error fetching designMasters:', error);
+    });
+  }
+
   addDesign(action: string, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(designMasterDialogComponent, {
       data: obj,
     });
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
-        this.designMaster.push({
-          id: this.designMaster.length + 1,
-          designNo: result.data.designNo,
-          designPrice: result.data.designPrice,
-          noStiching: result.data.noStiching,
-          imagePath: result.data.imagePath,
-        })
-        this.designMasterListDataSource = new MatTableDataSource(this.designMaster);
+        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'DesignMasterList');
+        this.getDesignMasterData();
       }
       if (result?.event === 'Edit') {
-        this.designMaster.forEach((element: any) => {
-          if (element.id === result.data.id) {
-            element.id = result.data.id
-            element.designNo = result.data.designNo
-            element.designPrice = result.data.designPrice
-            element.noStiching = result.data.noStiching
-            element.imagePath = result.data.imagePath
-          }
-        });
-        this.designMasterListDataSource = new MatTableDataSource(this.designMaster);
+        this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'DesignMasterList');
+        this.getDesignMasterData();
       }
       if (result?.event === 'Delete') {
-        const allEmployeesData = this.designMaster
-        this.designMaster = allEmployeesData.filter((id: any) => id.id !== result.data.id)
-        this.designMasterListDataSource = new MatTableDataSource(this.designMaster);
+        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'DesignMasterList');
+        this.getDesignMasterData();
       }
     });
   }
- 
+
 }
 
 @Component({
@@ -93,6 +98,7 @@ export class designMasterDialogComponent implements OnInit {
       this.local_data.imagePath = 'assets/images/profile/user-1.jpg';
     }
   }
+
   ngOnInit(): void {
     this.formBuild()
     if (this.action === 'Edit') {
@@ -112,7 +118,6 @@ export class designMasterDialogComponent implements OnInit {
 
   doAction(): void {
     const payload = {
-      id: this.local_data.id ? this.local_data.id : '',
       designNo: this.designForm.value.designNo,
       designPrice: this.designForm.value.designPrice,
       noStiching: this.designForm.value.noStiching,
@@ -139,4 +144,5 @@ export class designMasterDialogComponent implements OnInit {
       this.local_data.imagePath = reader.result;
     };
   }
+  
 }

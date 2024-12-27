@@ -1,7 +1,7 @@
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
     <div style="align-items: baseline;" class="row">
-      <div class="col-3">
+      <div class="col-4">
         <label>VEDANT CREATION</label>
       </div>
       <div class="col-4">
@@ -16,9 +16,6 @@
             <mat-option value="ABC">ABC</mat-option>
           </mat-select>
         </mat-form-field>
-      </div>
-      <div class="col-1">
-        <a class="m-r-10 cursor-pointer"><i-tabler name="file-download" class="icon-18"></i-tabler></a>
       </div>
     </div>
   </mat-card-content>
@@ -93,18 +90,8 @@
             No record found
           </td>
         </tr>
-
-        <!-- <tr mat-header-row *matHeaderRowDef="passbookColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: passbookColumns"></tr> -->
       </table>
       <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div>
-    <!-- <ng-template #noRecordsTemplate>
-        <div class="no-records text-center">
-            <span>
-                No Records Found
-            </span>
-        </div>
-    </ng-template> -->
   </mat-card-content>
 </mat-card>

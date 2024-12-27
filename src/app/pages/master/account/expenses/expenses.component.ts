@@ -4,7 +4,8 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ExpensesDialogComponent } from './expenses-dialog/expenses-dialog.component';
 import { ExpensesmasterDialogComponent } from './expensesmaster-dialog/expensesmaster-dialog.component';
 import { MatPaginator } from '@angular/material/paginator';
-import { log } from 'console';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-expenses',
@@ -12,6 +13,7 @@ import { log } from 'console';
   styleUrls: ['./expenses.component.scss']
 })
 export class ExpensesComponent implements OnInit {
+
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   expensesColumns: string[] = [
@@ -26,60 +28,74 @@ export class ExpensesComponent implements OnInit {
     'action',
   ];
 
-  expenses:any =[]
-
-  expensesListDataSource = new MatTableDataSource(this.expenses);
+  expensesList: any = [];
+  companyAccountList: any = [];
+  expensesListDataSource = new MatTableDataSource(this.expensesList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getExpensesListData();
+    this.getCompanyAccountData();
+  }
 
   ngAfterViewInit(): void {
     this.expensesListDataSource.paginator = this.paginator;
   }
-
   
+  applyFilter(filterValue: string): void {
+    this.expensesListDataSource.filter = filterValue.trim().toLowerCase();
+  }
+  
+  convertTimestampToDate(element: any): Date | null {
+    if (element instanceof Timestamp) {
+      return element.toDate();
+    }
+    return null;
+  }
+
+  getExpensesListData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'ExpensesList').then((expenses) => {
+      this.expensesList = expenses    
+      if (expenses && expenses.length > 0) {
+        this.expensesListDataSource = new MatTableDataSource(this.expensesList);
+      }
+    }).catch((error) => {
+      console.error('Error fetching expenses:', error);
+    });
+  }
+  
+  getCompanyAccountData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'CompanyAccountList').then((company) => {
+      if (company && company.length > 0) {
+        this.companyAccountList = company    
+      }
+    }).catch((error) => {
+      console.error('Error fetching company:', error);
+    });
+  }
+
   openExpenses(action: string, obj: any){
     obj.action = action;
     const dialogRef = this.dialog.open(ExpensesDialogComponent,{
       data: obj,
     })
-    dialogRef.afterClosed().subscribe((result) =>{
-      if(result.event === 'Add'){
-        this.expenses.push({
-          id:this.expenses.length + 1,
-          expensesType:result.data.expensesType,
-          date:result.data.date,
-          description:result.data.description,
-          chalanNo:result.data.chalanNo,
-          amount:result.data.amount,
-          paidBy:result.data.paidBy,
-          status:result.data.status
-        })
-        this.expensesListDataSource = new MatTableDataSource(this.expenses)
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.event === 'Add') {
+        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'ExpensesList');
+        this.getExpensesListData();
       }
-      if(result.event === 'Edit'){
-        this.expenses.forEach((value : any) => {
-          if(value.id === result.data.id){
-            value.id = result.data.id;
-            value.expensesType = result.data.expensesType;
-            value.date = result.data.date;
-            value.description = result.data.description;
-            value.chalanNo = result.data.chalanNo;
-            value.amount = result.data.amount;
-            value.paidBy = result.data.paidBy;
-            value.status = result.data.status;
-          }
-        })
-        this.expensesListDataSource = new MatTableDataSource(this.expenses)        
+      if (result?.event === 'Edit') {
+        this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'ExpensesList');
+        this.getExpensesListData();
       }
-      if(result.event === 'Delete'){
-        const expensesData = this.expenses
-        this.expenses = expensesData.filter((id:any) => id.id !== result.data.id)
-        this.expensesListDataSource = new MatTableDataSource(this.expenses)
-       }
-    })
+      if (result?.event === 'Delete') {
+        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'ExpensesList');
+        this.getExpensesListData();
+      }
+    });
   }
 
   openexpensesmaster(){
@@ -87,4 +103,5 @@ export class ExpensesComponent implements OnInit {
 
     })
   }
+
 }

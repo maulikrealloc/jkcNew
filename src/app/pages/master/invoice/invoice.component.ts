@@ -23,8 +23,8 @@ export class InvoiceComponent implements OnInit {
   chalanData: any = [];
   orderList: any = [];
   partyDetails: any;
-  firmDetails: any
-  orderDetails: any
+  firmDetails: any;
+  orderDetails: any;
   selectedChalanList: any = [];
   toWords = new ToWords({
     localeCode: 'en-IN',
@@ -63,7 +63,6 @@ export class InvoiceComponent implements OnInit {
     this.getChalanData();
     this.getOrderData();
     this.getInvoiceData();
-
   }
 
   buildForm() {
@@ -81,7 +80,6 @@ export class InvoiceComponent implements OnInit {
 
   ngAfterViewInit(): void {
     this.invoiceListdataSource.paginator = this.paginator;
-
   }
 
   getFirmData() {
@@ -176,7 +174,7 @@ export class InvoiceComponent implements OnInit {
 
     this.updateChalanIsCreated(payload.chalanId)
     this.firebaseCollectionService.addDocument('CompanyList', payload, 'InvoiceList');
-    this.invoiceForm.patchValue({
+    this.invoiceForm.reset({
       firm: '',
       party: '',
       chalanNo: '',
@@ -186,9 +184,10 @@ export class InvoiceComponent implements OnInit {
       cgst: 0,
       sgst: 0
     });
+    this.invoiceForm.markAsPristine();
+    this.invoiceForm.markAsUntouched();
     this.selectedChalanList = [];
     this.invoiceListdataSource = new MatTableDataSource(this.selectedChalanList);
-
   }
 
   invoiceview() {
@@ -212,17 +211,16 @@ export class InvoiceComponent implements OnInit {
       netAmount: netAmount,
       finalAmount: finalAmount
     }
-    this.getPartyDetails(payload.partyId)
-    this.getFirmDetails(payload.firmId)
-    this.getChalanDetails(payload.chalanId)
-    this.generatePDF(payload);
+    this.getPartyDetails(payload.partyId);
+    this.getFirmDetails(payload.firmId);
+    this.getChalanDetails(payload.chalanId);
+    this.generatePDF(payload);;
     }
 
   updateChalanIsCreated(chalanId: any) {
     const findChalanData = this.chalanList.find((id: any) => id.id === chalanId)
     findChalanData.isCreated = true
     this.firebaseCollectionService.updateDocument('CompanyList', findChalanData.id, findChalanData, 'ChalanList');
-
   }
 
   getInvoiceData() {

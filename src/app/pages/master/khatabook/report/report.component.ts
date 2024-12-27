@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 
@@ -8,8 +8,9 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
   templateUrl: './report.component.html',
   styleUrls: ['./report.component.scss']
 })
-export class ReportComponent {
+export class ReportComponent implements OnInit {
 
+  dateReportListForm: FormGroup;
   report = [
     {
       id: 1,
@@ -47,10 +48,17 @@ export class ReportComponent {
   reportDataSource = new MatTableDataSource(this.report);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    
+    const today = new Date();
+    const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    this.dateReportListForm = this.fb.group({
+      start: [startDate],
+      end: [endDate]
+    })
   }
 
 

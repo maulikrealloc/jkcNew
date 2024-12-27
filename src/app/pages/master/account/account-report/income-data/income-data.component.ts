@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-income-data',
@@ -7,15 +8,34 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./income-data.component.scss']
 })
 export class IncomeDataComponent implements OnInit {
+
   incomeDataColumns: string[] = [
     'partyName',
     'totalAmount'
-  ]
+  ];
 
-  incomeData: any = []
+  incomedataList: any = [];
+  incomeListDataSource = new MatTableDataSource(this.incomedataList);
 
-  incomeListDataSource = new MatTableDataSource(this.incomeData)
-  constructor(){}
-  ngOnInit(): void {}
+  constructor(private firebaseCollectionService: FirebaseCollectionService) { }
+  
+  ngOnInit(): void {
+    this.getIncomeListData();
+   }
+  
+  getIncomeListData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'IncomeList').then((income) => {
+      this.incomedataList = income
+      if (income && income.length > 0) {
+        this.incomeListDataSource = new MatTableDataSource(this.incomedataList);
+      }
+    }).catch((error) => {
+      console.error('Error fetching income:', error);
+    });
+  }
+
+  getTotalAmount(): number {
+    return this.incomedataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
+  }
 
 }

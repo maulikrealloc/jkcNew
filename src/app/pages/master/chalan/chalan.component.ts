@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -7,13 +7,16 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import moment from 'moment';
 import { ToWords } from 'to-words';
+import { ChalanViewDialogComponent } from './chalan-view-dialog/chalan-view-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-chalan',
   templateUrl: './chalan.component.html',
   styleUrls: ['./chalan.component.scss']
 })
-export class ChalanComponent {
+export class ChalanComponent implements OnInit {
+
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   chalanForm: FormGroup;
@@ -42,18 +45,19 @@ export class ChalanComponent {
   quantityValue: any = 0;
   productPriceValue: any = 0;
   totalProductPrices: any;
-  selectedPartyChalanNo: number = 0
-  selectedProduct: any = []
+  selectedPartyChalanNo: number = 0;
+  selectedProduct: any = [];
   chalanListDataSource = new MatTableDataSource(this.chalanList);
-  partyDetails: any
-  firmDetails: any
-  partyOrder: any
+  partyDetails: any;
+  firmDetails: any;
+  partyOrder: any;
   imageUrl: string | ArrayBuffer | null = null;
-  updateProductsData: any
-  netAmount: number = 0
+  updateProductsData: any;
+  netAmount: number = 0;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(
+    private dialog: MatDialog,
     private fb: FormBuilder,
     private firebaseCollectionService: FirebaseCollectionService
   ) { }
@@ -99,19 +103,13 @@ export class ChalanComponent {
     this.getPartyDetails(this.chalanForm.value.party)
     this.getFirmDetails(this.chalanForm.value.firm)
     this.generatePDF()
-    // const payload = {
-    //   firmId : this.chalanForm.value.firm,
-    //   partyId : this.chalanForm.value.party,
-    //   partyOrderId : this.chalanForm.value.partyOrder,
-    //   chalanDate : this.chalanForm.value.date,
-    //   chalanNo : this.selectedPartyChalanNo,
-    //   netAmount : this.netAmount,
-    //   isCreated : false,
-    // }
-    // this.updateProductsData.isCreated = true
-    // this.firebaseCollectionService.updateDocument('CompanyList', this.updateProductsData.id, this.updateProductsData, 'OrderList');
+  }
 
-    // this.firebaseCollectionService.addDocument('CompanyList', payload , 'ChalanList');
+  productViewData(action: any, obj: any) {
+    obj.action = action;  
+    const dialogRef = this.dialog.open(ChalanViewDialogComponent, {
+      data: obj,
+    });
   }
 
   submitData() {
@@ -124,28 +122,28 @@ export class ChalanComponent {
       netAmount: this.netAmount,
       isCreated: false,
     }
-    this.updateProductsData.isCreated = true
+    this.updateProductsData.isCreated = true;
     this.firebaseCollectionService.updateDocument('CompanyList', this.updateProductsData.id, this.updateProductsData, 'OrderList');
-
     this.firebaseCollectionService.addDocument('CompanyList', payload, 'ChalanList');
-    // this.chalanForm.reset();
-    this.chalanForm.patchValue({
+    this.chalanForm.reset({
       firm: '',
       party: '',
       partyOrder: '',
       date: new Date(),
     });
+    this.chalanForm.markAsPristine();
+    this.chalanForm.markAsUntouched();
     this.chalanList = [];
     this.chalanListDataSource = new MatTableDataSource(this.chalanList);
 
   }
 
   getPartyDetails(partyId: any) {
-    this.partyDetails = this.partyList.find((id: any) => id.id === partyId)
+    this.partyDetails = this.partyList.find((id: any) => id.id === partyId);
   }
 
   getFirmDetails(firmId: any) {
-    this.firmDetails = this.firmList.find((id: any) => id.id === firmId)
+    this.firmDetails = this.firmList.find((id: any) => id.id === firmId);
   }
 
   generatePDF() {
@@ -408,7 +406,6 @@ export class ChalanComponent {
       doc.setFont("helvetica", "bolditalic");
       const detailsWidth = doc.getTextWidth(details);
       const detailsX = (pageWidth - detailsWidth) / 2;
-      // 27
       doc.text(details, detailsX, addressY - 24 + addressLines.length * 5 + 10);
 
       const leftColumnX = margin + 5;
@@ -663,40 +660,24 @@ export class ChalanComponent {
         productID: seletedOrderProducts.id,
         chalanNo: this.selectedPartyChalanNo
       }
-      this.selectedProduct.push(product)
-      this.chalanList.push(payload)
+      this.selectedProduct.push(product);
+      this.chalanList.push(payload);
       this.chalanListDataSource = new MatTableDataSource(this.chalanList);
     });
-    this.updateProductsData = seletedOrderProducts                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+    this.updateProductsData = seletedOrderProducts;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
   }
 
   ngAfterViewInit(): void {
     this.chalanListDataSource.paginator = this.paginator;
   }
 
-  // doAction() {
-  //   const payload = {
-  //     firm: this.chalanForm.value.firm,
-  //     partyId: this.chalanForm.value.party,
-  //     date: this.chalanForm.value.date,
-  //     partyOrder: this.chalanForm.value.partyOrder,
-  //   }
-  //   this.chalanList.push(payload)
-  //   this.chalanListDataSource = new MatTableDataSource(this.chalanList);
-
-  //   ['firm', 'party', 'partyOrder', 'productName', 'quantity', 'productPrice', 'chalanNo'].forEach(controlName => {
-  //     this.chalanForm.controls[controlName].clearValidators();
-  //     this.chalanForm.controls[controlName].updateValueAndValidity();
-  //   });
-  // }
-
   getPartyName(partyId: string): string {
-    return this.partyList.find((partyObj: any) => partyObj.id === partyId)?.firstName
+    return this.partyList.find((partyObj: any) => partyObj.id === partyId)?.firstName;
   }
 
   deleteData(index: number) {
     this.chalanList.splice(index, 1);
-    this.selectedProduct.splice(index, 1)
+    this.selectedProduct.splice(index, 1);
     this.chalanListDataSource = new MatTableDataSource(this.chalanList);
   }
 

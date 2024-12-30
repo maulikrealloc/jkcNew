@@ -43,7 +43,7 @@
             Employee
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.employeeList }}
+            {{ getEmployeeName(element.employeeList) }}
           </td>
         </ng-container>
 
@@ -61,7 +61,7 @@
             Date
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.date | date : "mediumDate" }}
+          {{ convertTimestampToDate(element.date) | date : "mediumDate" }}
           </td>
         </ng-container>
 

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -11,11 +11,11 @@ import { Timestamp } from 'firebase/firestore';
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss']
 })
-export class OrderComponent {
+export class OrderComponent implements OnInit {
 
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   orderColumns: string[] = [
-    'srNo',
+    'orderNo',
     'partyName',
     'orderDate',
     'deliveryDate',
@@ -27,12 +27,15 @@ export class OrderComponent {
   ];
   orderList: any = [];
   partyList: any = [];
-  stausList: any =["Pending", "In Progress", "Rejected", "Cancelled", "Done"]
+  stausList: any = ["Pending", "In Progress", "Rejected", "Cancelled", "Done"];
 
   dataSource = new MatTableDataSource(this.orderList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
+ 
+  ngOnInit(): void {
+  }
 
   convertTimestampToDate(element: any): Date | null {
     if (element instanceof Timestamp) {
@@ -70,8 +73,6 @@ export class OrderComponent {
           const orderDate = this.convertTimestampToDate(data.orderDate);
           const deliveryDate = this.convertTimestampToDate(data.deliveryDate);
           const chalanNo = data.products?.[0]?.productChalanNo || '';
-
-          // Combine all fields into a single string
           const dataStr = `
         ${partyName}
         ${orderDate}
@@ -81,14 +82,12 @@ export class OrderComponent {
         ${chalanNo}
         ${data.orderStatus}
       `.toLowerCase();
-
           return dataStr.includes(filter);
         };
       } else {
         this.orderList = [];
         this.dataSource = new MatTableDataSource(this.orderList);
       }
-      // Attach paginator after reinitializing dataSource
       this.dataSource.paginator = this.paginator;
     }).catch((error) => {
       console.error('Error fetching order:', error);

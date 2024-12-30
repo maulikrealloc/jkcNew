@@ -1,15 +1,19 @@
 <mat-card class="cardWithShadow">
     <mat-card-content class="p-24">
-        <div style="align-items: baseline;" class="row">
-            <div class="col-3">
-                <mat-slide-toggle [(ngModel)]="isChecked"></mat-slide-toggle>
-                <span *ngIf="!isChecked">Progress</span>
-                <span *ngIf="isChecked">Done</span>
+        <div class="row justify-content-between">
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 hide-hint">
+                    <mat-label>Report</mat-label>
+                    <input matInput placeholder="Search report">
+                    <mat-icon matSuffix>
+                        <i-tabler name="search" class="icon-20"></i-tabler>
+                    </mat-icon>
+                </mat-form-field>
             </div>
-            <div class="col-3">
+            <div class="col-4">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Select Date</mat-label>
-                    <mat-date-range-input [rangePicker]="picker" [formGroup]="dateOrderListForm">
+                    <mat-label>Report Date</mat-label>
+                    <mat-date-range-input [rangePicker]="picker" [formGroup]="dateEmployeeForm">
                         <input matStartDate placeholder="Start date" formControlName="start">
                         <input matEndDate placeholder="End date" formControlName="end">
                     </mat-date-range-input>
@@ -17,123 +21,102 @@
                     <mat-date-range-picker #picker></mat-date-range-picker>
                 </mat-form-field>
             </div>
-            <div class="col-3">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Select Party</mat-label>
-                    <mat-select #dropdown placeholder="Select party">
-                        <mat-option [value]="item.id" *ngFor="let item of khataList">{{ item.companyName }}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="col-3">
-                <div class="d-flex align-items-center justify-content-end">
-                    <button mat-flat-button color="primary" (click)="transferOrder('Add', {})">
-                        Transfer Order
-                    </button>
-                </div>
-            </div>
         </div>
     </mat-card-content>
 </mat-card>
 <mat-card class="cardWithShadow">
     <mat-card-content class="p-24">
         <div class="table-responsive">
-            <table mat-table [dataSource]="orderDataSource" class="w-100">
-                <ng-container matColumnDef="srNo">
+            <table mat-table [dataSource]="employeeListDataSource" class="w-100">
+                <ng-container matColumnDef="#">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
                     <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
                 </ng-container>
 
-                <ng-container matColumnDef="partyName">
+                <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                        Party Name
+                        Name
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.partyName }}
+                        {{ element.name }}
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="khataName">
+                <ng-container matColumnDef="salary">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                        Khata Name
+                        Salary
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.khataName }}
+                        {{ element.salary }}
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="partyOrder">
+                <ng-container matColumnDef="day">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                        Party Order
+                        Days
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.partyOrder }}
+                        {{ element.days }}
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="itemName">
+                <ng-container matColumnDef="absent">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                        Item Name
+                        Absent
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.itemName }}
+                        {{ element.mobileNo }}
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="price">
+                <ng-container matColumnDef="upad">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                        Price
+                        Upad
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.price }}
+                        {{ element.bankName }}
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="quantity">
+                <ng-container matColumnDef="extra">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                        Quantity
+                        Extra
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.quantity }}
+                        {{ element.ifscCode }}
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="total">
+                <ng-container matColumnDef="remain">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                        Total
+                        Remain
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.total }}
+                        {{ element.bankAccountNo }}
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="status">
+                <ng-container matColumnDef="bonus">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                        Status
+                        Bonus
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.status }}
+                        {{ element.bankAccountNo }}
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="action">
+                <ng-container matColumnDef="finalAMT">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                        Action
+                        Final AMT
                     </th>
-                    <td mat-cell *matCellDef="let element" class="action-link">
-                        <a class="m-r-10 cursor-pointer"><i-tabler name="edit" (click)="transferOrder('Edit', element)"
-                                class="icon-18"></i-tabler></a>
-                        <a class="m-r-10 cursor-pointer">
-                            <i-tabler name="trash" (click)="transferOrder('Delete', element)"
-                                class="icon-18"></i-tabler>
-                        </a>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.bankAccountNo }}
                     </td>
                 </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="orderColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: orderColumns"></tr>
+                <tr mat-header-row *matHeaderRowDef="employeeMasterColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: employeeMasterColumns"></tr>
                 <tr class="mat-row" style="text-align: center;" *matNoDataRow>
-                    <td class="mat-cell" [attr.colspan]="orderColumns.length">
+                    <td class="mat-cell" [attr.colspan]="employeeMasterColumns.length">
                         No record found
                     </td>
                 </tr>

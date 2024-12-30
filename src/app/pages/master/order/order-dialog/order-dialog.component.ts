@@ -10,10 +10,12 @@ import { Timestamp } from 'firebase/firestore';
   styleUrls: ['./order-dialog.component.scss']
 })
 export class OrderDialogComponent implements OnInit {
+  
   orderForm: FormGroup;
   action: string;
   local_data: any;
   partyList: any = [];
+  searchQuery: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -108,4 +110,5 @@ export class OrderDialogComponent implements OnInit {
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
   }
+  
 }

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-expenses-data',
@@ -16,32 +17,26 @@ export class ExpensesDataComponent implements OnInit {
     'totalAmount',
   ]
 
-  expensesData: any = []
+  expensesList: any = [];
+  expensesListDataSource = new MatTableDataSource(this.expensesList);
 
-  expensesListDataSource = new MatTableDataSource(this.expensesData)
+  constructor(private firebaseCollectionService: FirebaseCollectionService) { }
 
-  constructor() { }
+  ngOnInit(): void {
+    this.getExpensesListData();
+   }
 
-  ngOnInit(): void { 
-    const expensessavedData = localStorage.getItem('expensesnewdata');
-    if (expensessavedData) {
-      const parsedData = JSON.parse(expensessavedData);
-      this.expensesData = parsedData;   
-      this.expensesListDataSource.data = this.expensesData;	
-    }
-    this.calculateTotalAmount()
-  }
-
-  calculateTotalAmount() {
-    if (this.expensesData &&   this.expensesData.length > 0) {
-      this.pendingTotal = this.expensesData
-        .filter((item: { status: any }) => item.status === 'pending')
-        .reduce((acc: any, item: { amount: any }) => acc + item.amount, 0);
-      
-      this.paidTotal = this.expensesData
-        .filter((item: { status: any }) => item.status === 'paid')
-        .reduce((acc: any, item: { amount: any }) => acc + item.amount, 0);
-    } 
+  getExpensesListData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'ExpensesList').then((expenses) => {
+      this.expensesList = expenses
+      if (expenses && expenses.length > 0) {
+        this.expensesListDataSource = new MatTableDataSource(this.expensesList);
+        this.pendingTotal = this.expensesList.filter((expenseObj: any) => expenseObj.status === 'pending').reduce((amount: number, expenseObj: any) => amount + (expenseObj.amount || 0), 0);
+        this.paidTotal = this.expensesList.filter((expenseObj: any) => expenseObj.status === 'paid').reduce((amount: number, expenseObj: any) => amount + (expenseObj.amount || 0), 0);
+      }
+    }).catch((error) => {
+      console.error('Error fetching expenses:', error);
+    });
   }
 
 }

@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { designMasterDialogComponent } from '../../design-master/design-master.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-company-account-dialog',
@@ -22,14 +23,22 @@ export class CompanyAccountDialogComponent implements OnInit {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
+
   ngOnInit(): void {
     this.formBuild()
     if (this.action === 'Edit') {
       this.companyForm.controls['accountName'].setValue(this.local_data.accountName)
       this.companyForm.controls['bankName'].setValue(this.local_data.bankName)
       this.companyForm.controls['openingBalance'].setValue(this.local_data.openingBalance)
-      this.companyForm.controls['date'].setValue(this.local_data.date)
+      this.companyForm.controls['date'].setValue(this.convertTimestampToDate(this.local_data.date))
     }
+  }
+
+  convertTimestampToDate(element: any): Date | null {
+    if (element instanceof Timestamp) {
+      return element.toDate();
+    }
+    return null;
   }
 
   formBuild() {
@@ -43,14 +52,11 @@ export class CompanyAccountDialogComponent implements OnInit {
 
   doAction(): void {
     const payload = {
-      id: this.local_data.id ? this.local_data.id : '',
       accountName: this.companyForm.value.accountName,
       bankName: this.companyForm.value.bankName,
       openingBalance: this.companyForm.value.openingBalance,
       date: this.companyForm.value.date,
-    }
-    console.log(payload, "payload=============>>>>>>>>>>>>");
-    
+    }    
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

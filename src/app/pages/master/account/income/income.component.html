@@ -9,11 +9,11 @@
           </mat-icon>
         </mat-form-field>
       </div>
-      <div class="col-3">
+      <div class="col-4">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Party</mat-label>
-          <mat-select #dropdown placeholder="Select party">
-            <mat-option value="ABC">ABC</mat-option>
+          <mat-label>Paid By</mat-label>
+          <mat-select #dropdown placeholder="Select paid by">
+            <mat-option  *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -23,12 +23,9 @@
         </button>
       </div>
       <div class="col-2">
-        <button mat-flat-button color="primary" (click)="openaddIncome('Add',{})">
+        <button mat-flat-button color="primary" (click)="openIncome('Add',{})">
           Add Income
         </button>
-      </div>
-      <div class="col-1">
-        <a class="m-r-10 cursor-pointer"><i-tabler name="file-download" class="icon-18"></i-tabler></a>
       </div>
     </div>
   </mat-card-content>
@@ -75,7 +72,7 @@
             Invoice Date
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.invoiceDate | date : "mediumDate" }}
+            {{ convertTimestampToDate(element.invoiceDate) | date : "mediumDate" }}
           </td>
         </ng-container>
 
@@ -84,7 +81,7 @@
             Credit Date
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.creditDate | date : "mediumDate" }}
+            {{ convertTimestampToDate(element.creditDate) | date : "mediumDate" }}
           </td>
         </ng-container>
 
@@ -103,10 +100,10 @@
           </th>
           <td mat-cell *matCellDef="let element" class="action-link">
             <a class="m-r-10 cursor-pointer">
-              <i-tabler name="edit" class="icon-18" (click)="openaddIncome('Edit',element)"></i-tabler>
+              <i-tabler name="edit" class="icon-18" (click)="openIncome('Edit', element)"></i-tabler>
             </a>
             <a class="m-r-10 cursor-pointer">
-              <i-tabler name="trash" class="icon-18" (click)="openaddIncome('Delete',element)"></i-tabler>
+              <i-tabler name="trash" class="icon-18" (click)="openIncome('Delete', element)"></i-tabler>
             </a>
           </td>
         </ng-container>

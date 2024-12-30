@@ -81,6 +81,11 @@ export const navItems: NavItem[] = [
     iconName: 'coin-rupee',
     route: '/master/machinesalarylist',
   },
+  {
+    displayName: 'Report List',
+    iconName: 'report',
+    route: '/master/employee-report',
+  },
 
 
   {

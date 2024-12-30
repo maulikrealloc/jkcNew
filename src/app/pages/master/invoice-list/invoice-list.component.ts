@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -9,14 +9,17 @@ import autoTable from 'jspdf-autotable';
 import { DatePipe } from '@angular/common';
 import { ToWords } from 'to-words';
 import { PaymentListComponent } from './payment-list/payment-list.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-invoice-list',
   templateUrl: './invoice-list.component.html',
   styleUrls: ['./invoice-list.component.scss']
 })
-export class InvoiceListComponent {
+  
+export class InvoiceListComponent implements OnInit {
 
+  dateInvoiceListForm: FormGroup;
   partyList: any = [];
   invoiceList: any = [];
   firmList: any = [];
@@ -54,10 +57,18 @@ export class InvoiceListComponent {
   invoiceListDataSource = new MatTableDataSource(this.invoiceList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private firebaseCollectionService: FirebaseCollectionService, private dialog: MatDialog,
+  constructor(private fb: FormBuilder, private firebaseCollectionService: FirebaseCollectionService, private dialog: MatDialog,
     private datePipe: DatePipe) { }
 
   ngOnInit(): void {
+    const today = new Date();
+    const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    this.dateInvoiceListForm = this.fb.group({
+      start: [startDate],
+      end: [endDate]
+    })
     this.getInvoiceData();
     this.getPartyData();
     this.getChalanData();
@@ -116,15 +127,18 @@ export class InvoiceListComponent {
       console.error('Error fetching chalan:', error);
     });
   }
+
   getPaymentReceiveList() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'PaymentReceiveList').then((payment) => {
       this.paymentReceiveData = payment
     })
   }
+
   getPaymentReceiveAmount(data :any) {
     const receiveData = this.paymentReceiveData?.find((obj: any) => obj.invoiceId === data.id)?.payments.map((id: any) => id.paymentReceive).reduce((a :any , b:any) => a + b)
     return receiveData ?? 0
   }
+
   getFormattedDate(value:any): string {
     const milliseconds = value?.seconds * 1000;
     const date = new Date(milliseconds);
@@ -332,7 +346,7 @@ export class InvoiceListComponent {
       const textWidth = doc.getTextWidth(field);
 
       const valueXPosition = (box2XPosition - 28) + textWidth + 5;
-      const valueYPosition = yPosition; // Position value above the line
+      const valueYPosition = yPosition;
       doc.text(fieldsRightValues[index], valueXPosition, valueYPosition);
 
       const lineYPosition = valueYPosition + 1;
@@ -361,7 +375,7 @@ export class InvoiceListComponent {
     const bankDetails = ["Date:", "Amount:"];
     const bankLeftYPosition = 204 + 5;
     const bankBoxWidth = doc.internal.pageSize.width * 0.25;
-    const fontSize = 9; // Desired font size
+    const fontSize = 9;
 
     bankDetails.forEach((field, index) => {
       const yPosition = bankLeftYPosition + (index * 7);
@@ -398,7 +412,6 @@ export class InvoiceListComponent {
 
     body.push(
       ['', '', '', '', { content: 'Gross Total', styles: { halign: 'left' } }, `${grossTotal}`],
-      // ['', '', '', '', { content: 'Discount 10%', styles: { halign: 'left' } }, `${discountAmount}`],
       ['', '', '', '', { content: `Discount ${value.discountRatio}%`, styles: { halign: 'left' } }, `${discountAmount}`],
       [{ content: `${finalAmountInWords}`, rowSpan: 2, colSpan: 4, styles: { halign: 'left', fontStyle: 'bold', valign: 'middle' } }, 'Net Amount', `${netAmount}`],
       [`CGST ${value?.cgst}%`, `${cgst}`],
@@ -511,8 +524,8 @@ export class InvoiceListComponent {
     doc.setFontSize(originalFontSize);
   }
 
-
   getPartyName(partyId: string): string {
     return this.partyList.find((partyObj: any) => partyObj.id === partyId)?.firstName
   }
+  
 }

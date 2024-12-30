@@ -1,10 +1,9 @@
 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
     <mat-tab label="Add Kharch">
-        <app-add-kharch></app-add-kharch>
+        <app-add-kharch (kharchListUpdated)="updateKharchList($event)"></app-add-kharch>
     </mat-tab>
 
     <mat-tab label="Report">
-        <app-kharch-report></app-kharch-report>
+        <app-kharch-report [KharchReportList]="kharchReportData"></app-kharch-report>
     </mat-tab>
-
 </mat-tab-group>

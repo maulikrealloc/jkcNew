@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-income-data',
@@ -12,27 +13,30 @@ export class IncomeDataComponent implements OnInit {
   incomeDataColumns: string[] = [
     'partyName',
     'totalAmount'
-  ]
+  ];
 
-  incomeData: any = []
+  incomedataList: any = [];
+  incomeListDataSource = new MatTableDataSource(this.incomedataList);
 
-  incomeListDataSource = new MatTableDataSource(this.incomeData)
-  constructor(){}
- 
-  ngOnInit(): void { 
-    const incomedatanewdata = localStorage.getItem('incomedatanewdata');
-    if (incomedatanewdata) {
-      const parsed = JSON.parse(incomedatanewdata);
-      this.incomeData = parsed;   
-      this.incomeListDataSource.data = this.incomeData;
-    }
-    this.calculateTotalAmount();
+  constructor(private firebaseCollectionService: FirebaseCollectionService) { }
+  
+  ngOnInit(): void {
+    this.getIncomeListData();
+   }
+  
+  getIncomeListData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'IncomeList').then((income) => {
+      this.incomedataList = income
+      if (income && income.length > 0) {
+        this.incomeListDataSource = new MatTableDataSource(this.incomedataList);
+      }
+    }).catch((error) => {
+      console.error('Error fetching income:', error);
+    });
   }
 
-  calculateTotalAmount() {
-    if (this.incomeData && this.incomeData.length > 0) {
-      this.totalAmount = this.incomeData.reduce((acc: any, item: { amount: any; }) => acc + item.amount, 0);
-    }
+  getTotalAmount(): number {
+    return this.incomedataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
   }
 
 }

@@ -11,7 +11,7 @@
         </mat-form-field>
       </div>
       <div class="col-lg-4 d-flex align-items-center justify-content-end">
-        <button mat-flat-button color="primary" (click)="addRowMaterial('Add', {})">
+        <button mat-flat-button color="primary" (click)="addDesign('Add', {})">
           Add Raw Material
         </button>
       </div>
@@ -61,10 +61,10 @@
           </th>
           <td mat-cell *matCellDef="let element" class="action-link">
             <a class="m-r-10 cursor-pointer">
-              <i-tabler (click)="addRowMaterial('Edit', element)" name="edit" class="icon-18"></i-tabler>
+              <i-tabler (click)="addDesign('Edit', element)" name="edit" class="icon-18"></i-tabler>
             </a>
             <a class="m-r-10 cursor-pointer">
-              <i-tabler (click)="addRowMaterial('Delete', element)" name="trash" class="icon-18"></i-tabler>
+              <i-tabler (click)="addDesign('Delete', element)" name="trash" class="icon-18"></i-tabler>
             </a>
           </td>
         </ng-container>

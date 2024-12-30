@@ -1,8 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { CompanyAccountDialogComponent } from './company-account-dialog/company-account-dialog.component';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
+import { Timestamp } from 'firebase/firestore';
 
 
 @Component({
@@ -10,7 +12,7 @@ import { CompanyAccountDialogComponent } from './company-account-dialog/company-
   templateUrl: './company-account.component.html',
   styleUrls: ['./company-account.component.scss']
 })
-export class CompanyAccountComponent {
+export class CompanyAccountComponent implements OnInit {
 
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   companyAccountColumns: string[] = [
@@ -22,17 +24,40 @@ export class CompanyAccountComponent {
     'action',
   ];
   
-  companyAccount: any = [];
-
-
-  companyAccountListDataSource = new MatTableDataSource(this.companyAccount);
+  companyAccountList: any = [];
+  companyAccountDataSource = new MatTableDataSource(this.companyAccountList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
+  ngOnInit(): void {
+    this.getCompanyAccountData();
+  }
 
   ngAfterViewInit(): void {
-    this.companyAccountListDataSource.paginator = this.paginator;
+    this.companyAccountDataSource.paginator = this.paginator;
+  }
+
+  convertTimestampToDate(element: any): Date | null {
+    if (element instanceof Timestamp) {
+      return element.toDate();
+    }
+    return null;
+  }
+
+  applyFilter(filterValue: string): void {
+    this.companyAccountDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  getCompanyAccountData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'CompanyAccountList').then((company) => {
+      this.companyAccountList = company
+      if (company && company.length > 0) {
+        this.companyAccountDataSource = new MatTableDataSource(this.companyAccountList);
+      }
+    }).catch((error) => {
+      console.error('Error fetching company:', error);
+    });
   }
 
   addDesign(action: string, obj: any) {
@@ -43,33 +68,20 @@ export class CompanyAccountComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.companyAccount.push({
-          id: this.companyAccount.length + 1,
-          accountName: result.data.accountName,
-          bankName: result.data.bankName,
-          openingBalance: result.data.openingBalance,
-          date: result.data.date,
-        })
-        this.companyAccountListDataSource = new MatTableDataSource(this.companyAccount);
-
+        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'CompanyAccountList');
+        this.getCompanyAccountData()
       }
       if (result.event === 'Edit') {
-        this.companyAccount.forEach((element: any) => {
-
-          if (element.id === result.data.id) {
-            element.id = result.data.id
-            element.accountName = result.data.accountName
-            element.bankName = result.data.bankName
-            element.openingBalance = result.data.openingBalance
-            element.date = result.data.date
+        this.companyAccountList.forEach((element: any) => {
+          if (obj.id === element.id) {
+            this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'CompanyAccountList');
+            this.getCompanyAccountData()
           }
         });
-        this.companyAccountListDataSource = new MatTableDataSource(this.companyAccount);
       }
       if (result.event === 'Delete') {
-        const allEmployeesData = this.companyAccount
-        this.companyAccount = allEmployeesData.filter((id: any) => id.id !== result.data.id)
-        this.companyAccountListDataSource = new MatTableDataSource(this.companyAccount);
+        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'CompanyAccountList');
+        this.getCompanyAccountData()
       }
     });
   }

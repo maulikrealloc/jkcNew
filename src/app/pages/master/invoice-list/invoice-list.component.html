@@ -21,9 +21,9 @@
             <div class="col-12 col-sm-12 col-md-4">
                 <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
                     <mat-label>Select Invoice Date</mat-label>
-                    <mat-date-range-input [rangePicker]="picker">
-                        <input matStartDate placeholder="Start date">
-                        <input matEndDate placeholder="End date">
+                    <mat-date-range-input [rangePicker]="picker" [formGroup]="dateInvoiceListForm">
+                        <input matStartDate placeholder="Start date" formControlName="start">
+                        <input matEndDate placeholder="End date" formControlName="end">
                     </mat-date-range-input>
                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-date-range-picker #picker></mat-date-range-picker>

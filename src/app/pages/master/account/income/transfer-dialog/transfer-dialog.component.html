@@ -5,7 +5,7 @@
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>From</mat-label>
       <mat-select #dropdown formControlName="from" placeholder="Select from">
-        <mat-option value="abc">abc</mat-option>
+        <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName }}</mat-option>
       </mat-select>
       <mat-hint *ngIf="transferForm.get('from')?.hasError('required') && transferForm.get('from')?.touched"
         class="error-message error-color">
@@ -16,7 +16,7 @@
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>To</mat-label>
       <mat-select #dropdown formControlName="to" placeholder="Select to">
-        <mat-option value="abc">abc</mat-option>
+        <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName }}</mat-option>
       </mat-select>
       <mat-hint *ngIf="transferForm.get('to')?.hasError('required') && transferForm.get('to')?.touched"
         class="error-message error-color">

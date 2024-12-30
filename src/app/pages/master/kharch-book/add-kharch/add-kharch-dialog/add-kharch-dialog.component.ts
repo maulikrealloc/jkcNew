@@ -1,14 +1,14 @@
-import { Component, Inject, Optional } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { firmMasterDialogComponent } from '../../../firm-master/firm-master.component';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-add-kharch-dialog',
   templateUrl: './add-kharch-dialog.component.html',
   styleUrls: ['./add-kharch-dialog.component.scss']
 })
-export class AddKharchDialogComponent {
+export class AddKharchDialogComponent implements OnInit {
 
   kharchForm: FormGroup;
   action: string;
@@ -22,16 +22,24 @@ export class AddKharchDialogComponent {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
+  
   ngOnInit(): void {
     this.formBuild()
     if (this.action === 'Edit') {
       this.kharchForm.controls['unit'].setValue(this.local_data.unit)
       this.kharchForm.controls['kharch'].setValue(this.local_data.kharch)
-      this.kharchForm.controls['date'].setValue(this.local_data.date)
+      this.kharchForm.controls['date'].setValue(this.convertTimestampToDate(this.local_data.date))
       this.kharchForm.controls['dec'].setValue(this.local_data.dec)
       this.kharchForm.controls['chalanNo'].setValue(this.local_data.chalanNo)
       this.kharchForm.controls['amount'].setValue(this.local_data.amount)
     }
+  }
+
+  convertTimestampToDate(element: any): Date | null {
+    if (element instanceof Timestamp) {
+      return element.toDate();
+    }
+    return null;
   }
 
   formBuild() {
@@ -47,7 +55,6 @@ export class AddKharchDialogComponent {
 
   doAction(): void {
     const payload = {
-      id: this.local_data.id ? this.local_data.id : '',
       unit: this.kharchForm.value.unit,
       kharch: this.kharchForm.value.kharch,
       date: this.kharchForm.value.date,
@@ -55,13 +62,11 @@ export class AddKharchDialogComponent {
       chalanNo: this.kharchForm.value.chalanNo,
       amount: this.kharchForm.value.amount,
     }
-    console.log(payload,"payload==========>>>>>>>>>>>>>>");
-    
     this.dialogRef.close({ event: this.action, data: payload });
-
   }
 
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
   }
+
 }

@@ -1,38 +1,25 @@
 <mat-card class="cardWithShadow">
     <mat-card-content class="p-24">
-        <div class="row justify-content-between">
-            <div class="col-5">
+        <div class="row">
+            <div class="col-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
-                    <mat-label>Order</mat-label>
-                    <input matInput placeholder="Search order">
+                    <mat-label>Kharch</mat-label>
+                    <input matInput placeholder="Search Kharch" (keyup)="applyFilter($any($event.target).value)">
                     <mat-icon matSuffix>
                         <i-tabler name="search" class="icon-20"></i-tabler>
                     </mat-icon>
                 </mat-form-field>
             </div>
-            <div class="col-5">
+            <div class="col-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Select Order Date</mat-label>
-                    <mat-date-range-input [rangePicker]="picker">
-                        <input matStartDate placeholder="Start date">
-                        <input matEndDate placeholder="End date">
+                    <mat-label>Select a Date</mat-label>
+                    <mat-date-range-input [rangePicker]="picker" [formGroup]="dateKharchReportListForm">
+                        <input matStartDate placeholder="Start date" formControlName="start">
+                        <input matEndDate placeholder="End date" formControlName="end">
                     </mat-date-range-input>
                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-date-range-picker #picker></mat-date-range-picker>
                 </mat-form-field>
-            </div>
-            <div class="col-2">
-                <svg style="margin-top: 15px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-pdf">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-                    <path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4" />
-                    <path d="M5 18h1.5a1.5 1.5 0 0 0 0 -3h-1.5v6" />
-                    <path d="M17 18h2" />
-                    <path d="M20 15h-3v6" />
-                    <path d="M11 15v6h1a2 2 0 0 0 2 -2v-2a2 2 0 0 0 -2 -2h-1z" />
-                </svg>
             </div>
         </div>
     </mat-card-content>
@@ -43,7 +30,7 @@
         <div style="align-items: baseline;" class="row">
             <div class="col-4">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Select Unit</mat-label>
+                    <mat-label>Unit</mat-label>
                     <mat-select #dropdown placeholder="Select unit">
                         <mat-option value="ABC">ABC</mat-option>
                     </mat-select>
@@ -51,14 +38,14 @@
             </div>
             <div class="col-4 ">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Select Kharch</mat-label>
+                    <mat-label>Kharch</mat-label>
                     <mat-select #dropdown placeholder="Select kharch">
                         <mat-option value="ABC">ABC</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-4 selectUnit">
-                <mat-label class="mat-subtitle-2 m-b-8 d-block">Total Expenses:- 0 </mat-label>
+                <mat-label class="mat-subtitle-2 m-b-8 d-block f-s-16 f-w-600">Total Expenses:- {{ totalAmount }} </mat-label>
             </div>
         </div>
 
@@ -66,7 +53,7 @@
             <table mat-table [dataSource]="kharchListdataSource" class="w-100 m-t-10">
                 <ng-container matColumnDef="srNo">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
-                    <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+                    <td mat-cell *matCellDef="let element let i = index">{{ i + 1 }}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="unitname">
@@ -74,7 +61,7 @@
                         Unit Name
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.unitName }}
+                        {{ element.unit }}
                     </td>
                 </ng-container>
 
@@ -83,16 +70,16 @@
                         Kharch Name
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.kharchName }}
+                        {{ element.kharch }}
                     </td>
                 </ng-container>
 
                 <ng-container matColumnDef="dec">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                        Dec
+                        Description
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.Dec }}
+                        {{ element.dec }}
                     </td>
                 </ng-container>
 
@@ -101,7 +88,7 @@
                         Date
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.Date | date : "mediumDate" }}
+                        {{ convertTimestampToDate(element.date) | date : "mediumDate" }}
                     </td>
                 </ng-container>
 
@@ -125,6 +112,11 @@
 
                 <tr mat-header-row *matHeaderRowDef="kharchReportColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: kharchReportColumns"></tr>
+                <tr class="mat-row" style="text-align: center;" *matNoDataRow>
+                    <td class="mat-cell" [attr.colspan]="kharchReportColumns.length">
+                        No record found
+                    </td>
+                </tr>
             </table>
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>

@@ -1,4 +1,4 @@
-import { Component, Inject, Optional } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { partyMasterDialogComponent } from '../../party-master/party-master.component';
@@ -8,7 +8,7 @@ import { partyMasterDialogComponent } from '../../party-master/party-master.comp
   templateUrl: './row-material-dialog.component.html',
   styleUrls: ['./row-material-dialog.component.scss']
 })
-export class RowMaterialDialogComponent {
+export class RowMaterialDialogComponent implements OnInit {
 
   rowMaterialForm: FormGroup;
   local_data: any;
@@ -42,12 +42,11 @@ export class RowMaterialDialogComponent {
 
   doAction(): void {
     const payload = {
-      id: this.local_data.id ? this.local_data.id : '',
         name: this.rowMaterialForm.value.name,
         quantity: this.rowMaterialForm.value.quantity,
         price: this.rowMaterialForm.value.price,
     }
-    console.log(payload, "payload==============>>>>>>>>>>>>>"); 
     this.dialogRef.close({event: this.action, data: payload})
   }
+
 }

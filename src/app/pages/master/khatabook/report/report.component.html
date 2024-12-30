@@ -13,9 +13,9 @@
             <div class="col-4">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Enter Date</mat-label>
-                    <mat-date-range-input [rangePicker]="picker">
-                        <input matStartDate placeholder="Start date">
-                        <input matEndDate placeholder="End date">
+                    <mat-date-range-input [rangePicker]="picker" [formGroup]="dateReportListForm">
+                        <input matStartDate placeholder="Start date" formControlName="start">
+                        <input matEndDate placeholder="End date" formControlName="end">
                     </mat-date-range-input>
                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-date-range-picker #picker></mat-date-range-picker>

@@ -1,0 +1,66 @@
+<h2 mat-dialog-title class="m-b-24 b-b-1 p-b-20">{{action}} </h2>
+<mat-dialog-content class="mat-typography" style="max-width: 750px" *ngIf="action !== 'Delete'; else elseTemplate">
+    <mat-card class="cardWithShadow">
+        <mat-card-content class="p-24">
+            <div class="table-responsive">
+                <table mat-table [dataSource]="selectedProduct" class="w-100">
+                    <ng-container matColumnDef="srNo">
+                        <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No.</th>
+                        <td mat-cell *matCellDef="let element; let i = index" class="f-s-14">{{ i + 1 }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="partyOrder">
+                        <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Party Order</th>
+                        <td mat-cell *matCellDef="let element" class="f-s-14">{{element.productName}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="productName">
+                        <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Product Name</th>
+                        <td mat-cell *matCellDef="let element" class="f-s-14">{{element.productQuantity}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Quantity">
+                        <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Quantity</th>
+                        <td mat-cell *matCellDef="let element" class="f-s-14">{{element.productPrice}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="productPrice">
+                        <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Product Price</th>
+                        <td mat-cell *matCellDef="let element" class="f-s-14">{{element.productQuantity *
+                            element.productPrice}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="chalanNo">
+                        <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Chalan No</th>
+                        <td mat-cell *matCellDef="let element" class="f-s-14">{{element.productQuantity *
+                            element.productPrice}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="totalAmount">
+                        <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Total Amount</th>
+                        <td mat-cell *matCellDef="let element" class="f-s-14">{{element.productQuantity *
+                            element.productPrice}}</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions class="p-24 justify-content-end">
+    <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
+    <button mat-flat-button [mat-dialog-close]="true" *ngIf="action !== 'Chalan View'" color="primary"
+        (click)="doAction();">
+        {{action}}
+    </button>
+</mat-dialog-actions>
+<ng-template #elseTemplate>
+    <div class="p-x-24">
+        <p>Sure to delete <span class="f-w-600"></span> ?</p>
+    </div>
+    <mat-divider></mat-divider>
+</ng-template>

@@ -62,7 +62,8 @@ import { DamanCostingComponent } from './daman-costing/daman-costing.component';
 import { ProductDialogComponent } from './chalan-list/product-dialog/product-dialog.component';
 import { PaymentListComponent } from './invoice-list/payment-list/payment-list.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
+import { ChalanViewDialogComponent } from './chalan/chalan-view-dialog/chalan-view-dialog.component';
+import { EmployeeReportComponent } from './employee-report/employee-report.component';
 
 
 @NgModule({
@@ -121,7 +122,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     NetProfitDataComponent,
     DamanCostingComponent,
     ProductDialogComponent,
-    PaymentListComponent
+    PaymentListComponent,
+    ChalanViewDialogComponent,
+    EmployeeReportComponent
   ],
   imports: [
     CommonModule,

@@ -2,7 +2,6 @@
   <mat-card-content class="p-24">
     <div class="table-responsive">
       <table mat-table [dataSource]="paidByDataListSource" class="w-100">
-
         <ng-container matColumnDef="paidBy">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
             Paid By
@@ -17,7 +16,7 @@
             TotalAmount
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.totalAmount }}
+            {{ element.amount }}
           </td>
         </ng-container>
 
@@ -28,18 +27,8 @@
             No record found
           </td>
         </tr>
-
-        <!-- <tr mat-header-row *matHeaderRowDef="paidByDataColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: paidByDataColumns"></tr> -->
       </table>
     </div>
-    <!-- <ng-template #noRecordsTemplate>
-          <div class="no-records text-center">
-              <span>
-                  No Records Found
-              </span>
-          </div>
-      </ng-template> -->
     <mat-divider></mat-divider>
   </mat-card-content>
 </mat-card>

@@ -9,11 +9,13 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import moment from 'moment';
 import { ToWords } from 'to-words';
+
 @Component({
   selector: 'app-chalan-list',
   templateUrl: './chalan-list.component.html',
   styleUrls: ['./chalan-list.component.scss']
 })
+  
 export class ChalanListComponent implements OnInit {
 
   firmList: any = [];
@@ -27,10 +29,9 @@ export class ChalanListComponent implements OnInit {
       ignoreZeroCurrency: false,
     },
   });
-  partyDetails: any
-  firmDetails: any
-  selectedOrderData: any
-
+  partyDetails: any;
+  firmDetails: any;
+  selectedOrderData: any;
 
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   chalanListColumns: string[] = [
@@ -43,8 +44,8 @@ export class ChalanListComponent implements OnInit {
     'action',
   ];
 
-  chalanList :any = []
-  netAmount: number = 0
+  chalanList: any = [];
+  netAmount: number = 0;
 
   chalanListDataSource = new MatTableDataSource(this.chalanList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -57,6 +58,7 @@ export class ChalanListComponent implements OnInit {
     this.getChalanData();
     this.getOrderData();
   }
+
   applyFilter(filterValue: string): void {
     this.chalanListDataSource.filter = filterValue.trim().toLowerCase();
   }
@@ -69,11 +71,11 @@ export class ChalanListComponent implements OnInit {
   }
   
   getPartyName(partyId: string): string {
-    return this.partyList.find((partyObj: any) => partyObj.id === partyId)?.firstName
+    return this.partyList.find((partyObj: any) => partyObj.id === partyId)?.firstName;
   }
   
   getOrderNo(partyOrderId: string): string {
-    return this.orderList.find((orderObj: any) => orderObj.id === partyOrderId)?.partyOrder
+    return this.orderList.find((orderObj: any) => orderObj.id === partyOrderId)?.partyOrder;
   }
   
   getChalanData() {
@@ -82,15 +84,12 @@ export class ChalanListComponent implements OnInit {
       if (chalan && chalan.length > 0) {
         this.chalanListDataSource = new MatTableDataSource(this.chalanList);
         this.chalanListDataSource.filterPredicate = (data:any, filter) => {
-          // Fetch relevant fields for filtering
           const srNo = (data.srNo || '').toString();
           const partyName = this.getPartyName(data.partyId);
           const partyOrder = this.getOrderNo(data.partyOrderId);
           const chalanNo = (data.chalanNo || '').toString();
           const chalanDate = this.convertTimestampToDate(data.chalanDate);
           const netAmount = (data.netAmount || '').toString();
-
-          // Combine all fields into a single string for filtering
           const dataStr = `
     ${srNo}
     ${partyName}
@@ -168,22 +167,23 @@ export class ChalanListComponent implements OnInit {
       width: '700px'
     });
   }
+  
   downloadPDF(data: any) {
-    this.getPartyDetails(data.partyId)
-    this.getFirmDetails(data.firmId)
-    this.selectedOrderData = this.orderList.find((obj: any) => obj.id === data.partyOrderId)
-    this.generatePDF(data)
+    this.getPartyDetails(data.partyId);
+    this.getFirmDetails(data.firmId);
+    this.selectedOrderData = this.orderList.find((obj: any) => obj.id === data.partyOrderId);
+    this.generatePDF(data);
   }
+
   getPartyDetails(partyId: any) {
-    this.partyDetails = this.partyList.find((id: any) => id.id === partyId)
+    this.partyDetails = this.partyList.find((id: any) => id.id === partyId);
   }
 
   getFirmDetails(firmId: any) {
-    this.firmDetails = this.firmList.find((id: any) => id.id === firmId)
+    this.firmDetails = this.firmList.find((id: any) => id.id === firmId);
   }
 
   generatePDF(seletedChalan: any) {
-    
     const { tr, tg, tb } = this.textHexToRgb(this.partyDetails.partyColorCode.fontColor);
     const { br, bg, bb } = this.bgHexToRgb(this.partyDetails.partyColorCode.bgColor);
     const doc = new jsPDF();
@@ -627,7 +627,7 @@ export class ChalanListComponent implements OnInit {
 
     const blob = doc.output('blob');
     const url = URL.createObjectURL(blob);
-    window.open(url);
+    const newTab = window.open(url);
   }
 
   textHexToRgb(hex: any) {
@@ -649,4 +649,5 @@ export class ChalanListComponent implements OnInit {
 
     return { br, bg, bb };
   }
+  
 }

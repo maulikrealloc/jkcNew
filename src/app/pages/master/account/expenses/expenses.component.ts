@@ -14,9 +14,7 @@ import { Timestamp } from 'firebase/firestore';
 })
 export class ExpensesComponent implements OnInit {
 
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-
-  expensesColumns: string[] = [
+  expensesDataColumns: string[] = [
     '#',
     'expensesType',
     'date',
@@ -27,27 +25,24 @@ export class ExpensesComponent implements OnInit {
     'status',
     'action',
   ];
-
   expensesList: any = [];
   companyAccountList: any = [];
   expensesListDataSource = new MatTableDataSource(this.expensesList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
     this.getExpensesListData();
     this.getCompanyAccountData();
-  }
-
-  ngAfterViewInit(): void {
     this.expensesListDataSource.paginator = this.paginator;
   }
-  
+
   applyFilter(filterValue: string): void {
     this.expensesListDataSource.filter = filterValue.trim().toLowerCase();
   }
-  
+
   convertTimestampToDate(element: any): Date | null {
     if (element instanceof Timestamp) {
       return element.toDate();
@@ -57,7 +52,7 @@ export class ExpensesComponent implements OnInit {
 
   getExpensesListData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'ExpensesList').then((expenses) => {
-      this.expensesList = expenses    
+      this.expensesList = expenses
       if (expenses && expenses.length > 0) {
         this.expensesListDataSource = new MatTableDataSource(this.expensesList);
       }
@@ -65,20 +60,20 @@ export class ExpensesComponent implements OnInit {
       console.error('Error fetching expenses:', error);
     });
   }
-  
+
   getCompanyAccountData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'CompanyAccountList').then((company) => {
       if (company && company.length > 0) {
-        this.companyAccountList = company    
+        this.companyAccountList = company
       }
     }).catch((error) => {
       console.error('Error fetching company:', error);
     });
   }
 
-  openExpenses(action: string, obj: any){
+  openExpenses(action: string, obj: any) {
     obj.action = action;
-    const dialogRef = this.dialog.open(ExpensesDialogComponent,{
+    const dialogRef = this.dialog.open(ExpensesDialogComponent, {
       data: obj,
     })
 
@@ -98,9 +93,8 @@ export class ExpensesComponent implements OnInit {
     });
   }
 
-  openexpensesmaster(){
-    const dialogRef = this.dialog.open(ExpensesmasterDialogComponent,{
-
+  openExpensesMaster() {
+    const dialogRef = this.dialog.open(ExpensesmasterDialogComponent, {
     })
   }
 

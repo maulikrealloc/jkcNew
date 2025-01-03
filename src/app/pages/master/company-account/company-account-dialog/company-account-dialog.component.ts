@@ -9,6 +9,7 @@ import { Timestamp } from 'firebase/firestore';
   templateUrl: './company-account-dialog.component.html',
   styleUrls: ['./company-account-dialog.component.scss']
 })
+
 export class CompanyAccountDialogComponent implements OnInit {
 
   companyForm: FormGroup;
@@ -16,10 +17,8 @@ export class CompanyAccountDialogComponent implements OnInit {
   local_data: any;
 
   constructor(
-    private fb: FormBuilder,
-    public dialogRef: MatDialogRef<CompanyAccountDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
+    private fb: FormBuilder, public dialogRef: MatDialogRef<CompanyAccountDialogComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
@@ -43,11 +42,11 @@ export class CompanyAccountDialogComponent implements OnInit {
 
   formBuild() {
     this.companyForm = this.fb.group({
-      accountName: ['',Validators.required],
-      bankName: ['',Validators.required],
-      openingBalance: ['',Validators.required],
+      accountName: ['', Validators.required],
+      bankName: ['', Validators.required],
+      openingBalance: ['', Validators.required],
       date: new Date(),
-    })
+    });
   }
 
   doAction(): void {
@@ -56,7 +55,7 @@ export class CompanyAccountDialogComponent implements OnInit {
       bankName: this.companyForm.value.bankName,
       openingBalance: this.companyForm.value.openingBalance,
       date: this.companyForm.value.date,
-    }    
+    }
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

@@ -2,14 +2,15 @@ import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
-
 @Component({
   selector: 'app-product-dialog',
   templateUrl: './product-dialog.component.html',
   styleUrls: ['./product-dialog.component.scss']
 })
+
 export class ProductDialogComponent implements OnInit {
-  displayedColumns: string[] = ['srNo', 'productName', 'productQuantity', 'productPrice', 'totalAmount'];
+
+  displayedDataColumns: string[] = ['srNo', 'productName', 'productQuantity', 'productPrice', 'totalAmount'];
   action: string;
   local_data: any;
   orderList: any = [];
@@ -18,17 +19,15 @@ export class ProductDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ProductDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
-    private firebaseCollectionService: FirebaseCollectionService
-  ) {
+    private firebaseCollectionService: FirebaseCollectionService) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
 
   ngOnInit(): void {
     if (this.action === 'Product List') {
-      this.getOrderData();   
+      this.getOrderData();
     }
-    
   }
 
   doAction() {
@@ -45,7 +44,7 @@ export class ProductDialogComponent implements OnInit {
       console.error('Error fetching order:', error);
     });
   }
-  
+
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
   }

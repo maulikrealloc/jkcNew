@@ -10,29 +10,24 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   templateUrl: './maintenance-master.component.html',
   styleUrls: ['./maintenance-master.component.scss']
 })
+  
 export class MaintenanceMasterComponent implements OnInit {
 
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-  maintenanceMasterColumns: string[] = [
+  maintenanceMasterDataColumns: string[] = [
     '#',
     'name',
     'value',
     'action',
   ];
-
   maintenanceMasterList: any = [];
-
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
-  dataSource = new MatTableDataSource(this.maintenanceMasterList);
+  maintenanceMasterDataSource = new MatTableDataSource(this.maintenanceMasterList);
 
   constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
-
-  }
-
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.maintenanceMasterDataSource.paginator = this.paginator;
     this.getMaintenanceData();
   }
 
@@ -40,10 +35,10 @@ export class MaintenanceMasterComponent implements OnInit {
     this.firebaseCollectionService.getDocuments('CompanyList', 'MaintenanceList').then((maintenance) => {
       this.maintenanceMasterList = maintenance
       if (maintenance && maintenance.length > 0) {
-        this.dataSource = new MatTableDataSource(this.maintenanceMasterList);
+        this.maintenanceMasterDataSource = new MatTableDataSource(this.maintenanceMasterList);
       } else {
         this.maintenanceMasterList = [];
-        this.dataSource = new MatTableDataSource(this.maintenanceMasterList);
+        this.maintenanceMasterDataSource = new MatTableDataSource(this.maintenanceMasterList);
       }
     }).catch((error) => {
       console.error('Error fetching maintenance:', error);
@@ -79,5 +74,5 @@ export class MaintenanceMasterComponent implements OnInit {
       }
     });
   }
-}
 
+}

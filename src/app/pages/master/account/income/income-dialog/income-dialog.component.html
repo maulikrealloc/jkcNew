@@ -16,7 +16,8 @@
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Account</mat-label>
       <mat-select #dropdown formControlName="account" placeholder="Select account">
-        <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName }}</mat-option>
+        <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName
+          }}</mat-option>
       </mat-select>
       <mat-hint *ngIf="incomeForm.get('account')?.hasError('required') && incomeForm.get('account')?.touched"
         class="error-message error-color">

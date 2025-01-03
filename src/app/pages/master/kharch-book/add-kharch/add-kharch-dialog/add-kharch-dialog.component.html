@@ -2,6 +2,7 @@
 <mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate">
   <form [formGroup]="kharchForm">
     <div class="row">
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Unit</mat-label>
@@ -14,6 +15,7 @@
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Kharch</mat-label>
@@ -26,6 +28,7 @@
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Date</mat-label>
@@ -38,18 +41,21 @@
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Description</mat-label>
           <input type="text" matInput placeholder="Enter description" formControlName="dec">
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Chalan No</mat-label>
           <input type="number" matInput placeholder="Enter chalan no" formControlName="chalanNo" min="0">
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Amount</mat-label>

@@ -11,11 +11,10 @@ import { Timestamp } from 'firebase/firestore';
   templateUrl: './income.component.html',
   styleUrls: ['./income.component.scss']
 })
+
 export class IncomeComponent implements OnInit {
 
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-
-  incomeColumns: string[] = [
+  incomeDataColumns: string[] = [
     '#',
     'partyName',
     'account',
@@ -25,18 +24,18 @@ export class IncomeComponent implements OnInit {
     'amount',
     'action',
   ];
-
-  incomedataList: any = [];
+  incomeList: any = [];
   companyAccountList: any = [];
-  incomeListDataSource = new MatTableDataSource(this.incomedataList);
+  incomeListDataSource = new MatTableDataSource(this.incomeList);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService){}
+  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
     this.getIncomeListData();
     this.getCompanyAccountData();
   }
-  
+
   convertTimestampToDate(element: any): Date | null {
     if (element instanceof Timestamp) {
       return element.toDate();
@@ -46,15 +45,15 @@ export class IncomeComponent implements OnInit {
 
   getIncomeListData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'IncomeList').then((income) => {
-      this.incomedataList = income
+      this.incomeList = income
       if (income && income.length > 0) {
-        this.incomeListDataSource = new MatTableDataSource(this.incomedataList);
+        this.incomeListDataSource = new MatTableDataSource(this.incomeList);
       }
     }).catch((error) => {
       console.error('Error fetching income:', error);
     });
   }
-  
+
   getCompanyAccountData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'CompanyAccountList').then((company) => {
       if (company && company.length > 0) {
@@ -87,8 +86,8 @@ export class IncomeComponent implements OnInit {
     });
   }
 
-  openTransfer(){
-    const dialogRef = this.dialog.open(TransferDialogComponent,{})
+  openTransfer() {
+    const dialogRef = this.dialog.open(TransferDialogComponent, {})
   }
 
 }

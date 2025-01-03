@@ -1,6 +1,7 @@
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
     <div class="row justify-content-between">
+
       <div class="col-lg-4">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <mat-label>Company</mat-label>
@@ -10,8 +11,9 @@
           </mat-icon>
         </mat-form-field>
       </div>
+
       <div class="col-lg-4 d-flex align-items-center justify-content-end">
-        <button mat-flat-button color="primary" (click)="addDesign('Add', {})">
+        <button mat-flat-button color="primary" (click)="openCompanyAccount('Add', {})">
           Add Company
         </button>
       </div>
@@ -22,6 +24,7 @@
   <mat-card-content class="p-24">
     <div class="table-responsive">
       <table mat-table [dataSource]="companyAccountDataSource" class="w-100">
+
         <ng-container matColumnDef="#">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
           <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
@@ -68,18 +71,18 @@
             Action
           </th>
           <td mat-cell *matCellDef="let element" class="action-link">
-            <a class="m-r-10 cursor-pointer"><i-tabler name="edit" (click)="addDesign('Edit', element)"
+            <a class="m-r-10 cursor-pointer"><i-tabler name="edit" (click)="openCompanyAccount('Edit', element)"
                 class="icon-18"></i-tabler></a>
             <a class="m-r-10 cursor-pointer">
-              <i-tabler name="trash" (click)="addDesign('Delete', element)" class="icon-18"></i-tabler>
+              <i-tabler name="trash" (click)="openCompanyAccount('Delete', element)" class="icon-18"></i-tabler>
             </a>
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="companyAccountColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: companyAccountColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="companyAccountDataColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: companyAccountDataColumns"></tr>
         <tr class="mat-row" style="text-align: center;" *matNoDataRow>
-          <td class="mat-cell" [attr.colspan]="companyAccountColumns.length">
+          <td class="mat-cell" [attr.colspan]="companyAccountDataColumns.length">
             No record found
           </td>
         </tr>

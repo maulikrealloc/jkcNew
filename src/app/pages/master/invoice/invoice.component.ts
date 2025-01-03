@@ -13,7 +13,27 @@ import { DatePipe } from '@angular/common';
   templateUrl: './invoice.component.html',
   styleUrls: ['./invoice.component.scss']
 })
+
 export class InvoiceComponent implements OnInit {
+
+  invoiceDataColumns: string[] = [
+    'srNo',
+    'productName',
+    'productPrice',
+    'quantity',
+    'chalanNo',
+    'totalAmount',
+    'finalAmount',
+    'action',
+  ];
+  toWords = new ToWords({
+    localeCode: 'en-IN',
+    converterOptions: {
+      currency: true,
+      ignoreDecimal: false,
+      ignoreZeroCurrency: false,
+    },
+  });
 
   invoiceForm: FormGroup;
   firmList: any = [];
@@ -26,35 +46,13 @@ export class InvoiceComponent implements OnInit {
   firmDetails: any;
   orderDetails: any;
   selectedChalanList: any = [];
-  toWords = new ToWords({
-    localeCode: 'en-IN',
-    converterOptions: {
-      currency: true,
-      ignoreDecimal: false,
-      ignoreZeroCurrency: false,
-    },
-  });
-
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-
-  invoiceColumns: string[] = [
-    'srNo',
-    'productName',
-    'productPrice',
-    'quantity',
-    'chalanNo',
-    'totalAmount',
-    'finalAmount',
-    'action',
-  ];
-
-  invoiceListdataSource = new MatTableDataSource(this.selectedChalanList);
+  invoiceListDataSource = new MatTableDataSource(this.selectedChalanList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(private fb: FormBuilder,
     private firebaseCollectionService: FirebaseCollectionService,
-    private datePipe: DatePipe
-  ) { }
+    private datePipe: DatePipe) { }
 
   ngOnInit(): void {
     this.buildForm();
@@ -63,6 +61,7 @@ export class InvoiceComponent implements OnInit {
     this.getChalanData();
     this.getOrderData();
     this.getInvoiceData();
+    this.invoiceListDataSource.paginator = this.paginator;
   }
 
   buildForm() {
@@ -76,10 +75,6 @@ export class InvoiceComponent implements OnInit {
       sgst: [0],
       discountRatio: [0]
     })
-  }
-
-  ngAfterViewInit(): void {
-    this.invoiceListdataSource.paginator = this.paginator;
   }
 
   getFirmData() {
@@ -178,7 +173,7 @@ export class InvoiceComponent implements OnInit {
       firm: '',
       party: '',
       chalanNo: '',
-      date: new Date(), 
+      date: new Date(),
       invoiceNo: null,
       discountRatio: 0,
       cgst: 0,
@@ -187,7 +182,7 @@ export class InvoiceComponent implements OnInit {
     this.invoiceForm.markAsPristine();
     this.invoiceForm.markAsUntouched();
     this.selectedChalanList = [];
-    this.invoiceListdataSource = new MatTableDataSource(this.selectedChalanList);
+    this.invoiceListDataSource = new MatTableDataSource(this.selectedChalanList);
   }
 
   invoiceview() {
@@ -214,8 +209,8 @@ export class InvoiceComponent implements OnInit {
     this.getPartyDetails(payload.partyId);
     this.getFirmDetails(payload.firmId);
     this.getChalanDetails(payload.chalanId);
-    this.generatePDF(payload);;
-    }
+    this.generatePDF(payload);
+  }
 
   updateChalanIsCreated(chalanId: any) {
     const findChalanData = this.chalanList.find((id: any) => id.id === chalanId)
@@ -369,14 +364,13 @@ export class InvoiceComponent implements OnInit {
       doc.line(valueXPosition, lineYPosition, valueXPosition + boxWidth, lineYPosition);
     });
 
-
     const box2Width = pageWidth * 0.25;
     const box2XPosition = box1XPosition + box1Width + 5;
     doc.setFillColor('#fff');
     doc.rect(box2XPosition - 25, boxYPosition, box2Width, boxHeight, 'F');
 
     const fieldsRight = ["Invoice:", "Date:", "P.CH:", "Date:"];
-    const fieldsRightValues = [invoiceData.invoiceNo, `${this.datePipe.transform(invoiceData?.date, 'dd-MM-yyyy')}`, `${this.partyDetails.chalanNoSeries}`, "------------"]; 
+    const fieldsRightValues = [invoiceData.invoiceNo, `${this.datePipe.transform(invoiceData?.date, 'dd-MM-yyyy')}`, `${this.partyDetails.chalanNoSeries}`, "------------"];
     const rightYPosition = boxYPosition + 5;
 
     fieldsRight.forEach((field, index) => {
@@ -425,7 +419,6 @@ export class InvoiceComponent implements OnInit {
       doc.setLineWidth(0.3);
       doc.line(15 + textWidth + 2, yPosition, 15 + bankBoxWidth, yPosition);
     });
-
 
     const bankDetails1 = ["Chq.No:", "Bank:"];
     const bankLeftYPosition1 = 204 + 5;
@@ -556,7 +549,6 @@ export class InvoiceComponent implements OnInit {
     const url = URL.createObjectURL(blob);
     window.open(url);
   }
-
 
   getPartyDetails(partyId: any) {
     this.partyDetails = this.partyList.find((id: any) => id.id === partyId)

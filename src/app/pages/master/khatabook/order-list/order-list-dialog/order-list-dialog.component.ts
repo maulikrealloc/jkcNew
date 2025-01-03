@@ -8,7 +8,7 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   templateUrl: './order-list-dialog.component.html',
   styleUrls: ['./order-list-dialog.component.scss']
 })
-  
+
 export class OrderListDialogComponent implements OnInit {
 
   orderForm: FormGroup;
@@ -19,19 +19,15 @@ export class OrderListDialogComponent implements OnInit {
   orderList: any = [];
 
   constructor(
-    private fb: FormBuilder,
-    private firebaseCollectionService: FirebaseCollectionService,
+    private fb: FormBuilder, private firebaseCollectionService: FirebaseCollectionService,
     public dialogRef: MatDialogRef<OrderListDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
-
   }
 
   ngOnInit(): void {
     this.formBuild()
-
     if (this.action === 'Edit') {
       this.orderForm.controls['party'].setValue(this.local_data.party)
       this.orderForm.controls['order'].setValue(this.local_data.order)
@@ -41,7 +37,6 @@ export class OrderListDialogComponent implements OnInit {
     this.getKhataData();
     this.getPartyData();
     this.getOrderData();
-
   }
 
   formBuild() {
@@ -75,14 +70,11 @@ export class OrderListDialogComponent implements OnInit {
     this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
       if (order && order.length > 0) {
         this.orderList = order
-        console.log(this.orderList);
-        
       }
     }).catch((error) => {
       console.error('Error fetching order:', error);
     });
   }
-
 
   doAction(): void {
     const payload = {

@@ -15,16 +15,14 @@ export class RowMaterialDialogComponent implements OnInit {
   action: string;
 
   constructor(
-    public dialogRef: MatDialogRef<RowMaterialDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb: FormBuilder
-  ) {
+    private fb: FormBuilder, public dialogRef: MatDialogRef<RowMaterialDialogComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
 
   ngOnInit(): void {
-    this.rowMateriallist()
+    this.rowMateriallist();
     if (this.action === 'Edit') {
       this.rowMaterialForm.controls['name'].setValue(this.local_data.name)
       this.rowMaterialForm.controls['quantity'].setValue(this.local_data.quantity)
@@ -32,21 +30,21 @@ export class RowMaterialDialogComponent implements OnInit {
     }
   }
 
-  rowMateriallist(){
-  this.rowMaterialForm = this.fb.group({
-    name: ['',Validators.required],
-    quantity: ['',Validators.required],
-    price: ['',Validators.required]
+  rowMateriallist() {
+    this.rowMaterialForm = this.fb.group({
+      name: ['', Validators.required],
+      quantity: ['', Validators.required],
+      price: ['', Validators.required]
     })
   }
 
   doAction(): void {
     const payload = {
-        name: this.rowMaterialForm.value.name,
-        quantity: this.rowMaterialForm.value.quantity,
-        price: this.rowMaterialForm.value.price,
+      name: this.rowMaterialForm.value.name,
+      quantity: this.rowMaterialForm.value.quantity,
+      price: this.rowMaterialForm.value.price,
     }
-    this.dialogRef.close({event: this.action, data: payload})
+    this.dialogRef.close({ event: this.action, data: payload })
   }
 
 }

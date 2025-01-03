@@ -1,14 +1,17 @@
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
     <div style="align-items: baseline;" class="row">
+
       <div class="col-4">
         <label>VEDANT CREATION</label>
       </div>
+
       <div class="col-4">
         <label>Remaining Balance:-
           <span>1760</span>
         </label>
       </div>
+
       <div class="col-4">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Party</mat-label>
@@ -25,6 +28,7 @@
   <mat-card-content class="p-24">
     <div class="table-responsive">
       <table mat-table [dataSource]="passbookListDataSource" class="w-100">
+
         <ng-container matColumnDef="#">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
           <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
@@ -74,6 +78,7 @@
             {{ element.credit }}
           </td>
         </ng-container>
+
         <ng-container matColumnDef="balance">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
             Balance
@@ -83,10 +88,10 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="passbookColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: passbookColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="passbookDataColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: passbookDataColumns"></tr>
         <tr class="mat-row" style="text-align: center;" *matNoDataRow>
-          <td class="mat-cell" [attr.colspan]="passbookColumns.length">
+          <td class="mat-cell" [attr.colspan]="passbookDataColumns.length">
             No record found
           </td>
         </tr>

@@ -10,26 +10,21 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   templateUrl: './row-material.component.html',
   styleUrls: ['./row-material.component.scss']
 })
-  
+
 export class RowMaterialComponent implements OnInit {
 
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-
-  rowMaterialColumns: string[] = [
+  rowMaterialDataColumns: string[] = [
     '#',
     'name',
     'quantity',
     'price',
     'action'
   ]
-
   rowMaterialList: any = [];
-
-
-  dataSource = new MatTableDataSource(this.rowMaterialList);
-
+  rowDataSource = new MatTableDataSource(this.rowMaterialList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
-  
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
+
   constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
@@ -40,10 +35,10 @@ export class RowMaterialComponent implements OnInit {
     this.firebaseCollectionService.getDocuments('CompanyList', 'RowMaterialList').then((rowmaterial) => {
       this.rowMaterialList = rowmaterial
       if (rowmaterial && rowmaterial.length > 0) {
-        this.dataSource = new MatTableDataSource(this.rowMaterialList);
+        this.rowDataSource = new MatTableDataSource(this.rowMaterialList);
       } else {
         this.rowMaterialList = [];
-        this.dataSource = new MatTableDataSource(this.rowMaterialList);
+        this.rowDataSource = new MatTableDataSource(this.rowMaterialList);
       }
     }).catch((error) => {
       console.error('Error fetching rowmaterial:', error);
@@ -71,6 +66,5 @@ export class RowMaterialComponent implements OnInit {
       }
     });
   }
-
 
 }

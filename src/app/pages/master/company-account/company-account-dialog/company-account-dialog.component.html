@@ -1,18 +1,22 @@
 <h2 mat-dialog-title class="m-b-24 b-b-1 p-b-20"><strong>{{action}} Company</strong></h2>
 <mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate">
   <form [formGroup]="companyForm">
+
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Account Holder Name</mat-label>
       <input type="text" matInput placeholder="Enter account holder name" formControlName="accountName">
     </mat-form-field>
+
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Bank Name</mat-label>
       <input type="text" matInput placeholder="Enter bank name" formControlName="bankName">
     </mat-form-field>
+
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Opening Balance</mat-label>
       <input type="number" matInput placeholder="Enter opening balance" formControlName="openingBalance" min="0">
     </mat-form-field>
+
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Date</mat-label>
       <input matInput [matDatepicker]="date" formControlName="date" placeholder="Select date">
@@ -21,6 +25,7 @@
     </mat-form-field>
   </form>
 </mat-dialog-content>
+
 <mat-divider></mat-divider>
 <mat-dialog-actions class="p-24 justify-content-end">
   <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>

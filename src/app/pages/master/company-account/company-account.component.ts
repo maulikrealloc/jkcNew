@@ -6,16 +6,15 @@ import { CompanyAccountDialogComponent } from './company-account-dialog/company-
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
 
-
 @Component({
   selector: 'app-company-account',
   templateUrl: './company-account.component.html',
   styleUrls: ['./company-account.component.scss']
 })
+
 export class CompanyAccountComponent implements OnInit {
 
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-  companyAccountColumns: string[] = [
+  companyAccountDataColumns: string[] = [
     '#',
     'accountName',
     'bankName',
@@ -23,18 +22,15 @@ export class CompanyAccountComponent implements OnInit {
     'date',
     'action',
   ];
-  
   companyAccountList: any = [];
   companyAccountDataSource = new MatTableDataSource(this.companyAccountList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
     this.getCompanyAccountData();
-  }
-
-  ngAfterViewInit(): void {
     this.companyAccountDataSource.paginator = this.paginator;
   }
 
@@ -60,7 +56,7 @@ export class CompanyAccountComponent implements OnInit {
     });
   }
 
-  addDesign(action: string, obj: any) {
+  openCompanyAccount(action: string, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(CompanyAccountDialogComponent, {
       data: obj,

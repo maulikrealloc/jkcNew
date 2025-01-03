@@ -12,12 +12,13 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   templateUrl: './add-kharch.component.html',
   styleUrls: ['./add-kharch.component.scss']
 })
+
 export class AddKharchComponent implements OnInit {
-  
-  dateKharchListForm: FormGroup;
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
+
   @Output() kharchListUpdated = new EventEmitter<any[]>();
-  kharchColumns: string[] = [
+
+  dateKharchListForm: FormGroup;
+  kharchDataColumns: string[] = [
     'srNo',
     'unitname',
     'kharchname',
@@ -29,10 +30,11 @@ export class AddKharchComponent implements OnInit {
   ];
   KharchList: any = [];
   kharchReportData: any = [];
-  kharchListdataSource = new MatTableDataSource(this.KharchList);
+  kharchListDataSource = new MatTableDataSource(this.KharchList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private fb:FormBuilder, private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private fb: FormBuilder, private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
   convertTimestampToDate(element: any): Date | null {
     if (element instanceof Timestamp) {
@@ -51,14 +53,11 @@ export class AddKharchComponent implements OnInit {
       end: [endDate]
     })
     this.getKharchData();
-  }
-
-  ngAfterViewInit(): void {
-    this.kharchListdataSource.paginator = this.paginator;
+    this.kharchListDataSource.paginator = this.paginator;
   }
 
   applyFilter(filterValue: string): void {
-    this.kharchListdataSource.filter = filterValue.trim().toLowerCase();
+    this.kharchListDataSource.filter = filterValue.trim().toLowerCase();
   }
 
   getKharchData() {
@@ -66,17 +65,17 @@ export class AddKharchComponent implements OnInit {
       this.KharchList = kharch
       if (kharch && kharch.length > 0) {
         this.kharchListUpdated.emit(kharch);
-        this.kharchListdataSource = new MatTableDataSource(this.KharchList);
+        this.kharchListDataSource = new MatTableDataSource(this.KharchList);
       } else {
         this.KharchList = [];
-        this.kharchListdataSource = new MatTableDataSource(this.KharchList);
+        this.kharchListDataSource = new MatTableDataSource(this.KharchList);
       }
     }).catch((error) => {
       console.error('Error fetching order:', error);
     });
   }
 
-  addkhatu(action: string, obj: any) {
+  openKhatu(action: string, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(AddKharchDialogComponent, {
       data: obj,

@@ -11,10 +11,10 @@ import { Timestamp } from 'firebase/firestore';
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss']
 })
+  
 export class OrderComponent implements OnInit {
 
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-  orderColumns: string[] = [
+  orderDataColumns: string[] = [
     'orderNo',
     'partyName',
     'orderDate',
@@ -28,13 +28,16 @@ export class OrderComponent implements OnInit {
   orderList: any = [];
   partyList: any = [];
   stausList: any = ["Pending", "In Progress", "Rejected", "Cancelled", "Done"];
-
-  dataSource = new MatTableDataSource(this.orderList);
+  orderDataSource = new MatTableDataSource(this.orderList);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
- 
+
   ngOnInit(): void {
+    this.orderDataSource.paginator = this.paginator;
+    this.getOrderData();
+    this.getPartyData();
   }
 
   convertTimestampToDate(element: any): Date | null {
@@ -44,14 +47,8 @@ export class OrderComponent implements OnInit {
     return null;
   }
 
-  applyFilter(filterValue: string): void{
-      this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-  
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.getOrderData();
-    this.getPartyData();
+  applyFilter(filterValue: string): void {
+    this.orderDataSource.filter = filterValue.trim().toLowerCase();
   }
 
   getPartyData() {
@@ -66,9 +63,9 @@ export class OrderComponent implements OnInit {
     this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
       this.orderList = order
       if (order && order.length > 0) {
-        this.dataSource = new MatTableDataSource(this.orderList);
+        this.orderDataSource = new MatTableDataSource(this.orderList);
 
-        this.dataSource.filterPredicate = (data: any, filter) => {
+        this.orderDataSource.filterPredicate = (data: any, filter) => {
           const partyName = this.getPartyName(data.partyId);
           const orderDate = this.convertTimestampToDate(data.orderDate);
           const deliveryDate = this.convertTimestampToDate(data.deliveryDate);
@@ -86,9 +83,9 @@ export class OrderComponent implements OnInit {
         };
       } else {
         this.orderList = [];
-        this.dataSource = new MatTableDataSource(this.orderList);
+        this.orderDataSource = new MatTableDataSource(this.orderList);
       }
-      this.dataSource.paginator = this.paginator;
+      this.orderDataSource.paginator = this.paginator;
     }).catch((error) => {
       console.error('Error fetching order:', error);
     });
@@ -116,7 +113,7 @@ export class OrderComponent implements OnInit {
     });
   }
 
-  getPartyName(partyId: string): string {  
+  getPartyName(partyId: string): string {
     return this.partyList.find((partyObj: any) => partyObj.id === partyId)?.firstName
   }
 

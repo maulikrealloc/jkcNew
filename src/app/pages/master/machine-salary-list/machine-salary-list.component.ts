@@ -12,46 +12,40 @@ import { Timestamp } from 'firebase/firestore';
   templateUrl: './machine-salary-list.component.html',
   styleUrls: ['./machine-salary-list.component.scss']
 })
+
 export class MachineSalaryListComponent implements OnInit {
 
-  dateMachinesalaryForm: FormGroup;
-
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-
-  machineSalaryColumns: string[] = [
+  machineSalaryDataColumns: string[] = [
     '#',
     'employee',
     'amount',
     'date',
     'action',
   ];
-
+  dateMachineSalaryForm: FormGroup;
   machineSalaryList: any = [];
   employeesList: any = [];
-
-  dataSource = new MatTableDataSource(this.machineSalaryList);
+  machineSalaryDataSource = new MatTableDataSource(this.machineSalaryList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(
-    private fb:FormBuilder,
+    private fb: FormBuilder,
     private dialog: MatDialog,
     private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
     const today = new Date();
-    const startDate = new Date(today.getFullYear(), today.getMonth(), 1); 
-    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0); 
-    
-    this.dateMachinesalaryForm = this.fb.group({
-      start:[startDate],
-      end:[endDate]
+    const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    this.dateMachineSalaryForm = this.fb.group({
+      start: [startDate],
+      end: [endDate]
     })
     this.getmachineSalaryData();
     this.getEmployeeData();
-  }
-
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.machineSalaryDataSource.paginator = this.paginator;
   }
 
   convertTimestampToDate(element: any): Date | null {
@@ -65,10 +59,10 @@ export class MachineSalaryListComponent implements OnInit {
     this.firebaseCollectionService.getDocuments('CompanyList', 'MachineSalaryList').then((machineSalary) => {
       this.machineSalaryList = machineSalary
       if (machineSalary && machineSalary.length > 0) {
-        this.dataSource = new MatTableDataSource(this.machineSalaryList);
+        this.machineSalaryDataSource = new MatTableDataSource(this.machineSalaryList);
       } else {
         this.machineSalaryList = [];
-        this.dataSource = new MatTableDataSource(this.machineSalaryList);
+        this.machineSalaryDataSource = new MatTableDataSource(this.machineSalaryList);
       }
     }).catch((error) => {
       console.error('Error fetching machineSalary:', error);

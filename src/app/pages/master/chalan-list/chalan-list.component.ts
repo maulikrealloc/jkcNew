@@ -15,26 +15,10 @@ import { ToWords } from 'to-words';
   templateUrl: './chalan-list.component.html',
   styleUrls: ['./chalan-list.component.scss']
 })
-  
+
 export class ChalanListComponent implements OnInit {
 
-  firmList: any = [];
-  partyList: any = [];
-  orderList: any = [];
-  toWords = new ToWords({
-    localeCode: 'en-IN',
-    converterOptions: {
-      currency: true,
-      ignoreDecimal: false,
-      ignoreZeroCurrency: false,
-    },
-  });
-  partyDetails: any;
-  firmDetails: any;
-  selectedOrderData: any;
-
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-  chalanListColumns: string[] = [
+  chalanDataColumns: string[] = [
     'srNo',
     'partyName',
     'partyOrder',
@@ -43,12 +27,26 @@ export class ChalanListComponent implements OnInit {
     'netAmount',
     'action',
   ];
+  toWords = new ToWords({
+    localeCode: 'en-IN',
+    converterOptions: {
+      currency: true,
+      ignoreDecimal: false,
+      ignoreZeroCurrency: false,
+    },
+  });
 
+  firmList: any = [];
+  partyList: any = [];
+  orderList: any = [];
   chalanList: any = [];
+  partyDetails: any;
+  firmDetails: any;
+  selectedOrderData: any;
   netAmount: number = 0;
-
   chalanListDataSource = new MatTableDataSource(this.chalanList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
@@ -57,6 +55,7 @@ export class ChalanListComponent implements OnInit {
     this.getPartyData();
     this.getChalanData();
     this.getOrderData();
+    this.chalanListDataSource.paginator = this.paginator;
   }
 
   applyFilter(filterValue: string): void {
@@ -69,21 +68,21 @@ export class ChalanListComponent implements OnInit {
     }
     return null;
   }
-  
+
   getPartyName(partyId: string): string {
     return this.partyList.find((partyObj: any) => partyObj.id === partyId)?.firstName;
   }
-  
+
   getOrderNo(partyOrderId: string): string {
     return this.orderList.find((orderObj: any) => orderObj.id === partyOrderId)?.partyOrder;
   }
-  
+
   getChalanData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'ChalanList').then((chalan) => {
       this.chalanList = chalan
       if (chalan && chalan.length > 0) {
         this.chalanListDataSource = new MatTableDataSource(this.chalanList);
-        this.chalanListDataSource.filterPredicate = (data:any, filter) => {
+        this.chalanListDataSource.filterPredicate = (data: any, filter) => {
           const srNo = (data.srNo || '').toString();
           const partyName = this.getPartyName(data.partyId);
           const partyOrder = this.getOrderNo(data.partyOrderId);
@@ -100,20 +99,14 @@ export class ChalanListComponent implements OnInit {
   `.toLowerCase();
           return dataStr.includes(filter.trim().toLowerCase());
         };
-
       } else {
         this.chalanList = [];
         this.chalanListDataSource = new MatTableDataSource(this.chalanList);
       }
-      
       this.chalanListDataSource.paginator = this.paginator;
     }).catch((error) => {
       console.error('Error fetching chalan:', error);
     });
-  }
-
-  ngAfterViewInit(): void {
-    this.chalanListDataSource.paginator = this.paginator;
   }
 
   getFirmData() {
@@ -129,7 +122,7 @@ export class ChalanListComponent implements OnInit {
   getOrderData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
       if (order && order.length > 0) {
-        this.orderList = order        
+        this.orderList = order
       }
     }).catch((error) => {
       console.error('Error fetching order:', error);
@@ -145,7 +138,7 @@ export class ChalanListComponent implements OnInit {
       console.error('Error fetching party:', error);
     });
   }
-  
+
   deleteChalan(action: any, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(ProductDialogComponent, {
@@ -157,7 +150,7 @@ export class ChalanListComponent implements OnInit {
         this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'ChalanList');
         this.getChalanData()
       }
-    })
+    });
   }
 
   getProductList(action: any, obj: any) {
@@ -167,7 +160,7 @@ export class ChalanListComponent implements OnInit {
       width: '700px'
     });
   }
-  
+
   downloadPDF(data: any) {
     this.getPartyDetails(data.partyId);
     this.getFirmDetails(data.firmId);
@@ -231,7 +224,6 @@ export class ChalanListComponent implements OnInit {
       doc.setFont("helvetica", "bolditalic");
       const detailsWidth = doc.getTextWidth(details);
       const detailsX = (pageWidth - detailsWidth) / 2;
-      // 27
       doc.text(details, detailsX, addressY - 24 + addressLines.length * 5 + 10);
 
       const leftColumnX = margin + 5;
@@ -649,5 +641,5 @@ export class ChalanListComponent implements OnInit {
 
     return { br, bg, bb };
   }
-  
+
 }

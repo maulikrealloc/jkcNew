@@ -12,45 +12,38 @@ import { Timestamp } from 'firebase/firestore';
   templateUrl: './bonus-list.component.html',
   styleUrls: ['./bonus-list.component.scss']
 })
+
 export class BonusListComponent implements OnInit {
 
-  dateBonusForm:FormGroup
-
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-
-  bounsListColumns: string[] = [
+  dateBonusForm: FormGroup;
+  bounsDataColumns: string[] = [
     '#',
     'employee',
     'amount',
     'date',
     'action',
   ];
-
   bonusList: any = [];
   employeesList: any = [];
-
   bonusListDataSource = new MatTableDataSource(this.bonusList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(
-    private fb:FormBuilder,
-    private dialog: MatDialog,
+    private fb: FormBuilder, private dialog: MatDialog,
     private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
     const today = new Date();
-    const startDate = new Date(today.getFullYear(), today.getMonth(), 1); 
-    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0); 
+    const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
     this.dateBonusForm = this.fb.group({
-      start:[startDate],
-      end:[endDate]
+      start: [startDate],
+      end: [endDate]
     })
     this.getBonusData();
     this.getEmployeeData();
-  }
-
-  ngAfterViewInit(): void {
     this.bonusListDataSource.paginator = this.paginator;
   }
 
@@ -89,7 +82,7 @@ export class BonusListComponent implements OnInit {
     return this.employeesList.find((employeeObj: any) => employeeObj.id === employeeId)?.firstName
   }
 
-  addDesign(action: string, obj: any) {
+  openBonus(action: string, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(BonusListDialogComponent, {
       data: obj,

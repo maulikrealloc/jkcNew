@@ -2,6 +2,7 @@
 <mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate">
   <form [formGroup]="employeeForm">
     <div class="row">
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>First Name</mat-label>
@@ -17,6 +18,7 @@
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Last Name</mat-label>
@@ -31,6 +33,7 @@
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Salary</mat-label>
@@ -41,6 +44,7 @@
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Mobile No</mat-label>
@@ -56,18 +60,21 @@
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Bank Name</mat-label>
           <input type="text" matInput placeholder="Enter bank name" formControlName="bankName">
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Bank IFSC</mat-label>
           <input type="text" matInput placeholder="Enter bank IFSC" formControlName="ifscCode">
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Bank AccountNo</mat-label>

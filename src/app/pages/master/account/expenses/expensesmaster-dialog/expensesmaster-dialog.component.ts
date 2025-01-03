@@ -6,20 +6,21 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './expensesmaster-dialog.component.html',
   styleUrls: ['./expensesmaster-dialog.component.scss']
 })
+
 export class ExpensesmasterDialogComponent implements OnInit {
 
-  expensesmasterForm:FormGroup
+  expensesMasterForm: FormGroup
 
-  constructor(private fb:FormBuilder){}
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.expensesmasterdata()
+    this.expensesMasterData()
   }
 
-expensesmasterdata(){
-  this.expensesmasterForm = this.fb.group({
-    type:['',Validators.required]
-  })
-}
+  expensesMasterData() {
+    this.expensesMasterForm = this.fb.group({
+      type: ['', Validators.required]
+    })
+  }
 
 }

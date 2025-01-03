@@ -9,6 +9,7 @@ import { Timestamp } from 'firebase/firestore';
   templateUrl: './absent-dialog.component.html',
   styleUrls: ['./absent-dialog.component.scss']
 })
+
 export class AbsentDialogComponent implements OnInit {
 
   absentForm: FormGroup;
@@ -17,8 +18,7 @@ export class AbsentDialogComponent implements OnInit {
   employeesList: any = [];
 
   constructor(
-    private fb: FormBuilder,
-    public dialogRef: MatDialogRef<AbsentDialogComponent>,
+    private fb: FormBuilder, public dialogRef: MatDialogRef<AbsentDialogComponent>,
     private firebaseCollectionService: FirebaseCollectionService,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
@@ -26,7 +26,7 @@ export class AbsentDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.buildForm()
+    this.buildForm();
     if (this.action === 'Edit') {
       this.absentForm.controls['employeeList'].setValue(this.local_data.employeeList)
       this.absentForm.controls['day'].setValue(this.local_data.day)
@@ -44,8 +44,8 @@ export class AbsentDialogComponent implements OnInit {
 
   buildForm() {
     this.absentForm = this.fb.group({
-      employeeList: ['',Validators.required],
-      day: ['',Validators.required],
+      employeeList: ['', Validators.required],
+      day: ['', Validators.required],
       date: new Date()
     })
   }

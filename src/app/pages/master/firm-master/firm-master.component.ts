@@ -4,16 +4,14 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
-import { SpinnerService } from 'src/app/services/spinner.service';
-
 
 @Component({
   selector: 'app-firm-master',
   templateUrl: './firm-master.component.html',
   styleUrls: ['./firm-master.component.scss']
 })
-export class FirmMasterComponent {
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
+export class FirmMasterComponent implements OnInit {
+
   firmMasterColumns: string[] = [
     '#',
     'header',
@@ -31,16 +29,15 @@ export class FirmMasterComponent {
     'action',
   ];
   firmList: any = [];
-
-  dataSource = new MatTableDataSource(this.firmList);
+  firmMasterDataSource = new MatTableDataSource(this.firmList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
-
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.getFirmData()
+  ngOnInit(): void {
+    this.firmMasterDataSource.paginator = this.paginator;
+    this.getFirmData();
   }
 
   generateRandomNumber(min: number, max: number): number {
@@ -51,16 +48,17 @@ export class FirmMasterComponent {
     this.firebaseCollectionService.getDocuments('CompanyList', 'FirmList').then((firms) => {
       this.firmList = firms
       if (firms && firms.length > 0) {
-        this.dataSource = new MatTableDataSource(this.firmList);
+        this.firmMasterDataSource = new MatTableDataSource(this.firmList);
       } else {
         this.firmList = [];
-        this.dataSource = new MatTableDataSource(this.firmList);
+        this.firmMasterDataSource = new MatTableDataSource(this.firmList);
       }
     }).catch((error) => {
       console.error('Error fetching firms:', error);
     });
   }
-  addFirm(action: string, obj: any) {
+
+  openFirmMaster(action: string, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(firmMasterDialogComponent, {
       data: obj,
@@ -85,6 +83,7 @@ export class FirmMasterComponent {
       }
     });
   }
+
 }
 
 @Component({
@@ -93,8 +92,8 @@ export class FirmMasterComponent {
   styleUrls: ['./firm-master.component.scss']
 })
 
-
 export class firmMasterDialogComponent implements OnInit {
+
   firmForm: FormGroup;
   action: string;
   local_data: any;
@@ -102,14 +101,13 @@ export class firmMasterDialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<firmMasterDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
+
   ngOnInit(): void {
-    this.formBuild()
+    this.formBuild();
     if (this.action === 'Edit') {
       this.firmForm.controls['header'].setValue(this.local_data.header)
       this.firmForm.controls['subHeader'].setValue(this.local_data.subHeader)
@@ -159,10 +157,10 @@ export class firmMasterDialogComponent implements OnInit {
       bankAccountNo: this.firmForm.value.bankAccountNo
     }
     this.dialogRef.close({ event: this.action, data: payload });
-
   }
 
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
   }
+
 }

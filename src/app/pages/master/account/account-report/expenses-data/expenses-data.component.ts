@@ -13,19 +13,17 @@ export class ExpensesDataComponent implements OnInit {
     'expensesType',
     'paymentType',
     'totalAmount',
-  ]
-
+  ];
   expensesList: any = [];
   pendingTotal: number = 0;
   paidTotal: number = 0;
-
   expensesListDataSource = new MatTableDataSource(this.expensesList);
 
   constructor(private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
     this.getExpensesListData();
-   }
+  }
 
   getExpensesListData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'ExpensesList').then((expenses) => {

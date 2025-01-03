@@ -10,6 +10,7 @@ import { Timestamp } from 'firebase/firestore';
   templateUrl: './bonus-list-dialog.component.html',
   styleUrls: ['./bonus-list-dialog.component.scss']
 })
+
 export class BonusListDialogComponent implements OnInit {
 
   bonusForm: FormGroup;
@@ -18,8 +19,7 @@ export class BonusListDialogComponent implements OnInit {
   employeesList: any = [];
 
   constructor(
-    private fb: FormBuilder,
-    public dialogRef: MatDialogRef<BonusListDialogComponent>,
+    private fb: FormBuilder, public dialogRef: MatDialogRef<BonusListDialogComponent>,
     private firebaseCollectionService: FirebaseCollectionService,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
@@ -42,11 +42,11 @@ export class BonusListDialogComponent implements OnInit {
     }
     return null;
   }
-  
+
   buildForm() {
     this.bonusForm = this.fb.group({
-      employeeList: ['',Validators.required],
-      amount: ['',Validators.required],
+      employeeList: ['', Validators.required],
+      amount: ['', Validators.required],
       date: new Date(),
     })
   }

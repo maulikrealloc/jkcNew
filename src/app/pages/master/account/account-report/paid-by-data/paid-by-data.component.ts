@@ -14,21 +14,20 @@ export class PaidByDataComponent implements OnInit {
     'paidBy',
     'totalAmount'
   ];
-
   expensesList: any = [];
-  paidByDataListSource = new MatTableDataSource(this.expensesList);
-  
+  paidByListDataSource = new MatTableDataSource(this.expensesList);
+
   constructor(private firebaseCollectionService: FirebaseCollectionService) { }
-  
+
   ngOnInit(): void {
     this.getExpensesListData();
-   }
-  
+  }
+
   getExpensesListData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'ExpensesList').then((expenses) => {
       this.expensesList = expenses
       if (expenses && expenses.length > 0) {
-        this.paidByDataListSource = new MatTableDataSource(this.expensesList);
+        this.paidByListDataSource = new MatTableDataSource(this.expensesList);
       }
     }).catch((error) => {
       console.error('Error fetching expenses:', error);

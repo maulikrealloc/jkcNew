@@ -1,87 +1,94 @@
 <h2 mat-dialog-title class="m-b-24 b-b-1 p-b-20">{{action}} Khatu</h2>
 <mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate">
-  <form [formGroup]="khatuForm">
+  <form [formGroup]="khataForm">
     <div class="row">
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>FIrst Name</mat-label>
           <input type="text" matInput formControlName="firstName" placeholder="Enter first name">
-          <mat-hint *ngIf="khatuForm.get('firstName')?.hasError('required') && khatuForm.get('firstName')?.touched"
+          <mat-hint *ngIf="khataForm.get('firstName')?.hasError('required') && khataForm.get('firstName')?.touched"
             class="error-message error-color">
             First name is required
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Last Name</mat-label>
           <input type="text" matInput formControlName="lastName" placeholder="Enter last name">
-          <mat-hint *ngIf="khatuForm.get('lastName')?.hasError('required') && khatuForm.get('lastName')?.touched"
+          <mat-hint *ngIf="khataForm.get('lastName')?.hasError('required') && khataForm.get('lastName')?.touched"
             class="error-message error-color">
             Last name is required
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Company Name</mat-label>
           <input type="text" matInput formControlName="companyName" placeholder="Enter company name">
-          <mat-hint *ngIf="khatuForm.get('companyName')?.hasError('required') && khatuForm.get('companyName')?.touched"
+          <mat-hint *ngIf="khataForm.get('companyName')?.hasError('required') && khataForm.get('companyName')?.touched"
             class="error-message error-color">
             Company name is required
           </mat-hint>
-          <mat-hint *ngIf="khatuForm.get('companyName')?.hasError('pattern') && khatuForm.get('companyName')?.touched"
+          <mat-hint *ngIf="khataForm.get('companyName')?.hasError('pattern') && khataForm.get('companyName')?.touched"
             class="error-message error-color">
             Please enter a valid name
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Owner Name</mat-label>
           <input type="text" matInput formControlName="ownerName" placeholder="Enter owner name">
-          <mat-hint *ngIf="khatuForm.get('ownerName')?.hasError('required') && khatuForm.get('ownerName')?.touched"
+          <mat-hint *ngIf="khataForm.get('ownerName')?.hasError('required') && khataForm.get('ownerName')?.touched"
             class="error-message error-color">
             Owner name is required
           </mat-hint>
-          <mat-hint *ngIf="khatuForm.get('ownerName')?.hasError('pattern') && khatuForm.get('ownerName')?.touched"
+          <mat-hint *ngIf="khataForm.get('ownerName')?.hasError('pattern') && khataForm.get('ownerName')?.touched"
             class="error-message error-color">
             Please enter a valid name
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Address</mat-label>
           <input type="text" matInput formControlName="address" placeholder="Enter address">
-          <mat-hint *ngIf="khatuForm.get('address')?.hasError('required') && khatuForm.get('address')?.touched"
+          <mat-hint *ngIf="khataForm.get('address')?.hasError('required') && khataForm.get('address')?.touched"
             class="error-message error-color">
             Address is required
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Mobile No</mat-label>
           <input type="number" matInput onKeyPress="if(this.value.length==10) return false;" formControlName="mobileNo"
             placeholder="Enter mobile no" min="0">
-          <mat-hint *ngIf="khatuForm.get('mobileNo')?.hasError('required') && khatuForm.get('mobileNo')?.touched"
+          <mat-hint *ngIf="khataForm.get('mobileNo')?.hasError('required') && khataForm.get('mobileNo')?.touched"
             class="error-message error-color">
             Mobile no is required
           </mat-hint>
-          <mat-hint *ngIf="khatuForm.get('mobileNo')?.hasError('pattern') && khatuForm.get('mobileNo')?.touched"
+          <mat-hint *ngIf="khataForm.get('mobileNo')?.hasError('pattern') && khataForm.get('mobileNo')?.touched"
             class="error-message error-color">
             Please enter a valid 10-digit
           </mat-hint>
-
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>PAN</mat-label>
           <input type="text" matInput formControlName="pan" placeholder="Enter PAN">
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>GST</mat-label>
@@ -94,7 +101,7 @@
 <mat-divider></mat-divider>
 <mat-dialog-actions class="p-24 justify-content-end">
   <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-  <button mat-flat-button [mat-dialog-close]="true" [disabled]="action !== 'Delete' && khatuForm.invalid"
+  <button mat-flat-button [mat-dialog-close]="true" [disabled]="action !== 'Delete' && khataForm.invalid"
     color="primary" (click)="doAction();">
     {{action}}
   </button>

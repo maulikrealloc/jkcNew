@@ -15,9 +15,7 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
 export class OrderListComponent implements OnInit {
 
   dateOrderListForm: FormGroup;
-  isChecked: boolean = false;
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-  orderColumns: string[] = [
+  orderDataColumns: string[] = [
     'srNo',
     'partyName',
     'khataName',
@@ -29,13 +27,12 @@ export class OrderListComponent implements OnInit {
     'status',
     'action'
   ];
-
   khataOrderList: any = [];
   khataList: any = [];
-
+  isChecked: boolean = false;
   orderDataSource = new MatTableDataSource(this.khataOrderList);
-
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(private fb: FormBuilder, private firebaseCollectionService: FirebaseCollectionService, private dialog: MatDialog) { }
 
@@ -50,9 +47,6 @@ export class OrderListComponent implements OnInit {
     });
     this.getKhataOrderData();
     this.getKhataData();
-  }
-
-  ngAfterViewInit(): void {
     this.orderDataSource.paginator = this.paginator;
   }
 
@@ -98,7 +92,6 @@ export class OrderListComponent implements OnInit {
         this.getKhataOrderData();
       }
     });
-
   }
 
 }

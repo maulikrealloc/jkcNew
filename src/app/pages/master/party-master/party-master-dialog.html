@@ -2,6 +2,7 @@
 <mat-dialog-content class="mat-typography" *ngIf="action !== 'Delete'; else elseTemplate" style="max-width: 600px">
   <form [formGroup]="partyForm">
     <div class="row">
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>First Name</mat-label>
@@ -16,22 +17,26 @@
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Last Name</mat-label>
           <input type="text" matInput formControlName="lastName" placeholder="Enter first name">
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Party Address</mat-label>
           <input type="text" matInput required formControlName="partyAddress" placeholder="Enter party firm address">
-          <mat-hint *ngIf="partyForm.get('partyAddress')?.hasError('required') && partyForm.get('partyAddress')?.touched"
+          <mat-hint
+            *ngIf="partyForm.get('partyAddress')?.hasError('required') && partyForm.get('partyAddress')?.touched"
             class="error-message error-color">
             Party address is required
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Party Mobile</mat-label>
@@ -43,29 +48,28 @@
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Party GSTIN</mat-label>
           <input type="text" matInput formControlName="partyGSTIN" placeholder="Enter party GSTIN">
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Party Pan No</mat-label>
           <input type="text" matInput formControlName="partyPanNo" placeholder="Enter party pan no">
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Chalan No Series</mat-label>
           <input type="text" matInput formControlName="chalanNoSeries" placeholder="Enter chalan no series">
-          <!-- <mat-hint
-            *ngIf="partyForm.get('chalanNoSeries')?.hasError('required') && partyForm.get('chalanNoSeries')?.touched"
-            class="error-message error-color">
-            Chalan no series is required
-          </mat-hint> -->
         </mat-form-field>
       </div>
+
       <div class="col-6" *ngIf="action !== 'Edit'">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Select Color</mat-label>
@@ -81,15 +85,15 @@
             </mat-option>
           </mat-select>
           <mat-hint
-                      *ngIf="partyForm.get('partyColorCode')?.hasError('required') && partyForm.get('partyColorCode')?.touched"
-                      class="error-message error-color">
-                      Party color code is required
-                    </mat-hint>
+            *ngIf="partyForm.get('partyColorCode')?.hasError('required') && partyForm.get('partyColorCode')?.touched"
+            class="error-message error-color">
+            Party color code is required
+          </mat-hint>
         </mat-form-field>
       </div>
-      <div class="col-6"  *ngIf="action === 'Edit'">
+      <div class="col-6" *ngIf="action === 'Edit'">
         <div style="width: 20px; height: 20px;border-radius: 10px;">
-          
+
         </div>
       </div>
     </div>
@@ -108,10 +112,4 @@
     <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
   </div>
   <mat-divider></mat-divider>
-  <!-- <div mat-dialog-actions class="p-x-24 p-b-24 m-t-10 justify-content-end">
-    <button mat-button (click)="doAction()" mat-flat-button color="warn">
-      {{action}}
-    </button>
-    <button mat-stroked-button color="warn" (click)="closeDialog()" class="m-l-8">Cancel</button>
-  </div> -->
 </ng-template>

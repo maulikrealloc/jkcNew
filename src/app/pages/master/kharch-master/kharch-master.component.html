@@ -2,6 +2,7 @@
     <mat-card-content class="p-24">
         <form [formGroup]="kharchForm">
             <div class="row">
+
                 <div class="col-4">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>Name</mat-label>
@@ -17,8 +18,9 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
+
                 <div class="col-4 selectUnit">
-                    <mat-label class="mat-subtitle-2 m-b-8 d-block">Select Unit & Kharch </mat-label>
+                    <mat-label class="mat-subtitle-2 m-b-8 d-block">Unit & Kharch </mat-label>
                     <mat-radio-group formControlName="unitKharch" aria-label="Select an option">
                         <mat-radio-button value="unit">Unit</mat-radio-button>
                         <mat-radio-button value="kharch">Kharch</mat-radio-button>
@@ -31,6 +33,7 @@
                         </mat-hint>
                     </div>
                 </div>
+
                 <div class="col-4 ">
                     <button class="button" (click)="submit()" mat-flat-button color="primary"
                         [disabled]="kharchForm.invalid">
@@ -50,6 +53,7 @@
                     </div>
                     <div class="table-responsive">
                         <table mat-table [dataSource]="unitDataSource" class="w-100">
+
                             <ng-container matColumnDef="srNo">
                                 <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
                                 <td mat-cell *matCellDef="let element">{{ element.id }}</td>
@@ -78,10 +82,10 @@
                                 </td>
                             </ng-container>
 
-                            <tr mat-header-row *matHeaderRowDef="kharchMasterColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: kharchMasterColumns"></tr>
+                            <tr mat-header-row *matHeaderRowDef="kharchMasterDataColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: kharchMasterDataColumns"></tr>
                             <tr class="mat-row" style="text-align: center;" *matNoDataRow>
-                                <td class="mat-cell" [attr.colspan]="kharchMasterColumns.length">
+                                <td class="mat-cell" [attr.colspan]="kharchMasterDataColumns.length">
                                     No record found
                                 </td>
                             </tr>
@@ -99,6 +103,7 @@
                     </div>
                     <div class="table-responsive">
                         <table mat-table [dataSource]="kharchDataSource" class="w-100">
+
                             <ng-container matColumnDef="srNo">
                                 <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
                                 <td mat-cell *matCellDef="let element">{{ element.id }}</td>
@@ -127,10 +132,10 @@
                                 </td>
                             </ng-container>
 
-                            <tr mat-header-row *matHeaderRowDef="kharchMasterColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: kharchMasterColumns"></tr>
+                            <tr mat-header-row *matHeaderRowDef="kharchMasterDataColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: kharchMasterDataColumns"></tr>
                             <tr class="mat-row" style="text-align: center;" *matNoDataRow>
-                                <td class="mat-cell" [attr.colspan]="kharchMasterColumns.length">
+                                <td class="mat-cell" [attr.colspan]="kharchMasterDataColumns.length">
                                     No record found
                                 </td>
                             </tr>

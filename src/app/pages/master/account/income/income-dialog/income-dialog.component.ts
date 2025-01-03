@@ -10,18 +10,16 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   styleUrls: ['./income-dialog.component.scss']
 })
 export class IncomeDialogComponent implements OnInit {
-  
+
   incomeForm: FormGroup;
   action: string;
   local_data: any;
   companyAccountList: any = [];
 
   constructor(
-    private fb:FormBuilder,
-    public dialogRef: MatDialogRef<IncomeDialogComponent>,
+    private fb: FormBuilder, public dialogRef: MatDialogRef<IncomeDialogComponent>,
     private firebaseCollectionService: FirebaseCollectionService,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
-  ){
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
@@ -39,14 +37,14 @@ export class IncomeDialogComponent implements OnInit {
     }
   }
 
-  incomegroup(){
+  incomegroup() {
     this.incomeForm = this.fb.group({
-      partyName:['',Validators.required],
-      account:['',Validators.required],
-      invoiceNo:['',Validators.required],
-      invoiceDate:[new Date()],
-      creditDate:[new Date()],
-      amount:['',Validators.required]
+      partyName: ['', Validators.required],
+      account: ['', Validators.required],
+      invoiceNo: ['', Validators.required],
+      invoiceDate: [new Date()],
+      creditDate: [new Date()],
+      amount: ['', Validators.required]
     })
   }
 
@@ -57,16 +55,16 @@ export class IncomeDialogComponent implements OnInit {
     return null;
   }
 
-  doAction(){
+  doAction() {
     const payload = {
-      partyName:this.incomeForm.value.partyName,
-      account:this.incomeForm.value.account,
-      invoiceNo:this.incomeForm.value.invoiceNo,
-      invoiceDate:this.incomeForm.value.invoiceDate,
-      creditDate:this.incomeForm.value.creditDate,
-      amount:this.incomeForm.value.amount
+      partyName: this.incomeForm.value.partyName,
+      account: this.incomeForm.value.account,
+      invoiceNo: this.incomeForm.value.invoiceNo,
+      invoiceDate: this.incomeForm.value.invoiceDate,
+      creditDate: this.incomeForm.value.creditDate,
+      amount: this.incomeForm.value.amount
     }
-    this.dialogRef.close({ event: this.action, data:payload })
+    this.dialogRef.close({ event: this.action, data: payload })
   }
 
   getCompanyAccountData() {
@@ -79,8 +77,8 @@ export class IncomeDialogComponent implements OnInit {
     });
   }
 
-  closeDialog(){
-    this.dialogRef.close({event:'cancel'})
+  closeDialog() {
+    this.dialogRef.close({ event: 'cancel' })
   }
 
 }

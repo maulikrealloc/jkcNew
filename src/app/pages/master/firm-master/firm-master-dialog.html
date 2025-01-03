@@ -2,6 +2,7 @@
 <mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate">
   <form [formGroup]="firmForm">
     <div class="row">
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Header</mat-label>
@@ -16,6 +17,7 @@
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Sub Header</mat-label>
@@ -30,6 +32,7 @@
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Address</mat-label>
@@ -40,6 +43,7 @@
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Mobile No</mat-label>
@@ -55,12 +59,14 @@
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>GST No</mat-label>
           <input type="text" matInput formControlName="GSTNo" placeholder="Enter GST no">
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Pan No</mat-label>
@@ -85,30 +91,35 @@
           </mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Email</mat-label>
           <input type="text" matInput formControlName="email" placeholder="Enter email">
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Bank Name</mat-label>
           <input type="text" matInput formControlName="bankName" placeholder="Enter bank name">
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Bank IFSC</mat-label>
           <input type="text" matInput formControlName="ifscCode" placeholder="Enter bank IFSC">
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Bank Account No</mat-label>
           <input type="number" matInput formControlName="bankAccountNo" placeholder="Enter bank account no" min="0">
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>GST Percentage</mat-label>

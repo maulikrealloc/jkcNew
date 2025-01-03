@@ -10,24 +10,22 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   styleUrls: ['./expenses-dialog.component.scss']
 })
 export class ExpensesDialogComponent implements OnInit {
-  
+
   expensesForm: FormGroup;
   action: string;
   local_data: any;
   companyAccountList: any = [];
 
   constructor(
-    private fb: FormBuilder,
-    public dialogRef: MatDialogRef<ExpensesDialogComponent>,
+    private fb: FormBuilder, public dialogRef: MatDialogRef<ExpensesDialogComponent>,
     private firebaseCollectionService: FirebaseCollectionService,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
 
   ngOnInit(): void {
-    this.expensesdata();
+    this.expensesData();
     this.getCompanyAccountData();
     if (this.action === 'Edit') {
       this.expensesForm.controls['expensesType'].setValue(this.local_data.expensesType)
@@ -40,7 +38,7 @@ export class ExpensesDialogComponent implements OnInit {
     }
   }
 
-  expensesdata() {
+  expensesData() {
     this.expensesForm = this.fb.group({
       expensesType: ['', Validators.required],
       paidBy: ['', Validators.required],
@@ -81,7 +79,7 @@ export class ExpensesDialogComponent implements OnInit {
     }
     this.dialogRef.close({ event: this.action, data: payload });
   }
-  
+
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
   }

@@ -10,9 +10,10 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   templateUrl: './party-master.component.html',
   styleUrls: ['./party-master.component.scss']
 })
-export class PartyMasterComponent implements AfterViewInit {
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-  partyColumns: string[] = [
+  
+export class PartyMasterComponent implements OnInit {
+
+  partyDataColumns: string[] = [
     'srno',
     'PartyName',
     'PartyGSTIN',
@@ -22,18 +23,15 @@ export class PartyMasterComponent implements AfterViewInit {
     'PartyMobile',
     'action',
   ];
-
-
-  partyList:any = []
-
-  dataSource: any = new MatTableDataSource(this.partyList);
+  partyList: any = []
+  partyMasterDataSource: any = new MatTableDataSource(this.partyList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private dialog: MatDialog , private firebaseCollectionService : FirebaseCollectionService) { }
+  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
-
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+  ngOnInit(): void {
+    this.partyMasterDataSource.paginator = this.paginator;
     this.getPartyData()
   }
 
@@ -41,10 +39,10 @@ export class PartyMasterComponent implements AfterViewInit {
     this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
       this.partyList = party
       if (party && party.length > 0) {
-        this.dataSource = new MatTableDataSource(this.partyList);
+        this.partyMasterDataSource = new MatTableDataSource(this.partyList);
       } else {
         this.partyList = [];
-        this.dataSource = new MatTableDataSource(this.partyList);
+        this.partyMasterDataSource = new MatTableDataSource(this.partyList);
       }
     }).catch((error) => {
       console.error('Error fetching party:', error);
@@ -74,8 +72,8 @@ export class PartyMasterComponent implements AfterViewInit {
       }
     });
   }
-}
 
+}
 
 @Component({
   selector: 'app-party-master-dialog',
@@ -84,63 +82,59 @@ export class PartyMasterComponent implements AfterViewInit {
 })
 
 export class partyMasterDialogComponent implements OnInit {
+
   partyForm: FormGroup;
   action: string;
   local_data: any;
   colorCode: any = [
-   {
+    {
       bgColor: '#9370DB',
       fontColor: '#ffffff',
-   },
-   {
-     bgColor: '#00008B',
-     fontColor: '#ffffff',
-   },
-   {
-     bgColor: '#008B8B',
-     fontColor: '#ffffff',
-   },
-   {
-     bgColor: '#8B008B',
-     fontColor: '#ffffff',
-   },
-   {
-     bgColor: '#483D8B',
-     fontColor: '#ffffff',
-   },
-   {
-     bgColor: '#20B2AA',
-     fontColor: '#ffffff',
-   },
-   {
-     bgColor: '#DDA0DD',
-     fontColor: '#020202',
-   },
-   {
-     bgColor: '#87CEEB',
-     fontColor: '#020202',
-   },
-   {
-     bgColor: '#40E0D0',
+    },
+    {
+      bgColor: '#00008B',
+      fontColor: '#ffffff',
+    },
+    {
+      bgColor: '#008B8B',
+      fontColor: '#ffffff',
+    },
+    {
+      bgColor: '#8B008B',
+      fontColor: '#ffffff',
+    },
+    {
+      bgColor: '#483D8B',
+      fontColor: '#ffffff',
+    },
+    {
+      bgColor: '#20B2AA',
+      fontColor: '#ffffff',
+    },
+    {
+      bgColor: '#DDA0DD',
       fontColor: '#020202',
-   },
-   {
-     bgColor: '#9ACD32',
+    },
+    {
+      bgColor: '#87CEEB',
       fontColor: '#020202',
-   },
-    
+    },
+    {
+      bgColor: '#40E0D0',
+      fontColor: '#020202',
+    },
+    {
+      bgColor: '#9ACD32',
+      fontColor: '#020202',
+    },
   ]
 
-
-  constructor(
-    private fb: FormBuilder,
-    public dialogRef: MatDialogRef<partyMasterDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-
+  constructor(private fb: FormBuilder, public dialogRef: MatDialogRef<partyMasterDialogComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
+
   ngOnInit(): void {
     this.buildForm()
     if (this.action === 'Edit') {
@@ -170,7 +164,6 @@ export class partyMasterDialogComponent implements OnInit {
 
   doAction(): void {
     const payload = {
-      // id: this.local_data.id ? this.local_data.id : '',
       firstName: this.partyForm.value.firstName,
       lastName: this.partyForm.value.lastName,
       partyAddress: this.partyForm.value.partyAddress,
@@ -180,11 +173,11 @@ export class partyMasterDialogComponent implements OnInit {
       partyMobile: this.partyForm.value.partyMobile,
       partyColorCode: this.partyForm.value.partyColorCode
     }
-    
-    this.dialogRef.close({ event: this.action, data: payload });  
+    this.dialogRef.close({ event: this.action, data: payload });
   }
 
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
   }
+
 }

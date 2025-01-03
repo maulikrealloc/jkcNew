@@ -9,8 +9,9 @@ import { Timestamp } from 'firebase/firestore';
   templateUrl: './order-dialog.component.html',
   styleUrls: ['./order-dialog.component.scss']
 })
-export class OrderDialogComponent implements OnInit {
   
+export class OrderDialogComponent implements OnInit {
+
   orderForm: FormGroup;
   action: string;
   local_data: any;
@@ -21,8 +22,7 @@ export class OrderDialogComponent implements OnInit {
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<OrderDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
-    private firebaseCollectionService: FirebaseCollectionService
-  ) {
+    private firebaseCollectionService: FirebaseCollectionService) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
@@ -60,7 +60,7 @@ export class OrderDialogComponent implements OnInit {
       orderDate: [new Date(), Validators.required],
       deliveryDate: [new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), Validators.required],
       products: this.fb.array([]),
-      orderStatus:['']
+      orderStatus: ['']
     })
   }
 
@@ -102,7 +102,7 @@ export class OrderDialogComponent implements OnInit {
       deliveryDate: this.orderForm.value.deliveryDate,
       products: this.orderForm.value.products,
       orderStatus: this.orderForm.value.orderStatus ? this.orderForm.value.orderStatus : 'Pending',
-      isCreated : false
+      isCreated: false
     }
     this.dialogRef.close({ event: this.action, data: payload });
   }
@@ -110,5 +110,5 @@ export class OrderDialogComponent implements OnInit {
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
   }
-  
+
 }

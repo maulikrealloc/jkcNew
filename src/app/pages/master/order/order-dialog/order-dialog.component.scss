@@ -1,8 +1,8 @@
-i-tabler{
+i-tabler {
     margin-top: 20px;
 }
 
-.error-color{
+.error-color {
     color: #fa896b;
     width: 100%;
     text-align: end;
@@ -35,10 +35,7 @@ form {
     flex-wrap: wrap;
 }
 
-.col-6,
-.col-4,
-.col-3,
-.col-1 {
+.col-6, .col-4, .col-3, .col-1 {
     flex: 1;
     max-width: 100%;
 }

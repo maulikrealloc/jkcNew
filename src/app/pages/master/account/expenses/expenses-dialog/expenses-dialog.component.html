@@ -17,7 +17,8 @@
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Paid By</mat-label>
       <mat-select #dropdown formControlName="paidBy" placeholder="Enter paid by">
-        <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName }}</mat-option>
+        <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName
+          }}</mat-option>
       </mat-select>
       <mat-hint *ngIf="expensesForm.get('paidBy')?.hasError('required') && expensesForm.get('paidBy')?.touched"
         class="error-message error-color">

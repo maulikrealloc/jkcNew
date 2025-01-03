@@ -15,12 +15,11 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './chalan.component.html',
   styleUrls: ['./chalan.component.scss']
 })
+
 export class ChalanComponent implements OnInit {
 
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-
   chalanForm: FormGroup;
-  chalanColumns: string[] = [
+  chalanDataColumns: string[] = [
     'srNo',
     'partyOrder',
     'productName',
@@ -30,10 +29,6 @@ export class ChalanComponent implements OnInit {
     'totalAmount',
     'action'
   ];
-  chalanList: any = [];
-  partyList: any = [];
-  firmList: any = [];
-  orderList: any = [];
   toWords = new ToWords({
     localeCode: 'en-IN',
     converterOptions: {
@@ -42,6 +37,11 @@ export class ChalanComponent implements OnInit {
       ignoreZeroCurrency: false,
     },
   });
+
+  chalanList: any = [];
+  partyList: any = [];
+  firmList: any = [];
+  orderList: any = [];
   quantityValue: any = 0;
   productPriceValue: any = 0;
   totalProductPrices: any;
@@ -55,12 +55,11 @@ export class ChalanComponent implements OnInit {
   updateProductsData: any;
   netAmount: number = 0;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(
-    private dialog: MatDialog,
-    private fb: FormBuilder,
-    private firebaseCollectionService: FirebaseCollectionService
-  ) { }
+    private dialog: MatDialog, private fb: FormBuilder,
+    private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
     this.formBuild();
@@ -102,11 +101,11 @@ export class ChalanComponent implements OnInit {
   viewpdf() {
     this.getPartyDetails(this.chalanForm.value.party)
     this.getFirmDetails(this.chalanForm.value.firm)
-    this.generatePDF()
+    this.generatePDF();
   }
 
-  productViewData(action: any, obj: any) {
-    obj.action = action;  
+  openProductViewData(action: any, obj: any) {
+    obj.action = action;
     const dialogRef = this.dialog.open(ChalanViewDialogComponent, {
       data: obj,
     });
@@ -135,7 +134,6 @@ export class ChalanComponent implements OnInit {
     this.chalanForm.markAsUntouched();
     this.chalanList = [];
     this.chalanListDataSource = new MatTableDataSource(this.chalanList);
-
   }
 
   getPartyDetails(partyId: any) {
@@ -610,9 +608,7 @@ export class ChalanComponent implements OnInit {
     this.firebaseCollectionService
       .getDocuments('CompanyList', 'ChalanList')
       .then((chalan) => {
-        const chalanData = chalan.filter(
-          (chalanObj: any) => chalanObj.partyId === event.value
-        );
+        const chalanData = chalan.filter((chalanObj: any) => chalanObj.partyId === event.value);
         const maxChalanNo =
           chalanData.length > 0
             ? Math.max(...chalanData.map((chalanObj: any) => Number(chalanObj.chalanNo) || 0)) + 1
@@ -664,7 +660,7 @@ export class ChalanComponent implements OnInit {
       this.chalanList.push(payload);
       this.chalanListDataSource = new MatTableDataSource(this.chalanList);
     });
-    this.updateProductsData = seletedOrderProducts;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+    this.updateProductsData = seletedOrderProducts;
   }
 
   ngAfterViewInit(): void {
@@ -697,4 +693,5 @@ export class ChalanComponent implements OnInit {
       reader.readAsDataURL(file);
     }
   }
+
 }

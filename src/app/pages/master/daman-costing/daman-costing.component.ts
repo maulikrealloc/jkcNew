@@ -10,7 +10,6 @@ export class DamanCostingComponent implements OnInit {
   areaHead: string = '400';
   designType = "daman";
   no: number | null = null;
-
   stitchesValue: number = 105871;
   headValue: number = 2.5;
   finalStitches: number = 265;
@@ -19,7 +18,6 @@ export class DamanCostingComponent implements OnInit {
   mtrFrameValue: number = 6;
   employeeSalaryValue: number = 566;
   cut: number = 6;
-
   stitchesHeadTotal: any;
   meterTotal: any;
   framesDayTotal: any;
@@ -106,6 +104,7 @@ export class DamanCostingComponent implements OnInit {
     this.empSalarymt = (this.employeeSalaryValue / this.finalMeter).toFixed(2);
     this.taxAmount = (this.meterTotal * this.cut / 100).toFixed(2);
     this.finalPrice = (parseFloat(this.meterTotal) + parseFloat(this.taxAmount)).toFixed(2);
+
     if (this.designType === 'choli') {
       this.stitchesHeadTotal = this.stitchesValue * 1.5;
       this.finalStitches = parseFloat((this.stitchesHeadTotal / 1000).toFixed(0));

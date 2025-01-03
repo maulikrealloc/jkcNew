@@ -1,4 +1,4 @@
-import { Component, Inject, Optional } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -7,37 +7,37 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   templateUrl: './khata-master-dialog.component.html',
   styleUrls: ['./khata-master-dialog.component.scss']
 })
-export class KhataMasterDialogComponent {
-  khatuForm: FormGroup;
+
+export class KhataMasterDialogComponent implements OnInit {
+
+  khataForm: FormGroup;
   action: string;
   local_data: any;
 
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<KhataMasterDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
+
   ngOnInit(): void {
     this.formBuild();
-
     if (this.action === 'Edit') {
-      this.khatuForm.controls['firstName'].setValue(this.local_data.firstName)
-      this.khatuForm.controls['lastName'].setValue(this.local_data.lastName)
-      this.khatuForm.controls['companyName'].setValue(this.local_data.companyName)
-      this.khatuForm.controls['ownerName'].setValue(this.local_data.ownerName)
-      this.khatuForm.controls['address'].setValue(this.local_data.address)
-      this.khatuForm.controls['mobileNo'].setValue(this.local_data.mobileNo)
-      this.khatuForm.controls['pan'].setValue(this.local_data.pan)
-      this.khatuForm.controls['gst'].setValue(this.local_data.gst)
+      this.khataForm.controls['firstName'].setValue(this.local_data.firstName)
+      this.khataForm.controls['lastName'].setValue(this.local_data.lastName)
+      this.khataForm.controls['companyName'].setValue(this.local_data.companyName)
+      this.khataForm.controls['ownerName'].setValue(this.local_data.ownerName)
+      this.khataForm.controls['address'].setValue(this.local_data.address)
+      this.khataForm.controls['mobileNo'].setValue(this.local_data.mobileNo)
+      this.khataForm.controls['pan'].setValue(this.local_data.pan)
+      this.khataForm.controls['gst'].setValue(this.local_data.gst)
     }
   }
 
   formBuild() {
-    this.khatuForm = this.fb.group({
+    this.khataForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
       lastName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
       companyName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
@@ -51,21 +51,20 @@ export class KhataMasterDialogComponent {
 
   doAction(): void {
     const payload = {
-      firstName: this.khatuForm.value.firstName,
-      lastName: this.khatuForm.value.lastName,
-      companyName: this.khatuForm.value.companyName,
-      ownerName: this.khatuForm.value.ownerName,
-      address: this.khatuForm.value.address,
-      mobileNo: this.khatuForm.value.mobileNo,
-      pan: this.khatuForm.value.pan,
-      gst: this.khatuForm.value.gst,
+      firstName: this.khataForm.value.firstName,
+      lastName: this.khataForm.value.lastName,
+      companyName: this.khataForm.value.companyName,
+      ownerName: this.khataForm.value.ownerName,
+      address: this.khataForm.value.address,
+      mobileNo: this.khataForm.value.mobileNo,
+      pan: this.khataForm.value.pan,
+      gst: this.khataForm.value.gst,
     }
     this.dialogRef.close({ event: this.action, data: payload });
-
   }
 
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
   }
-  
+
 }

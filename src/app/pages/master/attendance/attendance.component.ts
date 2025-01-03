@@ -12,13 +12,11 @@ import { Timestamp } from 'firebase/firestore';
   templateUrl: './attendance.component.html',
   styleUrls: ['./attendance.component.scss']
 })
+
 export class AttendanceComponent implements OnInit {
 
-  dateAttendanceForm: FormGroup
-
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-
-  absentColumns: string[] = [
+  dateAttendanceForm: FormGroup;
+  absentDataColumns: string[] = [
     '#',
     'employee',
     'day',
@@ -28,14 +26,11 @@ export class AttendanceComponent implements OnInit {
 
   attendanceList: any = [];
   employeesList: any = [];
-
-
   attendanceListDataSource = new MatTableDataSource(this.attendanceList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(
-    private fb: FormBuilder,
-    private dialog: MatDialog,
+  constructor(private fb: FormBuilder, private dialog: MatDialog,
     private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
@@ -46,12 +41,9 @@ export class AttendanceComponent implements OnInit {
     this.dateAttendanceForm = this.fb.group({
       start: [startDate],
       end: [endDate]
-    })
+    });
     this.getAttendanceData();
     this.getEmployeeData();
-  }
-
-  ngAfterViewInit(): void {
     this.attendanceListDataSource.paginator = this.paginator;
   }
 
@@ -65,7 +57,7 @@ export class AttendanceComponent implements OnInit {
   applyFilter(filterValue: string): void {
     this.attendanceListDataSource.filter = filterValue.trim().toLowerCase();
   }
- 
+
   getAttendanceData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'AttendanceList').then((attendance) => {
       this.attendanceList = attendance
@@ -94,7 +86,7 @@ export class AttendanceComponent implements OnInit {
     return this.employeesList.find((employeeObj: any) => employeeObj.id === employeeId)?.firstName
   }
 
-  addDesign(action: string, obj: any) {
+  openAbsent(action: string, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(AbsentDialogComponent, {
       data: obj,

@@ -8,14 +8,14 @@ import { Timestamp } from 'firebase/firestore';
   templateUrl: './kharch-report.component.html',
   styleUrls: ['./kharch-report.component.scss']
 })
-  
+
 export class KharchReportComponent implements OnInit {
 
-  dateKharchReportListForm: FormGroup;
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   @Input() KharchReportList: any[] = [];
+
+  dateKharchReportListForm: FormGroup;
   KharchReportData: any = [];
-  kharchReportColumns: string[] = [
+  kharchReportDataColumns: string[] = [
     'srNo',
     'unitname',
     'kharchname',
@@ -24,12 +24,12 @@ export class KharchReportComponent implements OnInit {
     'chalanno',
     'amount'
   ];
-
   totalAmount: number = 0;
-  kharchListdataSource = new MatTableDataSource(this.KharchReportData);
+  kharchListDataSource = new MatTableDataSource(this.KharchReportData);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private fb : FormBuilder) { }
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
     const today = new Date();
@@ -42,15 +42,12 @@ export class KharchReportComponent implements OnInit {
     })
     this.updateDataSource();
     this.calculateTotalAmount();
+    this.kharchListDataSource.paginator = this.paginator;
   }
-  
+
   ngOnChanges(): void {
     this.updateDataSource();
     this.calculateTotalAmount();
-  }
-
-  ngAfterViewInit(): void {
-    this.kharchListdataSource.paginator = this.paginator;
   }
 
   calculateTotalAmount() {
@@ -60,7 +57,7 @@ export class KharchReportComponent implements OnInit {
   }
 
   applyFilter(filterValue: string): void {
-    this.kharchListdataSource.filter = filterValue.trim().toLowerCase();
+    this.kharchListDataSource.filter = filterValue.trim().toLowerCase();
   }
 
   convertTimestampToDate(element: any): Date | null {
@@ -71,7 +68,7 @@ export class KharchReportComponent implements OnInit {
   }
 
   private updateDataSource() {
-    this.kharchListdataSource = new MatTableDataSource(this.KharchReportList);
+    this.kharchListDataSource = new MatTableDataSource(this.KharchReportList);
   }
 
 }

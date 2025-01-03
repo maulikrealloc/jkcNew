@@ -1,17 +1,15 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProductDialogComponent } from '../../chalan-list/product-dialog/product-dialog.component';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
-
-
 @Component({
   selector: 'app-chalan-view-dialog',
   templateUrl: './chalan-view-dialog.component.html',
   styleUrls: ['./chalan-view-dialog.component.scss']
 })
+
 export class ChalanViewDialogComponent implements OnInit {
-  
-  displayedColumns: string[] = ['srNo', 'partyOrder', 'productName', 'Quantity', 'productPrice', 'chalanNo', 'totalAmount'];
+
+  displayedDataColumns: string[] = ['srNo', 'partyOrder', 'productName', 'Quantity', 'productPrice', 'chalanNo', 'totalAmount'];
   action: string;
   local_data: any;
   orderList: any = [];
@@ -19,9 +17,7 @@ export class ChalanViewDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ProductDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
-     private firebaseCollectionService: FirebaseCollectionService
-  ) {
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
@@ -39,6 +35,5 @@ export class ChalanViewDialogComponent implements OnInit {
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
   }
-
 
 }

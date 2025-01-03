@@ -1,6 +1,7 @@
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
     <div class="row justify-content-between">
+
       <div class="col-lg-3">
         <mat-label>Design Type</mat-label><br>
         <mat-radio-group [(ngModel)]="designType" (ngModelChange)="designTypeChanges()">
@@ -9,6 +10,7 @@
           <mat-radio-button value="less">Less</mat-radio-button>
         </mat-radio-group>
       </div>
+
       <div class="col-lg-3">
         <ng-container *ngIf="designType !== 'choli'">
           <mat-label>Area Head</mat-label><br>
@@ -18,6 +20,7 @@
           </mat-radio-group>
         </ng-container>
       </div>
+
       <div class="col-lg-3">
         <ng-container *ngIf="designType === 'choli' || designType === 'less'">
           <mat-form-field appearance="outline" class="w-100">
@@ -26,6 +29,7 @@
           </mat-form-field>
         </ng-container>
       </div>
+
       <div class="col-lg-3">
         <div class="d-flex align-items-center m-t-10">
           <button class="w-100" mat-flat-button color="primary">
@@ -40,6 +44,7 @@
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
     <div class="row">
+
       <div class="col-lg-6">
         <table class="main-table">
           <thead>
@@ -54,7 +59,8 @@
             </tr>
             <tr>
               <td>Head</td>
-              <input class="input" [(ngModel)]="headValue" (ngModelChange)="getFinalStitches()" type="number" [ngClass]="{'disableBg': designType === 'choli'}" [disabled]="designType === 'choli'">
+              <input class="input" [(ngModel)]="headValue" (ngModelChange)="getFinalStitches()" type="number"
+                [ngClass]="{'disableBg': designType === 'choli'}" [disabled]="designType === 'choli'">
             </tr>
             <tr>
               <td></td>
@@ -75,6 +81,7 @@
           </tbody>
         </table>
       </div>
+
       <div class="col-lg-6">
         <table class="main-table">
           <tr>
@@ -118,6 +125,7 @@
       </div>
     </div>
     <div class="row m-t-20">
+
       <div class="col-lg-12">
         <table class="main-table">
           <thead>

@@ -11,8 +11,10 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   templateUrl: './payment-list.component.html',
   styleUrls: ['./payment-list.component.scss'],
 })
+
 export class PaymentListComponent implements OnInit {
-  displayedColumns: string[] = ['srNo', 'productPrice', 'totalAmount', 'action'];
+
+  displayedDataColumns: string[] = ['srNo', 'productPrice', 'totalAmount', 'action'];
   paymentReceiveList: FormGroup;
   action: string;
   local_data: any;
@@ -20,7 +22,6 @@ export class PaymentListComponent implements OnInit {
   paymentReciveList: any = [];
   paymentReceiveData: any = [];
   editIndex: number | null = null;
-
   paymentListDataSource = new MatTableDataSource(this.paymentReciveList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
@@ -28,9 +29,8 @@ export class PaymentListComponent implements OnInit {
     private fb: FormBuilder,
     private firebaseCollectionService: FirebaseCollectionService,
     public dialogRef: MatDialogRef<ProductDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-    this.getPaymentReceiveList()    
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
+    this.getPaymentReceiveList()
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
@@ -45,7 +45,7 @@ export class PaymentListComponent implements OnInit {
       this.paymentReceiveData = payment
       const datafind = this.paymentReceiveData?.find((id: any) => id.invoiceId === this.local_data.id)?.payments
       if (datafind) {
-        datafind.forEach((element:any) => {
+        datafind.forEach((element: any) => {
           const payload = {
             paymentReceive: element.paymentReceive,
             paymentDate: new Date(element.paymentDate).toLocaleDateString(),
@@ -54,7 +54,7 @@ export class PaymentListComponent implements OnInit {
         });
         this.paymentListDataSource.data = [...this.paymentReciveList];
       }
-    })
+    });
   }
 
   buildForm() {
@@ -95,14 +95,14 @@ export class PaymentListComponent implements OnInit {
   submitPayment() {
     const payload = {
       invoiceId: this.local_data.id,
-      finalAmount: this.data?.finalAmount ,
-      payments: this.paymentListDataSource.data ,
+      finalAmount: this.data?.finalAmount,
+      payments: this.paymentListDataSource.data,
     }
     const datafind = this.paymentReceiveData?.find((id: any) => id.invoiceId === this.local_data.id)?.payments
     if (datafind?.length > 0) {
       this.firebaseCollectionService.updateDocument('CompanyList', this.paymentReceiveData?.find((id: any) => id.invoiceId === this.local_data.id).id, payload, 'PaymentReceiveList');
     } else {
-      this.firebaseCollectionService.addDocument('CompanyList', payload, 'PaymentReceiveList');    
+      this.firebaseCollectionService.addDocument('CompanyList', payload, 'PaymentReceiveList');
     }
   }
 

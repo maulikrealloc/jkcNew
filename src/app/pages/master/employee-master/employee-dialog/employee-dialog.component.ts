@@ -1,14 +1,13 @@
-import { Component, Inject, Optional } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { designMasterDialogComponent } from '../../design-master/design-master.component';
 
 @Component({
   selector: 'app-employee-dialog',
   templateUrl: './employee-dialog.component.html',
   styleUrls: ['./employee-dialog.component.scss']
 })
-export class EmployeeDialogComponent {
+export class EmployeeDialogComponent implements OnInit {
 
   employeeForm: FormGroup;
   action: string;
@@ -17,15 +16,13 @@ export class EmployeeDialogComponent {
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<EmployeeDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
-
   }
+
   ngOnInit(): void {
-    this.formBuild()
+    this.formBuild();
     if (this.action === 'Edit') {
       this.employeeForm.controls['firstName'].setValue(this.local_data.firstName)
       this.employeeForm.controls['lastName'].setValue(this.local_data.lastName)
@@ -60,7 +57,6 @@ export class EmployeeDialogComponent {
       bankAccountNo: this.employeeForm.value.bankAccountNo
     }
     this.dialogRef.close({ event: this.action, data: payload });
-
   }
 
   closeDialog(): void {

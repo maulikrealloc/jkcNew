@@ -8,23 +8,22 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   styleUrls: ['./expenses-data.component.scss']
 })
 export class ExpensesDataComponent implements OnInit {
-  pendingTotal: number = 0;
-  paidTotal: number = 0;
 
   expensesDataColumns: string[] = [
     'expensesType',
     'paymentType',
     'totalAmount',
-  ]
-
+  ];
   expensesList: any = [];
+  pendingTotal: number = 0;
+  paidTotal: number = 0;
   expensesListDataSource = new MatTableDataSource(this.expensesList);
 
   constructor(private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
     this.getExpensesListData();
-   }
+  }
 
   getExpensesListData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'ExpensesList').then((expenses) => {

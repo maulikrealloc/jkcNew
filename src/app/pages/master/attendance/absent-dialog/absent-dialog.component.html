@@ -1,6 +1,7 @@
 <h2 mat-dialog-title class="m-b-24 b-b-1 p-b-20"><strong>{{action}} Absent</strong></h2>
 <mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate">
   <form [formGroup]="absentForm">
+
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Employee List</mat-label>
       <mat-select #dropdown formControlName="employeeList" placeholder="Enter employee">
@@ -11,6 +12,7 @@
         Employee list is required
       </mat-hint>
     </mat-form-field>
+
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Day</mat-label>
       <input type="number" matInput placeholder="Enter day" formControlName="day" min="0">
@@ -19,6 +21,7 @@
         Day is required
       </mat-hint>
     </mat-form-field>
+
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Date</mat-label>
       <input matInput [matDatepicker]="Date" formControlName="date" placeholder="Select date">

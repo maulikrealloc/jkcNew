@@ -7,26 +7,27 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   templateUrl: './transfer-dialog.component.html',
   styleUrls: ['./transfer-dialog.component.scss']
 })
+
 export class TransferDialogComponent implements OnInit {
 
   transferForm: FormGroup;
   companyAccountList: any = [];
 
-  constructor(private fb: FormBuilder, private firebaseCollectionService: FirebaseCollectionService){}
+  constructor(private fb: FormBuilder, private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
     this.transfergroup();
     this.getCompanyAccountData();
   }
 
-transfergroup(){
-  this.transferForm = this.fb.group({
-    from:['',Validators.required],
-    to:['',Validators.required],
-    amount:['',Validators.required]
-  })
+  transfergroup() {
+    this.transferForm = this.fb.group({
+      from: ['', Validators.required],
+      to: ['', Validators.required],
+      amount: ['', Validators.required]
+    })
   }
-  
+
   getCompanyAccountData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'CompanyAccountList').then((company) => {
       if (company && company.length > 0) {

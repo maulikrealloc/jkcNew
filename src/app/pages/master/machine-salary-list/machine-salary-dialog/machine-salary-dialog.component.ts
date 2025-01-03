@@ -10,6 +10,7 @@ import { Timestamp } from 'firebase/firestore';
   templateUrl: './machine-salary-dialog.component.html',
   styleUrls: ['./machine-salary-dialog.component.scss']
 })
+
 export class MachineSalaryDialogComponent implements OnInit {
 
   machineSalaryForm: FormGroup;
@@ -18,8 +19,7 @@ export class MachineSalaryDialogComponent implements OnInit {
   employeesList: any = [];
 
   constructor(
-    private fb: FormBuilder,
-    public dialogRef: MatDialogRef<MachineSalaryDialogComponent>,
+    private fb: FormBuilder, public dialogRef: MatDialogRef<MachineSalaryDialogComponent>,
     private firebaseCollectionService: FirebaseCollectionService,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
@@ -45,8 +45,8 @@ export class MachineSalaryDialogComponent implements OnInit {
 
   buildForm() {
     this.machineSalaryForm = this.fb.group({
-      employeeList: ['',Validators.required],
-      amount: ['',Validators.required],
+      employeeList: ['', Validators.required],
+      amount: ['', Validators.required],
       date: new Date(),
     })
   }

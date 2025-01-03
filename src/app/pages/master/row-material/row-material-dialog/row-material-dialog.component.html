@@ -2,18 +2,21 @@
 <mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !=='Delete'; else elseTemplate">
   <form [formGroup]="rowMaterialForm">
     <div class="row">
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Name</mat-label>
           <input type="text" matInput placeholder="Enter Name" min="0" formControlName="name">
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Quantity</mat-label>
           <input type="number" matInput placeholder="Enter quantity" min="0" formControlName="quantity">
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>price</mat-label>

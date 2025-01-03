@@ -11,9 +11,9 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   styleUrls: ['./employee-master.component.scss']
 })
 
-export class EmployeeMasterComponent implements AfterViewInit {
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-  employeeMasterColumns: string[] = [
+export class EmployeeMasterComponent implements OnInit {
+
+  employeeMasterDataColumns: string[] = [
     '#',
     'firstName',
     'lastName',
@@ -24,16 +24,14 @@ export class EmployeeMasterComponent implements AfterViewInit {
     'bankAccountNo',
     'action'
   ];
-
   employeesList: any = [];
-
   employeeListDataSource = new MatTableDataSource(this.employeesList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
-
-  ngAfterViewInit(): void {
+  ngOnInit() {
     this.employeeListDataSource.paginator = this.paginator;
     this.getEmployeeData();
   }
@@ -52,7 +50,7 @@ export class EmployeeMasterComponent implements AfterViewInit {
     });
   }
 
-  addDesign(action: string, obj: any) {
+  openEmployee(action: string, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(EmployeeDialogComponent, {
       data: obj,
@@ -77,4 +75,5 @@ export class EmployeeMasterComponent implements AfterViewInit {
       }
     });
   }
+
 }

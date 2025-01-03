@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -7,24 +7,22 @@ import { MatTableDataSource } from '@angular/material/table';
   templateUrl: './kharch-master.component.html',
   styleUrls: ['./kharch-master.component.scss']
 })
-export class KharchMasterComponent {
-  kharchForm: FormGroup;
-  isEditMode = false;
-  currentEditIndex: number | null = null;
-  currentListType: string = '';
 
-  kharchMasterColumns: string[] = [
+export class KharchMasterComponent implements OnInit {
+
+  kharchMasterDataColumns: string[] = [
     'srNo',
     'name',
     'action',
   ];
-
-  unitData: any = [];
-  kharchData: any = [];
-
-
-  unitDataSource = new MatTableDataSource(this.unitData);
-  kharchDataSource = new MatTableDataSource(this.kharchData);
+  kharchForm: FormGroup;
+  isEditMode = false;
+  currentEditIndex: number | null = null;
+  currentListType: string = '';
+  unitDataList: any = [];
+  kharchDataList: any = [];
+  unitDataSource = new MatTableDataSource(this.unitDataList);
+  kharchDataSource = new MatTableDataSource(this.kharchDataList);
 
   constructor(private fb: FormBuilder) { }
 
@@ -43,22 +41,21 @@ export class KharchMasterComponent {
     if (this.kharchForm.valid) {
       const Value = this.kharchForm.value;
       if (Value.unitKharch === 'unit') {
-        this.unitData.push({
-          id: this.unitData.length + 1,
+        this.unitDataList.push({
+          id: this.unitDataList.length + 1,
           name: Value.name
         });
-        this.unitDataSource.data = this.unitData;
+        this.unitDataSource.data = this.unitDataList;
       } else if (Value.unitKharch === 'kharch') {
-        this.kharchData.push({
-          id: this.kharchData.length + 1,
+        this.kharchDataList.push({
+          id: this.kharchDataList.length + 1,
           name: Value.name
         });
-        this.kharchDataSource.data = this.kharchData;
+        this.kharchDataSource.data = this.kharchDataList;
       }
       this.kharchForm.reset();
     }
   }
-
 
   editData(element: any, index: number, listType: string) {
     this.kharchForm.patchValue({

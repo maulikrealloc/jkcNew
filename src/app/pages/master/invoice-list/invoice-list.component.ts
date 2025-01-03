@@ -1,12 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
-import { ProductDialogComponent } from '../chalan-list/product-dialog/product-dialog.component';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { DatePipe } from '@angular/common';
 import { ToWords } from 'to-words';
 import { PaymentListComponent } from './payment-list/payment-list.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -16,30 +14,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   templateUrl: './invoice-list.component.html',
   styleUrls: ['./invoice-list.component.scss']
 })
-  
+
 export class InvoiceListComponent implements OnInit {
 
-  dateInvoiceListForm: FormGroup;
-  partyList: any = [];
-  invoiceList: any = [];
-  firmList: any = [];
-  orderList: any = []; 
-  chalanData: any = [];
-  paymentReceiveData: any = [];
-  invoiceListdataSource: any;
-  firmDetails: any;
-  orderDetails: any;
-  partyDetails: any;
-  selectedChalanList: any;
-  toWords = new ToWords({
-    localeCode: 'en-IN',
-    converterOptions: {
-      currency: true,
-      ignoreDecimal: false,
-      ignoreZeroCurrency: false,
-    },
-  });
-  invoiceListColumns: string[] = [
+  invoicDataColumns: string[] = [
     'srNo',
     'no',
     'date',
@@ -53,12 +31,31 @@ export class InvoiceListComponent implements OnInit {
     'recived',
     'action',
   ];
+  toWords = new ToWords({
+    localeCode: 'en-IN',
+    converterOptions: {
+      currency: true,
+      ignoreDecimal: false,
+      ignoreZeroCurrency: false,
+    },
+  });
 
+  dateInvoiceListForm: FormGroup;
+  partyList: any = [];
+  invoiceList: any = [];
+  firmList: any = [];
+  orderList: any = [];
+  chalanData: any = [];
+  paymentReceiveData: any = [];
+  invoiceListdataSource: any;
+  firmDetails: any;
+  orderDetails: any;
+  partyDetails: any;
+  selectedChalanList: any;
   invoiceListDataSource = new MatTableDataSource(this.invoiceList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private fb: FormBuilder, private firebaseCollectionService: FirebaseCollectionService, private dialog: MatDialog,
-    private datePipe: DatePipe) { }
+  constructor(private fb: FormBuilder, private firebaseCollectionService: FirebaseCollectionService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     const today = new Date();
@@ -68,17 +65,15 @@ export class InvoiceListComponent implements OnInit {
     this.dateInvoiceListForm = this.fb.group({
       start: [startDate],
       end: [endDate]
-    })
+    });
     this.getInvoiceData();
     this.getPartyData();
     this.getChalanData();
     this.getOrderData();
     this.getFirmData();
-    this.getPaymentReceiveList()
-  }
-
-  ngAfterViewInit(): void {
+    this.getPaymentReceiveList();
     this.invoiceListDataSource.paginator = this.paginator;
+
   }
 
   applyFilter(filterValue: string): void {
@@ -134,12 +129,12 @@ export class InvoiceListComponent implements OnInit {
     })
   }
 
-  getPaymentReceiveAmount(data :any) {
-    const receiveData = this.paymentReceiveData?.find((obj: any) => obj.invoiceId === data.id)?.payments.map((id: any) => id.paymentReceive).reduce((a :any , b:any) => a + b)
+  getPaymentReceiveAmount(data: any) {
+    const receiveData = this.paymentReceiveData?.find((obj: any) => obj.invoiceId === data.id)?.payments.map((id: any) => id.paymentReceive).reduce((a: any, b: any) => a + b)
     return receiveData ?? 0
   }
 
-  getFormattedDate(value:any): string {
+  getFormattedDate(value: any): string {
     const milliseconds = value?.seconds * 1000;
     const date = new Date(milliseconds);
     const formattedDate = date?.toLocaleDateString('en-GB', {
@@ -196,6 +191,7 @@ export class InvoiceListComponent implements OnInit {
       data: obj,
       width: action !== 'Delete' ? '700px' : ''
     });
+
     dialogRef.afterClosed().subscribe((result) => {
       this.getPaymentReceiveList()
       if (result && action === 'Delete') {
@@ -210,7 +206,7 @@ export class InvoiceListComponent implements OnInit {
     this.selectedChalanList = this.orderList.find((id: any) => id.id === selectedChalanPartyOrderId);
     this.firmDetails = this.firmList.find((id: any) => id.id === value?.firmId);
     this.partyDetails = this.partyList.find((id: any) => id.id === value?.partyId)
-    
+
     const doc: any = new jsPDF();
     const header = (doc: any) => {
       doc.setFillColor('#fff');
@@ -329,7 +325,6 @@ export class InvoiceListComponent implements OnInit {
       doc.line(valueXPosition, lineYPosition, valueXPosition + boxWidth, lineYPosition);
     });
 
-
     const box2Width = pageWidth * 0.25;
     const box2XPosition = box1XPosition + box1Width + 5;
     doc.setFillColor('#fff');
@@ -385,7 +380,6 @@ export class InvoiceListComponent implements OnInit {
       doc.setLineWidth(0.3);
       doc.line(15 + textWidth + 2, yPosition, 15 + bankBoxWidth, yPosition);
     });
-
 
     const bankDetails1 = ["Chq.No:", "Bank:"];
     const bankLeftYPosition1 = 204 + 5;
@@ -527,5 +521,5 @@ export class InvoiceListComponent implements OnInit {
   getPartyName(partyId: string): string {
     return this.partyList.find((partyObj: any) => partyObj.id === partyId)?.firstName
   }
-  
+
 }

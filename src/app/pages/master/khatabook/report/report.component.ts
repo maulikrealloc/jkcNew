@@ -8,10 +8,25 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
   templateUrl: './report.component.html',
   styleUrls: ['./report.component.scss']
 })
+
 export class ReportComponent implements OnInit {
 
   dateReportListForm: FormGroup;
-  report = [
+  reportDataColumns: string[] = [
+    'srNo',
+    'partyName',
+    'partyOrder',
+    'khataName',
+    'itemName',
+    'pQuantity',
+    'kQuantity',
+    'pPrice',
+    'kPrice',
+    'pTotal',
+    'kTotal',
+    'profit',
+  ];
+  reportList = [
     {
       id: 1,
       partyName: 'Demo',
@@ -27,26 +42,9 @@ export class ReportComponent implements OnInit {
       profit: 9876543210
     }
   ];
-
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-
-  reportColumns: string[] = [
-    'srNo',
-    'partyName',
-    'partyOrder',
-    'khataName',
-    'itemName',
-    'pQuantity',
-    'kQuantity',
-    'pPrice',
-    'kPrice',
-    'pTotal',
-    'kTotal',
-    'profit',
-  ];
-
-  reportDataSource = new MatTableDataSource(this.report);
+  reportDataSource = new MatTableDataSource(this.reportList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(private fb: FormBuilder) { }
 
@@ -59,10 +57,6 @@ export class ReportComponent implements OnInit {
       start: [startDate],
       end: [endDate]
     })
-  }
-
-
-  ngAfterViewInit(): void {
     this.reportDataSource.paginator = this.paginator;
   }
 

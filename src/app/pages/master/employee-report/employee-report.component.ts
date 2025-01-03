@@ -9,9 +9,9 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   templateUrl: './employee-report.component.html',
   styleUrls: ['./employee-report.component.scss']
 })
+  
 export class EmployeeReportComponent implements OnInit {
 
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   dateEmployeeForm: FormGroup;
   employeeMasterColumns: string[] = [
     '#',
@@ -29,12 +29,12 @@ export class EmployeeReportComponent implements OnInit {
   employeesList: any = [];
   attendanceList: any = [];
   bonusList: any = [];
-
   employeeListDataSource = new MatTableDataSource(this.employeesList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(private fb: FormBuilder, private firebaseCollectionService: FirebaseCollectionService) { }
-  
+
   ngOnInit(): void {
     const today = new Date();
     const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -43,21 +43,18 @@ export class EmployeeReportComponent implements OnInit {
     this.dateEmployeeForm = this.fb.group({
       start: [startDate],
       end: [endDate]
-    })
+    });
+
     this.getEmployeeData();
     this.getAttendanceData();
     this.getBonusData();
-  }
-
-  ngAfterViewInit(): void {
     this.employeeListDataSource.paginator = this.paginator;
+
   }
 
   getEmployeeData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'EmployeeList').then((employee) => {
       this.employeesList = employee
-      console.log(this.employeesList, 'empppppppppppppppppp=============');
-
     }).catch((error) => {
       console.error('Error fetching employee:', error);
     });
@@ -66,8 +63,6 @@ export class EmployeeReportComponent implements OnInit {
   getAttendanceData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'AttendanceList').then((attendance) => {
       this.attendanceList = attendance
-      console.log(this.attendanceList, 'atteeeeeeeeeeeeeeee=============');
-
     }).catch((error) => {
       console.error('Error fetching attendance:', error);
     });
@@ -76,8 +71,6 @@ export class EmployeeReportComponent implements OnInit {
   getBonusData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'BonusList').then((bonus) => {
       this.bonusList = bonus
-      console.log(this.bonusList, 'bonnnnnnnnnnnnnn=============');
-
     }).catch((error) => {
       console.error('Error fetching bonus:', error);
     });

@@ -2,6 +2,7 @@
     <mat-card-content class="p-24">
         <form [formGroup]="invoiceForm" class="responsivedesign">
             <div style="align-items: baseline;" class="row">
+
                 <div class="col-12 col-sm-12 col-md-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Select Firm</mat-label>
@@ -16,6 +17,7 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
+
                 <div class="col-12 col-sm-12 col-md-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Select Party</mat-label>
@@ -31,6 +33,7 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
+
                 <div class="col-12 col-sm-12 col-md-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Chalan no</mat-label>
@@ -51,6 +54,7 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
+
                 <div class="col-12 col-sm-12 col-md-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Select Invoice Date</mat-label>
@@ -59,6 +63,7 @@
                         <mat-datepicker #Date></mat-datepicker>
                     </mat-form-field>
                 </div>
+
                 <div class="col-12 col-sm-12 col-md-3">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Invoice No</mat-label>
@@ -71,6 +76,7 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
+
                 <div class="col-12 col-sm-12 col-md-2">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>C.G.S.T</mat-label>
@@ -82,6 +88,7 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
+
                 <div class="col-12 col-sm-12 col-md-2">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>S.G.S.T</mat-label>
@@ -93,6 +100,7 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
+
                 <div class="col-12 col-sm-12 col-md-2">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Discount Ratio</mat-label>
@@ -105,6 +113,7 @@
                         </mat-hint>
                     </mat-form-field>
                 </div>
+
                 <div class="col-12 col-sm-12 col-md-1">
                     <div class="d-flex align-items-center justify-content-end">
                         <button class="w-100" mat-flat-button color="primary" [disabled]="invoiceForm.invalid"
@@ -113,6 +122,7 @@
                         </button>
                     </div>
                 </div>
+
                 <div class="col-12 col-sm-12 col-md-2">
                     <div class="d-flex align-items-center justify-content-end marginTop">
                         <button class="w-100" mat-flat-button color="primary" [disabled]="invoiceForm.invalid"
@@ -130,6 +140,7 @@
         <div class="table-responsive">
             <table mat-table [dataSource]="selectedChalanList?.products" class="w-100 m-t-10"
                 *ngIf="selectedChalanList?.products?.length > 0; else noData">
+
                 <ng-container matColumnDef="srNo">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
                     <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
@@ -177,15 +188,14 @@
                     </td>
                 </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="invoiceColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: invoiceColumns"></tr>
+                <tr mat-header-row *matHeaderRowDef="invoiceDataColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: invoiceDataColumns"></tr>
             </table>
-
             <ng-template #noData>
                 <div class="f-s-16 f-w-600 text-center m-t-10">No record found</div>
             </ng-template>
-
-            <mat-paginator *ngIf="selectedChalanList?.products?.length > 0" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator *ngIf="selectedChalanList?.products?.length > 0" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons></mat-paginator>
         </div>
     </mat-card-content>
 </mat-card>

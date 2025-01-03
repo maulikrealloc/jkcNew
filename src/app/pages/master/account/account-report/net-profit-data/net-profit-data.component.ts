@@ -13,17 +13,15 @@ export class NetProfitDataComponent implements OnInit {
     'totalIncome',
     'totalExpenses',
     'netProfit'
-  ]
-
+  ];
   netProfitData: any = [];
   expensesList: any = [];
-  incomedataList: any = [];
-
+  incomeDataList: any = [];
   netProfitListDataSource = new MatTableDataSource(this.netProfitData);
 
   constructor(private firebaseCollectionService: FirebaseCollectionService) { }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.getExpensesListData();
     this.getIncomeListData();
   }
@@ -32,7 +30,6 @@ export class NetProfitDataComponent implements OnInit {
     this.firebaseCollectionService.getDocuments('CompanyList', 'ExpensesList').then((expenses) => {
       if (expenses && expenses.length > 0) {
         this.expensesList = expenses
-        console.log('expensesList============>>>>>>>>>>>', this.expensesList);
       }
     }).catch((error: any) => {
       console.error('Error fetching expenses:', error);
@@ -42,8 +39,7 @@ export class NetProfitDataComponent implements OnInit {
   getIncomeListData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'IncomeList').then((income) => {
       if (income && income.length > 0) {
-        this.incomedataList = income
-        console.log('incomedataList============>>>>>>>>>>>',this.incomedataList);
+        this.incomeDataList = income
       }
     }).catch((error: any) => {
       console.error('Error fetching income:', error);

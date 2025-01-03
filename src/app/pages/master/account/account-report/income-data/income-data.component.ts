@@ -14,21 +14,20 @@ export class IncomeDataComponent implements OnInit {
     'partyName',
     'totalAmount'
   ];
-
-  incomedataList: any = [];
-  incomeListDataSource = new MatTableDataSource(this.incomedataList);
+  incomeDataList: any = [];
+  incomeListDataSource = new MatTableDataSource(this.incomeDataList);
 
   constructor(private firebaseCollectionService: FirebaseCollectionService) { }
-  
+
   ngOnInit(): void {
     this.getIncomeListData();
-   }
-  
+  }
+
   getIncomeListData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'IncomeList').then((income) => {
-      this.incomedataList = income
+      this.incomeDataList = income
       if (income && income.length > 0) {
-        this.incomeListDataSource = new MatTableDataSource(this.incomedataList);
+        this.incomeListDataSource = new MatTableDataSource(this.incomeDataList);
       }
     }).catch((error) => {
       console.error('Error fetching income:', error);
@@ -36,7 +35,7 @@ export class IncomeDataComponent implements OnInit {
   }
 
   getTotalAmount(): number {
-    return this.incomedataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
+    return this.incomeDataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
   }
 
 }

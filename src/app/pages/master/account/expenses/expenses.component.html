@@ -1,6 +1,7 @@
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
     <div style="align-items: baseline;" class="row">
+
       <div class="col-4">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <mat-label>Expenses</mat-label>
@@ -10,19 +11,23 @@
           </mat-icon>
         </mat-form-field>
       </div>
+
       <div class="col-4">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Paid By</mat-label>
           <mat-select #dropdown placeholder="Select paid by">
-            <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName }}</mat-option>
+            <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName
+              }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
+
       <div class="col-2">
-        <button mat-flat-button color="primary" (click)="openexpensesmaster()">
+        <button mat-flat-button color="primary" (click)="openExpensesMaster()">
           Expenses Master
         </button>
       </div>
+
       <div class="col-2">
         <button mat-flat-button color="primary" (click)="openExpenses('Add', {})">
           Add Expenses
@@ -117,10 +122,10 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="expensesColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: expensesColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="expensesDataColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: expensesDataColumns"></tr>
         <tr class="mat-row" style="text-align: center;" *matNoDataRow>
-          <td class="mat-cell" [attr.colspan]="expensesColumns.length">
+          <td class="mat-cell" [attr.colspan]="expensesDataColumns.length">
             No record found
           </td>
         </tr>

@@ -6,44 +6,38 @@ import { WithdrawalListDialogComponent } from './withdrawal-list-dialog/withdraw
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
-
 export interface withdrawalData {
   id: number,
   employeeList: string,
   amount: string,
   date: string,
 }
-
 @Component({
   selector: 'app-withdrawal-list',
   templateUrl: './withdrawal-list.component.html',
   styleUrls: ['./withdrawal-list.component.scss']
 })
+
 export class WithdrawalListComponent implements OnInit {
 
   dateWithdrawalForm: FormGroup;
-
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-
-  withdrawalListColumns: string[] = [
+  withdrawalDataColumns: string[] = [
     '#',
     'employee',
     'amount',
     'date',
     'action',
   ];
-
   withdrawalList: any = [];
   employeesList: any = [];
-
-  dataSource = new MatTableDataSource(this.withdrawalList);
+  withdrawalDataSource = new MatTableDataSource(this.withdrawalList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
-    private firebaseCollectionService: FirebaseCollectionService
-  ) { }
+    private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
     const today = new Date();
@@ -56,10 +50,7 @@ export class WithdrawalListComponent implements OnInit {
     })
     this.getWithdrawalData();
     this.getEmployeeData();
-  }
-
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.withdrawalDataSource.paginator = this.paginator;
   }
 
   convertTimestampToDate(element: any): Date | null {
@@ -70,15 +61,15 @@ export class WithdrawalListComponent implements OnInit {
   }
 
   applyFilter(filterValue: string): void {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.withdrawalDataSource.filter = filterValue.trim().toLowerCase();
   }
 
   getWithdrawalData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'WithdrawalList').then((withdrawal) => {
       this.withdrawalList = withdrawal
       if (withdrawal && withdrawal.length > 0) {
-        this.dataSource = new MatTableDataSource(this.withdrawalList);
-        this.dataSource.filterPredicate = (data: any, filter: string) => {
+        this.withdrawalDataSource = new MatTableDataSource(this.withdrawalList);
+        this.withdrawalDataSource.filterPredicate = (data: any, filter: string) => {
           const employeeName = this.getEmployeeName(data.employeeId) || '';
           const withdrawalDate = this.convertTimestampToDate(data.date)?.toLocaleDateString() || '';
           const amount = data.amount || '';
@@ -91,7 +82,7 @@ export class WithdrawalListComponent implements OnInit {
         };
       } else {
         this.withdrawalList = [];
-        this.dataSource = new MatTableDataSource(this.withdrawalList);
+        this.withdrawalDataSource = new MatTableDataSource(this.withdrawalList);
       }
     }).catch((error) => {
       console.error('Error fetching withdrawal:', error);
@@ -101,8 +92,8 @@ export class WithdrawalListComponent implements OnInit {
   getEmployeeData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'EmployeeList').then((employee) => {
       this.employeesList = employee
-      console.log(this.employeesList,'empppppppppppppppppp');
-      
+      console.log(this.employeesList, 'empppppppppppppppppp');
+
     }).catch((error) => {
       console.error('Error fetching employee:', error);
     });
@@ -133,5 +124,5 @@ export class WithdrawalListComponent implements OnInit {
       }
     });
   }
-  
-}
+
+}   

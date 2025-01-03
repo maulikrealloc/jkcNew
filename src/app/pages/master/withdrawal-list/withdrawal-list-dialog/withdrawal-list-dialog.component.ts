@@ -9,6 +9,7 @@ import { Timestamp } from 'firebase/firestore';
   templateUrl: './withdrawal-list-dialog.component.html',
   styleUrls: ['./withdrawal-list-dialog.component.scss']
 })
+
 export class WithdrawalListDialogComponent implements OnInit {
 
   withdrawalForm: FormGroup;
@@ -17,8 +18,7 @@ export class WithdrawalListDialogComponent implements OnInit {
   employeesList: any = [];
 
   constructor(
-    private fb: FormBuilder,
-    public dialogRef: MatDialogRef<WithdrawalListDialogComponent>,
+    private fb: FormBuilder, public dialogRef: MatDialogRef<WithdrawalListDialogComponent>,
     private firebaseCollectionService: FirebaseCollectionService,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
@@ -45,8 +45,8 @@ export class WithdrawalListDialogComponent implements OnInit {
 
   buildForm() {
     this.withdrawalForm = this.fb.group({
-      employeeList: ['',Validators.required],
-      amount: ['',Validators.required],
+      employeeList: ['', Validators.required],
+      amount: ['', Validators.required],
       date: new Date()
     })
   }

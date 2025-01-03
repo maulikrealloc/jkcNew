@@ -1,6 +1,7 @@
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
     <div class="row justify-content-between">
+
       <div class="col-lg-4">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <mat-label>Order</mat-label>
@@ -10,6 +11,7 @@
           </mat-icon>
         </mat-form-field>
       </div>
+
       <div class="col-lg-4 d-flex align-items-center justify-content-end margintop">
         <button mat-flat-button color="primary" (click)="addDesign('Add', {})">
           Add Order
@@ -21,7 +23,8 @@
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
     <div class="table-responsive">
-      <table mat-table [dataSource]="dataSource" class="w-100">
+      <table mat-table [dataSource]="orderDataSource" class="w-100">
+
         <ng-container matColumnDef="orderNo">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Order No</th>
           <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
@@ -93,17 +96,13 @@
                                   'cancelled-status': element.orderStatus === 'Cancelled',
                                   'done-status': element.orderStatus === 'Done'
                                 }">
-              <span>
-                {{ element.orderStatus }}
-              </span>
+              <span> {{ element.orderStatus }} </span>
             </div>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Action
-          </th>
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Action </th>
           <td mat-cell *matCellDef="let element" class="action-link">
             <a class="m-r-10 cursor-pointer"><i-tabler name="edit" (click)="addDesign('Edit', element)"
                 class="icon-18"></i-tabler></a>
@@ -115,7 +114,8 @@
             </a>
             <mat-menu #menu="matMenu">
               <ng-container *ngFor="let status of stausList">
-                <div *ngIf="element.orderStatus !== status" (click)="changeStatus(status,element)" class="menu-item" [ngClass]="{
+                <div *ngIf="element.orderStatus !== status" (click)="changeStatus(status,element)" class="menu-item"
+                  [ngClass]="{
                         'pending-status': status === 'Pending',
                         'in-progress-status': status === 'In Progress',
                         'rejected-status': status === 'Rejected',
@@ -129,10 +129,10 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="orderColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: orderColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="orderDataColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: orderDataColumns"></tr>
         <tr class="mat-row" style="text-align: center;" *matNoDataRow>
-          <td class="mat-cell" [attr.colspan]="orderColumns.length">
+          <td class="mat-cell" [attr.colspan]="orderDataColumns.length">
             No record found
           </td>
         </tr>

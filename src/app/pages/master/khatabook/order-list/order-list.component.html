@@ -1,11 +1,13 @@
 <mat-card class="cardWithShadow">
     <mat-card-content class="p-24">
         <div style="align-items: baseline;" class="row">
+
             <div class="col-3">
                 <mat-slide-toggle [(ngModel)]="isChecked"></mat-slide-toggle>
                 <span *ngIf="!isChecked">Progress</span>
                 <span *ngIf="isChecked">Done</span>
             </div>
+
             <div class="col-3">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Select Date</mat-label>
@@ -17,6 +19,7 @@
                     <mat-date-range-picker #picker></mat-date-range-picker>
                 </mat-form-field>
             </div>
+
             <div class="col-3">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Select Party</mat-label>
@@ -25,6 +28,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
+
             <div class="col-3">
                 <div class="d-flex align-items-center justify-content-end">
                     <button mat-flat-button color="primary" (click)="transferOrder('Add', {})">
@@ -39,6 +43,7 @@
     <mat-card-content class="p-24">
         <div class="table-responsive">
             <table mat-table [dataSource]="orderDataSource" class="w-100">
+
                 <ng-container matColumnDef="srNo">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
                     <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
@@ -130,10 +135,10 @@
                     </td>
                 </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="orderColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: orderColumns"></tr>
+                <tr mat-header-row *matHeaderRowDef="orderDataColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: orderDataColumns"></tr>
                 <tr class="mat-row" style="text-align: center;" *matNoDataRow>
-                    <td class="mat-cell" [attr.colspan]="orderColumns.length">
+                    <td class="mat-cell" [attr.colspan]="orderDataColumns.length">
                         No record found
                     </td>
                 </tr>

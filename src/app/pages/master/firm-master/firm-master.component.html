@@ -1,6 +1,7 @@
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
     <div class="row justify-content-between">
+
       <div class="col-lg-4">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <mat-label>Firm</mat-label>
@@ -10,8 +11,9 @@
           </mat-icon>
         </mat-form-field>
       </div>
+
       <div class="col-lg-4 d-flex align-items-center justify-content-end">
-        <button mat-flat-button color="primary" (click)="addFirm('Add', {})">
+        <button mat-flat-button color="primary" (click)="openFirmMaster('Add', {})">
           Add Firm
         </button>
       </div>
@@ -21,7 +23,8 @@
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
     <div class="table-responsive">
-      <table style="min-width: 215%;" mat-table [dataSource]="dataSource" class="w-100">
+      <table style="min-width: 215%;" mat-table [dataSource]="firmMasterDataSource" class="w-100">
+
         <ng-container matColumnDef="#">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">SR No</th>
           <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
@@ -140,10 +143,10 @@
             Action
           </th>
           <td mat-cell *matCellDef="let element" class="action-link">
-            <a class="m-r-10 cursor-pointer"><i-tabler name="edit" (click)="addFirm('Edit', element)"
+            <a class="m-r-10 cursor-pointer"><i-tabler name="edit" (click)="openFirmMaster('Edit', element)"
                 class="icon-18"></i-tabler></a>
             <a class="m-r-10 cursor-pointer">
-              <i-tabler name="trash" (click)="addFirm('Delete', element)" class="icon-18"></i-tabler>
+              <i-tabler name="trash" (click)="openFirmMaster('Delete', element)" class="icon-18"></i-tabler>
             </a>
           </td>
         </ng-container>

@@ -8,6 +8,7 @@ import { Timestamp } from 'firebase/firestore';
   templateUrl: './add-kharch-dialog.component.html',
   styleUrls: ['./add-kharch-dialog.component.scss']
 })
+  
 export class AddKharchDialogComponent implements OnInit {
 
   kharchForm: FormGroup;
@@ -17,12 +18,11 @@ export class AddKharchDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AddKharchDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb: FormBuilder,
-  ) {
+    private fb: FormBuilder) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
-  
+
   ngOnInit(): void {
     this.formBuild()
     if (this.action === 'Edit') {

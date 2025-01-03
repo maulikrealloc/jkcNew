@@ -3,24 +3,25 @@
     border-collapse: collapse;
 }
 
-.main-table th, .main-table td {
+.main-table th,
+.main-table td {
     border: 1px solid #ccc;
     padding: 6px;
 }
 
-.thirdTabel{
+.thirdTabel {
     text-align: center;
 }
 
-.bg{
+.bg {
     background: #ecf2ff !important;
 }
 
-.disableBg{
+.disableBg {
     background: #0000001f;
 }
 
-.input{
+.input {
     width: 100%;
     height: 34px;
     border: 1px solid #ccc;
@@ -28,11 +29,10 @@
     font-family: 'Plus Jakarta Sans';
 }
 
-.inputNo{
+.inputNo {
     width: 100%;
     height: 34px;
     border: none;
     outline: none;
     font-family: 'Plus Jakarta Sans';
 }
-

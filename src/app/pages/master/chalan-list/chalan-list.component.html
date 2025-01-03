@@ -1,6 +1,7 @@
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
     <div class="row">
+
       <div class="col-12 col-sm-12 col-md-3">
         <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
           <mat-label>Chalan</mat-label>
@@ -10,6 +11,7 @@
           </mat-icon>
         </mat-form-field>
       </div>
+
       <div class="col-12 col-sm-12 col-md-3">
         <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
           <mat-label>Select Firm</mat-label>
@@ -18,6 +20,7 @@
           </mat-select>
         </mat-form-field>
       </div>
+
       <div class="col-12 col-sm-12 col-md-3">
         <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
           <mat-label>Select Party</mat-label>
@@ -26,6 +29,7 @@
           </mat-select>
         </mat-form-field>
       </div>
+
       <div class="col-12 col-sm-12 col-md-3">
         <div class="d-flex m-t-15 hide-hint align-items-center justify-content-end marginTop">
           <button mat-flat-button class="w-100" color="primary" routerLink="/master/chalan">
@@ -41,6 +45,7 @@
   <mat-card-content class="p-24">
     <div class="table-responsive">
       <table mat-table [dataSource]="chalanListDataSource" class="w-100 m-t-10">
+
         <ng-container matColumnDef="srNo">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
           <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
@@ -48,7 +53,7 @@
 
         <ng-container matColumnDef="partyName">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-          Party Name
+            Party Name
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ getPartyName(element.partyId) }}
@@ -57,7 +62,7 @@
 
         <ng-container matColumnDef="partyOrder">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-          Party Order
+            Party Order
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ getOrderNo(element.partyOrderId) }}
@@ -136,10 +141,10 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="chalanListColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: chalanListColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="chalanDataColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: chalanDataColumns"></tr>
         <tr class="mat-row" style="text-align: center;" *matNoDataRow>
-          <td class="mat-cell" [attr.colspan]="chalanListColumns.length">
+          <td class="mat-cell" [attr.colspan]="chalanDataColumns.length">
             No record found
           </td>
         </tr>

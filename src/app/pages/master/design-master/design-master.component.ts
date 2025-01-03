@@ -12,8 +12,6 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
 })
 export class DesignMasterComponent implements OnInit {
 
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-  
   designMasterColumns: string[] = [
     '#',
     'designNumber',
@@ -22,17 +20,14 @@ export class DesignMasterComponent implements OnInit {
     'action',
   ];
   designMaster: any = [];
-
   designMasterListDataSource = new MatTableDataSource(this.designMaster);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
     this.getDesignMasterData();
-  }
-
-  ngAfterViewInit(): void {
     this.designMasterListDataSource.paginator = this.paginator;
   }
 
@@ -50,7 +45,7 @@ export class DesignMasterComponent implements OnInit {
     });
   }
 
-  addDesign(action: string, obj: any) {
+  openDesignMaster(action: string, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(designMasterDialogComponent, {
       data: obj,
@@ -88,19 +83,16 @@ export class designMasterDialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<designMasterDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
-
     if (this.local_data.imagePath === undefined) {
       this.local_data.imagePath = 'assets/images/profile/user-1.jpg';
     }
   }
 
   ngOnInit(): void {
-    this.formBuild()
+    this.formBuild();
     if (this.action === 'Edit') {
       this.designForm.controls['designNo'].setValue(this.local_data.designNo)
       this.designForm.controls['designPrice'].setValue(this.local_data.designPrice)
@@ -110,9 +102,9 @@ export class designMasterDialogComponent implements OnInit {
 
   formBuild() {
     this.designForm = this.fb.group({
-      designNo: ['',Validators.required],
-      designPrice: ['',Validators.required],
-      noStiching: ['',Validators.required]
+      designNo: ['', Validators.required],
+      designPrice: ['', Validators.required],
+      noStiching: ['', Validators.required]
     })
   }
 
@@ -144,5 +136,5 @@ export class designMasterDialogComponent implements OnInit {
       this.local_data.imagePath = reader.result;
     };
   }
-  
+
 }

@@ -35,6 +35,10 @@ export class KhataMasterComponent implements OnInit {
     this.getKhataData();
   }
 
+  applyFilter(filterValue: string): void {
+    this.khataListDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   getKhataData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'KhataList').then((khata) => {
       this.khataList = khata

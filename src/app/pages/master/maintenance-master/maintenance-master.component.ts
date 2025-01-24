@@ -31,6 +31,10 @@ export class MaintenanceMasterComponent implements OnInit {
     this.getMaintenanceData();
   }
 
+  applyFilter(filterValue: string): void {
+    this.maintenanceMasterDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   getMaintenanceData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'MaintenanceList').then((maintenance) => {
       this.maintenanceMasterList = maintenance

@@ -48,6 +48,10 @@ export class MachineSalaryListComponent implements OnInit {
     this.machineSalaryDataSource.paginator = this.paginator;
   }
 
+  applyFilter(filterValue: string): void {
+    this.machineSalaryDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   convertTimestampToDate(element: any): Date | null {
     if (element instanceof Timestamp) {
       return element.toDate();

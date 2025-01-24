@@ -31,6 +31,10 @@ export class RowMaterialComponent implements OnInit {
     this.getRowMaterialData();
   }
 
+  applyFilter(filterValue: string): void {
+    this.rowDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   getRowMaterialData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'RowMaterialList').then((rowmaterial) => {
       this.rowMaterialList = rowmaterial

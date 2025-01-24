@@ -29,6 +29,8 @@ export class OrderListComponent implements OnInit {
   ];
   khataOrderList: any = [];
   khataList: any = [];
+  partyList: any = [];
+  orderList: any = [];
   isChecked: boolean = false;
   orderDataSource = new MatTableDataSource(this.khataOrderList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -45,14 +47,19 @@ export class OrderListComponent implements OnInit {
       start: [startDate],
       end: [endDate]
     });
+    
     this.getKhataOrderData();
     this.getKhataData();
+    this.getPartyData();
+    this.getOrderData();
     this.orderDataSource.paginator = this.paginator;
   }
 
   getKhataOrderData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'KhataOrderList').then((khataOrder) => {
       this.khataOrderList = khataOrder
+      console.log(this.khataOrderList,'khataorderList==========');
+      
       if (khataOrder && khataOrder.length > 0) {
         this.orderDataSource = new MatTableDataSource(this.khataOrderList);
       } else {
@@ -64,12 +71,47 @@ export class OrderListComponent implements OnInit {
     });
   }
 
+  getPartyData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
+      this.partyList = party
+      console.log(this.partyList,'partyList=========');
+      
+    }).catch((error) => {
+      console.error('Error fetching party:', error);
+    });
+  }
+
+  getPartyName(party: string): string {
+    return this.partyList.find((partyObj: any) => partyObj.id === party)?.firstName
+  }
+
   getKhataData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'KhataList').then((khata) => {
       this.khataList = khata
+      // console.log(this.khataList,'khataList================');
+      
     }).catch((error) => {
       console.error('Error fetching khata:', error);
     });
+  }
+
+  getKhataName(khata: string): string {
+    return this.khataList.find((khataObj: any) => khataObj.id === khata)?.companyName
+  }
+
+  getOrderData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
+      if (order && order.length > 0) {
+        this.orderList = order
+        // console.log(this.orderList, 'orederList=========');
+      }
+    }).catch((error) => {
+      console.error('Error fetching order:', error);
+    });
+  }
+
+  getOrderNo(order: string): string {
+    return this.orderList.find((orderObj: any) => orderObj.id === order)?.partyOrder
   }
 
   transferOrder(action: string, obj: any) {

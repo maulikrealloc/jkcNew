@@ -47,6 +47,10 @@ export class BonusListComponent implements OnInit {
     this.bonusListDataSource.paginator = this.paginator;
   }
 
+  applyFilter(filterValue: string): void {
+    this.bonusListDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   convertTimestampToDate(element: any): Date | null {
     if (element instanceof Timestamp) {
       return element.toDate();

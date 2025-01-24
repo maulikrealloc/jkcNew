@@ -6,7 +6,7 @@
             <div class="col-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Select Party</mat-label>
-                    <mat-select #dropdown formControlName="party" placeholder="Select party">
+                    <mat-select #dropdown formControlName="party" placeholder="Select party" (selectionChange)="onPartySelection($event.value)">
                         <mat-option *ngFor="let item of partyList" [value]="item.id">{{ item.firstName }}</mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -15,8 +15,13 @@
             <div class="col-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Select Order</mat-label>
-                    <mat-select #dropdown formControlName="order" placeholder="Select order">
-                        <mat-option *ngFor="let item of orderList" [value]="item.id">{{ item.partyOrder }}</mat-option>
+                    <mat-select #dropdown formControlName="order" placeholder="Select order" (selectionChange)="onOrderSelection()">
+                        <ng-container *ngIf="filterOrderList.length > 0; else noRecode">
+                            <mat-option *ngFor="let item of filterOrderList" [value]="item.id">{{ item.partyOrder }}</mat-option>
+                        </ng-container>
+                        <ng-template #noRecode>
+                            <mat-option class="text-center" disabled>No record found</mat-option>
+                        </ng-template>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -39,7 +44,66 @@
                 </mat-form-field>
             </div>
         </div>
+
+        <div class="row">
+            <ng-container formArrayName="productsOrder">
+                <ng-container *ngFor="let product of productsOrder.controls; let i = index" [formGroupName]="i"
+                    class="row">
+
+                    <div class="col-3">
+                        <mat-form-field appearance="outline" class="w-100 m-t-20">
+                            <mat-label>Name</mat-label>
+                            <input type="text" matInput formControlName="productName" placeholder="Enter name">
+                                <mat-hint *ngIf="product.get('productName')?.hasError('required') && product.get('productName')?.touched"
+                                    class="error-message error-color">
+                                    Name is required
+                                </mat-hint>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3">
+                        <mat-form-field appearance="outline" class="w-100 m-t-20">
+                            <mat-label>Quantity</mat-label>
+                            <input type="number" matInput formControlName="productQuantity" placeholder="Enter quantity">
+                            <mat-hint *ngIf="product.get('productQuantity')?.hasError('required') && product.get('productQuantity')?.touched"
+                                class="error-message error-color">
+                                Quantity is required
+                            </mat-hint>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3">
+                        <mat-form-field appearance="outline" class="w-100 m-t-20">
+                            <mat-label>Main Price</mat-label>
+                            <input type="number" matInput formControlName="productPrice" placeholder="Enter price">
+                            <mat-hint *ngIf="product.get('productPrice')?.hasError('required') && product.get('productPrice')?.touched"
+                                class="error-message error-color">
+                                Main price is required
+                            </mat-hint>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3">
+                        <mat-form-field appearance="outline" class="w-100 m-t-20">
+                            <mat-label>Khata Price</mat-label>
+                            <input type="number" matInput formControlName="khataPrice" placeholder="Enter price">
+                            <mat-hint *ngIf="product.get('khataPrice')?.hasError('required') && product.get('khataPrice')?.touched"
+                                class="error-message error-color">
+                                Khata price is required
+                            </mat-hint>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-1 d-flex align-items-center">
+                        <a (click)="removeProduct(i)" class="icon-18">
+                            <i-tabler name="trash"></i-tabler>
+                        </a>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </div>
     </form>
+
 </mat-dialog-content>
 <mat-divider></mat-divider>
 <mat-dialog-actions class="p-24 justify-content-end">

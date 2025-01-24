@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-report',
@@ -11,7 +12,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 
 export class ReportComponent implements OnInit {
 
-  dateReportListForm: FormGroup;
+  dateKhataReportListForm: FormGroup;
   reportDataColumns: string[] = [
     'srNo',
     'partyName',
@@ -26,38 +27,59 @@ export class ReportComponent implements OnInit {
     'kTotal',
     'profit',
   ];
-  reportList = [
-    {
-      id: 1,
-      partyName: 'Demo',
-      partyOrder: 'Test',
-      khataName: 2000,
-      itemName: 9876543210,
-      pQuantity: 9876543210,
-      kQuantity: 9876543210,
-      pPrice: 9876543210,
-      kPrice: 9876543210,
-      pTotal: 9876543210,
-      kTotal: 9876543210,
-      profit: 9876543210
-    }
-  ];
-  reportDataSource = new MatTableDataSource(this.reportList);
+
+  khataReportList: any = [];
+  partyList: any = [];
+
+  khataReportDataSource = new MatTableDataSource(this.khataReportList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
     const today = new Date();
     const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
     const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
-    this.dateReportListForm = this.fb.group({
+    this.dateKhataReportListForm = this.fb.group({
       start: [startDate],
       end: [endDate]
     })
-    this.reportDataSource.paginator = this.paginator;
+
+    this.getKhataReportData();
+    this.getPartyData();
+    this.khataReportDataSource.paginator = this.paginator;
+  }
+
+  getKhataReportData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'KhataReportList').then((khataReport) => {
+      this.khataReportList = khataReport
+      console.log(this.khataReportList, 'khataReportList==========');
+
+      if (khataReport && khataReport.length > 0) {
+        this.khataReportDataSource = new MatTableDataSource(this.khataReportList);
+      } else {
+        this.khataReportList = [];
+        this.khataReportDataSource = new MatTableDataSource(this.khataReportList);
+      }
+    }).catch((error) => {
+      console.error('Error fetching khataOrder:', error);
+    });
+  }
+
+  getPartyData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
+      this.partyList = party
+      console.log(this.partyList, 'partyList+++++++++++++++++++');
+
+    }).catch((error) => {
+      console.error('Error fetching party:', error);
+    });
+  }
+
+  getPartyName(party: string): string {
+    return this.partyList.find((partyObj: any) => partyObj.id === party)?.firstName
   }
 
 }

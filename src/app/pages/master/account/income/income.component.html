@@ -4,7 +4,8 @@
 
       <div class="col-4">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <input matInput placeholder="Search Income">
+          <mat-label>Income</mat-label>
+          <input matInput placeholder="Search income" (keyup)="applyFilter($any($event.target).value)">
           <mat-icon matSuffix>
             <i-tabler name="search" class="icon-20"></i-tabler>
           </mat-icon>

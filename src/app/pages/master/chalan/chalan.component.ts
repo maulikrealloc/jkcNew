@@ -26,8 +26,7 @@ export class ChalanComponent implements OnInit {
     'quantity',
     'productPrice',
     'chalanNo',
-    'totalAmount',
-    'action'
+    'totalAmount'
   ];
   toWords = new ToWords({
     localeCode: 'en-IN',
@@ -66,6 +65,7 @@ export class ChalanComponent implements OnInit {
     this.getPartyData();
     this.getFirmData();
     this.productPriceTotal();
+    
   }
 
   formBuild() {
@@ -124,14 +124,12 @@ export class ChalanComponent implements OnInit {
     this.updateProductsData.isCreated = true;
     this.firebaseCollectionService.updateDocument('CompanyList', this.updateProductsData.id, this.updateProductsData, 'OrderList');
     this.firebaseCollectionService.addDocument('CompanyList', payload, 'ChalanList');
-    this.chalanForm.reset({
-      firm: '',
-      party: '',
-      partyOrder: '',
-      date: new Date(),
-    });
-    this.chalanForm.markAsPristine();
-    this.chalanForm.markAsUntouched();
+    this.chalanForm.reset();
+    this.chalanForm.controls['firm'].setErrors(null)
+    this.chalanForm.controls['party'].setErrors(null)
+    this.chalanForm.controls['date'].setErrors(null)
+    this.chalanForm.controls['partyOrder'].setErrors(null)
+    this.chalanForm.controls['product'].setErrors(null)
     this.chalanList = [];
     this.chalanListDataSource = new MatTableDataSource(this.chalanList);
   }
@@ -256,7 +254,7 @@ export class ChalanComponent implements OnInit {
       this.netAmount = products.reduce((sum: any, p: any) => sum + p.totalAmount, 0);
 
       tableData.push([
-        '',
+        '', 
         'Net Amount',
         '',
         '',

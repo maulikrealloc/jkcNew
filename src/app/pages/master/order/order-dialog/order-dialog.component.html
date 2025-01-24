@@ -28,7 +28,7 @@
       <div class="col-4">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>P-Order</mat-label>
-          <input type="number" matInput required formControlName="partyOrder" placeholder="Enter party order">
+          <input type="number" min="0" matInput required formControlName="partyOrder" placeholder="Enter party order">
           <mat-hint *ngIf="orderForm.get('partyOrder')?.hasError('required') && orderForm.get('partyOrder')?.touched"
             class="error-message error-color">
             Party order is required

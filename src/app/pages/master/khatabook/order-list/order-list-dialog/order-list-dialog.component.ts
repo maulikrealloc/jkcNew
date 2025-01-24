@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { validateEvents } from 'angular-calendar/modules/common/util';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
@@ -17,7 +18,7 @@ export class OrderListDialogComponent implements OnInit {
   khataList: any = [];
   partyList: any = [];
   orderList: any = [];
-
+  filterOrderList: any = [];
   constructor(
     private fb: FormBuilder, private firebaseCollectionService: FirebaseCollectionService,
     public dialogRef: MatDialogRef<OrderListDialogComponent>,
@@ -37,6 +38,7 @@ export class OrderListDialogComponent implements OnInit {
     this.getKhataData();
     this.getPartyData();
     this.getOrderData();
+    
   }
 
   formBuild() {
@@ -45,7 +47,50 @@ export class OrderListDialogComponent implements OnInit {
       order: [''],
       khata: [''],
       date: new Date(),
+      productsOrder: this.fb.array([])
     })
+  }
+
+  get productsOrder() {
+    return this.orderForm.get('productsOrder') as FormArray;
+  }
+
+  removeProduct(index: number) {
+    this.productsOrder.removeAt(index);
+  }
+
+  onPartySelection(selectedPartyId: string) {
+    this.filterOrderList = this.orderList.filter(
+      (order: any) => order.partyId === selectedPartyId && order.orderStatus === 'Pending'
+    );
+    console.log(this.filterOrderList, 'filterOrderList==============');
+  }
+
+  onOrderSelection() {
+    if (this.filterOrderList.length > 0) {
+      const selectedOrderId = this.orderForm.get('order')?.value;
+      const selectedOrder = this.filterOrderList.find((order:any) => order.id === selectedOrderId);
+
+      if (selectedOrder && selectedOrder.products) {
+        const products = selectedOrder.products;
+        this.updateProductsFormArray(products);
+      }
+    }
+  }
+
+  updateProductsFormArray(products: any[]) {
+    const productsArray = this.orderForm.get('productsOrder') as FormArray;
+    productsArray.clear();
+    products.forEach(product => {
+      productsArray.push(
+        this.fb.group({
+          productName: [product.productName, Validators.required],
+          productQuantity: [product.productQuantity, Validators.required],
+          productPrice: [product.productPrice, Validators.required],
+          khataPrice: [ Validators.required],
+        })
+      );
+    });
   }
 
   getKhataData() {
@@ -70,6 +115,7 @@ export class OrderListDialogComponent implements OnInit {
     this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
       if (order && order.length > 0) {
         this.orderList = order
+        console.log(this.orderList, 'orederList=========');
       }
     }).catch((error) => {
       console.error('Error fetching order:', error);
@@ -81,8 +127,12 @@ export class OrderListDialogComponent implements OnInit {
       party: this.orderForm.value.party,
       order: this.orderForm.value.order,
       khata: this.orderForm.value.khata,
-      date: this.orderForm.value.date
+      date: this.orderForm.value.date,
+      productsOrder: this.orderForm.value.productsOrder,
+      status: 'Pending'
     }
+    console.log(payload,'payload=============');
+    
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

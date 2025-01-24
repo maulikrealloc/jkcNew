@@ -43,6 +43,12 @@ export class AppSideRegisterComponent {
     const registerSuccess:any = this.authServie.signUp(payload)
     if (registerSuccess) {
       this.form.reset()
+      this.form.controls['email'].setErrors(null)
+      this.form.controls['password'].setErrors(null)
+      this.form.controls['firstName'].setErrors(null)
+      this.form.controls['lastName'].setErrors(null)
+      this.form.controls['companyName'].setErrors(null)
+      this.form.controls['mobileNo'].setErrors(null)
     }
   }
 

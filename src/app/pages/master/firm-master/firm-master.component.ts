@@ -40,6 +40,10 @@ export class FirmMasterComponent implements OnInit {
     this.getFirmData();
   }
 
+  applyFilter(filterValue: string): void {
+    this.firmMasterDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   generateRandomNumber(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
@@ -126,8 +130,8 @@ export class firmMasterDialogComponent implements OnInit {
 
   formBuild() {
     this.firmForm = this.fb.group({
-      header: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
-      subHeader: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      header: ['', [Validators.required]],
+      subHeader: ['', [Validators.required]],
       address: ['', Validators.required],
       GSTNo: [''],
       gstPercentage: [''],

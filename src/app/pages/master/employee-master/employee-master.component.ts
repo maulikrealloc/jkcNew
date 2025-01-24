@@ -36,6 +36,10 @@ export class EmployeeMasterComponent implements OnInit {
     this.getEmployeeData();
   }
 
+  applyFilter(filterValue: string): void {
+    this.employeeListDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   getEmployeeData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'EmployeeList').then((employee) => {
       this.employeesList = employee

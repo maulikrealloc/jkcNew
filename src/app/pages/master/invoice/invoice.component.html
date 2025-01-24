@@ -96,7 +96,7 @@
                         <mat-hint
                             *ngIf="invoiceForm.get('sgst')?.hasError('required') && invoiceForm.get('sgst')?.touched"
                             class="error-message error-color">
-                            S.G.S.T no is required
+                            S.G.S.T is required
                         </mat-hint>
                     </mat-form-field>
                 </div>
@@ -116,8 +116,7 @@
 
                 <div class="col-12 col-sm-12 col-md-1">
                     <div class="d-flex align-items-center justify-content-end">
-                        <button class="w-100" mat-flat-button color="primary" [disabled]="invoiceForm.invalid"
-                            (click)="invoiceview()">
+                        <button class="w-100" mat-flat-button color="primary" [disabled]="invoiceForm.invalid" (click)="invoiceView()">
                             View
                         </button>
                     </div>

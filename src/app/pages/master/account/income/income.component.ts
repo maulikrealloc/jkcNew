@@ -36,6 +36,10 @@ export class IncomeComponent implements OnInit {
     this.getCompanyAccountData();
   }
 
+  applyFilter(filterValue: string): void {
+    this.incomeListDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   convertTimestampToDate(element: any): Date | null {
     if (element instanceof Timestamp) {
       return element.toDate();

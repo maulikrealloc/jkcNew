@@ -35,6 +35,10 @@ export class PartyMasterComponent implements OnInit {
     this.getPartyData()
   }
 
+  applyFilter(filterValue: string): void {
+    this.partyMasterDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   getPartyData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
       this.partyList = party
@@ -157,7 +161,7 @@ export class partyMasterDialogComponent implements OnInit {
       partyGSTIN: [''],
       chalanNoSeries: [''],
       partyPanNo: [''],
-      partyMobile: [''],
+      partyMobile: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       partyColorCode: ['']
     })
   }

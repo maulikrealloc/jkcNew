@@ -181,11 +181,19 @@ export class InvoiceComponent implements OnInit {
     });
     this.invoiceForm.markAsPristine();
     this.invoiceForm.markAsUntouched();
+    // this.invoiceForm.reset()
+    // this.invoiceForm.controls['firm'].setErrors(null)
+    // this.invoiceForm.controls['party'].setErrors(null)
+    // this.invoiceForm.controls['chalanNo'].setErrors(null)
+    // this.invoiceForm.controls['date'].setErrors(null)
+    // this.invoiceForm.controls['cgst'].setErrors(null)
+    // this.invoiceForm.controls['sgst'].setErrors(null)
+    // this.invoiceForm.controls['discountRatio'].setErrors(null)
     this.selectedChalanList = [];
     this.invoiceListDataSource = new MatTableDataSource(this.selectedChalanList);
   }
 
-  invoiceview() {
+  invoiceView() {
     const grossTotal = this.selectedChalanList.products.map((id: any) => id.productQuantity * id.productPrice).reduce((a: any, b: any) => { return a + b }).toFixed(2);
     const discountAmount: any = Number((grossTotal * this.invoiceForm.value.discountRatio) / 100).toFixed(2);
     const netAmount: any = Number(grossTotal - discountAmount).toFixed(2);
@@ -210,6 +218,11 @@ export class InvoiceComponent implements OnInit {
     this.getFirmDetails(payload.firmId);
     this.getChalanDetails(payload.chalanId);
     this.generatePDF(payload);
+    this.invoiceForm.markAsPristine();
+    this.invoiceForm.markAsUntouched();
+    this.selectedChalanList = [];
+    this.invoiceListDataSource = new MatTableDataSource(this.selectedChalanList);
+
   }
 
   updateChalanIsCreated(chalanId: any) {

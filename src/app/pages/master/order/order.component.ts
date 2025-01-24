@@ -54,6 +54,8 @@ export class OrderComponent implements OnInit {
   getPartyData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
       this.partyList = party
+      console.log(this.partyList,'partylist========');
+      
     }).catch((error) => {
       console.error('Error fetching party:', error);
     });

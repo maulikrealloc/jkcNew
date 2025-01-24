@@ -80,6 +80,8 @@ export class ChalanListComponent implements OnInit {
   getChalanData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'ChalanList').then((chalan) => {
       this.chalanList = chalan
+      console.log(this.chalanList,'chalan list=============');
+      
       if (chalan && chalan.length > 0) {
         this.chalanListDataSource = new MatTableDataSource(this.chalanList);
         this.chalanListDataSource.filterPredicate = (data: any, filter) => {
@@ -89,6 +91,8 @@ export class ChalanListComponent implements OnInit {
           const chalanNo = (data.chalanNo || '').toString();
           const chalanDate = this.convertTimestampToDate(data.chalanDate);
           const netAmount = (data.netAmount || '').toString();
+          console.log(netAmount,'newAmount===========');
+          
           const dataStr = `
     ${srNo}
     ${partyName}
@@ -288,7 +292,6 @@ export class ChalanListComponent implements OnInit {
         }),
         ...emptyRows
       ];
-
 
       this.netAmount = seletedChalan.netAmount;
 

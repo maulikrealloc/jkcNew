@@ -24,7 +24,7 @@
       <div class="col-12 col-sm-12 col-md-3">
         <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
           <mat-label>Select Party</mat-label>
-          <mat-select #dropdown placeholder="Select party">
+          <mat-select #dropdown placeholder="Select party" (selectionChange)="partyChange($event)">
             <mat-option [value]="item.id" *ngFor="let item of partyList">{{item.firstName}}</mat-option>
           </mat-select>
         </mat-form-field>

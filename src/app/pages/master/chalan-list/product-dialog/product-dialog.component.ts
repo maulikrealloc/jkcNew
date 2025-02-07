@@ -38,7 +38,11 @@ export class ProductDialogComponent implements OnInit {
     this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
       if (order && order.length > 0) {
         this.orderList = order
+        console.log(this.orderList,'orderList++++++++++++++');
+        
         this.selectedProduct = this.orderList.find((obj: any) => obj.id === this.local_data.partyOrderId).products
+        console.log(this.selectedProduct,'selectedProduct+++++++++++++++');
+        
       }
     }).catch((error) => {
       console.error('Error fetching order:', error);

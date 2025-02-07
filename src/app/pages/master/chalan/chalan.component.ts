@@ -53,6 +53,7 @@ export class ChalanComponent implements OnInit {
   imageUrl: string | ArrayBuffer | null = null;
   updateProductsData: any;
   netAmount: number = 0;
+  isDisplayChalan: boolean = false;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
@@ -102,6 +103,7 @@ export class ChalanComponent implements OnInit {
     this.getPartyDetails(this.chalanForm.value.party)
     this.getFirmDetails(this.chalanForm.value.firm)
     this.generatePDF();
+    this.isDisplayChalan = true
   }
 
   openProductViewData(action: any, obj: any) {

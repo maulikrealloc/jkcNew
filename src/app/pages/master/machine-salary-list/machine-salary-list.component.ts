@@ -76,8 +76,6 @@ export class MachineSalaryListComponent implements OnInit {
   getEmployeeData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'EmployeeList').then((employee) => {
       this.employeesList = employee
-      console.log(this.employeesList, 'empppppppppppppppppp');
-
     }).catch((error) => {
       console.error('Error fetching employee:', error);
     });

@@ -27,8 +27,8 @@
             <div class="col-4">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Party</mat-label>
-                    <mat-select #dropdown placeholder="Enter a party">
-                        <mat-option value="ABC">ABC</mat-option>
+                    <mat-select #dropdown [value]="khataList?.length ? khataList[0].id : null" placeholder="Enter a party">
+                        <mat-option [value]="item.id" *ngFor="let item of khataList">{{ item.companyName }}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>

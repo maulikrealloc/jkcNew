@@ -23,7 +23,7 @@
             <div class="col-3">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Select Party</mat-label>
-                    <mat-select #dropdown placeholder="Select party">
+                    <mat-select #dropdown [value]="khataList?.length ? khataList[0].id : null" placeholder="Select party" (selectionChange)="partyChange($event)">
                         <mat-option [value]="item.id" *ngFor="let item of khataList">{{ item.companyName }}</mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -135,7 +135,8 @@
                     </th>
                     <td mat-cell *matCellDef="let element" class="action-link">
                         <a class="m-r-10 cursor-pointer"><i-tabler name="edit" (click)="transferOrder('Edit', element)"
-                                class="icon-18"></i-tabler></a>
+                                class="icon-18"></i-tabler>
+                        </a>
                         <a class="m-r-10 cursor-pointer">
                             <i-tabler name="trash" (click)="transferOrder('Delete', element)"
                                 class="icon-18"></i-tabler>

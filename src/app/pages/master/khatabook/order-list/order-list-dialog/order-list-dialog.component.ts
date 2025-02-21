@@ -63,7 +63,6 @@ export class OrderListDialogComponent implements OnInit {
     this.filterOrderList = this.orderList.filter(
       (order: any) => order.partyId === selectedPartyId && order.orderStatus === 'Pending'
     );
-    console.log(this.filterOrderList, 'filterOrderList==============');
   }
 
   onOrderSelection() {
@@ -115,7 +114,6 @@ export class OrderListDialogComponent implements OnInit {
     this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
       if (order && order.length > 0) {
         this.orderList = order
-        console.log(this.orderList, 'orederList=========');
       }
     }).catch((error) => {
       console.error('Error fetching order:', error);
@@ -131,7 +129,6 @@ export class OrderListDialogComponent implements OnInit {
       productsOrder: this.orderForm.value.productsOrder,
       status: 'Pending'
     }
-    console.log(payload,'payload=============');
     
     this.dialogRef.close({ event: this.action, data: payload });
   }

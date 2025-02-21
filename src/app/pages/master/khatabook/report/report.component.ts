@@ -30,6 +30,7 @@ export class ReportComponent implements OnInit {
 
   khataReportList: any = [];
   partyList: any = [];
+  khataList: any = [];
 
   khataReportDataSource = new MatTableDataSource(this.khataReportList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -41,22 +42,21 @@ export class ReportComponent implements OnInit {
     const today = new Date();
     const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
     const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-
     this.dateKhataReportListForm = this.fb.group({
       start: [startDate],
       end: [endDate]
     })
-
     this.getKhataReportData();
     this.getPartyData();
+    this.getKhataData();
     this.khataReportDataSource.paginator = this.paginator;
   }
 
   getKhataReportData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'KhataReportList').then((khataReport) => {
       this.khataReportList = khataReport
-      console.log(this.khataReportList, 'khataReportList==========');
-
+      console.log(this.khataReportList,'khataReportList===================');
+      
       if (khataReport && khataReport.length > 0) {
         this.khataReportDataSource = new MatTableDataSource(this.khataReportList);
       } else {
@@ -71,8 +71,6 @@ export class ReportComponent implements OnInit {
   getPartyData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
       this.partyList = party
-      console.log(this.partyList, 'partyList+++++++++++++++++++');
-
     }).catch((error) => {
       console.error('Error fetching party:', error);
     });
@@ -80,6 +78,18 @@ export class ReportComponent implements OnInit {
 
   getPartyName(party: string): string {
     return this.partyList.find((partyObj: any) => partyObj.id === party)?.firstName
+  }
+
+  getKhataData() {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'KhataList').then((khata) => {
+      this.khataList = khata
+    }).catch((error) => {
+      console.error('Error fetching khata:', error);
+    });
+  }
+
+  getKhataName(khata: string): string {
+    return this.khataList.find((khataObj: any) => khataObj.id === khata)?.companyName
   }
 
 }

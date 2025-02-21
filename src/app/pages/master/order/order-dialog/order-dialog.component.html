@@ -63,10 +63,10 @@
         </mat-form-field>
       </div>
     </div>
+
     <div class="row">
       <ng-container formArrayName="products">
         <ng-container *ngFor="let itme of getProductsFormArry().controls; let i = index" [formGroupName]="i">
-
           <div class="col-4">
             <mat-form-field appearance="outline" class="w-100 m-t-10">
               <mat-label>Name</mat-label>
@@ -87,8 +87,7 @@
               <mat-label>Quantity</mat-label>
               <input type="number" matInput required formControlName="productQuantity" placeholder="Enter quantity"
                 min="0">
-              <mat-hint
-                *ngIf="itme.get('productQuantity')?.hasError('required') && itme.get('productQuantity')?.touched"
+              <mat-hint *ngIf="itme.get('productQuantity')?.hasError('required') && itme.get('productQuantity')?.touched"
                 class="error-message error-color">
                 Quantity is required
               </mat-hint>

@@ -80,9 +80,7 @@ export class ChalanListComponent implements OnInit {
   getChalanData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'ChalanList').then((chalan) => {
       this.chalanList = chalan
-      console.log(this.chalanList,'chalanList=================');
-      
-      
+
       if (chalan && chalan.length > 0) {
         this.chalanListDataSource = new MatTableDataSource(this.chalanList);
         this.chalanListDataSource.filterPredicate = (data: any, filter) => {
@@ -92,8 +90,6 @@ export class ChalanListComponent implements OnInit {
           const chalanNo = (data.chalanNo || '').toString();
           const chalanDate = this.convertTimestampToDate(data.chalanDate);
           const netAmount = (data.netAmount || '').toString();
-          console.log(netAmount,'netAmount===========');
-          
           const dataStr = ` 
     ${srNo}
     ${partyName}
@@ -138,17 +134,15 @@ export class ChalanListComponent implements OnInit {
     this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
       if (party && party.length > 0) {
         this.partyList = party
-        console.log(this.partyList,'partyList =============');
-        
       }
     }).catch((error) => {
       console.error('Error fetching party:', error);
     });
   }
 
-  partyChange(event : any) {
+  partyChange(event: any) {
     const partyChange = this.chalanList.filter((chalanObj: any) => chalanObj.partyId === event.value)
-    this.chalanListDataSource = new MatTableDataSource(partyChange); 
+    this.chalanListDataSource = new MatTableDataSource(partyChange);
   }
 
   deleteChalan(action: any, obj: any) {

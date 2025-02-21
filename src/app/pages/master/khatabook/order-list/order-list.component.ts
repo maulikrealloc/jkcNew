@@ -39,6 +39,7 @@ export class OrderListComponent implements OnInit {
   constructor(private fb: FormBuilder, private firebaseCollectionService: FirebaseCollectionService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.orderDataSource.paginator = this.paginator;
     const today = new Date();
     const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
     const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
@@ -47,25 +48,23 @@ export class OrderListComponent implements OnInit {
       start: [startDate],
       end: [endDate]
     });
-    
+
     this.getKhataOrderData();
     this.getKhataData();
     this.getPartyData();
     this.getOrderData();
-    this.orderDataSource.paginator = this.paginator;
   }
 
   getKhataOrderData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'KhataOrderList').then((khataOrder) => {
       this.khataOrderList = khataOrder
-      console.log(this.khataOrderList,'khataorderList==========');
-      
       if (khataOrder && khataOrder.length > 0) {
         this.orderDataSource = new MatTableDataSource(this.khataOrderList);
       } else {
         this.khataOrderList = [];
         this.orderDataSource = new MatTableDataSource(this.khataOrderList);
       }
+      this.orderDataSource.paginator = this.paginator;
     }).catch((error) => {
       console.error('Error fetching khataOrder:', error);
     });
@@ -73,9 +72,7 @@ export class OrderListComponent implements OnInit {
 
   getPartyData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
-      this.partyList = party
-      console.log(this.partyList,'partyList=========');
-      
+      this.partyList = party      
     }).catch((error) => {
       console.error('Error fetching party:', error);
     });
@@ -87,9 +84,7 @@ export class OrderListComponent implements OnInit {
 
   getKhataData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'KhataList').then((khata) => {
-      this.khataList = khata
-      // console.log(this.khataList,'khataList================');
-      
+      this.khataList = khata      
     }).catch((error) => {
       console.error('Error fetching khata:', error);
     });
@@ -103,7 +98,6 @@ export class OrderListComponent implements OnInit {
     this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
       if (order && order.length > 0) {
         this.orderList = order
-        // console.log(this.orderList, 'orederList=========');
       }
     }).catch((error) => {
       console.error('Error fetching order:', error);
@@ -112,6 +106,11 @@ export class OrderListComponent implements OnInit {
 
   getOrderNo(order: string): string {
     return this.orderList.find((orderObj: any) => orderObj.id === order)?.partyOrder
+  }
+
+  partyChange(event: any) {
+    const partyChange = this.khataOrderList.filter((khataOrderObj: any) => khataOrderObj.khata === event.value)
+    this.orderDataSource = new MatTableDataSource(partyChange);
   }
 
   transferOrder(action: string, obj: any) {

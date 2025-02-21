@@ -69,22 +69,20 @@ export class IncomeComponent implements OnInit {
   }
 
   openIncome(action: string, obj: any) {
-    obj.action = action;
     const dialogRef = this.dialog.open(IncomeDialogComponent, {
-      data: obj,
-    })
+      data: { ...obj, action },
+    });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'IncomeList');
-        this.getIncomeListData();
-      }
-      if (result?.event === 'Edit') {
-        this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'IncomeList');
-        this.getIncomeListData();
-      }
-      if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'IncomeList');
+      if (result?.event) {
+        const { event, data } = result;
+        const { id } = obj;
+        const collection = 'IncomeList';
+
+        event === 'Add' && this.firebaseCollectionService.addDocument('CompanyList', data, collection);
+        event === 'Edit' && this.firebaseCollectionService.updateDocument('CompanyList', id, data, collection);
+        event === 'Delete' && this.firebaseCollectionService.deleteDocument('CompanyList', id, collection);
+
         this.getIncomeListData();
       }
     });

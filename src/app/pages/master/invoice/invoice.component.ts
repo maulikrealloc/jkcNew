@@ -216,11 +216,6 @@ export class InvoiceComponent implements OnInit {
     this.getFirmDetails(payload.firmId);
     this.getChalanDetails(payload.chalanId);
     this.generatePDF(payload);
-    // this.invoiceForm.markAsPristine();
-    // this.invoiceForm.markAsUntouched();
-    // this.selectedChalanList = [];
-    // this.invoiceListDataSource = new MatTableDataSource(this.selectedChalanList);
-
   }
 
   updateChalanIsCreated(chalanId: any) {

@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
   templateUrl: './passbook.component.html',
   styleUrls: ['./passbook.component.scss']
 })
+  
 export class PassbookComponent implements OnInit {
 
   passbookDataColumns: string[] = [

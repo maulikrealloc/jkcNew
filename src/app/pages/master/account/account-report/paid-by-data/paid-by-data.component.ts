@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
-
 @Component({
   selector: 'app-paid-by-data',
   templateUrl: './paid-by-data.component.html',

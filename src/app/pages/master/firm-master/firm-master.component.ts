@@ -10,6 +10,7 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   templateUrl: './firm-master.component.html',
   styleUrls: ['./firm-master.component.scss']
 })
+  
 export class FirmMasterComponent implements OnInit {
 
   firmMasterColumns: string[] = [

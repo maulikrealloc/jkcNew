@@ -12,6 +12,7 @@ import { Timestamp } from 'firebase/firestore';
   templateUrl: './expenses.component.html',
   styleUrls: ['./expenses.component.scss']
 })
+  
 export class ExpensesComponent implements OnInit {
 
   expensesDataColumns: string[] = [

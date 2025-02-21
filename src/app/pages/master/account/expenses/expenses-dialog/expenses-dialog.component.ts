@@ -9,6 +9,7 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   templateUrl: './expenses-dialog.component.html',
   styleUrls: ['./expenses-dialog.component.scss']
 })
+  
 export class ExpensesDialogComponent implements OnInit {
 
   expensesForm: FormGroup;

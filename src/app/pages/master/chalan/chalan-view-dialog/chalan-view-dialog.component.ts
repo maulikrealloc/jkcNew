@@ -23,9 +23,6 @@ export class ChalanViewDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.action === 'Chalan View') {
-      // this.getOrderData();
-    }
   }
 
   doAction() {

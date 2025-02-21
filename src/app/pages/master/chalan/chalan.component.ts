@@ -66,7 +66,6 @@ export class ChalanComponent implements OnInit {
     this.getPartyData();
     this.getFirmData();
     this.productPriceTotal();
-    
   }
 
   formBuild() {

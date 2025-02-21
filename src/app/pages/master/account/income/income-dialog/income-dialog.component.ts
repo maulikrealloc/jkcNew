@@ -9,6 +9,7 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   templateUrl: './income-dialog.component.html',
   styleUrls: ['./income-dialog.component.scss']
 })
+  
 export class IncomeDialogComponent implements OnInit {
 
   incomeForm: FormGroup;

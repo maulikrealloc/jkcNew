@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, Inject, OnInit, Optional, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, Optional, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { Validators_Pattern } from 'src/app/shared/constants/validators';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
@@ -13,16 +14,7 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   
 export class PartyMasterComponent implements OnInit {
 
-  partyDataColumns: string[] = [
-    'srno',
-    'PartyName',
-    'PartyGSTIN',
-    'ChalanNo',
-    'Address',
-    'PartyPan',
-    'PartyMobile',
-    'action',
-  ];
+  partyDataColumns: string[] = ['srNo','partyName','partyGstIn','chalanNo','address','partyPan','partyMobile','action',];
   partyList: any = []
   partyMasterDataSource: any = new MatTableDataSource(this.partyList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -31,7 +23,6 @@ export class PartyMasterComponent implements OnInit {
   constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
-    this.partyMasterDataSource.paginator = this.paginator;
     this.getPartyData()
   }
 
@@ -41,38 +32,30 @@ export class PartyMasterComponent implements OnInit {
 
   getPartyData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
-      this.partyList = party
-      if (party && party.length > 0) {
-        this.partyMasterDataSource = new MatTableDataSource(this.partyList);
-      } else {
-        this.partyList = [];
-        this.partyMasterDataSource = new MatTableDataSource(this.partyList);
-      }
+      this.partyList = party || [];
+      this.partyMasterDataSource = new MatTableDataSource(this.partyList);
+      this.partyMasterDataSource.paginator = this.paginator;
     }).catch((error) => {
       console.error('Error fetching party:', error);
     });
   }
 
   addParty(action: string, obj: any) {
-    obj.action = action;
-    const dialogRef = this.dialog.open(partyMasterDialogComponent, { data: obj });
+    const dialogRef = this.dialog.open(partyMasterDialogComponent, {
+      data: { ...obj, action },
+    });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'PartyList');
-        this.getPartyData()
-      }
-      if (result?.event === 'Edit') {
-        this.partyList.forEach((element: any) => {
-          if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'PartyList');
-            this.getPartyData()
-          }
-        });
-      }
-      if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'PartyList');
-        this.getPartyData()
+      if (result?.event) {
+        const { event, data } = result;
+        const { id } = obj;
+        const collection = 'PartyList';
+
+        event === 'Add' && this.firebaseCollectionService.addDocument('CompanyList', data, collection);
+        event === 'Edit' && this.firebaseCollectionService.updateDocument('CompanyList', id, data, collection);
+        event === 'Delete' && this.firebaseCollectionService.deleteDocument('CompanyList', id, collection);
+
+        this.getPartyData();
       }
     });
   }
@@ -136,48 +119,32 @@ export class partyMasterDialogComponent implements OnInit {
   constructor(private fb: FormBuilder, public dialogRef: MatDialogRef<partyMasterDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
-    this.action = this.local_data.action;
   }
 
   ngOnInit(): void {
     this.buildForm()
-    if (this.action === 'Edit') {
-      this.partyForm.controls['firstName'].setValue(this.local_data.firstName)
-      this.partyForm.controls['lastName'].setValue(this.local_data.lastName)
-      this.partyForm.controls['partyAddress'].setValue(this.local_data.partyAddress)
-      this.partyForm.controls['partyGSTIN'].setValue(this.local_data.partyGSTIN)
-      this.partyForm.controls['chalanNoSeries'].setValue(this.local_data.chalanNoSeries)
-      this.partyForm.controls['partyPanNo'].setValue(this.local_data.partyPanNo)
-      this.partyForm.controls['partyMobile'].setValue(this.local_data.partyMobile)
-      this.partyForm.controls['partyColorCode'].setValue(this.local_data.partyColorCode)
-    }
   }
 
   buildForm() {
     this.partyForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
-      lastName: [''],
+      firstName: ['', [Validators.required, Validators.pattern(Validators_Pattern.NAME)]],
+      lastName: ['', [Validators.pattern(Validators_Pattern.NAME)]],
       partyAddress: [''],
-      partyGSTIN: [''],
-      chalanNoSeries: [''],
-      partyPanNo: [''],
+      partyGSTIN: ['', [Validators.pattern(Validators_Pattern.GST_NUMBER)]],
+      chalanNoSeries: ['', [Validators.pattern(Validators_Pattern.NUMBER)]],
+      partyPanNo: ['', [Validators.pattern(Validators_Pattern.PAN_NUMBER)]],
       partyMobile: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       partyColorCode: ['']
-    })
+    });
+
+    if (this.local_data?.action === 'Edit') {
+      this.partyForm.patchValue(this.local_data)
+    }
   }
 
   doAction(): void {
-    const payload = {
-      firstName: this.partyForm.value.firstName,
-      lastName: this.partyForm.value.lastName,
-      partyAddress: this.partyForm.value.partyAddress,
-      partyGSTIN: this.partyForm.value.partyGSTIN,
-      chalanNoSeries: this.partyForm.value.chalanNoSeries,
-      partyPanNo: this.partyForm.value.partyPanNo,
-      partyMobile: this.partyForm.value.partyMobile,
-      partyColorCode: this.partyForm.value.partyColorCode
-    }
-    this.dialogRef.close({ event: this.action, data: payload });
+    const payload = this.partyForm.value
+    this.dialogRef.close({ event: this.local_data?.action, data: payload });
   }
 
   closeDialog(): void {

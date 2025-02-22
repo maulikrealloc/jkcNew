@@ -89,13 +89,7 @@
             Status
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            <div class="statustable" [ngClass]="{
-                                  'pending-status': element.orderStatus === 'Pending',
-                                  'in-progress-status': element.orderStatus === 'In Progress',
-                                  'rejected-status': element.orderStatus === 'Rejected',
-                                  'cancelled-status': element.orderStatus === 'Cancelled',
-                                  'done-status': element.orderStatus === 'Done'
-                                }">
+            <div class="statustable" [ngClass]="orderStatus(element.orderStatus)">
               <span> {{ element.orderStatus }} </span>
             </div>
           </td>
@@ -115,13 +109,7 @@
             <mat-menu #menu="matMenu">
               <ng-container *ngFor="let status of stausList">
                 <div *ngIf="element.orderStatus !== status" (click)="changeStatus(status,element)" class="menu-item"
-                  [ngClass]="{
-                        'pending-status': status === 'Pending',
-                        'in-progress-status': status === 'In Progress',
-                        'rejected-status': status === 'Rejected',
-                        'cancelled-status': status === 'Cancelled',
-                        'done-status': status === 'Done'
-                      }">
+                  [ngClass]="orderStatus(element.orderStatus)">
                   <span>{{status}}</span><br>
                 </div>
               </ng-container>

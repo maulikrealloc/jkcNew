@@ -5,7 +5,6 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { OrderDialogComponent } from './order-dialog/order-dialog.component';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
-import { FilterService } from 'src/app/services/filter.service';
 
 @Component({
   selector: 'app-order',
@@ -15,30 +14,19 @@ import { FilterService } from 'src/app/services/filter.service';
   
 export class OrderComponent implements OnInit {
 
-  orderDataColumns: string[] = [
-    'orderNo',
-    'partyName',
-    'orderDate',
-    'deliveryDate',
-    'designNo',
-    'p-Order',
-    'chalanNo',
-    'status',
-    'action',
-  ];
+  orderDataColumns: string[] = [ 'orderNo', 'partyName', 'orderDate', 'deliveryDate', 'designNo', 'p-Order', 'chalanNo', 'status', 'action'];
   orderList: any = [];
   partyList: any = [];
   stausList: any = ["Pending", "In Progress", "Rejected", "Cancelled", "Done"];
   orderDataSource = new MatTableDataSource(this.orderList);
+
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog,
-    private firebaseCollectionService: FirebaseCollectionService,
-    private filterService: FilterService) { }
+    private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
-    this.orderDataSource.paginator = this.paginator;
     this.getOrderData();
     this.getPartyData();
   }
@@ -57,36 +45,30 @@ export class OrderComponent implements OnInit {
   getPartyData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
       this.partyList = party      
-    }).catch((error) => {
-      console.error('Error fetching party:', error);
-    });
+    }).catch((error) => {});
   }
 
   getOrderData() {
     this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
-      this.orderList = order
-      if (order && order.length > 0) {
-        this.orderDataSource = new MatTableDataSource(this.orderList);
-        // this.filterService.filterTableData(this.orderDataSource, )
-        this.orderDataSource.filterPredicate = (data: any, filter: string) => {
-          return [
-            this.getPartyName(data.partyId),
-            this.convertTimestampToDate(data.orderDate),
-            this.convertTimestampToDate(data.deliveryDate),
-            data.designNo,
-            data.partyOrder,
-            data.products?.[0]?.productChalanNo || '',
-            data.orderStatus
-          ].join(' ').toLowerCase().includes(filter);
-        }
-      } else {
-        this.orderList = [];
-        this.orderDataSource = new MatTableDataSource(this.orderList);
-      }
+      this.orderList = order || [];
+      this.orderDataSource = new MatTableDataSource(this.orderList);
+      if (this.orderList.length > 0) this.filterData();
       this.orderDataSource.paginator = this.paginator;
-    }).catch((error) => {
-      console.error('Error fetching order:', error);
-    });
+    }).catch((error) => {});
+  }
+
+  filterData() {
+    this.orderDataSource.filterPredicate = (data: any, filter: string) => {
+      return [
+        this.getPartyName(data.partyId),
+        this.convertTimestampToDate(data.orderDate),
+        this.convertTimestampToDate(data.deliveryDate),
+        data.designNo,
+        data.partyOrder,
+        data.products?.[0]?.productChalanNo || '',
+        data.orderStatus
+      ].join(' ').toLowerCase().includes(filter);
+    }
   }
 
   addDesign(action: string, obj: any) {
@@ -119,4 +101,13 @@ export class OrderComponent implements OnInit {
     this.getOrderData();
   }
 
+  orderStatus(status:any) {
+    return {
+      'pending-status': status === 'Pending',
+      'in-progress-status': status === 'In Progress',
+      'rejected-status': status === 'Rejected',
+      'cancelled-status': status === 'Cancelled',
+      'done-status': status === 'Done'
+    }
+  }
 }

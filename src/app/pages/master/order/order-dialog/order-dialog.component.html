@@ -9,11 +9,8 @@
           <mat-select #dropdown formControlName="party" placeholder="Select party">
             <mat-option [value]="item.id" *ngFor="let item of partyList">{{item.firstName}}</mat-option>
           </mat-select>
-          <mat-hint *ngIf="orderForm.get('party')?.hasError('required') && orderForm.get('party')?.touched"
-            class="error-message error-color">
-            Party is required
-          </mat-hint>
         </mat-form-field>
+        <app-validation-message class="position-relative" [control]="orderForm.controls['party']"></app-validation-message>
       </div>
 
       <div class="col-6">
@@ -29,11 +26,8 @@
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>P-Order</mat-label>
           <input type="number" min="0" matInput required formControlName="partyOrder" placeholder="Enter party order">
-          <mat-hint *ngIf="orderForm.get('partyOrder')?.hasError('required') && orderForm.get('partyOrder')?.touched"
-            class="error-message error-color">
-            Party order is required
-          </mat-hint>
         </mat-form-field>
+        <app-validation-message class="position-relative" [control]="orderForm.controls['partyOrder']"></app-validation-message>
       </div>
 
       <div class="col-4">
@@ -42,11 +36,8 @@
           <input matInput [matDatepicker]="orderDate" formControlName="orderDate" placeholder="Order date">
           <mat-datepicker-toggle matSuffix [for]="orderDate"></mat-datepicker-toggle>
           <mat-datepicker #orderDate></mat-datepicker>
-          <mat-hint *ngIf="orderForm.get('orderDate')?.hasError('required') && orderForm.get('orderDate')?.touched"
-            class="error-message error-color">
-            Order date is required
-          </mat-hint>
         </mat-form-field>
+        <app-validation-message class="position-relative" [control]="orderForm.controls['orderDate']"></app-validation-message>
       </div>
 
       <div class="col-4">
@@ -55,31 +46,20 @@
           <input matInput [matDatepicker]="deliveryDate" formControlName="deliveryDate" placeholder="Delivery date">
           <mat-datepicker-toggle matSuffix [for]="deliveryDate"></mat-datepicker-toggle>
           <mat-datepicker #deliveryDate></mat-datepicker>
-          <mat-hint
-            *ngIf="orderForm.get('deliveryDate')?.hasError('required') && orderForm.get('deliveryDate')?.touched"
-            class="error-message error-color">
-            Delivery date is required
-          </mat-hint>
         </mat-form-field>
+        <app-validation-message class="position-relative" [control]="orderForm.controls['deliveryDate']"></app-validation-message>
       </div>
     </div>
 
     <div class="row">
       <ng-container formArrayName="products">
-        <ng-container *ngFor="let itme of getProductsFormArry().controls; let i = index" [formGroupName]="i">
+        <ng-container *ngFor="let item of getProductsFormArry().controls; let i = index" [formGroupName]="i">
           <div class="col-4">
             <mat-form-field appearance="outline" class="w-100 m-t-10">
               <mat-label>Name</mat-label>
               <input type="text" matInput required formControlName="productName" placeholder="Enter name">
-              <mat-hint *ngIf="itme.get('productName')?.hasError('required') && itme.get('productName')?.touched"
-                class="error-message error-color">
-                Name is required
-              </mat-hint>
-              <mat-hint *ngIf="itme.get('productName')?.hasError('pattern') && itme.get('productName')?.touched"
-                class="error-message error-color">
-                Please enter valid name
-              </mat-hint>
             </mat-form-field>
+            <!-- <app-validation-message class="position-relative" [control]="item.controls['productName']"></app-validation-message> -->
           </div>
 
           <div class="col-4">
@@ -87,22 +67,16 @@
               <mat-label>Quantity</mat-label>
               <input type="number" matInput required formControlName="productQuantity" placeholder="Enter quantity"
                 min="0">
-              <mat-hint *ngIf="itme.get('productQuantity')?.hasError('required') && itme.get('productQuantity')?.touched"
-                class="error-message error-color">
-                Quantity is required
-              </mat-hint>
             </mat-form-field>
+            <!-- <app-validation-message class="position-relative" [control]="item.controls['productQuantity']"></app-validation-message> -->
           </div>
 
           <div class="col-3">
             <mat-form-field appearance="outline" class="w-100 m-t-10">
               <mat-label>Price</mat-label>
               <input type="number" matInput required formControlName="productPrice" placeholder="Enter price" min="0">
-              <mat-hint *ngIf="itme.get('productPrice')?.hasError('required') && itme.get('productPrice')?.touched"
-                class="error-message error-color">
-                Price is required
-              </mat-hint>
             </mat-form-field>
+            <!-- <app-validation-message class="position-relative" [control]="item.controls['productPrice']"></app-validation-message> -->
           </div>
 
           <div class="col-1">
@@ -119,7 +93,7 @@
 <mat-dialog-actions class="p-24 justify-content-end">
   <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
   <button mat-flat-button [mat-dialog-close]="true" [disabled]="action !== 'Delete' && orderForm.invalid"
-    color="primary" (click)="doAction();">
+    color="primary" (click)="saveOrder();">
     {{action}}
   </button>
 </mat-dialog-actions>

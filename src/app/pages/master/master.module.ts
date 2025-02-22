@@ -64,6 +64,7 @@ import { PaymentListComponent } from './invoice-list/payment-list/payment-list.c
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ChalanViewDialogComponent } from './chalan/chalan-view-dialog/chalan-view-dialog.component';
 import { EmployeeReportComponent } from './employee-report/employee-report.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -137,7 +138,8 @@ import { EmployeeReportComponent } from './employee-report/employee-report.compo
     TablerIconsModule,
     MatNativeDateModule,
     NgApexchartsModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    SharedModule
   ],
   providers: [DatePipe]
 })

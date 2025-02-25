@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
-
+import { CommonService } from 'src/app/services/common.service';
 @Component({
   selector: 'app-transfer-dialog',
   templateUrl: './transfer-dialog.component.html',
@@ -13,7 +12,7 @@ export class TransferDialogComponent implements OnInit {
   transferForm: FormGroup;
   companyAccountList: any = [];
 
-  constructor(private fb: FormBuilder, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private fb: FormBuilder, private commonService: CommonService) { }
 
   ngOnInit(): void {
     this.transfergroup();
@@ -29,13 +28,7 @@ export class TransferDialogComponent implements OnInit {
   }
 
   getCompanyAccountData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'CompanyAccountList').then((company) => {
-      if (company && company.length > 0) {
-        this.companyAccountList = company
-      }
-    }).catch((error) => {
-      console.error('Error fetching company:', error);
-    });
+    this.commonService.fetchData('CompanyAccountList', this.companyAccountList);
   }
 
 }

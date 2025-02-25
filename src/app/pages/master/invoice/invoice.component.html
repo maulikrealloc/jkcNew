@@ -10,11 +10,12 @@
                             (selectionChange)="firmChange($event)">
                             <mat-option [value]="item.id" *ngFor="let item of firmList">{{ item.header }}</mat-option>
                         </mat-select>
-                        <mat-hint
+                        <app-validation-message class="position-relative" [control]="invoiceForm.controls['firm']"></app-validation-message>
+                        <!-- <mat-hint
                             *ngIf="invoiceForm.get('firm')?.hasError('required') && invoiceForm.get('firm')?.touched"
                             class="error-message error-color">
                             Firm is required
-                        </mat-hint>
+                        </mat-hint> -->
                     </mat-form-field>
                 </div>
 
@@ -26,11 +27,7 @@
                             <mat-option *ngFor="let item of partyList" [value]="item.id">{{ item.firstName
                                 }}</mat-option>
                         </mat-select>
-                        <mat-hint
-                            *ngIf="invoiceForm.get('party')?.hasError('required') && invoiceForm.get('party')?.touched"
-                            class="error-message error-color">
-                            Party is required
-                        </mat-hint>
+                        <app-validation-message class="position-relative" [control]="invoiceForm.controls['party']"></app-validation-message>
                     </mat-form-field>
                 </div>
 
@@ -47,11 +44,7 @@
                                 <mat-option class="text-center" disabled>No record found</mat-option>
                             </ng-template>
                         </mat-select>
-                        <mat-hint
-                            *ngIf="invoiceForm.get('chalanNo')?.hasError('required') && invoiceForm.get('chalanNo')?.touched"
-                            class="error-message error-color">
-                            Chalan no is required
-                        </mat-hint>
+                        <app-validation-message class="position-relative" [control]="invoiceForm.controls['chalanNo']"></app-validation-message>
                     </mat-form-field>
                 </div>
 
@@ -69,11 +62,7 @@
                         <mat-label>Invoice No</mat-label>
                         <input type="text" matInput required formControlName="invoiceNo" placeholder="Enter invoice no"
                             min="0">
-                        <mat-hint
-                            *ngIf="invoiceForm.get('invoiceNo')?.hasError('required') && invoiceForm.get('invoiceNo')?.touched"
-                            class="error-message error-color">
-                            Invoice no is required
-                        </mat-hint>
+                            <app-validation-message class="position-relative" [control]="invoiceForm.controls['invoiceNo']"></app-validation-message>
                     </mat-form-field>
                 </div>
 
@@ -81,11 +70,7 @@
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>C.G.S.T</mat-label>
                         <input type="text" matInput required formControlName="cgst" placeholder="Enter C.G.S.T">
-                        <mat-hint
-                            *ngIf="invoiceForm.get('cgst')?.hasError('required') && invoiceForm.get('cgst')?.touched"
-                            class="error-message error-color">
-                            C.G.S.T is required
-                        </mat-hint>
+                        <app-validation-message class="position-relative" [control]="invoiceForm.controls['cgst']"></app-validation-message>
                     </mat-form-field>
                 </div>
 
@@ -93,11 +78,7 @@
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>S.G.S.T</mat-label>
                         <input type="text" matInput required formControlName="sgst" placeholder="Enter S.G.S.T">
-                        <mat-hint
-                            *ngIf="invoiceForm.get('sgst')?.hasError('required') && invoiceForm.get('sgst')?.touched"
-                            class="error-message error-color">
-                            S.G.S.T is required
-                        </mat-hint>
+                        <app-validation-message class="position-relative" [control]="invoiceForm.controls['sgst']"></app-validation-message>
                     </mat-form-field>
                 </div>
 
@@ -106,11 +87,7 @@
                         <mat-label>Discount Ratio</mat-label>
                         <input type="number" matInput required formControlName="discountRatio"
                             placeholder="Enter discount ratio (%)" min="0">
-                        <mat-hint style="min-width: 100%;"
-                            *ngIf="invoiceForm.get('discountRatio')?.hasError('required') && invoiceForm.get('discountRatio')?.touched"
-                            class="error-message error-color">
-                            Discount is required
-                        </mat-hint>
+                            <app-validation-message class="position-relative" [control]="invoiceForm.controls['discountRatio']"></app-validation-message>
                     </mat-form-field>
                 </div>
 

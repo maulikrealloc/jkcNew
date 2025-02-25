@@ -7,6 +7,7 @@
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Name</mat-label>
           <input type="text" matInput placeholder="Enter Name" min="0" formControlName="name">
+          <app-validation-message class="position-relative" [control]="rowMaterialForm.controls['name']"></app-validation-message>
         </mat-form-field>
       </div>
 
@@ -14,6 +15,7 @@
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Quantity</mat-label>
           <input type="number" matInput placeholder="Enter quantity" min="0" formControlName="quantity">
+          <app-validation-message class="position-relative" [control]="rowMaterialForm.controls['quantity']"></app-validation-message>
         </mat-form-field>
       </div>
 
@@ -21,6 +23,7 @@
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>price</mat-label>
           <input type="number" matInput placeholder="Enter price" min="0" formControlName="price">
+          <app-validation-message class="position-relative" [control]="rowMaterialForm.controls['price']"></app-validation-message>
         </mat-form-field>
       </div>
     </div>

@@ -22,28 +22,19 @@ export class RowMaterialDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.rowMateriallist();
-    if (this.action === 'Edit') {
-      this.rowMaterialForm.controls['name'].setValue(this.local_data.name)
-      this.rowMaterialForm.controls['quantity'].setValue(this.local_data.quantity)
-      this.rowMaterialForm.controls['price'].setValue(this.local_data.price)
-    }
+    this.rowMateriallist(this.action === 'Edit' ? this.local_data : undefined);
   }
 
-  rowMateriallist() {
+  rowMateriallist(data:any) {
     this.rowMaterialForm = this.fb.group({
-      name: ['', Validators.required],
-      quantity: ['', Validators.required],
-      price: ['', Validators.required]
+      name: [data ? data?.name :'', Validators.required],
+      quantity: [data ? data?.quantity :'', Validators.required],
+      price: [data ? data?.price :'', Validators.required]
     })
   }
 
   doAction(): void {
-    const payload = {
-      name: this.rowMaterialForm.value.name,
-      quantity: this.rowMaterialForm.value.quantity,
-      price: this.rowMaterialForm.value.price,
-    }
+    const payload = this.rowMaterialForm.value
     this.dialogRef.close({ event: this.action, data: payload })
   }
 

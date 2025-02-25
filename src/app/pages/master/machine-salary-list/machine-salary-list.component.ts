@@ -4,8 +4,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MachineSalaryDialogComponent } from './machine-salary-dialog/machine-salary-dialog.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-machine-salary-list',
@@ -31,8 +31,8 @@ export class MachineSalaryListComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private dialog: MatDialog,
-    private firebaseCollectionService: FirebaseCollectionService) { }
+    private commonService: CommonService,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
     const today = new Date();
@@ -60,25 +60,11 @@ export class MachineSalaryListComponent implements OnInit {
   }
 
   getmachineSalaryData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'MachineSalaryList').then((machineSalary) => {
-      this.machineSalaryList = machineSalary
-      if (machineSalary && machineSalary.length > 0) {
-        this.machineSalaryDataSource = new MatTableDataSource(this.machineSalaryList);
-      } else {
-        this.machineSalaryList = [];
-        this.machineSalaryDataSource = new MatTableDataSource(this.machineSalaryList);
-      }
-    }).catch((error) => {
-      console.error('Error fetching machineSalary:', error);
-    });
+    this.commonService.fetchData('MachineSalaryList', this.machineSalaryList, this.machineSalaryDataSource);
   }
 
   getEmployeeData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'EmployeeList').then((employee) => {
-      this.employeesList = employee
-    }).catch((error) => {
-      console.error('Error fetching employee:', error);
-    });
+    this.commonService.fetchData('EmployeeList', this.employeesList);
   }
 
   getEmployeeName(employeeId: string): string {
@@ -92,17 +78,8 @@ export class MachineSalaryListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'MachineSalaryList');
-        this.getmachineSalaryData();
-      }
-      if (result?.event === 'Edit') {
-        this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'MachineSalaryList');
-        this.getmachineSalaryData();
-      }
-      if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'MachineSalaryList');
-        this.getmachineSalaryData();
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'MachineSalaryList').then(() => this.getmachineSalaryData()).catch(console.error);
       }
     });
   }

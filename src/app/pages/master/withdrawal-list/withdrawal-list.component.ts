@@ -6,6 +6,7 @@ import { WithdrawalListDialogComponent } from './withdrawal-list-dialog/withdraw
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
+import { CommonService } from 'src/app/services/common.service';
 export interface withdrawalData {
   id: number,
   employeeList: string,
@@ -37,6 +38,7 @@ export class WithdrawalListComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
+    private commonService : CommonService,
     private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
@@ -50,7 +52,7 @@ export class WithdrawalListComponent implements OnInit {
     })
     this.getWithdrawalData();
     this.getEmployeeData();
-    this.withdrawalDataSource.paginator = this.paginator;
+    
   }
 
   convertTimestampToDate(element: any): Date | null {
@@ -65,36 +67,30 @@ export class WithdrawalListComponent implements OnInit {
   }
 
   getWithdrawalData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'WithdrawalList').then((withdrawal) => {
-      this.withdrawalList = withdrawal
-      if (withdrawal && withdrawal.length > 0) {
+    this.firebaseCollectionService.getDocuments('CompanyList', 'WithdrawalList')
+      .then((withdrawal) => {
+        this.withdrawalList = withdrawal || [];
         this.withdrawalDataSource = new MatTableDataSource(this.withdrawalList);
-        this.withdrawalDataSource.filterPredicate = (data: any, filter: string) => {
-          const employeeName = this.getEmployeeName(data.employeeId) || '';
-          const withdrawalDate = this.convertTimestampToDate(data.date)?.toLocaleDateString() || '';
-          const amount = data.amount || '';
-          const dataStr = `
-          ${employeeName}
-          ${withdrawalDate}
-          ${amount}
-        `.toLowerCase();
-          return dataStr.includes(filter.toLowerCase());
-        };
-      } else {
-        this.withdrawalList = [];
-        this.withdrawalDataSource = new MatTableDataSource(this.withdrawalList);
-      }
-    }).catch((error) => {
-      console.error('Error fetching withdrawal:', error);
-    });
+        if (this.withdrawalList.length > 0) this.filterData();
+        this.withdrawalDataSource.paginator = this.paginator;
+      })
+      .catch(error => console.error('Error fetching withdrawal:', error));
+  }
+
+  filterData() {
+    this.withdrawalDataSource.filterPredicate = (data: any, filter: string) => {
+      const dataStr = [
+        this.getEmployeeName(data.employeeId) || '',
+        this.convertTimestampToDate(data.date)?.toLocaleDateString() || '',
+        data.amount || ''
+      ].join(' ').toLowerCase();
+
+      return dataStr.includes(filter.toLowerCase());
+    };
   }
 
   getEmployeeData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'EmployeeList').then((employee) => {
-      this.employeesList = employee
-    }).catch((error) => {
-      console.error('Error fetching employee:', error);
-    });
+    this.commonService.fetchData('EmployeeList', this.employeesList);
   }
 
   getEmployeeName(employeeId: string): string {
@@ -108,17 +104,8 @@ export class WithdrawalListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'WithdrawalList');
-        this.getWithdrawalData();
-      }
-      if (result?.event === 'Edit') {
-        this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'WithdrawalList');
-        this.getWithdrawalData();
-      }
-      if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'WithdrawalList');
-        this.getWithdrawalData();
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'WithdrawalList').then(() => this.getWithdrawalData()).catch(console.error); 
       }
     });
   }

@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Validators_Pattern } from 'src/app/shared/constants/validators';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-firm-master',
@@ -22,7 +23,8 @@ export class FirmMasterComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private dialog: MatDialog,
+    private commonService: CommonService) { }
 
   ngOnInit(): void {
     this.getFirmData();
@@ -37,13 +39,7 @@ export class FirmMasterComponent implements OnInit {
   }
 
   getFirmData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'FirmList').then((firms) => {
-      this.firmList = firms || [];
-      this.firmMasterDataSource = new MatTableDataSource(this.firmList);
-      this.firmMasterDataSource.paginator = this.paginator;
-    }).catch((error) => {
-      console.error('Error fetching firms:', error);
-    });
+    this.commonService.fetchData('FirmList', this.firmList, this.firmMasterDataSource);
   }
 
   openFirmMaster(action: string, obj: any) {
@@ -53,15 +49,7 @@ export class FirmMasterComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event) {
-        const { event, data } = result;
-        const { id } = obj;
-        const collection = 'FirmList';
-
-        event === 'Add' && this.firebaseCollectionService.addDocument('CompanyList', data, collection);
-        event === 'Edit' && this.firebaseCollectionService.updateDocument('CompanyList', id, data, collection);
-        event === 'Delete' && this.firebaseCollectionService.deleteDocument('CompanyList', id, collection);
-
-        this.getFirmData();
+        this.commonService.commonApiCalled(result, obj, 'FirmList').then(() => this.getFirmData()).catch(console.error);
       }
     });
   }

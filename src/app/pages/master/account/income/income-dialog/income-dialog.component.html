@@ -7,10 +7,7 @@
       <mat-select #dropdown formControlName="partyName" placeholder="Select party">
         <mat-option value="abc">abc</mat-option>
       </mat-select>
-      <mat-hint *ngIf="incomeForm.get('partyName')?.hasError('required') && incomeForm.get('partyName')?.touched"
-        class="error-message error-color">
-        Select party is required
-      </mat-hint>
+      <app-validation-message class="position-relative" [control]="incomeForm.controls['partyName']"></app-validation-message>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
@@ -19,10 +16,7 @@
         <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName
           }}</mat-option>
       </mat-select>
-      <mat-hint *ngIf="incomeForm.get('account')?.hasError('required') && incomeForm.get('account')?.touched"
-        class="error-message error-color">
-        Select account is required
-      </mat-hint>
+      <app-validation-message class="position-relative" [control]="incomeForm.controls['account']"></app-validation-message>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
@@ -30,10 +24,7 @@
       <mat-select #dropdown formControlName="invoiceNo" placeholder="Select invoice no">
         <mat-option value="abc">abc</mat-option>
       </mat-select>
-      <mat-hint *ngIf="incomeForm.get('invoiceNo')?.hasError('required') && incomeForm.get('invoiceNo')?.touched"
-        class="error-message error-color">
-        Select account is required
-      </mat-hint>
+      <app-validation-message class="position-relative" [control]="incomeForm.controls['invoiceNo']"></app-validation-message>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
@@ -53,10 +44,7 @@
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Amount</mat-label>
       <input type="number" matInput placeholder="Enter amount" formControlName="amount" min="0">
-      <mat-hint *ngIf="incomeForm.get('amount')?.hasError('required') && incomeForm.get('amount')?.touched"
-        class="error-message error-color">
-        Amount is required
-      </mat-hint>
+      <app-validation-message class="position-relative" [control]="incomeForm.controls['amount']"></app-validation-message>
     </mat-form-field>
   </form>
 </mat-dialog-content>

@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-order-dialog',
@@ -22,7 +23,7 @@ export class OrderDialogComponent implements OnInit {
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<OrderDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
-    private firebaseCollectionService: FirebaseCollectionService) {
+    private commonService: CommonService) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
@@ -72,13 +73,7 @@ export class OrderDialogComponent implements OnInit {
   }
 
   getPartyData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
-      if (party && party.length > 0) {
-        this.partyList = party
-      }
-    }).catch((error) => {
-      console.error('Error fetching party:', error);
-    });
+    this.commonService.fetchData('PartyList', this.partyList);
   }
 
   saveOrder(): void {

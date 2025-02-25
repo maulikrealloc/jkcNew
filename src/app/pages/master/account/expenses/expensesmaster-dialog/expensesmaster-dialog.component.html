@@ -5,10 +5,8 @@
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Type</mat-label>
       <input type="text" matInput placeholder="Enter type" formControlName="type">
-      <mat-hint *ngIf="expensesMasterForm.get('type')?.hasError('required') && expensesMasterForm.get('type')?.touched"
-        class="error-message error-color">
-        Type is required
-      </mat-hint>
+      <app-validation-message class="position-relative" [control]="expensesMasterForm.controls['type']"></app-validation-message>
+
     </mat-form-field>
 
     <mat-divider></mat-divider>

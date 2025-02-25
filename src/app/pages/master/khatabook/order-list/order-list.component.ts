@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { OrderListDialogComponent } from './order-list-dialog/order-list-dialog.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-order-list',
@@ -36,7 +36,7 @@ export class OrderListComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private fb: FormBuilder, private firebaseCollectionService: FirebaseCollectionService, private dialog: MatDialog) { }
+  constructor(private fb: FormBuilder, private commonService: CommonService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.orderDataSource.paginator = this.paginator;
@@ -56,26 +56,11 @@ export class OrderListComponent implements OnInit {
   }
 
   getKhataOrderData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'KhataOrderList').then((khataOrder) => {
-      this.khataOrderList = khataOrder
-      if (khataOrder && khataOrder.length > 0) {
-        this.orderDataSource = new MatTableDataSource(this.khataOrderList);
-      } else {
-        this.khataOrderList = [];
-        this.orderDataSource = new MatTableDataSource(this.khataOrderList);
-      }
-      this.orderDataSource.paginator = this.paginator;
-    }).catch((error) => {
-      console.error('Error fetching khataOrder:', error);
-    });
+    this.commonService.fetchData('KhataOrderList', this.khataOrderList, this.orderDataSource);
   }
 
   getPartyData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
-      this.partyList = party      
-    }).catch((error) => {
-      console.error('Error fetching party:', error);
-    });
+    this.commonService.fetchData('PartyList', this.partyList);
   }
 
   getPartyName(party: string): string {
@@ -83,11 +68,7 @@ export class OrderListComponent implements OnInit {
   }
 
   getKhataData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'KhataList').then((khata) => {
-      this.khataList = khata      
-    }).catch((error) => {
-      console.error('Error fetching khata:', error);
-    });
+    this.commonService.fetchData('KhataList', this.khataList);
   }
 
   getKhataName(khata: string): string {
@@ -95,13 +76,7 @@ export class OrderListComponent implements OnInit {
   }
 
   getOrderData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
-      if (order && order.length > 0) {
-        this.orderList = order
-      }
-    }).catch((error) => {
-      console.error('Error fetching order:', error);
-    });
+    this.commonService.fetchData('OrderList', this.orderList);
   }
 
   getOrderNo(order: string): string {
@@ -120,17 +95,8 @@ export class OrderListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'KhataOrderList');
-        this.getKhataOrderData();
-      }
-      if (result?.event === 'Edit') {
-        this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'KhataOrderList');
-        this.getKhataOrderData();
-      }
-      if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'KhataOrderList');
-        this.getKhataOrderData();
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'KhataOrderList').then(() => this.getKhataOrderData()).catch(console.error);
       }
     });
   }

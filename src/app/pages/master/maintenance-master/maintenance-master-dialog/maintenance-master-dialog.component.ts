@@ -24,26 +24,18 @@ export class MaintenanceMasterDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.formBuild();
-
-    if (this.action === 'Edit') {
-      this.maintenanceForm.controls['name'].setValue(this.local_data.name)
-      this.maintenanceForm.controls['value'].setValue(this.local_data.value)
-    }
+    this.formBuild(this.action === 'Edit' ? this.local_data : undefined);
   }
 
-  formBuild() {
+  formBuild(data:any) {
     this.maintenanceForm = this.fb.group({
-      name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
-      value: ['', Validators.required]
+      name: [data ? data?.name : '', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      value: [data ? data?.value : '', Validators.required]
     })
   }
 
   doAction(): void {
-    const payload = {
-      name: this.maintenanceForm.value.name,
-      value: this.maintenanceForm.value.value
-    }
+    const payload = this.maintenanceForm.value
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Timestamp } from 'firebase/firestore';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-income-dialog',
@@ -18,34 +18,27 @@ export class IncomeDialogComponent implements OnInit {
   companyAccountList: any = [];
 
   constructor(
-    private fb: FormBuilder, public dialogRef: MatDialogRef<IncomeDialogComponent>,
-    private firebaseCollectionService: FirebaseCollectionService,
+    private fb: FormBuilder,
+    private commonService: CommonService,
+    public dialogRef: MatDialogRef<IncomeDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
 
   ngOnInit(): void {
-    this.incomegroup();
+    this.incomegroup(this.action === 'Edit' ? this.local_data : undefined);
     this.getCompanyAccountData();
-    if (this.action === 'Edit') {
-      this.incomeForm.controls['partyName'].setValue(this.local_data.partyName)
-      this.incomeForm.controls['account'].setValue(this.local_data.account)
-      this.incomeForm.controls['invoiceNo'].setValue(this.local_data.invoiceNo)
-      this.incomeForm.controls['invoiceDate'].setValue(this.convertTimestampToDate(this.local_data.invoiceDate))
-      this.incomeForm.controls['creditDate'].setValue(this.convertTimestampToDate(this.local_data.creditDate))
-      this.incomeForm.controls['amount'].setValue(this.local_data.amount)
-    }
   }
 
-  incomegroup() {
+  incomegroup(data:any) {
     this.incomeForm = this.fb.group({
-      partyName: ['', Validators.required],
-      account: ['', Validators.required],
-      invoiceNo: ['', Validators.required],
-      invoiceDate: [new Date()],
-      creditDate: [new Date()],
-      amount: ['', Validators.required]
+      partyName: [data ? data?.partyName : '', Validators.required],
+      account: [data ? data?.account : '', Validators.required],
+      invoiceNo: [data ? data?.invoiceNo : '', Validators.required],
+      invoiceDate: [data ? this.convertTimestampToDate(data?.invoiceDate): new Date()],
+      creditDate: [data ? this.convertTimestampToDate(data?.invoiceDate) : new Date()],
+      amount: [data ? data?.amount : '', Validators.required]
     })
   }
 
@@ -57,25 +50,12 @@ export class IncomeDialogComponent implements OnInit {
   }
 
   doAction() {
-    const payload = {
-      partyName: this.incomeForm.value.partyName,
-      account: this.incomeForm.value.account,
-      invoiceNo: this.incomeForm.value.invoiceNo,
-      invoiceDate: this.incomeForm.value.invoiceDate,
-      creditDate: this.incomeForm.value.creditDate,
-      amount: this.incomeForm.value.amount
-    }
+    const payload = this.incomeForm.value
     this.dialogRef.close({ event: this.action, data: payload })
   }
 
   getCompanyAccountData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'CompanyAccountList').then((company) => {
-      if (company && company.length > 0) {
-        this.companyAccountList = company
-      }
-    }).catch((error) => {
-      console.error('Error fetching company:', error);
-    });
+    this.commonService.fetchData('CompanyAccountList', this.companyAccountList);
   }
 
   closeDialog() {

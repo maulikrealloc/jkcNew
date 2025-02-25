@@ -7,15 +7,7 @@
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>Name</mat-label>
                         <input type="text" matInput required formControlName="name" placeholder="Enter name">
-                        <mat-hint
-                            *ngIf="kharchForm.get('name')?.hasError('required') && kharchForm.get('name')?.touched"
-                            class="error-message error-color">
-                            Name is required
-                        </mat-hint>
-                        <mat-hint *ngIf="kharchForm.get('name')?.hasError('pattern') && kharchForm.get('name')?.touched"
-                            class="error-message error-color">
-                            Please enter a valid name
-                        </mat-hint>
+                        <app-validation-message class="position-relative" [control]="kharchForm.controls['name']"></app-validation-message>
                     </mat-form-field>
                 </div>
 
@@ -25,13 +17,7 @@
                         <mat-radio-button value="unit">Unit</mat-radio-button>
                         <mat-radio-button value="kharch">Kharch</mat-radio-button>
                     </mat-radio-group>
-                    <div>
-                        <mat-hint
-                            *ngIf="kharchForm.get('unitKharch')?.hasError('required') && kharchForm.get('unitKharch')?.touched"
-                            class="error-message error-color">
-                            Unit kharch is required
-                        </mat-hint>
-                    </div>
+                        <app-validation-message class="position-relative" [control]="kharchForm.controls['unitKharch']"></app-validation-message>
                 </div>
 
                 <div class="col-4 ">

@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-withdrawal-list-dialog',
@@ -19,20 +20,14 @@ export class WithdrawalListDialogComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder, public dialogRef: MatDialogRef<WithdrawalListDialogComponent>,
-    private firebaseCollectionService: FirebaseCollectionService,
+    private commonService: CommonService,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
     this.action = this.local_data.action
   }
 
   ngOnInit(): void {
-    this.buildForm()
-    if (this.action === 'Edit') {
-      this.withdrawalForm.controls['employeeList'].setValue(this.local_data.employeeList)
-      this.withdrawalForm.controls['amount'].setValue(this.local_data.amount)
-      this.withdrawalForm.controls['date'].setValue(this.local_data.date)
-      this.withdrawalForm.controls['date'].setValue(this.convertTimestampToDate(this.local_data.date))
-    }
+    this.buildForm(this.action === 'Edit' ? this.local_data : undefined)
     this.getEmployeeData();
   }
 
@@ -43,31 +38,21 @@ export class WithdrawalListDialogComponent implements OnInit {
     return null;
   }
 
-  buildForm() {
+  buildForm(data :any) {
     this.withdrawalForm = this.fb.group({
-      employeeList: ['', Validators.required],
-      amount: ['', Validators.required],
-      date: new Date()
+      employeeList: [data ? data?.employeeList : '', Validators.required],
+      amount: [data ? data?.amount : '', Validators.required],
+      date: [data ? this.convertTimestampToDate(this.local_data.date) : new Date()]
     })
   }
 
   doAction() {
-    const payload = {
-      employeeList: this.withdrawalForm.value.employeeList,
-      amount: this.withdrawalForm.value.amount,
-      date: this.withdrawalForm.value.date
-    }
+    const payload = this.withdrawalForm.value
     this.dialogRef.close({ event: this.action, data: payload });
   }
 
   getEmployeeData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'EmployeeList').then((employee) => {
-      if (employee && employee.length > 0) {
-        this.employeesList = employee
-      }
-    }).catch((error) => {
-      console.error('Error fetching employee:', error);
-    });
+    this.commonService.fetchData('EmployeeList', this.employeesList);
   }
 
   closeDialog(): void {

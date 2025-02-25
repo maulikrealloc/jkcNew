@@ -7,20 +7,15 @@
       <mat-select #dropdown formControlName="employeeList" placeholder="Enter employee">
         <mat-option [value]="item.id" *ngFor="let item of employeesList">{{item.firstName}}</mat-option>
       </mat-select>
-      <mat-hint
-        *ngIf="withdrawalForm.get('employeeList')?.hasError('required') && withdrawalForm.get('employeeList')?.touched"
-        class="error-message error-color">
-        Employee is required
-      </mat-hint>
+      <app-validation-message class="position-relative"
+        [control]="withdrawalForm.controls['employeeList']"></app-validation-message>
     </mat-form-field>
 
     <mat-form-field class="w-100 m-t-10" appearance="outline">
       <mat-label>Amount</mat-label>
       <input type="number" matInput formControlName="amount" placeholder="Enter amount" min="0">
-      <mat-hint *ngIf="withdrawalForm.get('amount')?.hasError('required') && withdrawalForm.get('amount')?.touched"
-        class="error-message error-color">
-        Amount is required
-      </mat-hint>
+      <app-validation-message class="position-relative"
+        [control]="withdrawalForm.controls['amount']"></app-validation-message>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">

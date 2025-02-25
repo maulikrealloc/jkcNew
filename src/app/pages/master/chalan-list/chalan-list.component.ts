@@ -9,6 +9,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import moment from 'moment';
 import { ToWords } from 'to-words';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-chalan-list',
@@ -48,7 +49,7 @@ export class ChalanListComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private dialog: MatDialog, private commonService: CommonService, private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
     this.getFirmData();
@@ -78,66 +79,40 @@ export class ChalanListComponent implements OnInit {
   }
 
   getChalanData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'ChalanList').then((chalan) => {
-      this.chalanList = chalan
+    this.firebaseCollectionService.getDocuments('CompanyList', 'ChalanList')
+      .then((chalan) => {
+        this.chalanList = chalan || [];
+        this.chalanListDataSource = new MatTableDataSource(this.chalanList);
+        if (this.chalanList.length > 0) this.filterData();
+        this.chalanListDataSource.paginator = this.paginator;
+      })
+      .catch(error => console.error('Error fetching chalan:', error));
+  }
 
-      if (chalan && chalan.length > 0) {
-        this.chalanListDataSource = new MatTableDataSource(this.chalanList);
-        this.chalanListDataSource.filterPredicate = (data: any, filter) => {
-          const srNo = (data.srNo || '').toString();
-          const partyName = this.getPartyName(data.partyId);
-          const partyOrder = this.getOrderNo(data.partyOrderId);
-          const chalanNo = (data.chalanNo || '').toString();
-          const chalanDate = this.convertTimestampToDate(data.chalanDate);
-          const netAmount = (data.netAmount || '').toString();
-          const dataStr = ` 
-    ${srNo}
-    ${partyName}
-    ${partyOrder}
-    ${chalanNo}
-    ${chalanDate}
-    ${netAmount}
-  `.toLowerCase();
-          return dataStr.includes(filter.trim().toLowerCase());
-        };
-      } else {
-        this.chalanList = [];
-        this.chalanListDataSource = new MatTableDataSource(this.chalanList);
-      }
-      this.chalanListDataSource.paginator = this.paginator;
-    }).catch((error) => {
-      console.error('Error fetching chalan:', error);
-    });
+  filterData() {
+    this.chalanListDataSource.filterPredicate = (data: any, filter: string) => {
+      const dataStr = [
+        data.srNo || '',
+        this.getPartyName(data.partyId),
+        this.getOrderNo(data.partyOrderId),
+        data.chalanNo || '',
+        this.convertTimestampToDate(data.chalanDate),
+        data.netAmount || ''
+      ].join(' ').toLowerCase();
+      return dataStr.includes(filter.trim().toLowerCase());
+    };
   }
 
   getFirmData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'FirmList').then((firms) => {
-      if (firms && firms.length > 0) {
-        this.firmList = firms
-      }
-    }).catch((error) => {
-      console.error('Error fetching firms:', error);
-    });
+    this.commonService.fetchData('FirmList', this.firmList);
   }
 
   getOrderData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
-      if (order && order.length > 0) {
-        this.orderList = order
-      }
-    }).catch((error) => {
-      console.error('Error fetching order:', error);
-    });
+    this.commonService.fetchData('OrderList', this.orderList);
   }
 
   getPartyData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
-      if (party && party.length > 0) {
-        this.partyList = party
-      }
-    }).catch((error) => {
-      console.error('Error fetching party:', error);
-    });
+    this.commonService.fetchData('PartyList', this.partyList);
   }
 
   partyChange(event: any) {
@@ -152,9 +127,8 @@ export class ChalanListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'ChalanList');
-        this.getChalanData()
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'ChalanList').then(() => this.getChalanData()).catch(console.error);
       }
     });
   }

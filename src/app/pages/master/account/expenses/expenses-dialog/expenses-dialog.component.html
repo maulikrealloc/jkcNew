@@ -7,11 +7,8 @@
       <mat-select #dropdown formControlName="expensesType" placeholder="Enter expenses">
         <mat-option value="abc">abc</mat-option>
       </mat-select>
-      <mat-hint
-        *ngIf="expensesForm.get('expensesType')?.hasError('required') && expensesForm.get('expensesType')?.touched"
-        class="error-message error-color">
-        Expenses type is required
-      </mat-hint>
+      <app-validation-message class="position-relative" [control]="expensesForm.controls['expensesType']"></app-validation-message>
+
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
@@ -20,10 +17,8 @@
         <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName
           }}</mat-option>
       </mat-select>
-      <mat-hint *ngIf="expensesForm.get('paidBy')?.hasError('required') && expensesForm.get('paidBy')?.touched"
-        class="error-message error-color">
-        Paid by is required
-      </mat-hint>
+      <app-validation-message class="position-relative" [control]="expensesForm.controls['paidBy']"></app-validation-message>
+
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
@@ -36,29 +31,22 @@
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Description</mat-label>
       <input type="text" matInput placeholder="Enter description" formControlName="description">
-      <mat-hint
-        *ngIf="expensesForm.get('description')?.hasError('required') && expensesForm.get('description')?.touched"
-        class="error-message error-color">
-        Description is required
-      </mat-hint>
+      <app-validation-message class="position-relative" [control]="expensesForm.controls['description']"></app-validation-message>
+
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Chalan No</mat-label>
       <input type="number" matInput placeholder="Enter chalan no" formControlName="chalanNo" min="0">
-      <mat-hint *ngIf="expensesForm.get('chalanNo')?.hasError('required') && expensesForm.get('chalanNo')?.touched"
-        class="error-message error-color">
-        Chalan no is required
-      </mat-hint>
+      <app-validation-message class="position-relative" [control]="expensesForm.controls['chalanNo']"></app-validation-message>
+
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Amount</mat-label>
       <input type="number" matInput placeholder="Enter amount" formControlName="amount" min="0">
-      <mat-hint *ngIf="expensesForm.get('amount')?.hasError('required') && expensesForm.get('amount')?.touched"
-        class="error-message error-color">
-        Amount is required
-      </mat-hint>
+      <app-validation-message class="position-relative" [control]="expensesForm.controls['amount']"></app-validation-message>
+
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
@@ -67,10 +55,7 @@
         <mat-option value="pending">Pending</mat-option>
         <mat-option value="paid">Paid</mat-option>
       </mat-select>
-      <mat-hint *ngIf="expensesForm.get('status')?.hasError('required') && expensesForm.get('status')?.touched"
-        class="error-message error-color">
-        Status is required
-      </mat-hint>
+      <app-validation-message class="position-relative" [control]="expensesForm.controls['status']"></app-validation-message>
     </mat-form-field>
   </form>
 </mat-dialog-content>

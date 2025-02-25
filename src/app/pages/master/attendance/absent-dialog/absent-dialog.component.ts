@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-absent-dialog',
@@ -19,19 +19,14 @@ export class AbsentDialogComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder, public dialogRef: MatDialogRef<AbsentDialogComponent>,
-    private firebaseCollectionService: FirebaseCollectionService,
+    private commonService: CommonService,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
 
   ngOnInit(): void {
-    this.buildForm();
-    if (this.action === 'Edit') {
-      this.absentForm.controls['employeeList'].setValue(this.local_data.employeeList)
-      this.absentForm.controls['day'].setValue(this.local_data.day)
-      this.absentForm.controls['date'].setValue(this.convertTimestampToDate(this.local_data.date))
-    }
+    this.buildForm(this.action === 'Edit' ? this.local_data : undefined);
     this.getEmployeeData();
   }
 
@@ -42,31 +37,21 @@ export class AbsentDialogComponent implements OnInit {
     return null;
   }
 
-  buildForm() {
+  buildForm(data:any) {
     this.absentForm = this.fb.group({
-      employeeList: ['', Validators.required],
-      day: ['', Validators.required],
-      date: new Date()
+      employeeList: [data ? data?.employeeList :'', Validators.required],
+      day: [data ? data?.day :'', Validators.required],
+      date: [data ? this.convertTimestampToDate(this.local_data.date) : new Date()]
     })
   }
 
   doAction() {
-    const payload = {
-      employeeList: this.absentForm.value.employeeList,
-      day: this.absentForm.value.day,
-      date: this.absentForm.value.date
-    }
+    const payload = this.absentForm.value
     this.dialogRef.close({ event: this.action, data: payload });
   }
 
   getEmployeeData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'EmployeeList').then((employee) => {
-      if (employee && employee.length > 0) {
-        this.employeesList = employee
-      }
-    }).catch((error) => {
-      console.error('Error fetching employee:', error);
-    });
+    this.commonService.fetchData('EmployeeList', this.employeesList);
   }
 
   closeDialog(): void {

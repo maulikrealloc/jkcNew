@@ -5,6 +5,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { OrderDialogComponent } from './order-dialog/order-dialog.component';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-order',
@@ -23,7 +24,7 @@ export class OrderComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private dialog: MatDialog,
+  constructor(private dialog: MatDialog, private commonService: CommonService,
     private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
@@ -43,18 +44,13 @@ export class OrderComponent implements OnInit {
   }
 
   getPartyData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
-      this.partyList = party      
-    }).catch((error) => {});
+    this.commonService.fetchData('PartyList', this.partyList);
   }
 
   getOrderData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
-      this.orderList = order || [];
-      this.orderDataSource = new MatTableDataSource(this.orderList);
-      if (this.orderList.length > 0) this.filterData();
-      this.orderDataSource.paginator = this.paginator;
-    }).catch((error) => {});
+    this.commonService.fetchData('OrderList', this.orderList, this.orderDataSource).then(data => {
+      if (this.orderList.length > 0) { this.filterData();  } 
+    });
   }
 
   filterData() {
@@ -78,15 +74,7 @@ export class OrderComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event) {
-        const { event, data } = result;
-        const { id } = obj;
-        const collection = 'OrderList';
-
-        event === 'Add' && this.firebaseCollectionService.addDocument('CompanyList', data, collection);
-        event === 'Edit' && this.firebaseCollectionService.updateDocument('CompanyList', id, data, collection);
-        event === 'Delete' && this.firebaseCollectionService.deleteDocument('CompanyList', id, collection);
-
-        this.getOrderData();
+        this.commonService.commonApiCalled(result, obj, 'OrderList').then(() => this.getOrderData()).catch(console.error);
       }
     });
   }

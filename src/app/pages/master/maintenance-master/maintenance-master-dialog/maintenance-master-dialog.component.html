@@ -5,23 +5,13 @@
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Name</mat-label>
       <input type="text" matInput formControlName="name" placeholder="Enter name">
-      <mat-hint *ngIf="maintenanceForm.get('name')?.hasError('required') && maintenanceForm.get('name')?.touched"
-        class="error-message error-color">
-        Name is required
-      </mat-hint>
-      <mat-hint *ngIf="maintenanceForm.get('name')?.hasError('pattern') && maintenanceForm.get('name')?.touched"
-        class="error-message error-color">
-        Please enter a valid name
-      </mat-hint>
+      <app-validation-message class="position-relative" [control]="maintenanceForm.controls['name']"></app-validation-message>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Value</mat-label>
       <input type="number" matInput formControlName="value" placeholder="Enter value" min="0">
-      <mat-hint *ngIf="maintenanceForm.get('value')?.hasError('required') && maintenanceForm.get('value')?.touched"
-        class="error-message error-color">
-        Value is required
-      </mat-hint>
+      <app-validation-message class="position-relative" [control]="maintenanceForm.controls['value']"></app-validation-message>
     </mat-form-field>
   </form>
 </mat-dialog-content>

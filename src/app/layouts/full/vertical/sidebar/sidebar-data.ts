@@ -92,14 +92,19 @@ export const navItems: NavItem[] = [
     navCap: 'Master',
   },
   {
+    displayName: 'Firm Master',
+    iconName: 'books',
+    route: '/master/firmmaster',
+  },
+  {
     displayName: 'Party Master',
     iconName: 'books',
     route: '/master/partymaster',
   },
   {
-    displayName: 'Firm Master',
-    iconName: 'books',
-    route: '/master/firmmaster',
+    displayName: 'Khata Master',
+    iconName: 'mail',
+    route: '/master/khatamaster',
   },
   {
     displayName: 'Design Master',
@@ -132,11 +137,6 @@ export const navItems: NavItem[] = [
     displayName: 'Account',
     iconName: 'sort-descending',
     route: '/master/account',
-  },
-  {
-    displayName: 'Khata Master',
-    iconName: 'mail',
-    route: '/master/khatamaster',
   },
   {
     displayName: 'Raw Material',

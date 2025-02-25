@@ -3,9 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { AddKharchDialogComponent } from './add-kharch-dialog/add-kharch-dialog.component';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-add-kharch',
@@ -34,7 +34,7 @@ export class AddKharchComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private fb: FormBuilder, private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private fb: FormBuilder, private commonService: CommonService, private dialog: MatDialog) { }
 
   convertTimestampToDate(element: any): Date | null {
     if (element instanceof Timestamp) {
@@ -61,18 +61,7 @@ export class AddKharchComponent implements OnInit {
   }
 
   getKharchData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'KharchList').then((kharch) => {
-      this.KharchList = kharch
-      if (kharch && kharch.length > 0) {
-        this.kharchListUpdated.emit(kharch);
-        this.kharchListDataSource = new MatTableDataSource(this.KharchList);
-      } else {
-        this.KharchList = [];
-        this.kharchListDataSource = new MatTableDataSource(this.KharchList);
-      }
-    }).catch((error) => {
-      console.error('Error fetching order:', error);
-    });
+    this.commonService.fetchData('KharchList', this.KharchList, this.kharchListDataSource);
   }
 
   openKhatu(action: string, obj: any) {
@@ -82,17 +71,8 @@ export class AddKharchComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'KharchList');
-        this.getKharchData();
-      }
-      if (result?.event === 'Edit') {
-        this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'KharchList');
-        this.getKharchData();
-      }
-      if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'KharchList');
-        this.getKharchData();
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'KharchList').then(() => this.getKharchData()).catch(console.error);
       }
     });
   }

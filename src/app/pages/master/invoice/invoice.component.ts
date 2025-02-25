@@ -7,6 +7,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { ToWords } from 'to-words';
 import { DatePipe } from '@angular/common';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-invoice',
@@ -51,6 +52,7 @@ export class InvoiceComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(private fb: FormBuilder,
+    private commonService: CommonService,
     private firebaseCollectionService: FirebaseCollectionService,
     private datePipe: DatePipe) { }
 
@@ -78,23 +80,11 @@ export class InvoiceComponent implements OnInit {
   }
 
   getFirmData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'FirmList').then((firms: string | any[]) => {
-      if (firms && firms.length > 0) {
-        this.firmList = firms
-      }
-    }).catch((error: any) => {
-      console.error('Error fetching firms:', error);
-    });
+    this.commonService.fetchData('FirmList', this.firmList);
   }
 
   getPartyData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
-      if (party && party.length > 0) {
-        this.partyList = party
-      }
-    }).catch((error) => {
-      console.error('Error fetching party:', error);
-    });
+    this.commonService.fetchData('PartyList', this.partyList);
   }
 
   getChalanData() {
@@ -105,16 +95,11 @@ export class InvoiceComponent implements OnInit {
     }).catch((error) => {
       console.error('Error fetching chalan:', error);
     });
+    // this.commonService.fetchData('ChalanList', this.chalanData);
   }
 
   getOrderData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
-      if (order && order.length > 0) {
-        this.orderList = order
-      }
-    }).catch((error) => {
-      console.error('Error fetching order:', error);
-    });
+    this.commonService.fetchData('OrderList', this.orderList);
   }
 
   firmChange(event: any) {
@@ -225,11 +210,7 @@ export class InvoiceComponent implements OnInit {
   }
 
   getInvoiceData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'InvoiceList').then((invoice) => {
-      this.InvoiceList = invoice
-    }).catch((error) => {
-      console.error('Error fetching invoice:', error);
-    });
+    this.commonService.fetchData('InvoiceList', this.InvoiceList);
   }
 
   calculateFinalAmount(baseAmount: number): number {

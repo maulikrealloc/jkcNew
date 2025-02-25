@@ -7,19 +7,15 @@
       <mat-select #dropdown formControlName="employeeList" placeholder="Enter employee">
         <mat-option [value]="item.id" *ngFor="let item of employeesList">{{item.firstName}}</mat-option>
       </mat-select>
-      <mat-hint *ngIf="absentForm.get('employeeList')?.hasError('required') && absentForm.get('employeeList')?.touched"
-        class="error-message error-color">
-        Employee is required
-      </mat-hint>
+      <app-validation-message class="position-relative"
+        [control]="absentForm.controls['employeeList']"></app-validation-message>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Day</mat-label>
       <input type="number" matInput placeholder="Enter day" formControlName="day" min="0">
-      <mat-hint *ngIf="absentForm.get('day')?.hasError('required') && absentForm.get('day')?.touched"
-        class="error-message error-color">
-        Day is required
-      </mat-hint>
+      <app-validation-message class="position-relative"
+        [control]="absentForm.controls['day']"></app-validation-message>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">

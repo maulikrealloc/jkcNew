@@ -24,15 +24,7 @@ export class AddKharchDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.formBuild()
-    if (this.action === 'Edit') {
-      this.kharchForm.controls['unit'].setValue(this.local_data.unit)
-      this.kharchForm.controls['kharch'].setValue(this.local_data.kharch)
-      this.kharchForm.controls['date'].setValue(this.convertTimestampToDate(this.local_data.date))
-      this.kharchForm.controls['dec'].setValue(this.local_data.dec)
-      this.kharchForm.controls['chalanNo'].setValue(this.local_data.chalanNo)
-      this.kharchForm.controls['amount'].setValue(this.local_data.amount)
-    }
+    this.formBuild(this.action === 'Edit' ? this.local_data : undefined)
   }
 
   convertTimestampToDate(element: any): Date | null {
@@ -42,26 +34,19 @@ export class AddKharchDialogComponent implements OnInit {
     return null;
   }
 
-  formBuild() {
+  formBuild(data:any) {
     this.kharchForm = this.fb.group({
-      unit: ['', Validators.required],
-      kharch: ['', Validators.required],
-      date: [new Date, Validators.required],
-      dec: [''],
-      chalanNo: [''],
-      amount: ['', Validators.required]
+      unit: [data ? data?.unit : '', Validators.required],
+      kharch: [data ? data?.kharch : '', Validators.required],
+      date: [data ? this.convertTimestampToDate(this.local_data.date) : new Date, Validators.required],
+      dec: [data ? data?.dec : ''],
+      chalanNo: [data ? data?.chalanNo : ''],
+      amount: [data ? data?.amount : '', Validators.required]
     })
   }
 
   doAction(): void {
-    const payload = {
-      unit: this.kharchForm.value.unit,
-      kharch: this.kharchForm.value.kharch,
-      date: this.kharchForm.value.date,
-      dec: this.kharchForm.value.dec,
-      chalanNo: this.kharchForm.value.chalanNo,
-      amount: this.kharchForm.value.amount,
-    }
+    const payload = this.kharchForm.value
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

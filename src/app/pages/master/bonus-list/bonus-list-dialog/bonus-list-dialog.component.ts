@@ -1,9 +1,8 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { designMasterDialogComponent } from '../../design-master/design-master.component';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-bonus-list-dialog',
@@ -20,19 +19,14 @@ export class BonusListDialogComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder, public dialogRef: MatDialogRef<BonusListDialogComponent>,
-    private firebaseCollectionService: FirebaseCollectionService,
+    private commonService: CommonService, 
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
 
   ngOnInit(): void {
-    this.buildForm()
-    if (this.action === 'Edit') {
-      this.bonusForm.controls['employeeList'].setValue(this.local_data.employeeList)
-      this.bonusForm.controls['amount'].setValue(this.local_data.amount)
-      this.bonusForm.controls['date'].setValue(this.convertTimestampToDate(this.local_data.date))
-    }
+    this.buildForm(this.action === 'Edit' ? this.local_data : undefined)
     this.getEmployeeData();
   }
 
@@ -43,31 +37,21 @@ export class BonusListDialogComponent implements OnInit {
     return null;
   }
 
-  buildForm() {
+  buildForm(data:any) {
     this.bonusForm = this.fb.group({
-      employeeList: ['', Validators.required],
-      amount: ['', Validators.required],
-      date: new Date(),
+      employeeList: [data ? data?.employeeList : '', Validators.required],
+      amount: [data ? data?.amount : '', Validators.required],
+      date: [data ? this.convertTimestampToDate(this.local_data.date) : new Date()]
     })
   }
 
   doAction() {
-    const payload = {
-      employeeList: this.bonusForm.value.employeeList,
-      amount: this.bonusForm.value.amount,
-      date: this.bonusForm.value.date
-    }
+    const payload = this.bonusForm.value
     this.dialogRef.close({ event: this.action, data: payload });
   }
 
   getEmployeeData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'EmployeeList').then((employee) => {
-      if (employee && employee.length > 0) {
-        this.employeesList = employee
-      }
-    }).catch((error) => {
-      console.error('Error fetching employee:', error);
-    });
+    this.commonService.fetchData('EmployeeList', this.employeesList);
   }
 
   closeDialog(): void {

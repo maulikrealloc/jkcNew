@@ -4,9 +4,8 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ExpensesDialogComponent } from './expenses-dialog/expenses-dialog.component';
 import { ExpensesmasterDialogComponent } from './expensesmaster-dialog/expensesmaster-dialog.component';
 import { MatPaginator } from '@angular/material/paginator';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
-
+import { CommonService } from 'src/app/services/common.service';
 @Component({
   selector: 'app-expenses',
   templateUrl: './expenses.component.html',
@@ -33,7 +32,7 @@ export class ExpensesComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private dialog: MatDialog, private commonService : CommonService) { }
 
   ngOnInit(): void {
     this.getExpensesListData();
@@ -53,24 +52,11 @@ export class ExpensesComponent implements OnInit {
   }
 
   getExpensesListData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'ExpensesList').then((expenses) => {
-      this.expensesList = expenses
-      if (expenses && expenses.length > 0) {
-        this.expensesListDataSource = new MatTableDataSource(this.expensesList);
-      }
-    }).catch((error) => {
-      console.error('Error fetching expenses:', error);
-    });
+    this.commonService.fetchData('ExpensesList', this.expensesList, this.expensesListDataSource);
   }
 
   getCompanyAccountData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'CompanyAccountList').then((company) => {
-      if (company && company.length > 0) {
-        this.companyAccountList = company
-      }
-    }).catch((error) => {
-      console.error('Error fetching company:', error);
-    });
+    this.commonService.fetchData('CompanyAccountList', this.companyAccountList);
   }
 
   openExpenses(action: string, obj: any) {
@@ -80,19 +66,10 @@ export class ExpensesComponent implements OnInit {
     })
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'ExpensesList');
-        this.getExpensesListData();
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'ExpensesList').then(() => this.getExpensesListData()).catch(console.error);
       }
-      if (result?.event === 'Edit') {
-        this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'ExpensesList');
-        this.getExpensesListData();
-      }
-      if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'ExpensesList');
-        this.getExpensesListData();
-      }
-    });
+    });  
   }
 
   openExpensesMaster() {

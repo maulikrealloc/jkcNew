@@ -8,6 +8,7 @@ import autoTable from 'jspdf-autotable';
 import { ToWords } from 'to-words';
 import { PaymentListComponent } from './payment-list/payment-list.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-invoice-list',
@@ -55,7 +56,7 @@ export class InvoiceListComponent implements OnInit {
   invoiceListDataSource = new MatTableDataSource(this.invoiceList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private fb: FormBuilder, private firebaseCollectionService: FirebaseCollectionService, private dialog: MatDialog) { }
+  constructor(private fb: FormBuilder, private firebaseCollectionService: FirebaseCollectionService, private dialog: MatDialog, private commonService: CommonService) { }
 
   ngOnInit(): void {
     const today = new Date();
@@ -72,7 +73,6 @@ export class InvoiceListComponent implements OnInit {
     this.getOrderData();
     this.getFirmData();
     this.getPaymentReceiveList();
-    this.invoiceListDataSource.paginator = this.paginator;
 
   }
 
@@ -81,56 +81,42 @@ export class InvoiceListComponent implements OnInit {
   }
 
   getInvoiceData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'InvoiceList').then((invoice) => {
-      this.invoiceListDataSource.data = invoice;
-      this.invoiceList = invoice
-      if (invoice && invoice.length > 0) {
-        this.invoiceListdataSource = new MatTableDataSource(this.invoiceList);
-        this.invoiceListDataSource.filterPredicate = (data: any, filter: string) => {
-          const srNo = (data.srNo || '').toString();
-          const invoiceNo = (data.invoiceNo || '').toString();
-          const date = this.getFormattedDate(data.date);
-          const partyName = this.getPartyName(data.partyId);
-          const gross = (data.grossTotal || '').toString();
-          const discount = (data.discountRatio || '').toString();
-          const netAmount = (data.netAmount || '').toString();
-          const cgst = (data.cgst || '').toString();
-          const sgst = (data.sgst || '').toString();
-          const finalAmount = (data.finalAmount || '').toString();
-          const received = this.getPaymentReceiveAmount(data);
+    this.firebaseCollectionService.getDocuments('CompanyList', 'InvoiceList')
+      .then((invoice) => {
+        this.invoiceList = invoice || [];
+        this.invoiceListDataSource = new MatTableDataSource(this.invoiceList);
+        if (this.invoiceList.length > 0) this.filterData();
+        this.invoiceListDataSource.paginator = this.paginator;
+      })
+      .catch(error => console.error('Error fetching invoice:', error));
+  }
 
-          const dataStr = `
-          ${srNo}
-          ${invoiceNo}
-          ${date}
-          ${partyName}
-          ${gross}
-          ${discount}
-          ${netAmount}
-          ${cgst}
-          ${sgst}
-          ${finalAmount}
-          ${received}
-        `.toLowerCase();
-          return dataStr.includes(filter.trim().toLowerCase());
-        };
-      } else {
-        this.invoiceList = [];
-        this.invoiceListdataSource = new MatTableDataSource(this.invoiceList);
-      }
-    }).catch((error) => {
-      console.error('Error fetching chalan:', error);
-    });
+  filterData() {
+    this.invoiceListDataSource.filterPredicate = (data: any, filter: string) => {
+      const dataStr = [
+        data.srNo || '',
+        data.invoiceNo || '',
+        this.getFormattedDate(data.date),
+        this.getPartyName(data.partyId),
+        data.grossTotal || '',
+        data.discountRatio || '',
+        data.netAmount || '',
+        data.cgst || '',
+        data.sgst || '',
+        data.finalAmount || '',
+        this.getPaymentReceiveAmount(data)
+      ].join(' ').toLowerCase();
+
+      return dataStr.includes(filter.trim().toLowerCase());
+    };
   }
 
   getPaymentReceiveList() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'PaymentReceiveList').then((payment) => {
-      this.paymentReceiveData = payment
-    })
+    this.commonService.fetchData('PaymentReceiveList', this.paymentReceiveData);
   }
 
   getPaymentReceiveAmount(data: any) {
-    const receiveData = this.paymentReceiveData?.find((obj: any) => obj.invoiceId === data.id)?.payments.map((id: any) => id.paymentReceive).reduce((a: any, b: any) => a + b)
+    const receiveData = this.paymentReceiveData?.find((obj: any) => obj.invoiceId === data.id)?.payments?.map((id: any) => id.paymentReceive)?.reduce((a: any, b: any) => a + b, 0)
     return receiveData ?? 0
   }
 
@@ -146,43 +132,19 @@ export class InvoiceListComponent implements OnInit {
   }
 
   getFirmData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'FirmList').then((firms: string | any[]) => {
-      if (firms && firms.length > 0) {
-        this.firmList = firms
-      }
-    }).catch((error: any) => {
-      console.error('Error fetching firms:', error);
-    });
+    this.commonService.fetchData('FirmList', this.firmList);
   }
 
   getChalanData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'ChalanList').then((chalan) => {
-      if (chalan && chalan.length > 0) {
-        this.chalanData = chalan
-      }
-    }).catch((error) => {
-      console.error('Error fetching chalan:', error);
-    });
+    this.commonService.fetchData('ChalanList', this.chalanData);
   }
 
   getOrderData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
-      if (order && order.length > 0) {
-        this.orderList = order
-      }
-    }).catch((error) => {
-      console.error('Error fetching order:', error);
-    });
+    this.commonService.fetchData('OrderList', this.orderList);
   }
 
   getPartyData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
-      if (party && party.length > 0) {
-        this.partyList = party
-      }
-    }).catch((error) => {
-      console.error('Error fetching party:', error);
-    });
+    this.commonService.fetchData('PartyList', this.partyList);
   }
 
   getPaymentList(action: any, obj: any) {

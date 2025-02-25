@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
 import { IncomeDialogComponent } from './income-dialog/income-dialog.component';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-income',
@@ -29,7 +30,7 @@ export class IncomeComponent implements OnInit {
   incomeListDataSource = new MatTableDataSource(this.incomeList);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private dialog: MatDialog, private commonService: CommonService) { }
 
   ngOnInit(): void {
     this.getIncomeListData();
@@ -48,24 +49,11 @@ export class IncomeComponent implements OnInit {
   }
 
   getIncomeListData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'IncomeList').then((income) => {
-      this.incomeList = income
-      if (income && income.length > 0) {
-        this.incomeListDataSource = new MatTableDataSource(this.incomeList);
-      }
-    }).catch((error) => {
-      console.error('Error fetching income:', error);
-    });
+    this.commonService.fetchData('IncomeList', this.incomeList, this.incomeListDataSource);
   }
 
   getCompanyAccountData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'CompanyAccountList').then((company) => {
-      if (company && company.length > 0) {
-        this.companyAccountList = company
-      }
-    }).catch((error) => {
-      console.error('Error fetching company:', error);
-    });
+    this.commonService.fetchData('CompanyAccountList', this.companyAccountList);
   }
 
   openIncome(action: string, obj: any) {
@@ -75,15 +63,7 @@ export class IncomeComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event) {
-        const { event, data } = result;
-        const { id } = obj;
-        const collection = 'IncomeList';
-
-        event === 'Add' && this.firebaseCollectionService.addDocument('CompanyList', data, collection);
-        event === 'Edit' && this.firebaseCollectionService.updateDocument('CompanyList', id, data, collection);
-        event === 'Delete' && this.firebaseCollectionService.deleteDocument('CompanyList', id, collection);
-
-        this.getIncomeListData();
+        this.commonService.commonApiCalled(result, obj, 'IncomeList').then(() => this.getIncomeListData()).catch(console.error);
       }
     });
   }

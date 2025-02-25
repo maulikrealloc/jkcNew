@@ -23,43 +23,24 @@ export class KhataMasterDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.formBuild();
-    if (this.action === 'Edit') {
-      this.khataForm.controls['firstName'].setValue(this.local_data.firstName)
-      this.khataForm.controls['lastName'].setValue(this.local_data.lastName)
-      this.khataForm.controls['companyName'].setValue(this.local_data.companyName)
-      this.khataForm.controls['ownerName'].setValue(this.local_data.ownerName)
-      this.khataForm.controls['address'].setValue(this.local_data.address)
-      this.khataForm.controls['mobileNo'].setValue(this.local_data.mobileNo)
-      this.khataForm.controls['pan'].setValue(this.local_data.pan)
-      this.khataForm.controls['gst'].setValue(this.local_data.gst)
-    }
+    this.formBuild(this.action === 'Edit' ? this.local_data : undefined);
   }
 
-  formBuild() {
+  formBuild(data:any) {
     this.khataForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
-      lastName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
-      companyName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
-      ownerName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
-      address: ['', Validators.required],
-      mobileNo: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      pan: [''],
-      gst: [''],
+      firstName: [data ? data?.firstName : '', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      lastName: [data ? data?.lastName : '', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      companyName: [data ? data?.companyName : '', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      ownerName: [data ? data?.ownerName : '', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      address: [data ? data?.address : '', Validators.required],
+      mobileNo: [data ? data?.mobileNo : '', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      pan: [data ? data?.pan : ''],
+      gst: [data ? data?.gst : ''],
     })
   }
 
   doAction(): void {
-    const payload = {
-      firstName: this.khataForm.value.firstName,
-      lastName: this.khataForm.value.lastName,
-      companyName: this.khataForm.value.companyName,
-      ownerName: this.khataForm.value.ownerName,
-      address: this.khataForm.value.address,
-      mobileNo: this.khataForm.value.mobileNo,
-      pan: this.khataForm.value.pan,
-      gst: this.khataForm.value.gst,
-    }
+    const payload = this.khataForm.value
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

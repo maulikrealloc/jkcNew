@@ -1,9 +1,8 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
 import { IncomeDialogComponent } from './income-dialog/income-dialog.component';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
 import { CommonService } from 'src/app/services/common.service';
 
@@ -15,16 +14,7 @@ import { CommonService } from 'src/app/services/common.service';
 
 export class IncomeComponent implements OnInit {
 
-  incomeDataColumns: string[] = [
-    '#',
-    'partyName',
-    'account',
-    'invoiceNo',
-    'invoiceDate',
-    'creditDate',
-    'amount',
-    'action',
-  ];
+  incomeDataColumns: string[] = ['#','partyName','account','invoiceNo','invoiceDate','creditDate','amount','action' ];
   incomeList: any = [];
   companyAccountList: any = [];
   incomeListDataSource = new MatTableDataSource(this.incomeList);
@@ -71,5 +61,4 @@ export class IncomeComponent implements OnInit {
   openTransfer() {
     const dialogRef = this.dialog.open(TransferDialogComponent, {})
   }
-
 }

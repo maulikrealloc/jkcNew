@@ -6,6 +6,7 @@ import { ExpensesmasterDialogComponent } from './expensesmaster-dialog/expensesm
 import { MatPaginator } from '@angular/material/paginator';
 import { Timestamp } from 'firebase/firestore';
 import { CommonService } from 'src/app/services/common.service';
+
 @Component({
   selector: 'app-expenses',
   templateUrl: './expenses.component.html',
@@ -14,17 +15,7 @@ import { CommonService } from 'src/app/services/common.service';
   
 export class ExpensesComponent implements OnInit {
 
-  expensesDataColumns: string[] = [
-    '#',
-    'expensesType',
-    'date',
-    'description',
-    'chalanNo',
-    'amount',
-    'paidBy',
-    'status',
-    'action',
-  ];
+  expensesDataColumns: string[] = ['#','expensesType','date','description','chalanNo','amount','paidBy','status','action' ];
   expensesList: any = [];
   companyAccountList: any = [];
   expenses: any = []
@@ -75,18 +66,5 @@ export class ExpensesComponent implements OnInit {
   openExpensesMaster() {
     const dialogRef = this.dialog.open(ExpensesmasterDialogComponent, {
     })
-  }
-
-  private updateDataStorage(){
-    this.expensesListDataSource = new MatTableDataSource(this.expenses);
-    localStorage.setItem('expensesnewdata',JSON.stringify(this.expenses));
-  }
-
-  private loadBillData(){
-    const savedData = localStorage.getItem('expensesnewdata');
-    if(savedData){
-    this.expenses = JSON.parse(savedData)
-      this.expensesListDataSource = new MatTableDataSource(this.expenses);
-    }   
   }
 }

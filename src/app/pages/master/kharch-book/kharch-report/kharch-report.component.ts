@@ -15,15 +15,7 @@ export class KharchReportComponent implements OnInit {
 
   dateKharchReportListForm: FormGroup;
   KharchReportData: any = [];
-  kharchReportDataColumns: string[] = [
-    'srNo',
-    'unitname',
-    'kharchname',
-    'dec',
-    'date',
-    'chalanno',
-    'amount'
-  ];
+  kharchReportDataColumns: string[] = [ 'srNo', 'unitname', 'kharchname', 'dec', 'date', 'chalanno', 'amount' ];
   totalAmount: number = 0;
   kharchListDataSource = new MatTableDataSource(this.KharchReportData);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);

@@ -16,13 +16,7 @@ import { CommonService } from 'src/app/services/common.service';
 export class BonusListComponent implements OnInit {
 
   dateBonusForm: FormGroup;
-  bounsDataColumns: string[] = [
-    '#',
-    'employee',
-    'amount',
-    'date',
-    'action',
-  ];
+  bounsDataColumns: string[] = ['#','employee','amount','date','action' ];
   bonusList: any = [];
   employeesList: any = [];
   bonusListDataSource = new MatTableDataSource(this.bonusList);

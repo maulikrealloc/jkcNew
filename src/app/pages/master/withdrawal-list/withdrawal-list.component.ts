@@ -4,7 +4,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { WithdrawalListDialogComponent } from './withdrawal-list-dialog/withdrawal-list-dialog.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
 import { CommonService } from 'src/app/services/common.service';
 export interface withdrawalData {
@@ -22,13 +21,7 @@ export interface withdrawalData {
 export class WithdrawalListComponent implements OnInit {
 
   dateWithdrawalForm: FormGroup;
-  withdrawalDataColumns: string[] = [
-    '#',
-    'employee',
-    'amount',
-    'date',
-    'action',
-  ];
+  withdrawalDataColumns: string[] = ['#','employee','amount','date','action' ];
   withdrawalList: any = [];
   employeesList: any = [];
   withdrawalDataSource = new MatTableDataSource(this.withdrawalList);
@@ -38,8 +31,7 @@ export class WithdrawalListComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
-    private commonService : CommonService,
-    private firebaseCollectionService: FirebaseCollectionService) { }
+    private commonService : CommonService,) { }
 
   ngOnInit(): void {
     const today = new Date();
@@ -67,14 +59,7 @@ export class WithdrawalListComponent implements OnInit {
   }
 
   getWithdrawalData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'WithdrawalList')
-      .then((withdrawal) => {
-        this.withdrawalList = withdrawal || [];
-        this.withdrawalDataSource = new MatTableDataSource(this.withdrawalList);
-        if (this.withdrawalList.length > 0) this.filterData();
-        this.withdrawalDataSource.paginator = this.paginator;
-      })
-      .catch(error => console.error('Error fetching withdrawal:', error));
+    this.commonService.fetchData('WithdrawalList', this.withdrawalList, this.withdrawalDataSource);
   }
 
   filterData() {

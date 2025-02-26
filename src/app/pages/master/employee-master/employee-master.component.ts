@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { EmployeeDialogComponent } from './employee-dialog/employee-dialog.component';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { CommonService } from 'src/app/services/common.service';
 
 @Component({
@@ -14,23 +13,13 @@ import { CommonService } from 'src/app/services/common.service';
 
 export class EmployeeMasterComponent implements OnInit {
 
-  employeeMasterDataColumns: string[] = [
-    '#',
-    'firstName',
-    'lastName',
-    'salary',
-    'phoneNo',
-    'bankName',
-    'ifscCode',
-    'bankAccountNo',
-    'action'
-  ];
+  employeeMasterDataColumns: string[] = ['#','firstName','lastName','salary','phoneNo','bankName','ifscCode','bankAccountNo','action' ];
   employeesList: any = [];
   employeeListDataSource = new MatTableDataSource(this.employeesList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private dialog: MatDialog, private commonService: CommonService, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private dialog: MatDialog, private commonService: CommonService) { }
 
   ngOnInit() {
     this.employeeListDataSource.paginator = this.paginator;

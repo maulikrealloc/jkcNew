@@ -6,8 +6,8 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
 import { ToWords } from 'to-words';
 import { ChalanViewDialogComponent } from './chalan-view-dialog/chalan-view-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { ValidationService } from 'src/app/services/validation.service';
 import { CommonService } from 'src/app/services/common.service';
+import { ValidationService } from 'src/app/services/validation.service';
 
 @Component({
   selector: 'app-chalan',
@@ -44,14 +44,15 @@ export class ChalanComponent implements OnInit {
   imageUrl: string | ArrayBuffer | null = null;
   updateProductsData: any;
   netAmount: number = 0;
+  selectedPartyChalan = []
   isDisplayChalan: boolean = false;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-  validationService: any;
 
   constructor(
     private dialog: MatDialog, private fb: FormBuilder,
     private commonService: CommonService,
+    private validationService : ValidationService,
     private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
@@ -68,7 +69,7 @@ export class ChalanComponent implements OnInit {
       date: new Date(),
       partyOrder: ['', Validators.required],
       product: [this.selectedProduct]
-    })
+    });
   }
 
   getPartyData() {
@@ -130,22 +131,15 @@ export class ChalanComponent implements OnInit {
   }
 
   partyChange(event: any) {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'ChalanList').then((chalan) => {
-      const chalanData = chalan.filter((chalanObj: any) => chalanObj.partyId === event.value);
+    this.commonService.fetchData('ChalanList', this.selectedPartyChalan).then((chalan) => {
+      const chalanData = this.selectedPartyChalan.filter((chalanObj: any) => chalanObj.partyId === event.value);
       const maxChalanNo = chalanData.length > 0 ? Math.max(...chalanData.map((chalanObj: any) => Number(chalanObj.chalanNo) || 0)) + 1 : Number(this.partyList.find((partyObj: any) => partyObj.id === event.value).chalanNoSeries) || 0;
       this.selectedPartyChalanNo = maxChalanNo;
     })
-    .catch((error) => {
-      console.error('Error fetching chalan:', error);
-    });
     
-    this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
-      if (order && order.length > 0) {
-        this.orderList = order.filter(id => id.partyId === event?.value && id.orderStatus === 'Done' && id.isCreated === false)
-      }
-    }).catch((error) => {
-      console.error('Error fetching order:', error);
-    });
+    this.commonService.fetchData('OrderList', this.orderList).then((order) => {
+      this.orderList = this.orderList.filter((id: any) => id.partyId === event?.value && id.orderStatus === 'Done' && id.isCreated === false)
+    })
   }
 
   orderChange(event: any) {

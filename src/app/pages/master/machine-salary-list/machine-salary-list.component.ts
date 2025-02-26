@@ -15,13 +15,7 @@ import { CommonService } from 'src/app/services/common.service';
 
 export class MachineSalaryListComponent implements OnInit {
 
-  machineSalaryDataColumns: string[] = [
-    '#',
-    'employee',
-    'amount',
-    'date',
-    'action',
-  ];
+  machineSalaryDataColumns: string[] = ['#','employee','amount','date','action' ];
   dateMachineSalaryForm: FormGroup;
   machineSalaryList: any = [];
   employeesList: any = [];

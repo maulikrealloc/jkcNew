@@ -57,5 +57,4 @@ export class BonusListDialogComponent implements OnInit {
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
   }
-
 }

@@ -4,7 +4,6 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Validators_Pattern } from 'src/app/shared/constants/validators';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { CommonService } from 'src/app/services/common.service';
 
 @Component({
@@ -15,9 +14,7 @@ import { CommonService } from 'src/app/services/common.service';
   
 export class FirmMasterComponent implements OnInit {
 
-  firmMasterColumns: string[] = [
-    '#','header','subHeader','gstNo','gst','panNo','mobileNo','personalMobileNo','email','bankName','bankIFSC','bankAccountNo','address','action'
-  ];
+  firmMasterColumns: string[] = ['#','header','subHeader','gstNo','gst','panNo','mobileNo','personalMobileNo','email','bankName','bankIFSC','bankAccountNo','address','action' ];
   firmList: any = [];
   firmMasterDataSource = new MatTableDataSource(this.firmList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);

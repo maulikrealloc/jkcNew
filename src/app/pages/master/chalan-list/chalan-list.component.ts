@@ -19,15 +19,7 @@ import { CommonService } from 'src/app/services/common.service';
 
 export class ChalanListComponent implements OnInit {
 
-  chalanDataColumns: string[] = [
-    'srNo',
-    'partyName',
-    'partyOrder',
-    'chalanNo',
-    'chalanDate',
-    'netAmount',
-    'action',
-  ];
+  chalanDataColumns: string[] = [ 'srNo', 'partyName', 'partyOrder', 'chalanNo', 'chalanDate', 'netAmount', 'action'];
   toWords = new ToWords({
     localeCode: 'en-IN',
     converterOptions: {
@@ -79,14 +71,10 @@ export class ChalanListComponent implements OnInit {
   }
 
   getChalanData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'ChalanList')
-      .then((chalan) => {
-        this.chalanList = chalan || [];
-        this.chalanListDataSource = new MatTableDataSource(this.chalanList);
-        if (this.chalanList.length > 0) this.filterData();
-        this.chalanListDataSource.paginator = this.paginator;
-      })
-      .catch(error => console.error('Error fetching chalan:', error));
+    this.commonService.fetchData('ChalanList', this.chalanList, this.chalanListDataSource).then((chalan) => {
+      if (this.chalanList.length > 0) this.filterData();
+          this.chalanListDataSource.paginator = this.paginator;
+    })
   }
 
   filterData() {

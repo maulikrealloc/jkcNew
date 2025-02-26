@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-payment-list',
@@ -28,6 +29,7 @@ export class PaymentListComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private firebaseCollectionService: FirebaseCollectionService,
+    private commonService:CommonService,
     public dialogRef: MatDialogRef<ProductDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.getPaymentReceiveList()
@@ -41,8 +43,7 @@ export class PaymentListComponent implements OnInit {
   }
 
   getPaymentReceiveList() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'PaymentReceiveList').then((payment) => {
-      this.paymentReceiveData = payment
+    this.commonService.fetchData('PaymentReceiveList', this.paymentReceiveData).then((data) => {
       const datafind = this.paymentReceiveData?.find((id: any) => id.invoiceId === this.local_data.id)?.payments
       if (datafind) {
         datafind.forEach((element: any) => {
@@ -54,7 +55,7 @@ export class PaymentListComponent implements OnInit {
         });
         this.paymentListDataSource.data = [...this.paymentReciveList];
       }
-    });
+    })
   }
 
   buildForm() {

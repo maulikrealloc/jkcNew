@@ -9,15 +9,7 @@ import { MatTableDataSource } from '@angular/material/table';
   
 export class PassbookComponent implements OnInit {
 
-  passbookDataColumns: string[] = [
-    '#',
-    'passbook',
-    'name',
-    'date',
-    'debit',
-    'credit',
-    'balance'
-  ];
+  passbookDataColumns: string[] = ['#','passbook','name','date','debit','credit','balance' ];
   passbookList: any = []
   passbookListDataSource = new MatTableDataSource(this.passbookList);
 

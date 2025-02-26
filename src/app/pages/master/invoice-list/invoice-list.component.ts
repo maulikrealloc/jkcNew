@@ -18,20 +18,7 @@ import { CommonService } from 'src/app/services/common.service';
 
 export class InvoiceListComponent implements OnInit {
 
-  invoicDataColumns: string[] = [
-    'srNo',
-    'no',
-    'date',
-    'party',
-    'gross',
-    'discount',
-    'net',
-    'CGST',
-    'SGST',
-    'final',
-    'recived',
-    'action',
-  ];
+  invoicDataColumns: string[] = ['srNo','no','date','party','gross','discount','net','CGST','SGST','final','recived','action' ];
   toWords = new ToWords({
     localeCode: 'en-IN',
     converterOptions: {
@@ -81,14 +68,10 @@ export class InvoiceListComponent implements OnInit {
   }
 
   getInvoiceData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'InvoiceList')
-      .then((invoice) => {
-        this.invoiceList = invoice || [];
-        this.invoiceListDataSource = new MatTableDataSource(this.invoiceList);
-        if (this.invoiceList.length > 0) this.filterData();
-        this.invoiceListDataSource.paginator = this.paginator;
-      })
-      .catch(error => console.error('Error fetching invoice:', error));
+    this.commonService.fetchData('InvoiceList', this.invoiceList, this.invoiceListDataSource).then((invoice) => {
+      if (this.invoiceList.length > 0) this.filterData();
+          this.invoiceListDataSource.paginator = this.paginator;
+    })
   }
 
   filterData() {

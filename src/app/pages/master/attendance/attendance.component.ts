@@ -16,13 +16,7 @@ import { CommonService } from 'src/app/services/common.service';
 export class AttendanceComponent implements OnInit {
 
   dateAttendanceForm: FormGroup;
-  absentDataColumns: string[] = [
-    '#',
-    'employee',
-    'day',
-    'date',
-    'action',
-  ];
+  absentDataColumns: string[] = ['#','employee','day','date','action'];
 
   attendanceList: any = [];
   employeesList: any = [];

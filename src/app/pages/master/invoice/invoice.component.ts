@@ -17,16 +17,7 @@ import { CommonService } from 'src/app/services/common.service';
 
 export class InvoiceComponent implements OnInit {
 
-  invoiceDataColumns: string[] = [
-    'srNo',
-    'productName',
-    'productPrice',
-    'quantity',
-    'chalanNo',
-    'totalAmount',
-    'finalAmount',
-    'action',
-  ];
+  invoiceDataColumns: string[] = ['srNo','productName','productPrice','quantity','chalanNo','totalAmount','finalAmount','action' ];
   toWords = new ToWords({
     localeCode: 'en-IN',
     converterOptions: {
@@ -88,14 +79,9 @@ export class InvoiceComponent implements OnInit {
   }
 
   getChalanData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'ChalanList').then((chalan) => {
-      if (chalan && chalan.length > 0) {
-        this.chalanData = chalan.filter((id: any) => id.isCreated === false)
-      }
-    }).catch((error) => {
-      console.error('Error fetching chalan:', error);
+    this.commonService.fetchData('ChalanList', this.chalanData).then((data) => {
+      this.chalanData = this.chalanData.filter((id: any) => id.isCreated === false)
     });
-    // this.commonService.fetchData('ChalanList', this.chalanData);
   }
 
   getOrderData() {
@@ -164,14 +150,7 @@ export class InvoiceComponent implements OnInit {
       cgst: 0,
       sgst: 0
     });
-    this.invoiceForm.controls['firm'].setErrors(null)
-    this.invoiceForm.controls['party'].setErrors(null)
-    this.invoiceForm.controls['chalanNo'].setErrors(null)
-    this.invoiceForm.controls['date'].setErrors(null)
-    this.invoiceForm.controls['invoiceNo'].setErrors(null)
-    this.invoiceForm.controls['cgst'].setErrors(null)
-    this.invoiceForm.controls['sgst'].setErrors(null)
-    this.invoiceForm.controls['discountRatio'].setErrors(null)
+    this.invoiceForm.setErrors(null);
     this.selectedChalanList = [];
     this.invoiceListDataSource = new MatTableDataSource(this.selectedChalanList);
   }

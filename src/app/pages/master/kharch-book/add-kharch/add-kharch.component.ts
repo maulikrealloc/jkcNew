@@ -18,16 +18,7 @@ export class AddKharchComponent implements OnInit {
   @Output() kharchListUpdated = new EventEmitter<any[]>();
 
   dateKharchListForm: FormGroup;
-  kharchDataColumns: string[] = [
-    'srNo',
-    'unitname',
-    'kharchname',
-    'dec',
-    'date',
-    'chalanno',
-    'amount',
-    'action',
-  ];
+  kharchDataColumns: string[] = ['srNo','unitname','kharchname','dec','date','chalanno','amount','action' ];
   KharchList: any = [];
   kharchReportData: any = [];
   kharchListDataSource = new MatTableDataSource(this.KharchList);

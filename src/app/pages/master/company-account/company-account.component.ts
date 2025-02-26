@@ -14,14 +14,7 @@ import { CommonService } from 'src/app/services/common.service';
 
 export class CompanyAccountComponent implements OnInit {
 
-  companyAccountDataColumns: string[] = [
-    '#',
-    'accountName',
-    'bankName',
-    'openingBalance',
-    'date',
-    'action',
-  ];
+  companyAccountDataColumns: string[] = ['#','accountName','bankName','openingBalance','date','action' ];
   companyAccountList: any = [];
   companyAccountDataSource = new MatTableDataSource(this.companyAccountList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);

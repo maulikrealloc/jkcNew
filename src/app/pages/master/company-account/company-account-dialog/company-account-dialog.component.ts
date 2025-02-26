@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { designMasterDialogComponent } from '../../design-master/design-master.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Timestamp } from 'firebase/firestore';
 
@@ -25,12 +24,6 @@ export class CompanyAccountDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.formBuild(this.action === 'Edit' ? this.local_data : undefined)
-    // if (this.action === 'Edit') {
-    //   this.companyForm.controls['accountName'].setValue(this.local_data.accountName)
-    //   this.companyForm.controls['bankName'].setValue(this.local_data.bankName)
-    //   this.companyForm.controls['openingBalance'].setValue(this.local_data.openingBalance)
-    //   this.companyForm.controls['date'].setValue(this.convertTimestampToDate(this.local_data.date))
-    // }
   }
 
   convertTimestampToDate(element: any): Date | null {
@@ -57,5 +50,4 @@ export class CompanyAccountDialogComponent implements OnInit {
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
   }
-
 }

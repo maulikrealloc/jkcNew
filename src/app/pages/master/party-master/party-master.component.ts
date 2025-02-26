@@ -11,20 +11,24 @@ import { CommonService } from 'src/app/services/common.service';
   templateUrl: './party-master.component.html',
   styleUrls: ['./party-master.component.scss']
 })
-  
+
 export class PartyMasterComponent implements OnInit {
 
-  partyDataColumns: string[] = ['srNo','partyName','partyGstIn','chalanNo','address','partyPan','partyMobile','action',];
+  partyDataColumns: string[] = ['srNo', 'partyName', 'partyGstIn', 'chalanNo', 'address', 'partyPan', 'partyMobile', 'action',];
   partyList: any = []
   partyMasterDataSource: any = new MatTableDataSource(this.partyList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(private dialog: MatDialog,
-    private commonService : CommonService) { }
+    private commonService: CommonService) { }
 
   ngOnInit(): void {
     this.getPartyData()
+  }
+
+  ngAfterViewInit() {
+    this.partyMasterDataSource.paginator = this.paginator;
   }
 
   applyFilter(filterValue: string): void {
@@ -61,46 +65,16 @@ export class partyMasterDialogComponent implements OnInit {
   action: string;
   local_data: any;
   colorCode: any = [
-    {
-      bgColor: '#9370DB',
-      fontColor: '#ffffff',
-    },
-    {
-      bgColor: '#00008B',
-      fontColor: '#ffffff',
-    },
-    {
-      bgColor: '#008B8B',
-      fontColor: '#ffffff',
-    },
-    {
-      bgColor: '#8B008B',
-      fontColor: '#ffffff',
-    },
-    {
-      bgColor: '#483D8B',
-      fontColor: '#ffffff',
-    },
-    {
-      bgColor: '#20B2AA',
-      fontColor: '#ffffff',
-    },
-    {
-      bgColor: '#DDA0DD',
-      fontColor: '#020202',
-    },
-    {
-      bgColor: '#87CEEB',
-      fontColor: '#020202',
-    },
-    {
-      bgColor: '#40E0D0',
-      fontColor: '#020202',
-    },
-    {
-      bgColor: '#9ACD32',
-      fontColor: '#020202',
-    },
+    {bgColor: '#9370DB',fontColor: '#ffffff'},
+    {bgColor: '#00008B',fontColor: '#ffffff'},
+    {bgColor: '#008B8B',fontColor: '#ffffff'},
+    {bgColor: '#8B008B',fontColor: '#ffffff'},
+    {bgColor: '#483D8B',fontColor: '#ffffff'},
+    {bgColor: '#20B2AA',fontColor: '#ffffff'},
+    {bgColor: '#DDA0DD',fontColor: '#020202'},
+    {bgColor: '#87CEEB',fontColor: '#020202'},
+    {bgColor: '#40E0D0',fontColor: '#020202'},
+    {bgColor: '#9ACD32',fontColor: '#020202'}
   ]
 
   constructor(private fb: FormBuilder, public dialogRef: MatDialogRef<partyMasterDialogComponent>,

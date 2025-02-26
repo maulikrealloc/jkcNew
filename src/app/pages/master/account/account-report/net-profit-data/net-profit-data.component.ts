@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
-
+import { CommonService } from 'src/app/services/common.service';
 @Component({
   selector: 'app-net-profit-data',
   templateUrl: './net-profit-data.component.html',
@@ -9,17 +8,13 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
 })
 export class NetProfitDataComponent implements OnInit {
 
-  netProfitDataColumns: string[] = [
-    'totalIncome',
-    'totalExpenses',
-    'netProfit'
-  ];
+  netProfitDataColumns: string[] = [ 'totalIncome', 'totalExpenses', 'netProfit' ];
   netProfitData: any = [];
   expensesList: any = [];
   incomeDataList: any = [];
   netProfitListDataSource = new MatTableDataSource(this.netProfitData);
 
-  constructor(private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private commonService: CommonService) { }
 
   ngOnInit(): void {
     this.getExpensesListData();
@@ -27,23 +22,11 @@ export class NetProfitDataComponent implements OnInit {
   }
 
   getExpensesListData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'ExpensesList').then((expenses) => {
-      if (expenses && expenses.length > 0) {
-        this.expensesList = expenses
-      }
-    }).catch((error: any) => {
-      console.error('Error fetching expenses:', error);
-    });
+    this.commonService.fetchData('ExpensesList', this.expensesList);
   }
 
   getIncomeListData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'IncomeList').then((income) => {
-      if (income && income.length > 0) {
-        this.incomeDataList = income
-      }
-    }).catch((error: any) => {
-      console.error('Error fetching income:', error);
-    });
+    this.commonService.fetchData('IncomeList', this.incomeDataList);
   }
 
 }

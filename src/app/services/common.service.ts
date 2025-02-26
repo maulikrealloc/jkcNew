@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Injectable, ViewChild } from '@angular/core';
+import { Injectable, ViewChild } from '@angular/core';
 import { FirebaseCollectionService } from './firebase-collection.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -35,8 +35,6 @@ export class CommonService {
   fetchData(collection: string, targetList: any, dataSource?: MatTableDataSource<any>) {
     return this.firebaseCollectionService.getDocuments('CompanyList', collection)
       .then((data) => {
-        console.log('Fetched Data:', data);
-
         targetList.length = 0;
         if (data && data.length > 0) {
           targetList.push(...data);
@@ -44,12 +42,12 @@ export class CommonService {
           if (dataSource) {
             dataSource.data = [];
             dataSource.data = [...targetList];
+
             dataSource._updateChangeSubscription();
 
             setTimeout(() => {
               if (this.table) {
                 this.table.renderRows();
-                console.log('MatTable Refreshed!');
               }
             }, 100);
           }
@@ -57,5 +55,4 @@ export class CommonService {
       })
       .catch(error => console.error(`Error fetching ${collection}:`, error));
   }
-
 }

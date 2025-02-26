@@ -4,7 +4,6 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { CommonService } from 'src/app/services/common.service';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-design-master',
@@ -13,19 +12,13 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
 })
 export class DesignMasterComponent implements OnInit {
 
-  designMasterColumns: string[] = [
-    '#',
-    'designNumber',
-    'designPrice',
-    'noStiching',
-    'action',
-  ];
+  designMasterColumns: string[] = ['#','designNumber','designPrice','noStiching','action' ];
   designMaster: any = [];
   designMasterListDataSource = new MatTableDataSource(this.designMaster);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private dialog: MatDialog, private commonService: CommonService, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private dialog: MatDialog, private commonService: CommonService) { }
 
   ngOnInit(): void {
     this.getDesignMasterData();

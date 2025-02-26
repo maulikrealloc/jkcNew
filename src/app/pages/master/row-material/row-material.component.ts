@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { RowMaterialDialogComponent } from './row-material-dialog/row-material-dialog.component';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { CommonService } from 'src/app/services/common.service';
 
 @Component({
@@ -14,19 +13,13 @@ import { CommonService } from 'src/app/services/common.service';
 
 export class RowMaterialComponent implements OnInit {
 
-  rowMaterialDataColumns: string[] = [
-    '#',
-    'name',
-    'quantity',
-    'price',
-    'action'
-  ]
+  rowMaterialDataColumns: string[] = ['#','name','quantity','price','action']
   rowMaterialList: any = [];
   rowDataSource = new MatTableDataSource(this.rowMaterialList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private dialog: MatDialog, private commonService: CommonService, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private dialog: MatDialog, private commonService: CommonService) { }
 
   ngOnInit(): void {
     this.getRowMaterialData();

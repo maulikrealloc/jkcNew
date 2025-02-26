@@ -14,16 +14,7 @@ import { CommonService } from 'src/app/services/common.service';
 
 export class KhataMasterComponent implements OnInit {
 
-  khataMasterDataColumns: string[] = [
-    'srNo',
-    'companyName',
-    'ownerName',
-    'address',
-    'gstNo',
-    'panNo',
-    'mobileNo',
-    'action',
-  ];
+  khataMasterDataColumns: string[] = ['srNo','companyName','ownerName','address','gstNo','panNo','mobileNo','action' ];
   khataList: any = [];
   khataListDataSource = new MatTableDataSource(this.khataList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);

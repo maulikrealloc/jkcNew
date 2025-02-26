@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { CommonService } from 'src/app/services/common.service';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
@@ -13,20 +14,7 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
 export class ReportComponent implements OnInit {
 
   dateKhataReportListForm: FormGroup;
-  reportDataColumns: string[] = [
-    'srNo',
-    'partyName',
-    'partyOrder',
-    'khataName',
-    'itemName',
-    'pQuantity',
-    'kQuantity',
-    'pPrice',
-    'kPrice',
-    'pTotal',
-    'kTotal',
-    'profit',
-  ];
+  reportDataColumns: string[] = ['srNo','partyName','partyOrder','khataName','itemName','pQuantity','kQuantity','pPrice','kPrice','pTotal','kTotal','profit' ];
 
   khataReportList: any = [];
   partyList: any = [];
@@ -36,7 +24,7 @@ export class ReportComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private fb: FormBuilder, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private fb: FormBuilder, private commonService: CommonService, private firebaseCollectionService : FirebaseCollectionService) { }
 
   ngOnInit(): void {
     const today = new Date();
@@ -53,27 +41,11 @@ export class ReportComponent implements OnInit {
   }
 
   getKhataReportData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'KhataReportList').then((khataReport) => {
-      this.khataReportList = khataReport
-      console.log(this.khataReportList,'khataReportList===================');
-      
-      if (khataReport && khataReport.length > 0) {
-        this.khataReportDataSource = new MatTableDataSource(this.khataReportList);
-      } else {
-        this.khataReportList = [];
-        this.khataReportDataSource = new MatTableDataSource(this.khataReportList);
-      }
-    }).catch((error) => {
-      console.error('Error fetching khataOrder:', error);
-    });
+    this.commonService.fetchData('KhataReportList', this.khataReportList, this.khataReportDataSource)
   }
 
   getPartyData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
-      this.partyList = party
-    }).catch((error) => {
-      console.error('Error fetching party:', error);
-    });
+    this.commonService.fetchData('PartyList', this.partyList)
   }
 
   getPartyName(party: string): string {
@@ -81,11 +53,7 @@ export class ReportComponent implements OnInit {
   }
 
   getKhataData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'KhataList').then((khata) => {
-      this.khataList = khata
-    }).catch((error) => {
-      console.error('Error fetching khata:', error);
-    });
+    this.commonService.fetchData('KhataList', this.khataList)
   }
 
   getKhataName(khata: string): string {

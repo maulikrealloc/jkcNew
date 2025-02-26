@@ -10,11 +10,7 @@ import { MatTableDataSource } from '@angular/material/table';
 
 export class KharchMasterComponent implements OnInit {
 
-  kharchMasterDataColumns: string[] = [
-    'srNo',
-    'name',
-    'action',
-  ];
+  kharchMasterDataColumns: string[] = ['srNo','name','action' ];
   kharchForm: FormGroup;
   isEditMode = false;
   currentEditIndex: number | null = null;
@@ -68,8 +64,6 @@ export class KharchMasterComponent implements OnInit {
     this.currentListType = listType;
   }
 
-  deleteData() {
-
-  }
+  deleteData() {}
 
 }

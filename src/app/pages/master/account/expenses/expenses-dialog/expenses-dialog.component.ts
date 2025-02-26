@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Timestamp } from 'firebase/firestore';
 import { CommonService } from 'src/app/services/common.service';
+
 @Component({
   selector: 'app-expenses-dialog',
   templateUrl: './expenses-dialog.component.html',
@@ -60,5 +61,4 @@ export class ExpensesDialogComponent implements OnInit {
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
   }
-
 }

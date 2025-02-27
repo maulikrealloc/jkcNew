@@ -6,3 +6,22 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-mdc-form-field-hint-wrapper {
     padding: 0 !important;
 }
+
+.goog-te-combo {
+    padding: 7px;
+    border-radius: 7px;
+    margin-top: 28px !important;
+    width: 150px;
+}
+
+.skiptranslate {
+    opacity: 0;
+}
+
+.goog-te-gadget {
+    opacity: 1;
+}
+
+.mat-typography {
+   top: 0 !important;
+}

@@ -162,9 +162,6 @@ export class ChalanComponent implements OnInit {
 
     this.chalanListDataSource = new MatTableDataSource(this.chalanList);
     this.updateProductsData = selectedOrder;
-  }
-
-  ngAfterViewInit(): void {
     this.chalanListDataSource.paginator = this.paginator;
   }
 

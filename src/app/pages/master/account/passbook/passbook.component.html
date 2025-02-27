@@ -16,7 +16,7 @@
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Party</mat-label>
           <mat-select #dropdown placeholder="Select party">
-            <mat-option value="ABC">ABC</mat-option>
+            <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>

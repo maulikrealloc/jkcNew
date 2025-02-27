@@ -13,6 +13,8 @@ export class NetProfitDataComponent implements OnInit {
   expensesList: any = [];
   incomeDataList: any = [];
   netProfitListDataSource = new MatTableDataSource(this.netProfitData);
+  totalExpenses: any;
+  totalIncome: any;
 
   constructor(private commonService: CommonService) { }
 
@@ -22,11 +24,17 @@ export class NetProfitDataComponent implements OnInit {
   }
 
   getExpensesListData() {
-    this.commonService.fetchData('ExpensesList', this.expensesList);
+    this.commonService.fetchData('ExpensesList', this.expensesList).then((data) => {
+      this.totalExpenses = this.expensesList.map((id: any) => id.amount).reduce((a: any, b: any) => a + b);
+    });
   }
 
   getIncomeListData() {
-    this.commonService.fetchData('IncomeList', this.incomeDataList);
+    this.commonService.fetchData('IncomeList', this.incomeDataList).then((data) => {
+      this.totalIncome = this.incomeDataList.map((id: any) => id.amount).reduce((a: any, b: any) => a + b);
+      const totalNetProfit:any = [{ totalExpenses: this.totalExpenses, totalIncome: this.totalIncome, netProfit: this.totalIncome - this.totalExpenses }]
+      this.netProfitListDataSource = new MatTableDataSource(totalNetProfit);
+    });
   }
 
 }

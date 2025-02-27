@@ -39,6 +39,10 @@ export class OrderComponent implements OnInit {
     return null;
   }
 
+  ngAfterViewInit() {
+    this.orderDataSource.paginator = this.paginator;
+  }
+
   applyFilter(filterValue: string): void {
     this.orderDataSource.filter = filterValue.trim().toLowerCase();
   }

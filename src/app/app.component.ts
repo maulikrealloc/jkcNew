@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable, filter } from 'rxjs';
+import { filter } from 'rxjs';
 import { Router, NavigationEnd } from '@angular/router';
 import { OnlineStatusService } from './services/online-status.service';
 import { SpinnerService } from './services/spinner.service';

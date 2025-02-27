@@ -59,11 +59,11 @@
         </mat-form-field>
         <app-validation-message class="position-relative" [control]="partyForm.controls['chalanNoSeries']"></app-validation-message>
       </div>
-
-      <div class="col-6" *ngIf="action !== 'Edit'">
+<!-- *ngIf="action !== 'Edit'" -->
+      <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Select Color</mat-label>
-          <mat-select #dropdown required formControlName="partyColorCode" placeholder="Select color">
+          <mat-select required formControlName="partyColorCode" placeholder="Select color">
             <mat-option [value]="item" *ngFor="let item of colorCode">
               <div style="display: flex;">
                 <div style="width: 20px; height: 20px;border-radius: 10px;" [style.background-color]="item.bgColor">

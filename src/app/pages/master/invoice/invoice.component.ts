@@ -54,7 +54,6 @@ export class InvoiceComponent implements OnInit {
     this.getChalanData();
     this.getOrderData();
     this.getInvoiceData();
-    this.invoiceListDataSource.paginator = this.paginator;
   }
 
   buildForm() {

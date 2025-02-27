@@ -1,5 +1,7 @@
-import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { Component, Inject, OnInit, Optional, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { CommonService } from 'src/app/services/common.service';
 
 @Component({
@@ -11,10 +13,14 @@ import { CommonService } from 'src/app/services/common.service';
 export class ProductDialogComponent implements OnInit {
 
   displayedDataColumns: string[] = ['srNo', 'productName', 'productQuantity', 'productPrice', 'totalAmount'];
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
+
   action: string;
   local_data: any;
   orderList: any = [];
   selectedProduct: any;
+  productListDataSource = new MatTableDataSource(this.orderList);
 
   constructor(
     public dialogRef: MatDialogRef<ProductDialogComponent>,
@@ -35,7 +41,9 @@ export class ProductDialogComponent implements OnInit {
   }
 
   getOrderData() {
-    this.commonService.fetchData('OrderList', this.orderList);
+    this.commonService.fetchData('OrderList', this.orderList).then((data) => {
+      this.productListDataSource = this.orderList.find((obj: any) => obj.id === this.local_data.partyOrderId).products;
+    });
   }
 
   closeDialog(): void {

@@ -38,13 +38,11 @@ export class CommonService {
         targetList.length = 0;
         if (data && data.length > 0) {
           targetList.push(...data);
-
           if (dataSource) {
             dataSource.data = [];
             dataSource.data = [...targetList];
 
             dataSource._updateChangeSubscription();
-
             setTimeout(() => {
               if (this.table) {
                 this.table.renderRows();

@@ -106,6 +106,7 @@ export class ChalanListComponent implements OnInit {
   partyChange(event: any) {
     const partyChange = this.chalanList.filter((chalanObj: any) => chalanObj.partyId === event.value)
     this.chalanListDataSource = new MatTableDataSource(partyChange);
+    this.chalanListDataSource.paginator = this.paginator;
   }
 
   deleteChalan(action: any, obj: any) {

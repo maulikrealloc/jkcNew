@@ -27,6 +27,10 @@ export class FirmMasterComponent implements OnInit {
     this.getFirmData();
   }
 
+  ngAfterViewInit() {
+    this.firmMasterDataSource.paginator = this.paginator;
+  }
+
   applyFilter(filterValue: string): void {
     this.firmMasterDataSource.filter = filterValue.trim().toLowerCase();
   }

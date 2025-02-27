@@ -40,6 +40,10 @@ export class BonusListComponent implements OnInit {
     this.bonusListDataSource.paginator = this.paginator;
   }
 
+  ngAfterViewInit() {
+    this.bonusListDataSource.paginator = this.paginator;
+  }
+
   applyFilter(filterValue: string): void {
     this.bonusListDataSource.filter = filterValue.trim().toLowerCase();
   }

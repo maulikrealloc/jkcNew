@@ -5,6 +5,7 @@ import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.compo
 import { IncomeDialogComponent } from './income-dialog/income-dialog.component';
 import { Timestamp } from 'firebase/firestore';
 import { CommonService } from 'src/app/services/common.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-income',
@@ -19,12 +20,17 @@ export class IncomeComponent implements OnInit {
   companyAccountList: any = [];
   incomeListDataSource = new MatTableDataSource(this.incomeList);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(private dialog: MatDialog, private commonService: CommonService) { }
 
   ngOnInit(): void {
     this.getIncomeListData();
     this.getCompanyAccountData();
+  }
+
+  ngAfterViewInit() {
+    this.incomeListDataSource.paginator = this.paginator;
   }
 
   applyFilter(filterValue: string): void {

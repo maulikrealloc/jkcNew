@@ -47,6 +47,10 @@ export class AttendanceComponent implements OnInit {
     return null;
   }
 
+  ngAfterViewInit() {
+    this.attendanceListDataSource.paginator = this.paginator;
+  }
+
   applyFilter(filterValue: string): void {
     this.attendanceListDataSource.filter = filterValue.trim().toLowerCase();
   }

@@ -25,6 +25,10 @@ export class RowMaterialComponent implements OnInit {
     this.getRowMaterialData();
   }
 
+  ngAfterViewInit() {
+    this.rowDataSource.paginator = this.paginator;
+  }
+
   applyFilter(filterValue: string): void {
     this.rowDataSource.filter = filterValue.trim().toLowerCase();
   }

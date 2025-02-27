@@ -44,7 +44,10 @@ export class WithdrawalListComponent implements OnInit {
     })
     this.getWithdrawalData();
     this.getEmployeeData();
-    
+  }
+
+  ngAfterViewInit() {
+    this.withdrawalDataSource.paginator = this.paginator;
   }
 
   convertTimestampToDate(element: any): Date | null {

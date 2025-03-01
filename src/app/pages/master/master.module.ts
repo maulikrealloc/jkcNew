@@ -10,7 +10,6 @@ import { RouterModule } from '@angular/router';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { MaterialModule } from 'src/app/material.module';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/compiler';
 import { DesignMasterComponent, designMasterDialogComponent } from './design-master/design-master.component';
 import { MaintenanceMasterDialogComponent } from './maintenance-master/maintenance-master-dialog/maintenance-master-dialog.component';
 import { CompanyAccountComponent } from './company-account/company-account.component';
@@ -65,6 +64,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { ChalanViewDialogComponent } from './chalan/chalan-view-dialog/chalan-view-dialog.component';
 import { EmployeeReportComponent } from './employee-report/employee-report.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { EditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
 
 
 @NgModule({
@@ -125,7 +125,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     ProductDialogComponent,
     PaymentListComponent,
     ChalanViewDialogComponent,
-    EmployeeReportComponent
+    EmployeeReportComponent,
+    EditInvoiceComponent
   ],
   imports: [
     CommonModule,

@@ -40,7 +40,7 @@ export class OrderComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.orderDataSource.paginator = this.paginator;
+    
   }
 
   applyFilter(filterValue: string): void {
@@ -53,8 +53,30 @@ export class OrderComponent implements OnInit {
 
   getOrderData() {
     this.commonService.fetchData('OrderList', this.orderList, this.orderDataSource).then(data => {
-      if (this.orderList.length > 0) { this.filterData();  } 
+      if (this.orderList.length > 0) {
+        this.orderList.forEach((ele:any) => {
+          ele.orderDate = this.convertTimestampToDate(ele.orderDate)
+        })
+        this.orderList.sort((a:any, b:any) => new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime());
+        
+        this.orderDataSource = new MatTableDataSource(this.orderList);
+        this.orderDataSource.paginator = this.paginator;
+        this.filterData();
+      } 
     });
+  }
+
+  // Function to handle both Firestore timestamps and ISO strings
+  convertToDate(orderDate: any): Date | null {
+    if (!orderDate) return null;
+
+    if (typeof orderDate === "string") {
+      return new Date(orderDate); // Convert ISO string to Date
+    } else if (typeof orderDate === "object" && orderDate.seconds) {
+      return new Date(orderDate.seconds * 1000); // Convert Firestore timestamp to Date
+    }
+
+    return null;
   }
 
   filterData() {

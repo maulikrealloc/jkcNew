@@ -10,6 +10,7 @@ import autoTable from 'jspdf-autotable';
 import moment from 'moment';
 import { ToWords } from 'to-words';
 import { CommonService } from 'src/app/services/common.service';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-chalan-list',
@@ -40,6 +41,7 @@ export class ChalanListComponent implements OnInit {
   chalanListDataSource = new MatTableDataSource(this.chalanList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private dialog: MatDialog, private commonService: CommonService, private firebaseCollectionService: FirebaseCollectionService) { }
 
@@ -72,9 +74,13 @@ export class ChalanListComponent implements OnInit {
 
   getChalanData() {
     this.commonService.fetchData('ChalanList', this.chalanList, this.chalanListDataSource).then((chalan) => {
-      if (this.chalanList.length > 0) this.filterData();
-          this.chalanListDataSource.paginator = this.paginator;
-    })
+      if (this.chalanList.length > 0) 
+        this.chalanListDataSource.data.sort((a: any, b: any) => b.chalanNo - a.chalanNo);
+      this.chalanListDataSource.paginator = this.paginator;
+      this.chalanListDataSource.sort = this.sort;
+      this.filterData();
+    })    
+    console.log("this.chalanList===", this.chalanList);
   }
 
   filterData() {
@@ -93,6 +99,7 @@ export class ChalanListComponent implements OnInit {
 
   getFirmData() {
     this.commonService.fetchData('FirmList', this.firmList);
+    console.log("this.firmList==", this.firmList);
   }
 
   getOrderData() {
@@ -109,6 +116,12 @@ export class ChalanListComponent implements OnInit {
     this.chalanListDataSource.paginator = this.paginator;
   }
 
+  firmChange(event: any) { 
+    const partyChange = this.chalanList.filter((chalanObj: any) => chalanObj.firmId === event.value)
+    this.chalanListDataSource = new MatTableDataSource(partyChange);
+    this.chalanListDataSource.paginator = this.paginator;
+  }
+  
   deleteChalan(action: any, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(ProductDialogComponent, {

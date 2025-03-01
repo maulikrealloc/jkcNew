@@ -25,3 +25,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-typography {
    top: 0 !important;
 }
+
+:root {
+    .succss-msg {
+        --mdc-snackbar-container-color: green;
+    }
+}

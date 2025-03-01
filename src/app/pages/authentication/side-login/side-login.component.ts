@@ -20,7 +20,7 @@ export class AppSideLoginComponent {
   form = new FormGroup({
     uname: new FormControl('', [Validators.required, Validators.minLength(6)]),
     password: new FormControl('', [Validators.required]),
-    accountYear: new FormControl('', [Validators.required])
+    accountYear: new FormControl(1, [Validators.required])
   });
 
   get f() {

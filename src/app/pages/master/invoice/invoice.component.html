@@ -68,8 +68,16 @@
 
                 <div class="col-12 col-sm-12 col-md-2">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
+                        <mat-label>I.G.S.T</mat-label>
+                        <input type="text" matInput required formControlName="igst" placeholder="Enter I.G.S.T" (ngModelChange)="gstValueChange($event, 'igst')">
+                        <app-validation-message class="position-relative" [control]="invoiceForm.controls['igst']"></app-validation-message>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-12 col-sm-12 col-md-2">
+                    <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>C.G.S.T</mat-label>
-                        <input type="text" matInput required formControlName="cgst" placeholder="Enter C.G.S.T">
+                        <input type="text" matInput required formControlName="cgst" placeholder="Enter C.G.S.T" (ngModelChange)="gstValueChange($event,'cgst')">
                         <app-validation-message class="position-relative" [control]="invoiceForm.controls['cgst']"></app-validation-message>
                     </mat-form-field>
                 </div>
@@ -77,7 +85,7 @@
                 <div class="col-12 col-sm-12 col-md-2">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>S.G.S.T</mat-label>
-                        <input type="text" matInput required formControlName="sgst" placeholder="Enter S.G.S.T">
+                        <input type="text" matInput required formControlName="sgst" placeholder="Enter S.G.S.T" (ngModelChange)="gstValueChange($event, 'sgst')">
                         <app-validation-message class="position-relative" [control]="invoiceForm.controls['sgst']"></app-validation-message>
                     </mat-form-field>
                 </div>
@@ -159,8 +167,8 @@
                 <ng-container matColumnDef="action">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Action</th>
                     <td mat-cell *matCellDef="let element; let i = index" class="action-link">
-                        <a class="m-r-10 cursor-pointer" (click)="deleteInvoiceData(i)"><i-tabler name="trash"
-                                class="icon-18"></i-tabler></a>
+                        <a class="m-r-10 cursor-pointer" (click)="deleteInvoiceData(i)"><i-tabler name="trash" class="icon-18"></i-tabler></a>
+                        <a class="m-r-10 cursor-pointer" (click)="editInvoiceData('Edit', element)"><i-tabler name="edit" class="icon-18"></i-tabler></a>
                     </td>
                 </ng-container>
 

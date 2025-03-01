@@ -8,6 +8,8 @@ import autoTable from 'jspdf-autotable';
 import { ToWords } from 'to-words';
 import { DatePipe } from '@angular/common';
 import { CommonService } from 'src/app/services/common.service';
+import { MatDialog } from '@angular/material/dialog';
+import { EditInvoiceComponent } from './edit-invoice/edit-invoice.component';
 
 @Component({
   selector: 'app-invoice',
@@ -43,6 +45,7 @@ export class InvoiceComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(private fb: FormBuilder,
+    private dialog: MatDialog,
     private commonService: CommonService,
     private firebaseCollectionService: FirebaseCollectionService,
     private datePipe: DatePipe) { }
@@ -63,6 +66,7 @@ export class InvoiceComponent implements OnInit {
       chalanNo: ['', Validators.required],
       date: new Date(),
       invoiceNo: [''],
+      igst: [0],
       cgst: [0],
       sgst: [0],
       discountRatio: [0]
@@ -532,6 +536,24 @@ export class InvoiceComponent implements OnInit {
     doc.setFontSize(fontSize);
     doc.text(text, x, y);
     doc.setFontSize(originalFontSize);
+  }
+
+  gstValueChange(event : any, value : any) {
+    const { cgst, sgst, igst } = this.invoiceForm.controls;
+    const hasValue = event.length > 0;
+
+    if (value === 'igst') {
+      cgst[hasValue ? 'disable' : 'enable']();
+      sgst[hasValue ? 'disable' : 'enable']();
+    } else if (value === 'cgst' || value === 'sgst') {
+      igst[(hasValue || cgst.value || sgst.value) ? 'disable' : 'enable']();
+    }
+  }
+  
+  editInvoiceData(action: string, obj: any) {
+    const dialogRef = this.dialog.open(EditInvoiceComponent, {
+      data: { ...obj, action },
+    });
   }
 
 }

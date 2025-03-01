@@ -143,15 +143,16 @@ export class FirebaseCollectionService {
       }
 
       await collectionRef.add(documentData);
-      this.snackBar.open('Document added successfully', 'Close', {
+      this.snackBar.open('Record added successfully', 'Close', {
         duration: 3000,
-        horizontalPosition: 'right',
+        horizontalPosition: 'center',
         verticalPosition: 'top',
+        panelClass: ['succss-msg']
       });
     } catch (error: any) {
       this.snackBar.open(`Error adding document: ${error.message}`, 'Close', {
         duration: 3000,
-        horizontalPosition: 'right',
+        horizontalPosition: 'center',
         verticalPosition: 'top',
       });
       throw error;
@@ -174,15 +175,16 @@ export class FirebaseCollectionService {
       }
 
       await collectionRef.update(documentData);
-      this.snackBar.open('Document updated successfully', 'Close', {
+      this.snackBar.open('Record updated successfully', 'Close', {
         duration: 3000,
-        horizontalPosition: 'right',
+        horizontalPosition: 'center',
         verticalPosition: 'top',
+        panelClass: ['succss-msg']
       });
     } catch (error: any) {
       this.snackBar.open(`Error updating document: ${error.message}`, 'Close', {
         duration: 3000,
-        horizontalPosition: 'right',
+        horizontalPosition: 'center',
         verticalPosition: 'top',
       });
       throw error;
@@ -205,15 +207,16 @@ export class FirebaseCollectionService {
       }
 
       await collectionRef.delete();
-      this.snackBar.open('Document deleted successfully', 'Close', {
+      this.snackBar.open('Record deleted successfully', 'Close', {
         duration: 3000,
-        horizontalPosition: 'right',
+        horizontalPosition: 'center',
         verticalPosition: 'top',
+        panelClass: ['succss-msg']
       });
     } catch (error: any) {
       this.snackBar.open(`Error deleting document: ${error.message}`, 'Close', {
         duration: 3000,
-        horizontalPosition: 'right',
+        horizontalPosition: 'center',
         verticalPosition: 'top',
       });
       throw error;
@@ -244,7 +247,7 @@ export class FirebaseCollectionService {
     } catch (error: any) {
       this.snackBar.open(`Error fetching documents: ${error.message}`, 'Close', {
         duration: 3000,
-        horizontalPosition: 'right',
+        horizontalPosition: 'center',
         verticalPosition: 'top',
       });
       throw error;

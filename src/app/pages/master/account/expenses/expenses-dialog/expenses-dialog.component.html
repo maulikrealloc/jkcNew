@@ -5,11 +5,10 @@
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Expenses Type</mat-label>
       <mat-select #dropdown formControlName="expensesType" placeholder="Enter expenses">
-        <mat-option value="abc">abc</mat-option>
+        <mat-option *ngFor="let item of expensesmasterList" [value]="item.type">{{item.type}}</mat-option>
       </mat-select>
-      <app-validation-message class="position-relative" [control]="expensesForm.controls['expensesType']"></app-validation-message>
-
     </mat-form-field>
+    <app-validation-message class="position-relative" [control]="expensesForm.controls['expensesType']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Paid By</mat-label>
@@ -17,9 +16,8 @@
         <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName
           }}</mat-option>
       </mat-select>
-      <app-validation-message class="position-relative" [control]="expensesForm.controls['paidBy']"></app-validation-message>
-
     </mat-form-field>
+    <app-validation-message class="position-relative" [control]="expensesForm.controls['paidBy']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Date</mat-label>
@@ -31,23 +29,20 @@
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Description</mat-label>
       <input type="text" matInput placeholder="Enter description" formControlName="description">
-      <app-validation-message class="position-relative" [control]="expensesForm.controls['description']"></app-validation-message>
-
     </mat-form-field>
+    <app-validation-message class="position-relative" [control]="expensesForm.controls['description']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Chalan No</mat-label>
       <input type="number" matInput placeholder="Enter chalan no" formControlName="chalanNo" min="0">
-      <app-validation-message class="position-relative" [control]="expensesForm.controls['chalanNo']"></app-validation-message>
-
     </mat-form-field>
+    <app-validation-message class="position-relative" [control]="expensesForm.controls['chalanNo']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Amount</mat-label>
       <input type="number" matInput placeholder="Enter amount" formControlName="amount" min="0">
-      <app-validation-message class="position-relative" [control]="expensesForm.controls['amount']"></app-validation-message>
-
     </mat-form-field>
+    <app-validation-message class="position-relative" [control]="expensesForm.controls['amount']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Status</mat-label>
@@ -55,8 +50,8 @@
         <mat-option value="pending">Pending</mat-option>
         <mat-option value="paid">Paid</mat-option>
       </mat-select>
-      <app-validation-message class="position-relative" [control]="expensesForm.controls['status']"></app-validation-message>
     </mat-form-field>
+    <app-validation-message class="position-relative" [control]="expensesForm.controls['status']"></app-validation-message>
   </form>
 </mat-dialog-content>
 <mat-divider></mat-divider>

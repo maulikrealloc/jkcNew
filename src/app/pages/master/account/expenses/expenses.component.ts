@@ -18,6 +18,7 @@ export class ExpensesComponent implements OnInit {
   expensesDataColumns: string[] = ['#','expensesType','date','description','chalanNo','amount','paidBy','status','action' ];
   expensesList: any = [];
   companyAccountList: any = [];
+  expensesmasterList: any = [];
   expenses: any = []
   expensesListDataSource = new MatTableDataSource(this.expensesList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -28,6 +29,7 @@ export class ExpensesComponent implements OnInit {
   ngOnInit(): void {
     this.getExpensesListData();
     this.getCompanyAccountData();
+    this.getExpensesmasterListData();
     this.expensesListDataSource.paginator = this.paginator;
   }
 
@@ -44,6 +46,10 @@ export class ExpensesComponent implements OnInit {
 
   getExpensesListData() {
     this.commonService.fetchData('ExpensesList', this.expensesList, this.expensesListDataSource);
+  }
+
+  getExpensesmasterListData() {
+    this.commonService.fetchData('ExpensesmasterList', this.expensesmasterList);
   }
 
   getCompanyAccountData() {
@@ -63,8 +69,15 @@ export class ExpensesComponent implements OnInit {
     });  
   }
 
-  openExpensesMaster() {
+  openExpensesMaster(action: string, obj: any) {
+    obj.action = action;
     const dialogRef = this.dialog.open(ExpensesmasterDialogComponent, {
+      data: obj,
     })
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'ExpensesmasterList').then(() => this.getExpensesmasterListData()).catch(console.error);
+      }
+    });  
   }
 }

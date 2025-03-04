@@ -7,8 +7,8 @@
       <mat-select #dropdown formControlName="partyName" placeholder="Select party">
         <mat-option value="abc">abc</mat-option>
       </mat-select>
-      <app-validation-message class="position-relative" [control]="incomeForm.controls['partyName']"></app-validation-message>
     </mat-form-field>
+    <app-validation-message class="position-relative" [control]="incomeForm.controls['partyName']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Account</mat-label>
@@ -16,16 +16,16 @@
         <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName
           }}</mat-option>
       </mat-select>
-      <app-validation-message class="position-relative" [control]="incomeForm.controls['account']"></app-validation-message>
     </mat-form-field>
+    <app-validation-message class="position-relative" [control]="incomeForm.controls['account']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Invoice No</mat-label>
       <mat-select #dropdown formControlName="invoiceNo" placeholder="Select invoice no">
         <mat-option value="abc">abc</mat-option>
       </mat-select>
-      <app-validation-message class="position-relative" [control]="incomeForm.controls['invoiceNo']"></app-validation-message>
     </mat-form-field>
+    <app-validation-message class="position-relative" [control]="incomeForm.controls['invoiceNo']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Invoice Date</mat-label>
@@ -44,8 +44,8 @@
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Amount</mat-label>
       <input type="number" matInput placeholder="Enter amount" formControlName="amount" min="0">
-      <app-validation-message class="position-relative" [control]="incomeForm.controls['amount']"></app-validation-message>
     </mat-form-field>
+    <app-validation-message class="position-relative" [control]="incomeForm.controls['amount']"></app-validation-message>
   </form>
 </mat-dialog-content>
 <mat-divider></mat-divider>

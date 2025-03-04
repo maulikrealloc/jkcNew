@@ -74,13 +74,16 @@ export class ChalanListComponent implements OnInit {
 
   getChalanData() {
     this.commonService.fetchData('ChalanList', this.chalanList, this.chalanListDataSource).then((chalan) => {
-      if (this.chalanList.length > 0) 
-        this.chalanListDataSource.data.sort((a: any, b: any) => b.chalanNo - a.chalanNo);
-      this.chalanListDataSource.paginator = this.paginator;
-      this.chalanListDataSource.sort = this.sort;
-      this.filterData();
+      if (this.chalanList.length > 0)
+        this.chalanSorting();
+        this.filterData();
     })    
-    console.log("this.chalanList===", this.chalanList);
+  }
+
+  chalanSorting() {
+    this.chalanListDataSource.data.sort((a: any, b: any) => b.chalanNo - a.chalanNo);
+    this.chalanListDataSource.paginator = this.paginator;
+    this.chalanListDataSource.sort = this.sort;
   }
 
   filterData() {
@@ -99,7 +102,6 @@ export class ChalanListComponent implements OnInit {
 
   getFirmData() {
     this.commonService.fetchData('FirmList', this.firmList);
-    console.log("this.firmList==", this.firmList);
   }
 
   getOrderData() {
@@ -113,13 +115,13 @@ export class ChalanListComponent implements OnInit {
   partyChange(event: any) {
     const partyChange = this.chalanList.filter((chalanObj: any) => chalanObj.partyId === event.value)
     this.chalanListDataSource = new MatTableDataSource(partyChange);
-    this.chalanListDataSource.paginator = this.paginator;
+    this.chalanSorting();
   }
 
   firmChange(event: any) { 
     const partyChange = this.chalanList.filter((chalanObj: any) => chalanObj.firmId === event.value)
     this.chalanListDataSource = new MatTableDataSource(partyChange);
-    this.chalanListDataSource.paginator = this.paginator;
+    this.chalanSorting();
   }
   
   deleteChalan(action: any, obj: any) {

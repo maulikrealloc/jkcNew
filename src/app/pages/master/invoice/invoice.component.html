@@ -10,13 +10,8 @@
                             (selectionChange)="firmChange($event)">
                             <mat-option [value]="item.id" *ngFor="let item of firmList">{{ item.header }}</mat-option>
                         </mat-select>
-                        <app-validation-message class="position-relative" [control]="invoiceForm.controls['firm']"></app-validation-message>
-                        <!-- <mat-hint
-                            *ngIf="invoiceForm.get('firm')?.hasError('required') && invoiceForm.get('firm')?.touched"
-                            class="error-message error-color">
-                            Firm is required
-                        </mat-hint> -->
                     </mat-form-field>
+                    <app-validation-message class="position-relative" [control]="invoiceForm.controls['firm']"></app-validation-message>
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-3">
@@ -27,8 +22,8 @@
                             <mat-option *ngFor="let item of partyList" [value]="item.id">{{ item.firstName
                                 }}</mat-option>
                         </mat-select>
-                        <app-validation-message class="position-relative" [control]="invoiceForm.controls['party']"></app-validation-message>
                     </mat-form-field>
+                    <app-validation-message class="position-relative" [control]="invoiceForm.controls['party']"></app-validation-message>
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-3">
@@ -44,8 +39,8 @@
                                 <mat-option class="text-center" disabled>No record found</mat-option>
                             </ng-template>
                         </mat-select>
-                        <app-validation-message class="position-relative" [control]="invoiceForm.controls['chalanNo']"></app-validation-message>
                     </mat-form-field>
+                    <app-validation-message class="position-relative" [control]="invoiceForm.controls['chalanNo']"></app-validation-message>
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-3">
@@ -57,37 +52,37 @@
                     </mat-form-field>
                 </div>
 
-                <div class="col-12 col-sm-12 col-md-3">
+                <div class="col-12 col-sm-12 col-md-2">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Invoice No</mat-label>
                         <input type="text" matInput required formControlName="invoiceNo" placeholder="Enter invoice no"
                             min="0">
-                            <app-validation-message class="position-relative" [control]="invoiceForm.controls['invoiceNo']"></app-validation-message>
                     </mat-form-field>
+                    <app-validation-message class="position-relative" [control]="invoiceForm.controls['invoiceNo']"></app-validation-message>
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-2">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>I.G.S.T</mat-label>
                         <input type="text" matInput required formControlName="igst" placeholder="Enter I.G.S.T" (ngModelChange)="gstValueChange($event, 'igst')">
-                        <app-validation-message class="position-relative" [control]="invoiceForm.controls['igst']"></app-validation-message>
                     </mat-form-field>
+                    <app-validation-message class="position-relative" [control]="invoiceForm.controls['igst']"></app-validation-message>
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-2">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>C.G.S.T</mat-label>
                         <input type="text" matInput required formControlName="cgst" placeholder="Enter C.G.S.T" (ngModelChange)="gstValueChange($event,'cgst')">
-                        <app-validation-message class="position-relative" [control]="invoiceForm.controls['cgst']"></app-validation-message>
                     </mat-form-field>
+                    <app-validation-message class="position-relative" [control]="invoiceForm.controls['cgst']"></app-validation-message>
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-2">
                     <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>S.G.S.T</mat-label>
                         <input type="text" matInput required formControlName="sgst" placeholder="Enter S.G.S.T" (ngModelChange)="gstValueChange($event, 'sgst')">
-                        <app-validation-message class="position-relative" [control]="invoiceForm.controls['sgst']"></app-validation-message>
                     </mat-form-field>
+                    <app-validation-message class="position-relative" [control]="invoiceForm.controls['sgst']"></app-validation-message>
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-2">
@@ -95,8 +90,17 @@
                         <mat-label>Discount Ratio</mat-label>
                         <input type="number" matInput required formControlName="discountRatio"
                             placeholder="Enter discount ratio (%)" min="0">
-                            <app-validation-message class="position-relative" [control]="invoiceForm.controls['discountRatio']"></app-validation-message>
                     </mat-form-field>
+                    <app-validation-message class="position-relative" [control]="invoiceForm.controls['discountRatio']"></app-validation-message>
+                </div>
+
+                <div class="col-12 col-sm-12 col-md-2">
+                    <mat-form-field appearance="outline" class="w-100 m-t-10">
+                        <mat-label>Payment Day's</mat-label>
+                        <input type="number" matInput required (ngModelChange)="paymentDaysChange($event)" formControlName="paymentDays" placeholder="Enter discount ratio (%)"
+                            min="0">
+                    </mat-form-field>
+                    <app-validation-message class="position-relative" [control]="invoiceForm.controls['paymentDays']"></app-validation-message>
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-1">
@@ -114,6 +118,10 @@
                             Generate Invoice
                         </button>
                     </div>
+                </div>
+
+                <div class="col-12 col-sm-12 col-md-3 payment-date">
+                    Payment due date is &nbsp;<b>{{ paymentDays | date : "dd-MM-yyyy" }}</b>
                 </div>
             </div>
         </form>

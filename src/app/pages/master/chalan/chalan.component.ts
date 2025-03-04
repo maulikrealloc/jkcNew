@@ -108,8 +108,9 @@ export class ChalanComponent implements OnInit {
 
     this.firebaseCollectionService.updateDocument('CompanyList', this.updateProductsData.id, this.updateProductsData, 'OrderList');
     this.firebaseCollectionService.addDocument('CompanyList', payload, 'ChalanList');
-
-    this.chalanForm.reset();
+    const chalanDateValue = this.chalanForm.value.date; 
+    this.chalanForm.reset(); 
+    this.chalanForm.patchValue({ date: chalanDateValue });
     ['firm', 'party', 'date', 'partyOrder', 'product'].forEach(ele => {
       this.chalanForm.controls[ele].setErrors(null)
     })

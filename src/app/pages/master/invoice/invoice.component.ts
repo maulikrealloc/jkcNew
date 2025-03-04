@@ -28,7 +28,7 @@ export class InvoiceComponent implements OnInit {
       ignoreZeroCurrency: false,
     },
   });
-
+  paymentDays = new Date()
   invoiceForm: FormGroup;
   firmList: any = [];
   partyList: any = [];
@@ -64,12 +64,13 @@ export class InvoiceComponent implements OnInit {
       firm: ['', Validators.required],
       party: ['', Validators.required],
       chalanNo: ['', Validators.required],
-      date: new Date(),
+      date: [new Date()],
       invoiceNo: [''],
       igst: [0],
       cgst: [0],
       sgst: [0],
-      discountRatio: [0]
+      discountRatio: [0],
+      paymentDays: [0]
     })
   }
 
@@ -125,7 +126,8 @@ export class InvoiceComponent implements OnInit {
     const netAmount: any = Number(grossTotal - discountAmount).toFixed(2);
     const cgst = Number((netAmount * Number(this.invoiceForm.value.cgst)) / 100).toFixed(2);
     const sgst = Number((netAmount * Number(this.invoiceForm.value.sgst)) / 100).toFixed(2);
-    const finalAmount = (Number(netAmount) + Number(cgst) + Number(sgst)).toFixed(2);
+    const igst = Number((netAmount * Number(this.invoiceForm.value.igst)) / 100).toFixed(2);
+    const finalAmount = (Number(netAmount) + Number(igst) + Number(cgst) + Number(sgst)).toFixed(2);
 
     const payload = {
       firmId: this.invoiceForm.value.firm,
@@ -133,12 +135,14 @@ export class InvoiceComponent implements OnInit {
       chalanId: this.invoiceForm.value.chalanNo,
       date: this.invoiceForm.value.date,
       invoiceNo: this.invoiceForm.value.invoiceNo,
-      cgst: Number(this.invoiceForm.value.cgst),
-      sgst: Number(this.invoiceForm.value.sgst),
+      cgst: isNaN(Number(this.invoiceForm.value.cgst)) ? 0 : Number(this.invoiceForm.value.cgst),
+      sgst: isNaN(Number(this.invoiceForm.value.sgst)) ? 0 : Number(this.invoiceForm.value.sgst),
+      igst: isNaN(Number(this.invoiceForm.value.igst)) ? 0 : Number(this.invoiceForm.value.igst),
       discountRatio: this.invoiceForm.value.discountRatio,
       grossTotal: grossTotal,
       netAmount: netAmount,
-      finalAmount: finalAmount
+      finalAmount: isNaN(Number(finalAmount)) ? 0 : Number(finalAmount),
+      paymentDueDate: this.paymentDays
     }
 
     this.updateChalanIsCreated(payload.chalanId)
@@ -151,8 +155,12 @@ export class InvoiceComponent implements OnInit {
       invoiceNo: null,
       discountRatio: 0,
       cgst: 0,
-      sgst: 0
+      sgst: 0,
+      igst: 0,
+      paymentDueDate:''
     });
+
+    ['cgst', 'sgst', 'igst'].forEach(ele => this.invoiceForm.controls[ele].enable())
     this.invoiceForm.setErrors(null);
     this.selectedChalanList = [];
     this.invoiceListDataSource = new MatTableDataSource(this.selectedChalanList);
@@ -164,8 +172,9 @@ export class InvoiceComponent implements OnInit {
     const netAmount: any = Number(grossTotal - discountAmount).toFixed(2);
     const cgst = Number((netAmount * Number(this.invoiceForm.value.cgst)) / 100).toFixed(2);
     const sgst = Number((netAmount * Number(this.invoiceForm.value.sgst)) / 100).toFixed(2);
-    const finalAmount = (Number(netAmount) + Number(cgst) + Number(sgst)).toFixed(2);
-
+    const igst = Number((netAmount * Number(this.invoiceForm.value.igst)) / 100).toFixed(2);
+    const finalAmount = (Number(netAmount) + (this.invoiceForm.value.igst ? Number(igst) : Number(cgst) + Number(sgst))).toFixed(2);
+    
     const payload = {
       firmId: this.invoiceForm.value.firm,
       partyId: this.invoiceForm.value.party,
@@ -174,10 +183,11 @@ export class InvoiceComponent implements OnInit {
       invoiceNo: this.invoiceForm.value.invoiceNo,
       cgst: Number(this.invoiceForm.value.cgst),
       sgst: Number(this.invoiceForm.value.sgst),
+      igst: Number(this.invoiceForm.value.igst),
       discountRatio: this.invoiceForm.value.discountRatio,
       grossTotal: grossTotal,
       netAmount: netAmount,
-      finalAmount: finalAmount
+      finalAmount: isNaN(Number(finalAmount)) ? 0 : Number(finalAmount)
     }
     this.getPartyDetails(payload.partyId);
     this.getFirmDetails(payload.firmId);
@@ -409,15 +419,16 @@ export class InvoiceComponent implements OnInit {
     const netAmount: any = Number(grossTotal - discountAmount).toFixed(2);
     const cgst = Number((netAmount * invoiceData?.cgst) / 100).toFixed(2);
     const sgst = Number((netAmount * invoiceData?.sgst) / 100).toFixed(2);
-    const finalAmount = (Number(netAmount) + Number(cgst) + Number(sgst)).toFixed(2);
+    const igst = Number((netAmount * invoiceData?.igst) / 100).toFixed(2);
+    const finalAmount = (Number(netAmount) + (invoiceData?.igst ? Number(igst) : Number(cgst) + Number(sgst))).toFixed(2);
     const finalAmountInWords = this.toWords.convert(Number(finalAmount));
 
     body.push(
       ['', '', '', '', { content: 'Gross Total', styles: { halign: 'left' } }, `${grossTotal}`],
       ['', '', '', '', { content: `Discount ${invoiceData.discountRatio}%`, styles: { halign: 'left' } }, `${discountAmount}`],
       [{ content: `${finalAmountInWords}`, rowSpan: 2, colSpan: 4, styles: { halign: 'left', fontStyle: 'bold', valign: 'middle' } }, 'Net Amount', `${netAmount}`],
-      [`CGST ${invoiceData?.cgst}%`, `${cgst}`],
-      [{ content: '', rowSpan: 2, colSpan: 4, styles: { halign: 'center', fontStyle: 'bold' } }, `SGST ${invoiceData?.sgst}%`, `${sgst}`],
+      invoiceData?.igst ? [`IGST ${invoiceData?.igst}%`, `${igst}`] : [`CGST ${invoiceData?.cgst}%`, `${cgst}`],
+      [{ content: '', rowSpan: 2, colSpan: 4, styles: { halign: 'center', fontStyle: 'bold' } }, invoiceData?.igst ? `` : `SGST ${invoiceData?.sgst}%`, invoiceData?.igst ? `` : `${sgst}`],
       ['Final Amount', `${finalAmount}`, { styles: { FontFace: 'left' } }],
       [
         { content: `Bank Name: ${this.firmDetails.bankName}`, styles: { fontStyle: 'bold' }, colSpan: 2 },
@@ -540,7 +551,7 @@ export class InvoiceComponent implements OnInit {
 
   gstValueChange(event : any, value : any) {
     const { cgst, sgst, igst } = this.invoiceForm.controls;
-    const hasValue = event.length > 0;
+    let hasValue:any = event.length > 0;
 
     if (value === 'igst') {
       cgst[hasValue ? 'disable' : 'enable']();
@@ -554,6 +565,14 @@ export class InvoiceComponent implements OnInit {
     const dialogRef = this.dialog.open(EditInvoiceComponent, {
       data: { ...obj, action },
     });
+  }
+
+  paymentDaysChange(value:any) {
+    let date = this.invoiceForm.value.date;
+    const dateValue = new Date();
+    dateValue.setDate(date.getDate() + value);
+  
+    this.paymentDays = dateValue;
   }
 
 }

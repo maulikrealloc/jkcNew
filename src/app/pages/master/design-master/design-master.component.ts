@@ -25,6 +25,10 @@ export class DesignMasterComponent implements OnInit {
     this.designMasterListDataSource.paginator = this.paginator;
   }
 
+  applyFilter(filterValue: string): void {
+    this.designMasterListDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   getDesignMasterData() {
     this.commonService.fetchData('DesignMasterList', this.designMaster, this.designMasterListDataSource);
   }

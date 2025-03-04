@@ -24,7 +24,7 @@ export class IncomeDataComponent implements OnInit {
   }
 
   getIncomeListData() {
-    this.commonService.fetchData('IncomeList', this.incomeDataList, this.incomeListDataSource)
+    this.commonService.fetchData('IncomeList', this.incomeDataList, this.incomeListDataSource)    
   }
 
   getTotalAmount(): number {

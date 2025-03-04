@@ -5,14 +5,14 @@
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Name</mat-label>
       <input type="text" matInput formControlName="name" placeholder="Enter name">
-      <app-validation-message class="position-relative" [control]="maintenanceForm.controls['name']"></app-validation-message>
     </mat-form-field>
+    <app-validation-message class="position-relative" [control]="maintenanceForm.controls['name']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Value</mat-label>
       <input type="number" matInput formControlName="value" placeholder="Enter value" min="0">
-      <app-validation-message class="position-relative" [control]="maintenanceForm.controls['value']"></app-validation-message>
     </mat-form-field>
+    <app-validation-message class="position-relative" [control]="maintenanceForm.controls['value']"></app-validation-message>
   </form>
 </mat-dialog-content>
 <mat-divider></mat-divider>

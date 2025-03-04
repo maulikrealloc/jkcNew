@@ -16,6 +16,7 @@ export class ExpensesDialogComponent implements OnInit {
   action: string;
   local_data: any;
   companyAccountList: any = [];
+  expensesmasterList: any = [];
 
   constructor(
     private fb: FormBuilder, public dialogRef: MatDialogRef<ExpensesDialogComponent>,
@@ -28,6 +29,7 @@ export class ExpensesDialogComponent implements OnInit {
   ngOnInit(): void {
     this.expensesData(this.action === 'Edit' ? this.local_data : undefined);
     this.getCompanyAccountData();
+    this.getExpensesmasterListData()
   }
 
   expensesData(data:any) {
@@ -51,7 +53,12 @@ export class ExpensesDialogComponent implements OnInit {
 
   getCompanyAccountData() {
     this.commonService.fetchData('CompanyAccountList', this.companyAccountList);
+  } 
+  
+  getExpensesmasterListData() {
+    this.commonService.fetchData('ExpensesmasterList', this.expensesmasterList);
   }
+
 
   doAction(): void {
     const payload = this.expensesForm.value

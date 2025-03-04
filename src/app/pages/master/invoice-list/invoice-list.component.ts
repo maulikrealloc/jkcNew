@@ -9,6 +9,7 @@ import { ToWords } from 'to-words';
 import { PaymentListComponent } from './payment-list/payment-list.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CommonService } from 'src/app/services/common.service';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-invoice-list',
@@ -18,7 +19,7 @@ import { CommonService } from 'src/app/services/common.service';
 
 export class InvoiceListComponent implements OnInit {
 
-  invoicDataColumns: string[] = ['srNo','no','date','party','gross','discount','net','CGST','SGST','final','recived','action' ];
+  invoicDataColumns: string[] = ['srNo','no','date','party','gross','discount','net','CGST','SGST','final','recived','action'];
   toWords = new ToWords({
     localeCode: 'en-IN',
     converterOptions: {
@@ -42,6 +43,7 @@ export class InvoiceListComponent implements OnInit {
   selectedChalanList: any;
   invoiceListDataSource = new MatTableDataSource(this.invoiceList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private fb: FormBuilder, private firebaseCollectionService: FirebaseCollectionService, private dialog: MatDialog, private commonService: CommonService) { }
 
@@ -60,7 +62,6 @@ export class InvoiceListComponent implements OnInit {
     this.getOrderData();
     this.getFirmData();
     this.getPaymentReceiveList();
-
   }
 
   applyFilter(filterValue: string): void {
@@ -69,7 +70,8 @@ export class InvoiceListComponent implements OnInit {
 
   getInvoiceData() {
     this.commonService.fetchData('InvoiceList', this.invoiceList, this.invoiceListDataSource).then((invoice) => {
-      if (this.invoiceList.length > 0) this.filterData();
+      if (this.invoiceList.length > 0) 
+      this.filterData();
           this.invoiceListDataSource.paginator = this.paginator;
     })
   }
@@ -92,6 +94,23 @@ export class InvoiceListComponent implements OnInit {
 
       return dataStr.includes(filter.trim().toLowerCase());
     };
+    this.filterDate()
+  }
+
+  filterDate() {
+    if (!this.invoiceList) return;
+    const startDate = this.dateInvoiceListForm.value.start ? new Date(this.dateInvoiceListForm.value.start) : null;
+    const endDate = this.dateInvoiceListForm.value.end ? new Date(this.dateInvoiceListForm.value.end) : null;
+    if (startDate && endDate) {
+      this.invoiceListDataSource.data = this.invoiceList.filter((invoice: any) => {
+        if (!invoice.date) return false;
+
+        const invoiceDate = new Date(invoice.date.seconds * 1000);
+        return invoiceDate >= startDate && invoiceDate <= endDate;
+      });
+    } else {
+      this.invoiceListDataSource.data = this.invoiceList;
+    }
   }
 
   getPaymentReceiveList() {
@@ -116,6 +135,18 @@ export class InvoiceListComponent implements OnInit {
 
   getFirmData() {
     this.commonService.fetchData('FirmList', this.firmList);
+  }
+
+  firmChange(event: any) {
+    const partyChange = this.invoiceList.filter((chalanObj: any) => chalanObj.firmId === event.value)
+    this.invoiceListDataSource = new MatTableDataSource(partyChange);
+    this.invoiceSorting();
+  }
+
+  invoiceSorting() {
+    this.invoiceListDataSource.data.sort((a: any, b: any) => b.invoiceNo - a.invoiceNo);
+    this.invoiceListDataSource.paginator = this.paginator;
+    this.invoiceListDataSource.sort = this.sort;
   }
 
   getChalanData() {

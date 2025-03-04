@@ -7,6 +7,15 @@
 //     text-align: start;
 // }
 
+.payment-date {
+    background-color: green;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    padding-left: 10px;
+    font-weight: 600;
+}
+
 @media (max-width: 768px) {
     .marginTop {
         margin-top: 10px;

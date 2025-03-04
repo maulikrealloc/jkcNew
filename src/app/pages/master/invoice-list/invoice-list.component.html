@@ -15,7 +15,7 @@
             <div class="col-12 col-sm-12 col-md-4">
                 <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
                     <mat-label>Select Firm</mat-label>
-                    <mat-select #dropdown placeholder="Select firm">
+                    <mat-select #dropdown placeholder="Select firm" (selectionChange)="firmChange($event)">
                         <mat-option [value]="item.id" *ngFor="let item of firmList">{{ item.header }}</mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -29,7 +29,7 @@
                         <input matEndDate placeholder="End date" formControlName="end">
                     </mat-date-range-input>
                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-date-range-picker #picker></mat-date-range-picker>
+                    <mat-date-range-picker #picker (closed)="filterDate()"></mat-date-range-picker>
                 </mat-form-field>
             </div>
         </div>

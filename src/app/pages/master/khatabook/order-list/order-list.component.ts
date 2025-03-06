@@ -55,6 +55,22 @@ export class OrderListComponent implements OnInit {
     this.getOrderData();
   }
 
+  filterDate() {
+    if (!this.khataOrderList) return;
+    const startDate = this.dateOrderListForm.value.start ? new Date(this.dateOrderListForm.value.start) : null;
+    const endDate = this.dateOrderListForm.value.end ? new Date(this.dateOrderListForm.value.end) : null;
+    if (startDate && endDate) {
+      this.orderDataSource.data = this.khataOrderList.filter((invoice: any) => {
+        if (!invoice.date) return false;
+
+        const invoiceDate = new Date(invoice.date.seconds * 1000);
+        return invoiceDate >= startDate && invoiceDate <= endDate;
+      });
+    } else {
+      this.orderDataSource.data = this.khataOrderList;
+    }
+  }
+  
   getKhataOrderData() {
     this.commonService.fetchData('KhataOrderList', this.khataOrderList, this.orderDataSource);
   }

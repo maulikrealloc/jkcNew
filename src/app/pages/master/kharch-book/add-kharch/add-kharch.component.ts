@@ -51,6 +51,22 @@ export class AddKharchComponent implements OnInit {
     this.kharchListDataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  filterDate() {
+    if (!this.KharchList) return;
+    const startDate = this.dateKharchListForm.value.start ? new Date(this.dateKharchListForm.value.start) : null;
+    const endDate = this.dateKharchListForm.value.end ? new Date(this.dateKharchListForm.value.end) : null;
+    if (startDate && endDate) {
+      this.kharchListDataSource.data = this.KharchList.filter((invoice: any) => {
+        if (!invoice.date) return false;
+
+        const invoiceDate = new Date(invoice.date.seconds * 1000);
+        return invoiceDate >= startDate && invoiceDate <= endDate;
+      });
+    } else {
+      this.kharchListDataSource.data = this.KharchList;
+    }
+  }
+
   getKharchData() {
     this.commonService.fetchData('KharchList', this.KharchList, this.kharchListDataSource);
   }

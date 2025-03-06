@@ -47,6 +47,22 @@ export class AttendanceComponent implements OnInit {
     return null;
   }
 
+  filterDate() {
+    if (!this.attendanceList) return;
+    const startDate = this.dateAttendanceForm.value.start ? new Date(this.dateAttendanceForm.value.start) : null;
+    const endDate = this.dateAttendanceForm.value.end ? new Date(this.dateAttendanceForm.value.end) : null;
+    if (startDate && endDate) {
+      this.attendanceListDataSource.data = this.attendanceList.filter((invoice: any) => {
+        if (!invoice.date) return false;
+
+        const invoiceDate = new Date(invoice.date.seconds * 1000);
+        return invoiceDate >= startDate && invoiceDate <= endDate;
+      });
+    } else {
+      this.attendanceListDataSource.data = this.attendanceList;
+    }
+  }
+
   ngAfterViewInit() {
     this.attendanceListDataSource.paginator = this.paginator;
   }

@@ -84,7 +84,6 @@ export class AppTopCardsComponent implements OnInit {
       parties: this.commonService.fetchData('PartyList', this.partyList),
       invoices: this.commonService.fetchData('InvoiceList', this.InvoiceList),
     }).subscribe(({ firms, parties, invoices }) => {
-      debugger
       this.topcards[0].subtitle = this.firmList?.length;
       this.topcards[1].subtitle = this.partyList?.length;
       this.topcards[2].subtitle = this.InvoiceList?.length;

@@ -20,7 +20,7 @@
                         <input matEndDate placeholder="End date" formControlName="end">
                     </mat-date-range-input>
                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-date-range-picker #picker></mat-date-range-picker>
+                    <mat-date-range-picker #picker (closed)="filterDate()"></mat-date-range-picker>
                 </mat-form-field>
             </div>
         </div>

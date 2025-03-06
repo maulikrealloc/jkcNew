@@ -38,9 +38,24 @@ export class EmployeeReportComponent implements OnInit {
     this.getAttendanceData();
     this.getBonusData();
     this.employeeListDataSource.paginator = this.paginator;
-
   }
 
+  filterDate() {
+    if (!this.employeesList) return;
+    const startDate = this.dateEmployeeForm.value.start ? new Date(this.dateEmployeeForm.value.start) : null;
+    const endDate = this.dateEmployeeForm.value.end ? new Date(this.dateEmployeeForm.value.end) : null;
+    if (startDate && endDate) {
+      this.employeeListDataSource.data = this.employeesList.filter((invoice: any) => {
+        if (!invoice.date) return false;
+
+        const invoiceDate = new Date(invoice.date.seconds * 1000);
+        return invoiceDate >= startDate && invoiceDate <= endDate;
+      });
+    } else {
+      this.employeeListDataSource.data = this.employeesList;
+    }
+  }
+  
   getEmployeeData() {
     this.commonService.fetchData('EmployeeList', this.employeesList);
   }

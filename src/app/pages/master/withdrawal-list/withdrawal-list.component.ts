@@ -57,6 +57,22 @@ export class WithdrawalListComponent implements OnInit {
     return null;
   }
 
+  filterDate() {
+    if (!this.withdrawalList) return;
+    const startDate = this.dateWithdrawalForm.value.start ? new Date(this.dateWithdrawalForm.value.start) : null;
+    const endDate = this.dateWithdrawalForm.value.end ? new Date(this.dateWithdrawalForm.value.end) : null;
+    if (startDate && endDate) {
+      this.withdrawalDataSource.data = this.withdrawalList.filter((invoice: any) => {
+        if (!invoice.date) return false;
+
+        const invoiceDate = new Date(invoice.date.seconds * 1000);
+        return invoiceDate >= startDate && invoiceDate <= endDate;
+      });
+    } else {
+      this.withdrawalDataSource.data = this.withdrawalList;
+    }
+  }
+
   applyFilter(filterValue: string): void {
     this.withdrawalDataSource.filter = filterValue.trim().toLowerCase();
   }

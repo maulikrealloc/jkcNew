@@ -19,7 +19,7 @@ import { MatSort } from '@angular/material/sort';
 
 export class InvoiceListComponent implements OnInit {
 
-  invoicDataColumns: string[] = ['srNo','no','date','party','gross','discount','net','CGST','SGST','final','recived','action'];
+  invoicDataColumns: string[] = ['srNo', 'no', 'date', 'party', 'gross', 'discount', 'net', 'IGST','CGST','SGST','final','recived','action'];
   toWords = new ToWords({
     localeCode: 'en-IN',
     converterOptions: {

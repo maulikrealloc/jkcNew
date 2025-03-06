@@ -1,8 +1,10 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import de from 'date-fns/esm/locale/de/index.js';
 import { Timestamp } from 'firebase/firestore';
 import { CommonService } from 'src/app/services/common.service';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-income-dialog',
@@ -16,10 +18,12 @@ export class IncomeDialogComponent implements OnInit {
   action: string;
   local_data: any;
   companyAccountList: any = [];
+  incomeMasterData: any = [];
 
   constructor(
     private fb: FormBuilder,
     private commonService: CommonService,
+    private firebaseCollectionService: FirebaseCollectionService,
     public dialogRef: MatDialogRef<IncomeDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
@@ -29,6 +33,7 @@ export class IncomeDialogComponent implements OnInit {
   ngOnInit(): void {
     this.incomegroup(this.action === 'Edit' ? this.local_data : undefined);
     this.getCompanyAccountData();
+    this.getIncomeMasterList()
   }
 
   incomegroup(data:any) {
@@ -49,13 +54,31 @@ export class IncomeDialogComponent implements OnInit {
     return null;
   }
 
-  doAction() {
-    const payload = this.incomeForm.value
-    this.dialogRef.close({ event: this.action, data: payload })
-  }
-
   getCompanyAccountData() {
     this.commonService.fetchData('CompanyAccountList', this.companyAccountList);
+  }
+
+  getIncomeMasterList() {
+    this.commonService.fetchData('IncomeMasterList', this.incomeMasterData);
+  }
+
+  doAction() {
+    const payload = this.incomeForm.value
+  
+    const datafindIncome = this.incomeMasterData?.find((id: any) => id.invoiceId === this.local_data.id);
+    const IncomeMaster = {
+      type:"Other",
+      description: "demo",
+      createddate: new Date(),
+      AmountDate: this.incomeForm.value.invoiceDate ,
+      Amount: this.incomeForm.value.amount , 
+    };
+    if (datafindIncome?.payments?.length > 0) {
+      this.firebaseCollectionService.updateDocument('CompanyList', datafindIncome.id, IncomeMaster, 'IncomeMasterList');
+    } else {
+      this.firebaseCollectionService.addDocument('CompanyList', IncomeMaster, 'IncomeMasterList');
+    }
+    this.dialogRef.close({ event: this.action, data: payload })
   }
 
   closeDialog() {

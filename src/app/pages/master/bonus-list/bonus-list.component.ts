@@ -48,6 +48,22 @@ export class BonusListComponent implements OnInit {
     this.bonusListDataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  filterDate() {
+    if (!this.bonusList) return;
+    const startDate = this.dateBonusForm.value.start ? new Date(this.dateBonusForm.value.start) : null;
+    const endDate = this.dateBonusForm.value.end ? new Date(this.dateBonusForm.value.end) : null;
+    if (startDate && endDate) {
+      this.bonusListDataSource.data = this.bonusList.filter((invoice: any) => {
+        if (!invoice.date) return false;
+
+        const invoiceDate = new Date(invoice.date.seconds * 1000);
+        return invoiceDate >= startDate && invoiceDate <= endDate;
+      });
+    } else {
+      this.bonusListDataSource.data = this.bonusList;
+    }
+  }
+
   convertTimestampToDate(element: any): Date | null {
     if (element instanceof Timestamp) {
       return element.toDate();

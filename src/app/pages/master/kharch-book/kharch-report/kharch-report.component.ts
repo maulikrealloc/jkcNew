@@ -52,6 +52,22 @@ export class KharchReportComponent implements OnInit {
     this.kharchListDataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  filterDate() {
+    if (!this.KharchReportData) return;
+    const startDate = this.dateKharchReportListForm.value.start ? new Date(this.dateKharchReportListForm.value.start) : null;
+    const endDate = this.dateKharchReportListForm.value.end ? new Date(this.dateKharchReportListForm.value.end) : null;
+    if (startDate && endDate) {
+      this.kharchListDataSource.data = this.KharchReportData.filter((invoice: any) => {
+        if (!invoice.date) return false;
+
+        const invoiceDate = new Date(invoice.date.seconds * 1000);
+        return invoiceDate >= startDate && invoiceDate <= endDate;
+      });
+    } else {
+      this.kharchListDataSource.data = this.KharchReportData;
+    }
+  }
+
   convertTimestampToDate(element: any): Date | null {
     if (element instanceof Timestamp) {
       return element.toDate();

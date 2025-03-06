@@ -53,6 +53,22 @@ export class MachineSalaryListComponent implements OnInit {
     return null;
   }
 
+  filterDate() {
+    if (!this.machineSalaryList) return;
+    const startDate = this.dateMachineSalaryForm.value.start ? new Date(this.dateMachineSalaryForm.value.start) : null;
+    const endDate = this.dateMachineSalaryForm.value.end ? new Date(this.dateMachineSalaryForm.value.end) : null;
+    if (startDate && endDate) {
+      this.machineSalaryDataSource.data = this.machineSalaryList.filter((invoice: any) => {
+        if (!invoice.date) return false;
+
+        const invoiceDate = new Date(invoice.date.seconds * 1000);
+        return invoiceDate >= startDate && invoiceDate <= endDate;
+      });
+    } else {
+      this.machineSalaryDataSource.data = this.machineSalaryList;
+    }
+  }
+
   getmachineSalaryData() {
     this.commonService.fetchData('MachineSalaryList', this.machineSalaryList, this.machineSalaryDataSource);
   }

@@ -40,6 +40,22 @@ export class ReportComponent implements OnInit {
     this.khataReportDataSource.paginator = this.paginator;
   }
 
+  filterDate() {
+    if (!this.khataReportList) return;
+    const startDate = this.dateKhataReportListForm.value.start ? new Date(this.dateKhataReportListForm.value.start) : null;
+    const endDate = this.dateKhataReportListForm.value.end ? new Date(this.dateKhataReportListForm.value.end) : null;
+    if (startDate && endDate) {
+      this.khataReportDataSource.data = this.khataReportList.filter((invoice: any) => {
+        if (!invoice.date) return false;
+
+        const invoiceDate = new Date(invoice.date.seconds * 1000);
+        return invoiceDate >= startDate && invoiceDate <= endDate;
+      });
+    } else {
+      this.khataReportDataSource.data = this.khataReportList;
+    }
+  }
+
   getKhataReportData() {
     this.commonService.fetchData('KhataReportList', this.khataReportList, this.khataReportDataSource)
   }

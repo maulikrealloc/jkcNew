@@ -52,6 +52,12 @@ export class IncomeComponent implements OnInit {
     this.commonService.fetchData('CompanyAccountList', this.companyAccountList);
   }
 
+  paidbyChange(event: any) {
+    const paidbylist = this.incomeList.filter((paidbyObj: any) => paidbyObj.account === event.value)
+    this.incomeListDataSource = new MatTableDataSource(paidbylist);
+    this.incomeListDataSource.paginator = this.paginator;
+  }
+
   openIncome(action: string, obj: any) {
     const dialogRef = this.dialog.open(IncomeDialogComponent, {
       data: { ...obj, action },

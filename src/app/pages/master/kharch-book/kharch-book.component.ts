@@ -7,15 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class KharchBookComponent implements OnInit {
 
-  kharchReportData: any[] = [];
-
   constructor() { }
 
   ngOnInit(): void {
   }
-
-  updateKharchList(updatedList: any[]) {
-    this.kharchReportData = updatedList;
-  }
-
 }

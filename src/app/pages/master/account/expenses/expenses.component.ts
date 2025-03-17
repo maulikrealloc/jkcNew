@@ -56,6 +56,12 @@ export class ExpensesComponent implements OnInit {
     this.commonService.fetchData('CompanyAccountList', this.companyAccountList);
   }
 
+  paidbyChange(event: any) {
+    const paidbylist = this.expensesList.filter((paidbyObj: any) => paidbyObj.paidBy === event.value)
+    this.expensesListDataSource = new MatTableDataSource(paidbylist);
+    this.expensesListDataSource.paginator = this.paginator;
+  }
+
   openExpenses(action: string, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(ExpensesDialogComponent, {

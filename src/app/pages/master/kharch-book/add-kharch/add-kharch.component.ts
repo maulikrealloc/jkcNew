@@ -15,8 +15,6 @@ import { CommonService } from 'src/app/services/common.service';
 
 export class AddKharchComponent implements OnInit {
 
-  @Output() kharchListUpdated = new EventEmitter<any[]>();
-
   dateKharchListForm: FormGroup;
   kharchDataColumns: string[] = ['srNo','unitname','kharchname','dec','date','chalanno','amount','action' ];
   KharchList: any = [];
@@ -26,13 +24,6 @@ export class AddKharchComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(private fb: FormBuilder, private commonService: CommonService, private dialog: MatDialog) { }
-
-  convertTimestampToDate(element: any): Date | null {
-    if (element instanceof Timestamp) {
-      return element.toDate();
-    }
-    return null;
-  }
 
   ngOnInit(): void {
     const today = new Date();
@@ -47,6 +38,13 @@ export class AddKharchComponent implements OnInit {
     this.kharchListDataSource.paginator = this.paginator;
   }
 
+  convertTimestampToDate(element: any): Date | null {
+    if (element instanceof Timestamp) {
+      return element.toDate();
+    }
+    return null;
+  }
+  
   applyFilter(filterValue: string): void {
     this.kharchListDataSource.filter = filterValue.trim().toLowerCase();
   }

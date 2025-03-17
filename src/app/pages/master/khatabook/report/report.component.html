@@ -26,7 +26,7 @@
             <div class="col-4">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Party</mat-label>
-                    <mat-select #dropdown [value]="khataList?.length ? khataList[0].id : null" placeholder="Enter a party">
+                    <mat-select #dropdown [value]="khataList?.length ? khataList[0].id : null" placeholder="Enter a party" (selectionChange)="partyChange($event)">
                         <mat-option [value]="item.id" *ngFor="let item of khataList">{{ item.companyName }}</mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -41,7 +41,7 @@
 
                 <ng-container matColumnDef="srNo">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
-                    <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+                    <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="partyName">
@@ -58,7 +58,7 @@
                         Party Order
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.partyOrder }}
+                        {{getOrderNo(element.order) }}
                     </td>
                 </ng-container>
 
@@ -67,7 +67,7 @@
                         Khata Name
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.khataName }}
+                        {{ getKhataName(element.khata) }}
                     </td>
                 </ng-container>
 
@@ -76,7 +76,7 @@
                         Item Name
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.itemName }}
+                        {{ element.productsOrder[0].productName }}
                     </td>
                 </ng-container>
 
@@ -85,7 +85,7 @@
                         P-Quantity
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.pQuantity }}
+                        {{ element.productsOrder[0].productQuantity }}
                     </td>
                 </ng-container>
 
@@ -94,7 +94,7 @@
                         K-Quantity
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.kQuantity }}
+                        {{ element.productsOrder[0].khataQuantity }}
                     </td>
                 </ng-container>
 
@@ -103,7 +103,7 @@
                         P-Price
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.pPrice }}
+                        {{ element.productsOrder[0].productPrice }}
                     </td>
                 </ng-container>
 
@@ -112,7 +112,7 @@
                         K-Price
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.kPrice }}
+                        {{ element.productsOrder[0].khataPrice }}
                     </td>
                 </ng-container>
 
@@ -121,7 +121,7 @@
                         P-Total
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.pTotal }}
+                        {{ element.productsOrder[0].productPrice * element.productsOrder[0].productQuantity }}
                     </td>
                 </ng-container>
 

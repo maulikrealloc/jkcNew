@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { Timestamp } from 'firebase/firestore';
 import { CommonService } from 'src/app/services/common.service';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
@@ -17,14 +18,15 @@ export class ReportComponent implements OnInit {
   reportDataColumns: string[] = ['srNo','partyName','partyOrder','khataName','itemName','pQuantity','kQuantity','pPrice','kPrice','pTotal','kTotal','profit' ];
 
   khataReportList: any = [];
+  khataOrderList: any = [];
   partyList: any = [];
   khataList: any = [];
-
+  orderList: any = [];
   khataReportDataSource = new MatTableDataSource(this.khataReportList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private fb: FormBuilder, private commonService: CommonService, private firebaseCollectionService : FirebaseCollectionService) { }
+  constructor(private fb: FormBuilder, private commonService: CommonService) { }
 
   ngOnInit(): void {
     const today = new Date();
@@ -35,33 +37,48 @@ export class ReportComponent implements OnInit {
       end: [endDate]
     })
     this.getKhataReportData();
+    this.getKhataOrderData();
     this.getPartyData();
     this.getKhataData();
-    this.khataReportDataSource.paginator = this.paginator;
+    this.getOrderData();
+    this.khataReportDataSource.paginator = this.paginator;  
   }
 
   filterDate() {
-    if (!this.khataReportList) return;
+    if (!this.khataOrderList) return;
     const startDate = this.dateKhataReportListForm.value.start ? new Date(this.dateKhataReportListForm.value.start) : null;
     const endDate = this.dateKhataReportListForm.value.end ? new Date(this.dateKhataReportListForm.value.end) : null;
     if (startDate && endDate) {
-      this.khataReportDataSource.data = this.khataReportList.filter((invoice: any) => {
+      this.khataReportDataSource.data = this.khataOrderList.filter((invoice: any) => {
         if (!invoice.date) return false;
 
         const invoiceDate = new Date(invoice.date.seconds * 1000);
         return invoiceDate >= startDate && invoiceDate <= endDate;
       });
     } else {
-      this.khataReportDataSource.data = this.khataReportList;
+      this.khataReportDataSource.data = this.khataOrderList;
     }
   }
 
+  convertTimestampToDate(element: any): Date | null {
+    if (element instanceof Timestamp) {
+      return element.toDate();
+    }
+    return null;
+  }
+  
   getKhataReportData() {
     this.commonService.fetchData('KhataReportList', this.khataReportList, this.khataReportDataSource)
   }
-
+  
+  getKhataOrderData() {
+    this.commonService.fetchData('KhataOrderList', this.khataOrderList).then((data:any) => {
+      this.khataReportDataSource.data = [...this.khataOrderList]; 
+    });
+  }
+  
   getPartyData() {
-    this.commonService.fetchData('PartyList', this.partyList)
+    this.commonService.fetchData('PartyList', this.partyList) 
   }
 
   getPartyName(party: string): string {
@@ -74,6 +91,20 @@ export class ReportComponent implements OnInit {
 
   getKhataName(khata: string): string {
     return this.khataList.find((khataObj: any) => khataObj.id === khata)?.companyName
+  }
+
+  getOrderData() {
+    this.commonService.fetchData('OrderList', this.orderList);
+  }
+
+  getOrderNo(order: string): string {
+    return this.orderList.find((orderObj: any) => orderObj.id === order)?.partyOrder
+  }
+
+  partyChange(event: any) {
+    const party = this.khataOrderList.filter((partyobj: any) => partyobj.khata === event.value)
+    this.khataReportDataSource = new MatTableDataSource(party);
+    this.khataReportDataSource.paginator = this.paginator;  
   }
 
 }

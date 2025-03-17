@@ -15,7 +15,7 @@
       <div class="col-4">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Paid By</mat-label>
-          <mat-select #dropdown placeholder="Select paid by">
+          <mat-select #dropdown placeholder="Select paid by" (selectionChange)="paidbyChange($event)">
             <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName }}</mat-option>
           </mat-select>
         </mat-form-field>

@@ -80,32 +80,29 @@ export class partyMasterDialogComponent implements OnInit {
   constructor(private fb: FormBuilder, public dialogRef: MatDialogRef<partyMasterDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
+    this.action = this.local_data.action;
   }
 
   ngOnInit(): void {
-    this.buildForm()
+    this.buildForm(this.action === 'Edit' ? this.local_data : undefined)
   }
 
-  buildForm() {
+  buildForm(data:any) {
     this.partyForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.pattern(Validators_Pattern.NAME)]],
-      lastName: ['', [Validators.pattern(Validators_Pattern.NAME)]],
-      partyAddress: [''],
-      partyGSTIN: ['', [Validators.pattern(Validators_Pattern.GST_NUMBER)]],
-      chalanNoSeries: ['', [Validators.pattern(Validators_Pattern.NUMBER)]],
-      partyPanNo: ['', [Validators.pattern(Validators_Pattern.PAN_NUMBER)]],
-      partyMobile: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      firstName: [data ? data?.firstName : '', [Validators.required, Validators.pattern(Validators_Pattern.NAME)]],
+      lastName: [data ? data?.lastName : '', [Validators.pattern(Validators_Pattern.NAME)]],
+      partyAddress: [data ? data?.partyAddress : ''],
+      partyGSTIN: [data ? data?.partyGSTIN : '', [Validators.pattern(Validators_Pattern.GST_NUMBER)]],
+      chalanNoSeries: [data ? data?.chalanNoSeries : '', [Validators.pattern(Validators_Pattern.NUMBER)]],
+      partyPanNo: [data ? data?.partyPanNo : '', [Validators.pattern(Validators_Pattern.PAN_NUMBER)]],
+      partyMobile: [data ? data?.partyMobile : '', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       partyColorCode: ['']
     });
-
-    if (this.local_data?.action === 'Edit') {
-      this.partyForm.patchValue(this.local_data)
-    }
   }
 
   doAction(): void {
     const payload = this.partyForm.value
-    this.dialogRef.close({ event: this.local_data?.action, data: payload });
+    this.dialogRef.close({ event: this.action, data: payload });
   }
 
   closeDialog(): void {

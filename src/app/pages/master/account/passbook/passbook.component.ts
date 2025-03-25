@@ -15,6 +15,8 @@ export class PassbookComponent implements OnInit {
   passbookDataColumns: string[] = ['#','passbook','name','date','debit','credit','balance' ];
   passbookList: any = []
   companyAccountList: any = [];
+  incomeList: any = [];
+  expensesmasterList: any = [];
   passbookListDataSource = new MatTableDataSource(this.passbookList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
@@ -23,6 +25,8 @@ export class PassbookComponent implements OnInit {
   ngOnInit(): void {
     this.getCompanyAccountData()
     this.getPassBookData()
+    this.getIncomeListData()
+    this.getExpensesmasterListData()
    }
 
   ngAfterViewInit() {
@@ -38,6 +42,14 @@ export class PassbookComponent implements OnInit {
     this.commonService.fetchData('CompanyAccountList',this.companyAccountList).then((data: any) => {
       this.passbookList = this.companyAccountList
     })
+  }
+
+  getIncomeListData() {
+    this.commonService.fetchData('IncomeList', this.incomeList);
+  }
+
+  getExpensesmasterListData() {
+    this.commonService.fetchData('ExpensesmasterList', this.expensesmasterList);
   }
 
   convertTimestampToDate(element: any): Date | null {

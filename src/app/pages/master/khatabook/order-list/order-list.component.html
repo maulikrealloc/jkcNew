@@ -134,7 +134,7 @@
                         Action
                     </th>
                     <td mat-cell *matCellDef="let element" class="action-link">
-                        <a class="m-r-10 cursor-pointer"><i-tabler name="edit" (click)="transferOrder('Edit', element)"
+                        <a class="m-r-10 cursor-pointer"><i-tabler name="edit" *ngIf="!isChecked" (click)="transferOrder('Edit', element)"
                                 class="icon-18"></i-tabler>
                         </a>
                         <a class="m-r-10 cursor-pointer">
@@ -142,7 +142,10 @@
                                 class="icon-18"></i-tabler>
                         </a>
                         <a class="m-r-10 cursor-pointer">
-                            <button class="done-button">Done</button>
+                            <!-- <button class="done-button">Done</button> -->
+                            <button class="done-button" *ngIf="element.status === 'Pending'" >
+                                Done
+                            </button>
                         </a>
                     </td>
                 </ng-container>

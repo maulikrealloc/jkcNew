@@ -66,14 +66,13 @@ export class OrderComponent implements OnInit {
     });
   }
 
-  // Function to handle both Firestore timestamps and ISO strings
   convertToDate(orderDate: any): Date | null {
     if (!orderDate) return null;
 
     if (typeof orderDate === "string") {
-      return new Date(orderDate); // Convert ISO string to Date
+      return new Date(orderDate);
     } else if (typeof orderDate === "object" && orderDate.seconds) {
-      return new Date(orderDate.seconds * 1000); // Convert Firestore timestamp to Date
+      return new Date(orderDate.seconds * 1000); 
     }
 
     return null;

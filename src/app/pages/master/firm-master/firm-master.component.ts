@@ -74,36 +74,33 @@ export class firmMasterDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<firmMasterDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
+    this.action = this.local_data.action;
   }
 
   ngOnInit(): void {
-    this.formBuild();
+    this.formBuild(this.action === 'Edit' ? this.local_data : undefined);
   }
 
-  formBuild() {
+  formBuild(data:any) {
     this.firmForm = this.fb.group({
-      header: ['', [Validators.required, Validators.pattern(Validators_Pattern.NAME)]],
-      subHeader: ['', Validators.required],
-      address: ['', Validators.required],
-      GSTNo: ['', [Validators.pattern(Validators_Pattern.GST_NUMBER)]],
-      gstPercentage: ['', [Validators.pattern(Validators_Pattern.POINT_NUMBER)]],
-      panNo: ['', [Validators.pattern(Validators_Pattern.PAN_NUMBER)]],
-      mobileNO: ['', [Validators.required, Validators.pattern(Validators_Pattern.MOBILE)]],
-      personalMobileNo: ['', [Validators.required, Validators.pattern(Validators_Pattern.MOBILE)]],
-      email: ['', [Validators.email]],
-      bankName: ['', [Validators.pattern(Validators_Pattern.NAME)]],
-      ifscCode: ['', [Validators.pattern(Validators_Pattern.NAME_NUMBER)]],
-      bankAccountNo: ['', [Validators.pattern(Validators_Pattern.NUMBER)]],
+      header: [data ? data?.header : '', [Validators.required, Validators.pattern(Validators_Pattern.NAME)]],
+      subHeader: [data ? data?.subHeader : '', Validators.required],
+      address: [data ? data?.address : '', Validators.required],
+      GSTNo: [data ? data?.GSTNo : '', [Validators.pattern(Validators_Pattern.GST_NUMBER)]],
+      gstPercentage: [data ? data?.gstPercentage : '', [Validators.pattern(Validators_Pattern.POINT_NUMBER)]],
+      panNo: [data ? data?.panNo : '', [Validators.pattern(Validators_Pattern.PAN_NUMBER)]],
+      mobileNO: [data ? data?.mobileNO : '', [Validators.required, Validators.pattern(Validators_Pattern.MOBILE)]],
+      personalMobileNo: [data ? data?.personalMobileNo : '', [Validators.required, Validators.pattern(Validators_Pattern.MOBILE)]],
+      email: [data ? data?.email : '', [Validators.email]],
+      bankName: [data ? data?.bankName : '', [Validators.pattern(Validators_Pattern.NAME)]],
+      ifscCode: [data ? data?.ifscCode : '', [Validators.pattern(Validators_Pattern.NAME_NUMBER)]],
+      bankAccountNo: [data ? data?.bankAccountNo : '', [Validators.pattern(Validators_Pattern.NUMBER)]],
     })
-
-    if (this.local_data?.action === 'Edit') {
-      this.firmForm.patchValue(this.local_data)
-    }
   }
 
   saveFirm(): void {
     const payload = this.firmForm.value;
-    this.dialogRef.close({ event: this.local_data?.action, data: payload });
+    this.dialogRef.close({ event: this.action, data: payload });
   }
 
   closeDialog(): void {

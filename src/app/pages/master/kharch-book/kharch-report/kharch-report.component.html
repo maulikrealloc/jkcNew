@@ -35,7 +35,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Unit</mat-label>
                     <mat-select #dropdown placeholder="Select unit">
-                        <mat-option *ngFor="let item of KharchList" [value]="item.unit">{{ item.unit}}</mat-option>
+                        <mat-option [value]="item.name" *ngFor="let item of UnitDataList">{{item.name}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -44,7 +44,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Kharch</mat-label>
                     <mat-select #dropdown placeholder="Select kharch">
-                        <mat-option *ngFor="let item of KharchList" [value]="item.kharch">{{ item.kharch}}</mat-option>
+                        <mat-option [value]="item.name"  *ngFor="let item of KharchDataList">{{item.name}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>

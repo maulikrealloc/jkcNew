@@ -166,8 +166,7 @@ export class FirebaseCollectionService {
     this.spinnerService.setSpinner(true);
     const companyId: any = localStorage.getItem('uid');
     try {
-      let collectionRef = this.firestore.collection(collectionName).doc(companyId);
-      
+      let collectionRef = this.firestore.collection(collectionName).doc(companyId);      
       if (subCollectionName) {
         collectionRef = collectionRef.collection(subCollectionName).doc(documentId);
       } else {

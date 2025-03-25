@@ -18,6 +18,8 @@ export class EmployeeReportComponent implements OnInit {
   employeesList: any = [];
   attendanceList: any = [];
   bonusList: any = [];
+  withdrawalList: any = [];
+  machineSalaryList: any = [];
   employeeListDataSource = new MatTableDataSource(this.employeeReportList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
@@ -37,6 +39,8 @@ export class EmployeeReportComponent implements OnInit {
     this.getEmployeeData();
     this.getAttendanceData();
     this.getBonusData();
+    this.getWithdrawalData();
+    this.getmachineSalaryData();
     this.employeeListDataSource.paginator = this.paginator;
   }
 
@@ -57,23 +61,44 @@ export class EmployeeReportComponent implements OnInit {
   }
 
   getEmployeeReport() {
-    this.commonService.fetchData('EmployeeReportList', this.employeeReportList, this.employeeListDataSource)
-    console.log('[{=employeeReportList=}]',this.employeeReportList);
+   
+    this.commonService.fetchData('employeeReportList', this.employeeReportList);
+       console.log('[{=employeeReportList=}]',this.employeeReportList);
   }
   
   getEmployeeData() {
-    this.commonService.fetchData('EmployeeList', this.employeesList);
+    this.commonService.fetchData('EmployeeList', this.employeesList).then((data: any) => {
+      this.employeeReportList = [...this.employeesList]
+    });
     console.log('{[this.employeesList]}', this.employeesList);
   }
 
   getAttendanceData() {
-    this.commonService.fetchData('AttendanceList', this.attendanceList);
+    this.commonService.fetchData('AttendanceList', this.attendanceList).then((data: any) => {
+      this.employeeReportList = [...this.attendanceList]
+    });
     console.log('{[this.attendanceList]}', this.attendanceList);
   }
 
   getBonusData() {
-    this.commonService.fetchData('BonusList', this.bonusList);
+    this.commonService.fetchData('BonusList', this.bonusList).then((data: any) => {
+      this.employeeReportList = [...this.bonusList]
+    });;
     console.log('[{this.bonusList}]', this.bonusList);
+  }
+
+  getWithdrawalData() {
+    this.commonService.fetchData('WithdrawalList', this.withdrawalList).then((data: any) => {
+      this.employeeReportList = [...this.withdrawalList]
+    });
+    console.log('[{=withdrawalList=}]', this.withdrawalList);
+  }
+
+  getmachineSalaryData() {
+    this.commonService.fetchData('MachineSalaryList', this.machineSalaryList).then((data: any) => {
+      this.employeeReportList = [...this.machineSalaryList]
+    });;
+    console.log('[{=machineSalaryList=}]', this.machineSalaryList);
   }
 
 }

@@ -18,7 +18,7 @@ import { ValidationService } from 'src/app/services/validation.service';
 export class ChalanComponent implements OnInit {
 
   chalanForm: FormGroup;
-  chalanDataColumns: string[] = [ 'srNo', 'partyOrder', 'productName', 'quantity', 'productPrice', 'chalanNo', 'totalAmount'];
+  chalanDataColumns: string[] = ['srNo', 'partyOrder', 'productName', 'quantity', 'productPrice', 'chalanNo', 'totalAmount','action'];
   toWords = new ToWords({
     localeCode: 'en-IN',
     converterOptions: {

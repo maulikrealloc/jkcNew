@@ -23,8 +23,8 @@ export class KhataMasterComponent implements OnInit {
   constructor(private dialog: MatDialog, private commonService: CommonService, private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
-    this.khataListDataSource.paginator = this.paginator;
     this.getKhataData();
+    this.khataListDataSource.paginator = this.paginator;
   }
 
   applyFilter(filterValue: string): void {

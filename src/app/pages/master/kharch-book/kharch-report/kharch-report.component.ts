@@ -13,6 +13,8 @@ import { CommonService } from 'src/app/services/common.service';
 export class KharchReportComponent implements OnInit {
 
   dateKharchReportListForm: FormGroup;
+  UnitDataList: any = [];
+  KharchDataList: any = [];
   KharchList: any = [];
   kharchReportDataColumns: string[] = [ 'srNo', 'unitname', 'kharchname', 'dec', 'date', 'chalanno', 'amount' ];
   totalAmount: number = 0;
@@ -25,6 +27,8 @@ export class KharchReportComponent implements OnInit {
   ngOnInit(): void {
     this.kharchReportForm()
     this.getKharchData();
+    this.getunitList()
+    this.getkharchList()
     this.kharchListDataSource.paginator = this.paginator;
   }
 
@@ -76,6 +80,16 @@ export class KharchReportComponent implements OnInit {
       this.kharchListDataSource.data = [...this.KharchList]; 
       this.calculateTotalAmount(); 
     });
+  }
+
+  getunitList() {
+    this.commonService.fetchData('UnitList', this.UnitDataList);
+    console.log('[{{this.UnitDataList}}]', this.UnitDataList);
+  }
+
+  getkharchList() {
+    this.commonService.fetchData('kharchList', this.KharchDataList);
+    console.log('[{{this.KharchDataList}}]', this.KharchDataList);
   }
 
 }

@@ -1,4 +1,4 @@
-<h2 mat-dialog-title class="m-b-24 b-b-1 p-b-20"><strong>{{local_data?.action}} Firm</strong></h2>
+<h2 mat-dialog-title class="m-b-24 b-b-1 p-b-20"><strong>{{action}} Firm</strong></h2>
 <mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate">
   <form [formGroup]="firmForm">
     <div class="row">
@@ -8,24 +8,24 @@
           <mat-label>Header</mat-label>
           <input type="text" matInput required formControlName="header" placeholder="Enter header">
         </mat-form-field>
+        <app-validation-message class="position-relative" [control]="firmForm.controls['header']"></app-validation-message>
       </div>
-      <app-validation-message class="position-relative" [control]="firmForm.controls['header']"></app-validation-message>
 
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Sub Header</mat-label>
           <input type="text" matInput required formControlName="subHeader" placeholder="Enter sub header">
         </mat-form-field>
+        <app-validation-message class="position-relative" [control]="firmForm.controls['subHeader']"></app-validation-message>
       </div>
-      <app-validation-message class="position-relative" [control]="firmForm.controls['subHeader']"></app-validation-message>
 
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Address</mat-label>
           <input type="text" matInput required formControlName="address" placeholder="Enter address">
         </mat-form-field>
+        <app-validation-message class="position-relative" [control]="firmForm.controls['address']"></app-validation-message>
       </div>
-      <app-validation-message class="position-relative" [control]="firmForm.controls['address']"></app-validation-message>
 
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
@@ -33,24 +33,24 @@
           <input type="number" matInput onKeyPress="if(this.value.length==10) return false;" required
             formControlName="mobileNO" placeholder="Enter mobile no" min="0">
         </mat-form-field>
+        <app-validation-message class="position-relative" [control]="firmForm.controls['mobileNO']"></app-validation-message>
       </div>
-      <app-validation-message class="position-relative" [control]="firmForm.controls['mobileNO']"></app-validation-message>
 
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>GST No</mat-label>
           <input type="text" matInput formControlName="GSTNo" placeholder="Enter GST no">
         </mat-form-field>
+        <app-validation-message class="position-relative" [control]="firmForm.controls['GSTNo']"></app-validation-message>
       </div>
-      <app-validation-message class="position-relative" [control]="firmForm.controls['GSTNo']"></app-validation-message>
 
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Pan No</mat-label>
           <input type="text" matInput formControlName="panNo" placeholder="Enter pan no">
         </mat-form-field>
+        <app-validation-message class="position-relative" [control]="firmForm.controls['panNo']"></app-validation-message>
       </div>
-      <app-validation-message class="position-relative" [control]="firmForm.controls['panNo']"></app-validation-message>
 
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
@@ -58,56 +58,56 @@
           <input type="number" matInput onKeyPress="if(this.value.length==10) return false;"
             formControlName="personalMobileNo" placeholder="Enter personal mobile no" min="0">
         </mat-form-field>
+        <app-validation-message class="position-relative" [control]="firmForm.controls['personalMobileNo']"></app-validation-message>
       </div>
-      <app-validation-message class="position-relative" [control]="firmForm.controls['personalMobileNo']"></app-validation-message>
 
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Email</mat-label>
           <input type="text" matInput formControlName="email" placeholder="Enter email">
         </mat-form-field>
+        <app-validation-message class="position-relative" [control]="firmForm.controls['email']"></app-validation-message>
       </div>
-      <app-validation-message class="position-relative" [control]="firmForm.controls['email']"></app-validation-message>
 
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Bank Name</mat-label>
           <input type="text" matInput formControlName="bankName" placeholder="Enter bank name">
         </mat-form-field>
+        <app-validation-message class="position-relative" [control]="firmForm.controls['bankName']"></app-validation-message>
       </div>
-      <app-validation-message class="position-relative" [control]="firmForm.controls['bankName']"></app-validation-message>
 
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Bank IFSC</mat-label>
           <input type="text" matInput formControlName="ifscCode" placeholder="Enter bank IFSC">
         </mat-form-field>
+        <app-validation-message class="position-relative" [control]="firmForm.controls['ifscCode']"></app-validation-message>
       </div>
-      <app-validation-message class="position-relative" [control]="firmForm.controls['ifscCode']"></app-validation-message>
 
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Bank Account No</mat-label>
           <input type="number" matInput formControlName="bankAccountNo" placeholder="Enter bank account no" min="0">
         </mat-form-field>
+        <app-validation-message class="position-relative" [control]="firmForm.controls['bankAccountNo']"></app-validation-message>
       </div>
-      <app-validation-message class="position-relative" [control]="firmForm.controls['bankAccountNo']"></app-validation-message>
 
       <div class="col-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>GST Percentage</mat-label>
           <input type="number" matInput onKeyPress="if(this.value.length==5) return false;" formControlName="gstPercentage" placeholder="Enter GST percentage" min="0">
         </mat-form-field>
+        <app-validation-message class="position-relative" [control]="firmForm.controls['gstPercentage']"></app-validation-message>
       </div>
-      <app-validation-message class="position-relative" [control]="firmForm.controls['gstPercentage']"></app-validation-message>
     </div>
   </form>
 </mat-dialog-content>
 <mat-divider></mat-divider>
 <mat-dialog-actions class="p-24 justify-content-end">
   <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-  <button mat-flat-button [disabled]="action !=='Delete' && !firmForm.valid" color="primary" (click)="saveFirm();">
-    {{local_data?.action}}
+  <button mat-flat-button [disabled]="action !=='Delete' && firmForm.invalid" color="primary" (click)="saveFirm();">
+    {{action}}
   </button>
 </mat-dialog-actions>
 <ng-template #elseTemplate>

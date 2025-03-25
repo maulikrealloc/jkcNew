@@ -7,7 +7,7 @@
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Unit</mat-label>
           <mat-select formControlName="unit" placeholder="Select unit">
-            <mat-option value="abc">abc</mat-option>
+            <mat-option [value]="item.id" *ngFor="let item of UnitDataList">{{item.name}}</mat-option>
           </mat-select>
           <mat-hint *ngIf="kharchForm.get('unit')?.hasError('required') && kharchForm.get('unit')?.touched"
             class="error-message error-color">
@@ -20,7 +20,7 @@
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Kharch</mat-label>
           <mat-select formControlName="kharch" placeholder="Select kharch">
-            <mat-option value="abc">abc</mat-option>
+            <mat-option [value]="item.id"  *ngFor="let item of KharchDataList">{{item.name}}</mat-option>
           </mat-select>
           <mat-hint *ngIf="kharchForm.get('kharch')?.hasError('required') && kharchForm.get('kharch')?.touched"
             class="error-message error-color">

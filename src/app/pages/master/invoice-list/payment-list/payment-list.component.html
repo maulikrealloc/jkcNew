@@ -53,9 +53,7 @@
                     <mat-label>Payment Date</mat-label>
                     <input matInput formControlName="paymentDate" [matDatepicker]="Date"
                         placeholder="Enter payment date">
-                    <mat-hint
-                        *ngIf="paymentReceiveList.get('paymentDate')?.hasError('required') && paymentReceiveList.get('paymentDate')?.touched"
-                        class="error-message error-color">
+                    <mat-hint *ngIf="paymentReceiveList.get('paymentDate')?.hasError('required') && paymentReceiveList.get('paymentDate')?.touched" class="error-message error-color">
                         Payment date is required
                     </mat-hint>
                     <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>

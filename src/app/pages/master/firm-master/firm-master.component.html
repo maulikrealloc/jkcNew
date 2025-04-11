@@ -4,8 +4,7 @@
 
       <div class="col-lg-4">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <mat-label>Firm</mat-label>
-          <input matInput placeholder="Search firm" (keyup)="applyFilter($any($event.target).value)">
+          <input matInput placeholder="Search firm..." (keyup)="applyFilter($any($event.target).value)">
           <mat-icon matSuffix>
             <i-tabler name="search" class="icon-20"></i-tabler>
           </mat-icon>
@@ -26,7 +25,7 @@
       <table style="min-width: 215%;" mat-table [dataSource]="firmMasterDataSource" class="w-100">
 
         <ng-container matColumnDef="#">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">SR No</th>
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No.</th>
           <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
         </ng-container>
 
@@ -39,7 +38,7 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="Subheader">
+        <ng-container matColumnDef="subHeader">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
             Sub Header
           </th>
@@ -48,9 +47,9 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="GSTMo">
+        <ng-container matColumnDef="gstNo">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            GST No
+            GST No.
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.GSTNo }}
@@ -66,27 +65,27 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="PanNo">
+        <ng-container matColumnDef="panNo">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Pan No
+            Pan No.
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.panNo }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="MobileNo">
+        <ng-container matColumnDef="mobileNo">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Mobile No
+            Mobile No.
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.mobileNO }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="PersonalMobileNo">
+        <ng-container matColumnDef="personalMobileNo">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Personal Mobile No
+            Personal Mobile No.
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.personalMobileNo }}
@@ -102,7 +101,7 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="BankName">
+        <ng-container matColumnDef="bankName">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
             Bank Name
           </th>
@@ -111,7 +110,7 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="BankIFSC">
+        <ng-container matColumnDef="bankIFSC">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
             Bank IFSC
           </th>
@@ -120,16 +119,16 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="BankAccountNo">
+        <ng-container matColumnDef="bankAccountNo">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Bank AccountNo
+            Bank Account No.
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.bankAccountNo }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="Address">
+        <ng-container matColumnDef="address">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
             Address
           </th>

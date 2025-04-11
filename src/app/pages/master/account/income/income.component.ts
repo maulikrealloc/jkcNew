@@ -3,8 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
 import { IncomeDialogComponent } from './income-dialog/income-dialog.component';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
+import { CommonService } from 'src/app/services/common.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-income',
@@ -14,26 +15,22 @@ import { Timestamp } from 'firebase/firestore';
 
 export class IncomeComponent implements OnInit {
 
-  incomeDataColumns: string[] = [
-    '#',
-    'partyName',
-    'account',
-    'invoiceNo',
-    'invoiceDate',
-    'creditDate',
-    'amount',
-    'action',
-  ];
+  incomeDataColumns: string[] = ['#','partyName','account','invoiceNo','invoiceDate','creditDate','amount','action' ];
   incomeList: any = [];
   companyAccountList: any = [];
   incomeListDataSource = new MatTableDataSource(this.incomeList);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private dialog: MatDialog, private commonService: CommonService) { }
 
   ngOnInit(): void {
     this.getIncomeListData();
     this.getCompanyAccountData();
+  }
+
+  ngAfterViewInit() {
+    this.incomeListDataSource.paginator = this.paginator;
   }
 
   applyFilter(filterValue: string): void {
@@ -48,44 +45,27 @@ export class IncomeComponent implements OnInit {
   }
 
   getIncomeListData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'IncomeList').then((income) => {
-      this.incomeList = income
-      if (income && income.length > 0) {
-        this.incomeListDataSource = new MatTableDataSource(this.incomeList);
-      }
-    }).catch((error) => {
-      console.error('Error fetching income:', error);
-    });
+    this.commonService.fetchData('IncomeList', this.incomeList, this.incomeListDataSource);
   }
 
   getCompanyAccountData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'CompanyAccountList').then((company) => {
-      if (company && company.length > 0) {
-        this.companyAccountList = company
-      }
-    }).catch((error) => {
-      console.error('Error fetching company:', error);
-    });
+    this.commonService.fetchData('CompanyAccountList', this.companyAccountList);
+  }
+
+  paidbyChange(event: any) {
+    const paidbylist = this.incomeList.filter((paidbyObj: any) => paidbyObj.account === event.value)
+    this.incomeListDataSource = new MatTableDataSource(paidbylist);
+    this.incomeListDataSource.paginator = this.paginator;
   }
 
   openIncome(action: string, obj: any) {
-    obj.action = action;
     const dialogRef = this.dialog.open(IncomeDialogComponent, {
-      data: obj,
-    })
+      data: { ...obj, action },
+    });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'IncomeList');
-        this.getIncomeListData();
-      }
-      if (result?.event === 'Edit') {
-        this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'IncomeList');
-        this.getIncomeListData();
-      }
-      if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'IncomeList');
-        this.getIncomeListData();
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'IncomeList').then(() => this.getIncomeListData()).catch(console.error);
       }
     });
   }
@@ -93,5 +73,4 @@ export class IncomeComponent implements OnInit {
   openTransfer() {
     const dialogRef = this.dialog.open(TransferDialogComponent, {})
   }
-
 }

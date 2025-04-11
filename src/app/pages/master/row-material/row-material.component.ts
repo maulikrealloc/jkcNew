@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { RowMaterialDialogComponent } from './row-material-dialog/row-material-dialog.component';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-row-material',
@@ -13,22 +13,20 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
 
 export class RowMaterialComponent implements OnInit {
 
-  rowMaterialDataColumns: string[] = [
-    '#',
-    'name',
-    'quantity',
-    'price',
-    'action'
-  ]
+  rowMaterialDataColumns: string[] = ['#','name','quantity','price','action']
   rowMaterialList: any = [];
   rowDataSource = new MatTableDataSource(this.rowMaterialList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private dialog: MatDialog, private commonService: CommonService) { }
 
   ngOnInit(): void {
     this.getRowMaterialData();
+  }
+
+  ngAfterViewInit() {
+    this.rowDataSource.paginator = this.paginator;
   }
 
   applyFilter(filterValue: string): void {
@@ -36,17 +34,7 @@ export class RowMaterialComponent implements OnInit {
   }
 
   getRowMaterialData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'RowMaterialList').then((rowmaterial) => {
-      this.rowMaterialList = rowmaterial
-      if (rowmaterial && rowmaterial.length > 0) {
-        this.rowDataSource = new MatTableDataSource(this.rowMaterialList);
-      } else {
-        this.rowMaterialList = [];
-        this.rowDataSource = new MatTableDataSource(this.rowMaterialList);
-      }
-    }).catch((error) => {
-      console.error('Error fetching rowmaterial:', error);
-    });
+    this.commonService.fetchData('RowMaterialList', this.rowMaterialList, this.rowDataSource);
   }
 
   addDesign(action: string, obj: any) {
@@ -56,17 +44,8 @@ export class RowMaterialComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'RowMaterialList');
-        this.getRowMaterialData();
-      }
-      if (result?.event === 'Edit') {
-        this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'RowMaterialList');
-        this.getRowMaterialData();
-      }
-      if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'RowMaterialList');
-        this.getRowMaterialData();
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'RowMaterialList').then(() => this.getRowMaterialData()).catch(console.error);
       }
     });
   }

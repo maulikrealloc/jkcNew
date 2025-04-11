@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { designMasterDialogComponent } from '../../design-master/design-master.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Timestamp } from 'firebase/firestore';
 
@@ -24,13 +23,7 @@ export class CompanyAccountDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.formBuild()
-    if (this.action === 'Edit') {
-      this.companyForm.controls['accountName'].setValue(this.local_data.accountName)
-      this.companyForm.controls['bankName'].setValue(this.local_data.bankName)
-      this.companyForm.controls['openingBalance'].setValue(this.local_data.openingBalance)
-      this.companyForm.controls['date'].setValue(this.convertTimestampToDate(this.local_data.date))
-    }
+    this.formBuild(this.action === 'Edit' ? this.local_data : undefined)
   }
 
   convertTimestampToDate(element: any): Date | null {
@@ -40,27 +33,21 @@ export class CompanyAccountDialogComponent implements OnInit {
     return null;
   }
 
-  formBuild() {
+  formBuild(data:any) {
     this.companyForm = this.fb.group({
-      accountName: ['', Validators.required],
-      bankName: ['', Validators.required],
-      openingBalance: ['', Validators.required],
-      date: new Date(),
+      accountName: [data ? data?.accountName : '', Validators.required],
+      bankName: [data ? data?.bankName : '', Validators.required],
+      openingBalance: [data ? data?.openingBalance : '', Validators.required],
+      date: [data ? this.convertTimestampToDate(this.local_data.date) : new Date()]
     });
   }
 
   doAction(): void {
-    const payload = {
-      accountName: this.companyForm.value.accountName,
-      bankName: this.companyForm.value.bankName,
-      openingBalance: this.companyForm.value.openingBalance,
-      date: this.companyForm.value.date,
-    }
+    const payload = this.companyForm.value
     this.dialogRef.close({ event: this.action, data: payload });
   }
 
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
   }
-
 }

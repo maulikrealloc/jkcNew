@@ -1,5 +1,5 @@
 .menu-item {
-    padding: 8px 16px;
+    padding: 8px;
     margin: 5px;
     cursor: pointer;
     border-radius: 3px;
@@ -7,34 +7,45 @@
 }
 
 .statustable {
-    padding: 4px 10px;
-    border-radius: 3px;
-    color: #fff;
+    text-transform: uppercase;
+    font-weight: 800;
+    font-size: 10px;
+}
+
+@mixin status-border($borderColor) {
+    border: 1px solid $borderColor;
+    border-radius: 30px;
+    padding: 5px 10px;
 }
 
 .pending-status {
-    background-color: #f0ad4e;
+    color: #f7970e;
+    @include status-border(#f7970e);
 }
 
 .in-progress-status {
-    background-color: #5bc0de;
+    color: #01a0cf;
+    @include status-border(#01a0cf);
 }
 
 .rejected-status {
-    background-color: #d9534f;
+    color: #e1342f;
+    @include status-border(#e1342f);
 }
 
 .cancelled-status {
-    background-color: #6c757d;
+    color: #505458;
+    @include status-border(#505458);
 }
 
 .done-status {
-    background-color: #5cb85c;
+    color: green;
+    @include status-border(green);
 }
 
 .menu-item:hover {
-    background-color: #5d87ff;
-    color: #e5ecff;
+    // background-color: #5d87ff;
+    // color: #e5ecff;
 }
 
 @media screen and (max-width: 768px) {

@@ -7,6 +7,9 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { ToWords } from 'to-words';
 import { DatePipe } from '@angular/common';
+import { CommonService } from 'src/app/services/common.service';
+import { MatDialog } from '@angular/material/dialog';
+import { EditInvoiceComponent } from './edit-invoice/edit-invoice.component';
 
 @Component({
   selector: 'app-invoice',
@@ -16,16 +19,7 @@ import { DatePipe } from '@angular/common';
 
 export class InvoiceComponent implements OnInit {
 
-  invoiceDataColumns: string[] = [
-    'srNo',
-    'productName',
-    'productPrice',
-    'quantity',
-    'chalanNo',
-    'totalAmount',
-    'finalAmount',
-    'action',
-  ];
+  invoiceDataColumns: string[] = ['srNo','productName','productPrice','quantity','chalanNo','totalAmount','finalAmount','action' ];
   toWords = new ToWords({
     localeCode: 'en-IN',
     converterOptions: {
@@ -34,7 +28,7 @@ export class InvoiceComponent implements OnInit {
       ignoreZeroCurrency: false,
     },
   });
-
+  paymentDays = new Date()
   invoiceForm: FormGroup;
   firmList: any = [];
   partyList: any = [];
@@ -51,6 +45,8 @@ export class InvoiceComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(private fb: FormBuilder,
+    private dialog: MatDialog,
+    private commonService: CommonService,
     private firebaseCollectionService: FirebaseCollectionService,
     private datePipe: DatePipe) { }
 
@@ -61,7 +57,6 @@ export class InvoiceComponent implements OnInit {
     this.getChalanData();
     this.getOrderData();
     this.getInvoiceData();
-    this.invoiceListDataSource.paginator = this.paginator;
   }
 
   buildForm() {
@@ -69,52 +64,33 @@ export class InvoiceComponent implements OnInit {
       firm: ['', Validators.required],
       party: ['', Validators.required],
       chalanNo: ['', Validators.required],
-      date: new Date(),
+      date: [new Date()],
       invoiceNo: [''],
+      igst: [0],
       cgst: [0],
       sgst: [0],
-      discountRatio: [0]
+      discountRatio: [0],
+      paymentDays: [30]
     })
+    this.paymentDaysChange(30)
   }
 
   getFirmData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'FirmList').then((firms: string | any[]) => {
-      if (firms && firms.length > 0) {
-        this.firmList = firms
-      }
-    }).catch((error: any) => {
-      console.error('Error fetching firms:', error);
-    });
+    this.commonService.fetchData('FirmList', this.firmList);
   }
 
   getPartyData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
-      if (party && party.length > 0) {
-        this.partyList = party
-      }
-    }).catch((error) => {
-      console.error('Error fetching party:', error);
-    });
+    this.commonService.fetchData('PartyList', this.partyList);
   }
 
   getChalanData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'ChalanList').then((chalan) => {
-      if (chalan && chalan.length > 0) {
-        this.chalanData = chalan.filter((id: any) => id.isCreated === false)
-      }
-    }).catch((error) => {
-      console.error('Error fetching chalan:', error);
+    this.commonService.fetchData('ChalanList', this.chalanData).then((data) => {
+      this.chalanData = this.chalanData.filter((id: any) => id.isCreated === false)
     });
   }
 
   getOrderData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
-      if (order && order.length > 0) {
-        this.orderList = order
-      }
-    }).catch((error) => {
-      console.error('Error fetching order:', error);
-    });
+    this.commonService.fetchData('OrderList', this.orderList);
   }
 
   firmChange(event: any) {
@@ -143,6 +119,7 @@ export class InvoiceComponent implements OnInit {
   chalanChange(event: any) {
     const selectedChalanPartyOrderId = this.chalanList.find((id: any) => id.id === event.value).partyOrderId
     this.selectedChalanList = this.orderList.find((id: any) => id.id === selectedChalanPartyOrderId)
+    this.invoiceListDataSource = new MatTableDataSource(this.selectedChalanList);
   }
 
   invoiceSubmitData() {
@@ -151,7 +128,8 @@ export class InvoiceComponent implements OnInit {
     const netAmount: any = Number(grossTotal - discountAmount).toFixed(2);
     const cgst = Number((netAmount * Number(this.invoiceForm.value.cgst)) / 100).toFixed(2);
     const sgst = Number((netAmount * Number(this.invoiceForm.value.sgst)) / 100).toFixed(2);
-    const finalAmount = (Number(netAmount) + Number(cgst) + Number(sgst)).toFixed(2);
+    const igst = Number((netAmount * Number(this.invoiceForm.value.igst)) / 100).toFixed(2);
+    const finalAmount = (Number(netAmount) + Number(igst) + Number(cgst) + Number(sgst)).toFixed(2);
 
     const payload = {
       firmId: this.invoiceForm.value.firm,
@@ -159,12 +137,14 @@ export class InvoiceComponent implements OnInit {
       chalanId: this.invoiceForm.value.chalanNo,
       date: this.invoiceForm.value.date,
       invoiceNo: this.invoiceForm.value.invoiceNo,
-      cgst: Number(this.invoiceForm.value.cgst),
-      sgst: Number(this.invoiceForm.value.sgst),
+      cgst: isNaN(Number(this.invoiceForm.value.cgst)) ? 0 : Number(this.invoiceForm.value.cgst),
+      sgst: isNaN(Number(this.invoiceForm.value.sgst)) ? 0 : Number(this.invoiceForm.value.sgst),
+      igst: isNaN(Number(this.invoiceForm.value.igst)) ? 0 : Number(this.invoiceForm.value.igst),
       discountRatio: this.invoiceForm.value.discountRatio,
       grossTotal: grossTotal,
       netAmount: netAmount,
-      finalAmount: finalAmount
+      finalAmount: isNaN(Number(finalAmount)) ? 0 : Number(finalAmount),
+      paymentDueDate: this.paymentDays
     }
 
     this.updateChalanIsCreated(payload.chalanId)
@@ -177,16 +157,13 @@ export class InvoiceComponent implements OnInit {
       invoiceNo: null,
       discountRatio: 0,
       cgst: 0,
-      sgst: 0
+      sgst: 0,
+      igst: 0,
+      paymentDueDate:''
     });
-    this.invoiceForm.controls['firm'].setErrors(null)
-    this.invoiceForm.controls['party'].setErrors(null)
-    this.invoiceForm.controls['chalanNo'].setErrors(null)
-    this.invoiceForm.controls['date'].setErrors(null)
-    this.invoiceForm.controls['invoiceNo'].setErrors(null)
-    this.invoiceForm.controls['cgst'].setErrors(null)
-    this.invoiceForm.controls['sgst'].setErrors(null)
-    this.invoiceForm.controls['discountRatio'].setErrors(null)
+
+    ['cgst', 'sgst', 'igst'].forEach(ele => this.invoiceForm.controls[ele].enable())
+    this.invoiceForm.setErrors(null);
     this.selectedChalanList = [];
     this.invoiceListDataSource = new MatTableDataSource(this.selectedChalanList);
   }
@@ -197,8 +174,9 @@ export class InvoiceComponent implements OnInit {
     const netAmount: any = Number(grossTotal - discountAmount).toFixed(2);
     const cgst = Number((netAmount * Number(this.invoiceForm.value.cgst)) / 100).toFixed(2);
     const sgst = Number((netAmount * Number(this.invoiceForm.value.sgst)) / 100).toFixed(2);
-    const finalAmount = (Number(netAmount) + Number(cgst) + Number(sgst)).toFixed(2);
-
+    const igst = Number((netAmount * Number(this.invoiceForm.value.igst)) / 100).toFixed(2);
+    const finalAmount = (Number(netAmount) + (this.invoiceForm.value.igst ? Number(igst) : Number(cgst) + Number(sgst))).toFixed(2);
+    
     const payload = {
       firmId: this.invoiceForm.value.firm,
       partyId: this.invoiceForm.value.party,
@@ -207,20 +185,16 @@ export class InvoiceComponent implements OnInit {
       invoiceNo: this.invoiceForm.value.invoiceNo,
       cgst: Number(this.invoiceForm.value.cgst),
       sgst: Number(this.invoiceForm.value.sgst),
+      igst: Number(this.invoiceForm.value.igst),
       discountRatio: this.invoiceForm.value.discountRatio,
       grossTotal: grossTotal,
       netAmount: netAmount,
-      finalAmount: finalAmount
+      finalAmount: isNaN(Number(finalAmount)) ? 0 : Number(finalAmount)
     }
     this.getPartyDetails(payload.partyId);
     this.getFirmDetails(payload.firmId);
     this.getChalanDetails(payload.chalanId);
     this.generatePDF(payload);
-    // this.invoiceForm.markAsPristine();
-    // this.invoiceForm.markAsUntouched();
-    // this.selectedChalanList = [];
-    // this.invoiceListDataSource = new MatTableDataSource(this.selectedChalanList);
-
   }
 
   updateChalanIsCreated(chalanId: any) {
@@ -230,11 +204,7 @@ export class InvoiceComponent implements OnInit {
   }
 
   getInvoiceData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'InvoiceList').then((invoice) => {
-      this.InvoiceList = invoice
-    }).catch((error) => {
-      console.error('Error fetching invoice:', error);
-    });
+    this.commonService.fetchData('InvoiceList', this.InvoiceList);
   }
 
   calculateFinalAmount(baseAmount: number): number {
@@ -451,15 +421,16 @@ export class InvoiceComponent implements OnInit {
     const netAmount: any = Number(grossTotal - discountAmount).toFixed(2);
     const cgst = Number((netAmount * invoiceData?.cgst) / 100).toFixed(2);
     const sgst = Number((netAmount * invoiceData?.sgst) / 100).toFixed(2);
-    const finalAmount = (Number(netAmount) + Number(cgst) + Number(sgst)).toFixed(2);
+    const igst = Number((netAmount * invoiceData?.igst) / 100).toFixed(2);
+    const finalAmount = (Number(netAmount) + (invoiceData?.igst ? Number(igst) : Number(cgst) + Number(sgst))).toFixed(2);
     const finalAmountInWords = this.toWords.convert(Number(finalAmount));
 
     body.push(
       ['', '', '', '', { content: 'Gross Total', styles: { halign: 'left' } }, `${grossTotal}`],
       ['', '', '', '', { content: `Discount ${invoiceData.discountRatio}%`, styles: { halign: 'left' } }, `${discountAmount}`],
       [{ content: `${finalAmountInWords}`, rowSpan: 2, colSpan: 4, styles: { halign: 'left', fontStyle: 'bold', valign: 'middle' } }, 'Net Amount', `${netAmount}`],
-      [`CGST ${invoiceData?.cgst}%`, `${cgst}`],
-      [{ content: '', rowSpan: 2, colSpan: 4, styles: { halign: 'center', fontStyle: 'bold' } }, `SGST ${invoiceData?.sgst}%`, `${sgst}`],
+      invoiceData?.igst ? [`IGST ${invoiceData?.igst}%`, `${igst}`] : [`CGST ${invoiceData?.cgst}%`, `${cgst}`],
+      [{ content: '', rowSpan: 2, colSpan: 4, styles: { halign: 'center', fontStyle: 'bold' } }, invoiceData?.igst ? `` : `SGST ${invoiceData?.sgst}%`, invoiceData?.igst ? `` : `${sgst}`],
       ['Final Amount', `${finalAmount}`, { styles: { FontFace: 'left' } }],
       [
         { content: `Bank Name: ${this.firmDetails.bankName}`, styles: { fontStyle: 'bold' }, colSpan: 2 },
@@ -578,6 +549,57 @@ export class InvoiceComponent implements OnInit {
     doc.setFontSize(fontSize);
     doc.text(text, x, y);
     doc.setFontSize(originalFontSize);
+  }
+
+  gstValueChange(event : any, value : any) {
+    const { cgst, sgst, igst } = this.invoiceForm.controls;
+    let hasValue:any = event.length > 0;
+
+    if (value === 'igst') {
+      cgst[hasValue ? 'disable' : 'enable']();
+      sgst[hasValue ? 'disable' : 'enable']();
+    } else if (value === 'cgst' || value === 'sgst') {
+      igst[(hasValue || cgst.value || sgst.value) ? 'disable' : 'enable']();
+    }
+  }
+  
+  editInvoiceData(action: string, obj: any) {
+    const dialogRef = this.dialog.open(EditInvoiceComponent, {
+      data: { ...obj, action },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      const findOrder = this.orderList.find((order: any) => order.id === this.selectedChalanList.id);
+      findOrder?.products.forEach((element: any) => {
+        if (element.productName === result.data.productName) {
+          element.productPrice = result.data.productPrice;
+          element.productQuantity = result.data.quantity;
+        } 
+      });
+      const resultApi = {
+        event: 'Edit',
+        data: { ...findOrder, id: findOrder?.id },
+      };
+      this.commonService.commonApiCalled(resultApi, findOrder, 'OrderList').catch(console.error);
+      const event = {
+        value: findOrder?.id
+      }
+      this.chalanChange(event)
+    })
+  }
+
+  paymentDaysChange(value: any) {
+    // let date = this.invoiceForm.value.date;
+    // const dateValue = new Date();
+    // dateValue.setDate(date.getDate() + value);
+  
+    // this.paymentDays = dateValue;
+    let date = this.invoiceForm.get('date')?.value;
+    if (date) {
+      const dateValue = new Date(date);
+      dateValue.setDate(dateValue.getDate() + (value ?? this.invoiceForm.get('paymentDays')?.value ?? 30));
+
+      this.paymentDays = dateValue;
+    }
   }
 
 }

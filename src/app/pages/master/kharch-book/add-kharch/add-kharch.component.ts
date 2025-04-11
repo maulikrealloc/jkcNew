@@ -3,9 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { AddKharchDialogComponent } from './add-kharch-dialog/add-kharch-dialog.component';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-add-kharch',
@@ -15,33 +15,15 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 export class AddKharchComponent implements OnInit {
 
-  @Output() kharchListUpdated = new EventEmitter<any[]>();
-
   dateKharchListForm: FormGroup;
-  kharchDataColumns: string[] = [
-    'srNo',
-    'unitname',
-    'kharchname',
-    'dec',
-    'date',
-    'chalanno',
-    'amount',
-    'action',
-  ];
+  kharchDataColumns: string[] = ['srNo','unitname','kharchname','dec','date','chalanno','amount','action' ];
   KharchList: any = [];
   kharchReportData: any = [];
   kharchListDataSource = new MatTableDataSource(this.KharchList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private fb: FormBuilder, private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
-
-  convertTimestampToDate(element: any): Date | null {
-    if (element instanceof Timestamp) {
-      return element.toDate();
-    }
-    return null;
-  }
+  constructor(private fb: FormBuilder, private commonService: CommonService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     const today = new Date();
@@ -56,23 +38,35 @@ export class AddKharchComponent implements OnInit {
     this.kharchListDataSource.paginator = this.paginator;
   }
 
+  convertTimestampToDate(element: any): Date | null {
+    if (element instanceof Timestamp) {
+      return element.toDate();
+    }
+    return null;
+  }
+  
   applyFilter(filterValue: string): void {
     this.kharchListDataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  filterDate() {
+    if (!this.KharchList) return;
+    const startDate = this.dateKharchListForm.value.start ? new Date(this.dateKharchListForm.value.start) : null;
+    const endDate = this.dateKharchListForm.value.end ? new Date(this.dateKharchListForm.value.end) : null;
+    if (startDate && endDate) {
+      this.kharchListDataSource.data = this.KharchList.filter((invoice: any) => {
+        if (!invoice.date) return false;
+
+        const invoiceDate = new Date(invoice.date.seconds * 1000);
+        return invoiceDate >= startDate && invoiceDate <= endDate;
+      });
+    } else {
+      this.kharchListDataSource.data = this.KharchList;
+    }
+  }
+
   getKharchData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'KharchList').then((kharch) => {
-      this.KharchList = kharch
-      if (kharch && kharch.length > 0) {
-        this.kharchListUpdated.emit(kharch);
-        this.kharchListDataSource = new MatTableDataSource(this.KharchList);
-      } else {
-        this.KharchList = [];
-        this.kharchListDataSource = new MatTableDataSource(this.KharchList);
-      }
-    }).catch((error) => {
-      console.error('Error fetching order:', error);
-    });
+    this.commonService.fetchData('KharchList', this.KharchList, this.kharchListDataSource);
   }
 
   openKhatu(action: string, obj: any) {
@@ -82,17 +76,8 @@ export class AddKharchComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'KharchList');
-        this.getKharchData();
-      }
-      if (result?.event === 'Edit') {
-        this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'KharchList');
-        this.getKharchData();
-      }
-      if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'KharchList');
-        this.getKharchData();
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'KharchList').then(() => this.getKharchData()).catch(console.error);
       }
     });
   }

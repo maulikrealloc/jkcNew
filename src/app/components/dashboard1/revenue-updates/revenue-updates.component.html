@@ -3,20 +3,17 @@
     <div class="d-flex w-100">
       <div>
         <mat-card-title>Revenue Updates</mat-card-title>
-        <mat-card-subtitle class="mat-body-1"
-          >Overview of Profit</mat-card-subtitle
-        >
-        
+        <mat-card-subtitle class="mat-body-1">Overview of Profit</mat-card-subtitle>
       </div>
-      <div class="m-l-auto">
-        <mat-form-field class="theme-select" appearance="outline">
-          <mat-select value="mar">
-            <mat-option *ngFor="let month of months" [value]="month.value">
-              {{ month.viewValue }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+          <div class="m-l-auto">
+            <mat-form-field class="theme-select" appearance="outline">
+              <mat-select [(value)]="currentMonth" (selectionChange)="onMonthChange($event)">
+                <mat-option *ngFor="let month of months" [value]="month.value">
+                  {{ month.viewValue }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
     </div>
   </mat-card-header>
   <mat-card-content>
@@ -42,27 +39,24 @@
           </span>
          
           <div class="m-l-12">
-            <h5 class="mat-headline-5 m-b-4">$63,489.50</h5>
+            <h5 class="mat-headline-5 m-b-4">₹{{remainingBalance.toFixed(2)}}</h5>
             <span class="mat-subtitle-2">Total Earnings</span>
           </div>
         </div>
 
         <div class="d-flex m-t-32">
-          <i-tabler
-            name="circle-filled"
-            class="text-primary icon-12"
-          ></i-tabler>
+          <i-tabler name="circle-filled" class="text-primary icon-12"></i-tabler>
           <div class="m-l-12">
-            <span class="mat-subtitle-2">Earnings this month</span>
-            <h3 class="mat-headline-6 m-t-4">$48,820</h3>
+            <span class="mat-subtitle-2">Income</span>
+            <h3 class="mat-headline-6 m-t-4">₹{{totalincomeAmount}}</h3>
           </div>
         </div>
 
         <div class="d-flex m-t-24">
           <i-tabler name="circle-filled" class="text-accent icon-12"></i-tabler>
           <div class="m-l-12">
-            <span class="mat-subtitle-2">Expense this month</span>
-            <h3 class="mat-headline-6 m-t-4">$26,498</h3>
+            <span class="mat-subtitle-2">Expenses</span>
+            <h3 class="mat-headline-6 m-t-4">₹{{totalexpensesAmount}}</h3>
           </div>
         </div>
 

@@ -3,41 +3,32 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
+import { Validators_Pattern } from 'src/app/shared/constants/validators';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-firm-master',
   templateUrl: './firm-master.component.html',
   styleUrls: ['./firm-master.component.scss']
 })
+  
 export class FirmMasterComponent implements OnInit {
 
-  firmMasterColumns: string[] = [
-    '#',
-    'header',
-    'Subheader',
-    'GSTMo',
-    'gst',
-    'PanNo',
-    'MobileNo',
-    'PersonalMobileNo',
-    'email',
-    'BankName',
-    'BankIFSC',
-    'BankAccountNo',
-    'Address',
-    'action',
-  ];
+  firmMasterColumns: string[] = ['#','header','subHeader','gstNo','gst','panNo','mobileNo','personalMobileNo','email','bankName','bankIFSC','bankAccountNo','address','action' ];
   firmList: any = [];
   firmMasterDataSource = new MatTableDataSource(this.firmList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private dialog: MatDialog,
+    private commonService: CommonService) { }
 
   ngOnInit(): void {
-    this.firmMasterDataSource.paginator = this.paginator;
     this.getFirmData();
+  }
+
+  ngAfterViewInit() {
+    this.firmMasterDataSource.paginator = this.paginator;
   }
 
   applyFilter(filterValue: string): void {
@@ -49,41 +40,17 @@ export class FirmMasterComponent implements OnInit {
   }
 
   getFirmData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'FirmList').then((firms) => {
-      this.firmList = firms
-      if (firms && firms.length > 0) {
-        this.firmMasterDataSource = new MatTableDataSource(this.firmList);
-      } else {
-        this.firmList = [];
-        this.firmMasterDataSource = new MatTableDataSource(this.firmList);
-      }
-    }).catch((error) => {
-      console.error('Error fetching firms:', error);
-    });
+    this.commonService.fetchData('FirmList', this.firmList, this.firmMasterDataSource);
   }
 
   openFirmMaster(action: string, obj: any) {
-    obj.action = action;
     const dialogRef = this.dialog.open(firmMasterDialogComponent, {
-      data: obj,
+      data: { ...obj, action },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result.event === 'Add') {
-        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'FirmList');
-        this.getFirmData()
-      }
-      if (result.event === 'Edit') {
-        this.firmList.forEach((element: any) => {
-          if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'FirmList');
-            this.getFirmData()
-          }
-        });
-      }
-      if (result.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'FirmList');
-        this.getFirmData()
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'FirmList').then(() => this.getFirmData()).catch(console.error);
       }
     });
   }
@@ -111,60 +78,32 @@ export class firmMasterDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.formBuild();
-    if (this.action === 'Edit') {
-      this.firmForm.controls['header'].setValue(this.local_data.header)
-      this.firmForm.controls['subHeader'].setValue(this.local_data.subHeader)
-      this.firmForm.controls['address'].setValue(this.local_data.address)
-      this.firmForm.controls['GSTNo'].setValue(this.local_data.GSTNo)
-      this.firmForm.controls['gstPercentage'].setValue(this.local_data.gstPercentage)
-      this.firmForm.controls['panNo'].setValue(this.local_data.panNo)
-      this.firmForm.controls['mobileNO'].setValue(this.local_data.mobileNO)
-      this.firmForm.controls['personalMobileNo'].setValue(this.local_data.personalMobileNo)
-      this.firmForm.controls['email'].setValue(this.local_data.email)
-      this.firmForm.controls['bankName'].setValue(this.local_data.bankName)
-      this.firmForm.controls['ifscCode'].setValue(this.local_data.ifscCode)
-      this.firmForm.controls['bankAccountNo'].setValue(this.local_data.bankAccountNo)
-    }
+    this.formBuild(this.action === 'Edit' ? this.local_data : undefined);
   }
 
-  formBuild() {
+  formBuild(data:any) {
     this.firmForm = this.fb.group({
-      header: ['', [Validators.required]],
-      subHeader: ['', [Validators.required]],
-      address: ['', Validators.required],
-      GSTNo: [''],
-      gstPercentage: [''],
-      panNo: [''],
-      mobileNO: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      personalMobileNo: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      email: [''],
-      bankName: [''],
-      ifscCode: [''],
-      bankAccountNo: [''],
+      header: [data ? data?.header : '', [Validators.required, Validators.pattern(Validators_Pattern.NAME)]],
+      subHeader: [data ? data?.subHeader : '', Validators.required],
+      address: [data ? data?.address : '', Validators.required],
+      GSTNo: [data ? data?.GSTNo : '', [Validators.pattern(Validators_Pattern.GST_NUMBER)]],
+      gstPercentage: [data ? data?.gstPercentage : '', [Validators.pattern(Validators_Pattern.POINT_NUMBER)]],
+      panNo: [data ? data?.panNo : '', [Validators.pattern(Validators_Pattern.PAN_NUMBER)]],
+      mobileNO: [data ? data?.mobileNO : '', [Validators.required, Validators.pattern(Validators_Pattern.MOBILE)]],
+      personalMobileNo: [data ? data?.personalMobileNo : '', [Validators.required, Validators.pattern(Validators_Pattern.MOBILE)]],
+      email: [data ? data?.email : '', [Validators.email]],
+      bankName: [data ? data?.bankName : '', [Validators.pattern(Validators_Pattern.NAME)]],
+      ifscCode: [data ? data?.ifscCode : '', [Validators.pattern(Validators_Pattern.NAME_NUMBER)]],
+      bankAccountNo: [data ? data?.bankAccountNo : '', [Validators.pattern(Validators_Pattern.NUMBER)]],
     })
   }
 
-  doAction(): void {
-    const payload = {
-      header: this.firmForm.value.header,
-      subHeader: this.firmForm.value.subHeader,
-      address: this.firmForm.value.address,
-      GSTNo: this.firmForm.value.GSTNo,
-      gstPercentage: this.firmForm.value.gstPercentage,
-      panNo: this.firmForm.value.panNo,
-      mobileNO: this.firmForm.value.mobileNO,
-      personalMobileNo: this.firmForm.value.personalMobileNo,
-      email: this.firmForm.value.email,
-      bankName: this.firmForm.value.bankName,
-      ifscCode: this.firmForm.value.ifscCode,
-      bankAccountNo: this.firmForm.value.bankAccountNo
-    }
+  saveFirm(): void {
+    const payload = this.firmForm.value;
     this.dialogRef.close({ event: this.action, data: payload });
   }
 
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
   }
-
 }

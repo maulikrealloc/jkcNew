@@ -9,12 +9,8 @@
                         <mat-select #dropdown formControlName="firm" placeholder="Select firm">
                             <mat-option [value]="item.id" *ngFor="let item of firmList">{{ item.header }}</mat-option>
                         </mat-select>
-                        <mat-hint
-                            *ngIf="chalanForm.get('firm')?.hasError('required') && chalanForm.get('firm')?.touched"
-                            class="error-message error-color">
-                            Firm is required
-                        </mat-hint>
                     </mat-form-field>
+                    <app-validation-message class="position-relative" [control]="chalanForm.controls['firm']"></app-validation-message>
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-4">
@@ -24,12 +20,8 @@
                             (selectionChange)="partyChange($event)">
                             <mat-option *ngFor="let item of partyList" [value]="item.id">{{ item.firstName }}</mat-option>
                         </mat-select>
-                        <mat-hint
-                            *ngIf="chalanForm.get('party')?.hasError('required') && chalanForm.get('party')?.touched"
-                            class="error-message error-color">
-                            Party is required
-                        </mat-hint>
                     </mat-form-field>
+                    <app-validation-message class="position-relative" [control]="chalanForm.controls['party']"></app-validation-message>
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-4">
@@ -55,19 +47,15 @@
                                 <mat-option class="text-center" disabled>No record found</mat-option>
                             </ng-template>
                         </mat-select>
-                        <mat-hint
-                            *ngIf="chalanForm.get('partyOrder')?.hasError('required') && chalanForm.get('partyOrder')?.touched"
-                            class="error-message error-color">
-                            Party order is required
-                        </mat-hint>
                     </mat-form-field>
+                    <app-validation-message class="position-relative" [control]="chalanForm.controls['partyOrder']"></app-validation-message>
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-2">
                     <div class="file-upload">
                         <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file" />
                         <button mat-flat-button color="primary" class="w-100" (click)="fileInput.click()">
-                            Upload File
+                            Upload Design
                         </button>
                     </div>
                 </div>
@@ -83,14 +71,14 @@
                     </ng-container>
                 </div>
 
-                <div class="col-12 col-sm-12 col-md-2 marginTop">
+                <!-- <div class="col-12 col-sm-12 col-md-2 marginTop">
                     <div>
                         <button (click)="submitData()" *ngIf="isDisplayChalan" class="w-100" mat-flat-button color="primary"
                             [disabled]="chalanForm.invalid">
                             Generate Chalan
                         </button>
                     </div>
-                </div>
+                </div> -->
             </div>
         </form>
     </mat-card-content>
@@ -159,6 +147,16 @@
                         {{ element.totalAmount }}
                     </td>
                 </ng-container>
+
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                    Action
+                </th>
+                <td mat-cell *matCellDef="let element" class="action-link">
+                    <a class="m-r-10 cursor-pointer" (click)="editChalanData('Edit', element)"><i-tabler name="edit"
+                            class="icon-18"></i-tabler></a>
+                </td>
+            </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="chalanDataColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: chalanDataColumns"></tr>

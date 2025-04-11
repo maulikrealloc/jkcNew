@@ -6,16 +6,19 @@
       <mat-label>Account Holder Name</mat-label>
       <input type="text" matInput placeholder="Enter account holder name" formControlName="accountName">
     </mat-form-field>
+    <app-validation-message class="position-relative" [control]="companyForm.controls['accountName']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Bank Name</mat-label>
       <input type="text" matInput placeholder="Enter bank name" formControlName="bankName">
     </mat-form-field>
+    <app-validation-message class="position-relative" [control]="companyForm.controls['bankName']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Opening Balance</mat-label>
       <input type="number" matInput placeholder="Enter opening balance" formControlName="openingBalance" min="0">
     </mat-form-field>
+    <app-validation-message class="position-relative" [control]="companyForm.controls['openingBalance']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Date</mat-label>

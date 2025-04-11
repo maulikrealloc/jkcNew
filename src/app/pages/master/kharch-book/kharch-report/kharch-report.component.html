@@ -20,7 +20,7 @@
                         <input matEndDate placeholder="End date" formControlName="end">
                     </mat-date-range-input>
                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-date-range-picker #picker></mat-date-range-picker>
+                    <mat-date-range-picker #picker (closed)="filterDate()"></mat-date-range-picker>
                 </mat-form-field>
             </div>
         </div>
@@ -35,7 +35,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Unit</mat-label>
                     <mat-select #dropdown placeholder="Select unit">
-                        <mat-option value="ABC">ABC</mat-option>
+                        <mat-option [value]="item.name" *ngFor="let item of UnitDataList">{{item.name}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -44,7 +44,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Kharch</mat-label>
                     <mat-select #dropdown placeholder="Select kharch">
-                        <mat-option value="ABC">ABC</mat-option>
+                        <mat-option [value]="item.name"  *ngFor="let item of KharchDataList">{{item.name}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>

@@ -1,6 +1,8 @@
-import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { Component, Inject, OnInit, Optional, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-product-dialog',
@@ -11,15 +13,19 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
 export class ProductDialogComponent implements OnInit {
 
   displayedDataColumns: string[] = ['srNo', 'productName', 'productQuantity', 'productPrice', 'totalAmount'];
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
+
   action: string;
   local_data: any;
   orderList: any = [];
   selectedProduct: any;
+  productListDataSource = new MatTableDataSource(this.orderList);
 
   constructor(
     public dialogRef: MatDialogRef<ProductDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
-    private firebaseCollectionService: FirebaseCollectionService) {
+    private commonService: CommonService) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
@@ -35,18 +41,12 @@ export class ProductDialogComponent implements OnInit {
   }
 
   getOrderData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
-      if (order && order.length > 0) {
-        this.orderList = order        
-        this.selectedProduct = this.orderList.find((obj: any) => obj.id === this.local_data.partyOrderId).products        
-      }
-    }).catch((error) => {
-      console.error('Error fetching order:', error);
+    this.commonService.fetchData('OrderList', this.orderList).then((data) => {
+      this.productListDataSource = this.orderList.find((obj: any) => obj.id === this.local_data.partyOrderId).products;
     });
   }
 
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
   }
-
 }

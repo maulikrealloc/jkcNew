@@ -10,7 +10,6 @@ import { RouterModule } from '@angular/router';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { MaterialModule } from 'src/app/material.module';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/compiler';
 import { DesignMasterComponent, designMasterDialogComponent } from './design-master/design-master.component';
 import { MaintenanceMasterDialogComponent } from './maintenance-master/maintenance-master-dialog/maintenance-master-dialog.component';
 import { CompanyAccountComponent } from './company-account/company-account.component';
@@ -64,6 +63,11 @@ import { PaymentListComponent } from './invoice-list/payment-list/payment-list.c
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ChalanViewDialogComponent } from './chalan/chalan-view-dialog/chalan-view-dialog.component';
 import { EmployeeReportComponent } from './employee-report/employee-report.component';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { EditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
+import { EditchalanComponent } from './chalan/editchalan/editchalan.component';
+import { ViewPDFdialogComponent } from './chalan/view-pdfdialog/view-pdfdialog.component';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 
 @NgModule({
@@ -124,7 +128,10 @@ import { EmployeeReportComponent } from './employee-report/employee-report.compo
     ProductDialogComponent,
     PaymentListComponent,
     ChalanViewDialogComponent,
-    EmployeeReportComponent
+    EmployeeReportComponent,
+    EditInvoiceComponent,
+    EditchalanComponent,
+    ViewPDFdialogComponent,
   ],
   imports: [
     CommonModule,
@@ -137,7 +144,9 @@ import { EmployeeReportComponent } from './employee-report/employee-report.compo
     TablerIconsModule,
     MatNativeDateModule,
     NgApexchartsModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    NgxExtendedPdfViewerModule,
+    SharedModule
   ],
   providers: [DatePipe]
 })

@@ -1,15 +1,11 @@
-i-tabler {
-    margin-top: 20px;
-}
-
-.error-color {
-    color: #fa896b;
-    width: 100%;
-    text-align: end;
-    padding: 0;
-    margin: 0;
-    text-align: start;
-}
+// .error-color {
+//     color: #fa896b;
+//     width: 100%;
+//     text-align: end;
+//     padding: 0;
+//     margin: 0;
+//     text-align: start;
+// }
 
 .mat-dialog-content {
     overflow-y: auto;
@@ -33,6 +29,15 @@ form {
 .row {
     display: flex;
     flex-wrap: wrap;
+}
+
+.action-btn {
+    padding: 3px;
+    display: inline-grid;
+    border-radius: 25px;
+    margin-top: 24px;
+    cursor: pointer;
+    border: 1px solid #7c7d7f;
 }
 
 .col-6, .col-4, .col-3, .col-1 {

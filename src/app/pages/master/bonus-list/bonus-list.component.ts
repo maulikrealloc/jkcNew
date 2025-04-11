@@ -4,8 +4,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { BonusListDialogComponent } from './bonus-list-dialog/bonus-list-dialog.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-bonus-list',
@@ -16,13 +16,7 @@ import { Timestamp } from 'firebase/firestore';
 export class BonusListComponent implements OnInit {
 
   dateBonusForm: FormGroup;
-  bounsDataColumns: string[] = [
-    '#',
-    'employee',
-    'amount',
-    'date',
-    'action',
-  ];
+  bounsDataColumns: string[] = ['#','employee','amount','date','action' ];
   bonusList: any = [];
   employeesList: any = [];
   bonusListDataSource = new MatTableDataSource(this.bonusList);
@@ -30,8 +24,7 @@ export class BonusListComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(
-    private fb: FormBuilder, private dialog: MatDialog,
-    private firebaseCollectionService: FirebaseCollectionService) { }
+    private fb: FormBuilder, private commonService: CommonService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     const today = new Date();
@@ -47,8 +40,28 @@ export class BonusListComponent implements OnInit {
     this.bonusListDataSource.paginator = this.paginator;
   }
 
+  ngAfterViewInit() {
+    this.bonusListDataSource.paginator = this.paginator;
+  }
+
   applyFilter(filterValue: string): void {
     this.bonusListDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  filterDate() {
+    if (!this.bonusList) return;
+    const startDate = this.dateBonusForm.value.start ? new Date(this.dateBonusForm.value.start) : null;
+    const endDate = this.dateBonusForm.value.end ? new Date(this.dateBonusForm.value.end) : null;
+    if (startDate && endDate) {
+      this.bonusListDataSource.data = this.bonusList.filter((invoice: any) => {
+        if (!invoice.date) return false;
+
+        const invoiceDate = new Date(invoice.date.seconds * 1000);
+        return invoiceDate >= startDate && invoiceDate <= endDate;
+      });
+    } else {
+      this.bonusListDataSource.data = this.bonusList;
+    }
   }
 
   convertTimestampToDate(element: any): Date | null {
@@ -59,25 +72,11 @@ export class BonusListComponent implements OnInit {
   }
 
   getBonusData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'BonusList').then((bonus) => {
-      this.bonusList = bonus
-      if (bonus && bonus.length > 0) {
-        this.bonusListDataSource = new MatTableDataSource(this.bonusList);
-      } else {
-        this.bonusList = [];
-        this.bonusListDataSource = new MatTableDataSource(this.bonusList);
-      }
-    }).catch((error) => {
-      console.error('Error fetching bonus:', error);
-    });
+    this.commonService.fetchData('BonusList', this.bonusList, this.bonusListDataSource);
   }
 
   getEmployeeData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'EmployeeList').then((employee) => {
-      this.employeesList = employee
-    }).catch((error) => {
-      console.error('Error fetching employee:', error);
-    });
+    this.commonService.fetchData('EmployeeList', this.employeesList);
   }
 
   getEmployeeName(employeeId: string): string {
@@ -91,17 +90,8 @@ export class BonusListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'BonusList');
-        this.getBonusData();
-      }
-      if (result?.event === 'Edit') {
-        this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'BonusList');
-        this.getBonusData();
-      }
-      if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'BonusList');
-        this.getBonusData();
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'BonusList').then(() => this.getBonusData()).catch(console.error);
       }
     });
   }

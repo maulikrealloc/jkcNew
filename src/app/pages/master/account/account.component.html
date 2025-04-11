@@ -1,18 +1,26 @@
-<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" [(selectedIndex)]="selectedTabIndex">
     <mat-tab label="Expenses">
-        <app-expenses></app-expenses>
+        <ng-container *ngIf="selectedTabIndex === 0">
+            <app-expenses></app-expenses>
+        </ng-container>
     </mat-tab>
 
     <mat-tab label="Income">
-        <app-income></app-income>
+        <ng-container *ngIf="selectedTabIndex === 1">
+            <app-income></app-income>
+        </ng-container>
     </mat-tab>
 
     <mat-tab label="Report">
-        <app-account-report></app-account-report>
+        <ng-container *ngIf="selectedTabIndex === 2">
+            <app-account-report></app-account-report>
+        </ng-container>
     </mat-tab>
 
     <mat-tab label="Passbook">
-        <app-passbook></app-passbook>
+        <ng-container *ngIf="selectedTabIndex === 3">
+            <app-passbook></app-passbook>
+        </ng-container>
     </mat-tab>
 
 </mat-tab-group>

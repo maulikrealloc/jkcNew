@@ -5,6 +5,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { OrderDialogComponent } from './order-dialog/order-dialog.component';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-order',
@@ -14,28 +15,19 @@ import { Timestamp } from 'firebase/firestore';
   
 export class OrderComponent implements OnInit {
 
-  orderDataColumns: string[] = [
-    'orderNo',
-    'partyName',
-    'orderDate',
-    'deliveryDate',
-    'designNo',
-    'p-Order',
-    'chalanNo',
-    'status',
-    'action',
-  ];
+  orderDataColumns: string[] = [ 'orderNo', 'partyName', 'orderDate', 'deliveryDate', 'designNo', 'p-Order', 'chalanNo', 'status', 'action'];
   orderList: any = [];
   partyList: any = [];
   stausList: any = ["Pending", "In Progress", "Rejected", "Cancelled", "Done"];
   orderDataSource = new MatTableDataSource(this.orderList);
+
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private dialog: MatDialog, private commonService: CommonService,
+    private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
-    this.orderDataSource.paginator = this.paginator;
     this.getOrderData();
     this.getPartyData();
   }
@@ -47,68 +39,67 @@ export class OrderComponent implements OnInit {
     return null;
   }
 
+  ngAfterViewInit() {
+    
+  }
+
   applyFilter(filterValue: string): void {
     this.orderDataSource.filter = filterValue.trim().toLowerCase();
   }
 
   getPartyData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
-      this.partyList = party      
-    }).catch((error) => {
-      console.error('Error fetching party:', error);
-    });
+    this.commonService.fetchData('PartyList', this.partyList);
   }
 
   getOrderData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'OrderList').then((order) => {
-      this.orderList = order
-      if (order && order.length > 0) {
+    this.commonService.fetchData('OrderList', this.orderList, this.orderDataSource).then(data => {
+      if (this.orderList.length > 0) {
+        this.orderList.forEach((ele:any) => {
+          ele.orderDate = this.convertTimestampToDate(ele.orderDate)
+        })
+        this.orderList.sort((a:any, b:any) => new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime());
+        
         this.orderDataSource = new MatTableDataSource(this.orderList);
-
-        this.orderDataSource.filterPredicate = (data: any, filter) => {
-          const partyName = this.getPartyName(data.partyId);
-          const orderDate = this.convertTimestampToDate(data.orderDate);
-          const deliveryDate = this.convertTimestampToDate(data.deliveryDate);
-          const chalanNo = data.products?.[0]?.productChalanNo || '';
-          const dataStr = `
-        ${partyName}
-        ${orderDate}
-        ${deliveryDate}
-        ${data.designNo}
-        ${data.partyOrder}
-        ${chalanNo}
-        ${data.orderStatus}
-      `.toLowerCase();
-          return dataStr.includes(filter);
-        };
-      } else {
-        this.orderList = [];
-        this.orderDataSource = new MatTableDataSource(this.orderList);
-      }
-      this.orderDataSource.paginator = this.paginator;
-    }).catch((error) => {
-      console.error('Error fetching order:', error);
+        this.orderDataSource.paginator = this.paginator;
+        this.filterData();
+      } 
     });
   }
 
+  convertToDate(orderDate: any): Date | null {
+    if (!orderDate) return null;
+
+    if (typeof orderDate === "string") {
+      return new Date(orderDate);
+    } else if (typeof orderDate === "object" && orderDate.seconds) {
+      return new Date(orderDate.seconds * 1000); 
+    }
+
+    return null;
+  }
+
+  filterData() {
+    this.orderDataSource.filterPredicate = (data: any, filter: string) => {
+      return [
+        this.getPartyName(data.partyId),
+        this.convertTimestampToDate(data.orderDate),
+        this.convertTimestampToDate(data.deliveryDate),
+        data.designNo,
+        data.partyOrder,
+        data.products?.[0]?.productChalanNo || '',
+        data.orderStatus
+      ].join(' ').toLowerCase().includes(filter);
+    }
+  }
+
   addDesign(action: string, obj: any) {
-    obj.action = action;
     const dialogRef = this.dialog.open(OrderDialogComponent, {
-      data: obj,
+      data: { ...obj, action },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'OrderList');
-        this.getOrderData();
-      }
-      if (result?.event === 'Edit') {
-        this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'OrderList');
-        this.getOrderData();
-      }
-      if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'OrderList');
-        this.getOrderData();
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'OrderList').then(() => this.getOrderData()).catch(console.error);
       }
     });
   }
@@ -123,4 +114,13 @@ export class OrderComponent implements OnInit {
     this.getOrderData();
   }
 
+  orderStatus(status:any) {
+    return {
+      'pending-status': status === 'Pending',
+      'in-progress-status': status === 'In Progress',
+      'rejected-status': status === 'Rejected',
+      'cancelled-status': status === 'Cancelled',
+      'done-status': status === 'Done'
+    }
+  }
 }

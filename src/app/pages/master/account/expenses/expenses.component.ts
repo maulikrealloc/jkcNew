@@ -4,39 +4,32 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ExpensesDialogComponent } from './expenses-dialog/expenses-dialog.component';
 import { ExpensesmasterDialogComponent } from './expensesmaster-dialog/expensesmaster-dialog.component';
 import { MatPaginator } from '@angular/material/paginator';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-expenses',
   templateUrl: './expenses.component.html',
   styleUrls: ['./expenses.component.scss']
 })
+  
 export class ExpensesComponent implements OnInit {
 
-  expensesDataColumns: string[] = [
-    '#',
-    'expensesType',
-    'date',
-    'description',
-    'chalanNo',
-    'amount',
-    'paidBy',
-    'status',
-    'action',
-  ];
+  expensesDataColumns: string[] = ['#','expensesType','date','description','chalanNo','amount','paidBy','status','action' ];
   expensesList: any = [];
   companyAccountList: any = [];
+  expensesmasterList: any = [];
   expenses: any = []
   expensesListDataSource = new MatTableDataSource(this.expensesList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private dialog: MatDialog, private commonService : CommonService) { }
 
   ngOnInit(): void {
     this.getExpensesListData();
     this.getCompanyAccountData();
+    this.getExpensesmasterListData();
     this.expensesListDataSource.paginator = this.paginator;
   }
 
@@ -52,24 +45,21 @@ export class ExpensesComponent implements OnInit {
   }
 
   getExpensesListData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'ExpensesList').then((expenses) => {
-      this.expensesList = expenses
-      if (expenses && expenses.length > 0) {
-        this.expensesListDataSource = new MatTableDataSource(this.expensesList);
-      }
-    }).catch((error) => {
-      console.error('Error fetching expenses:', error);
-    });
+    this.commonService.fetchData('ExpensesList', this.expensesList, this.expensesListDataSource);
+  }
+
+  getExpensesmasterListData() {
+    this.commonService.fetchData('ExpensesmasterList', this.expensesmasterList);
   }
 
   getCompanyAccountData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'CompanyAccountList').then((company) => {
-      if (company && company.length > 0) {
-        this.companyAccountList = company
-      }
-    }).catch((error) => {
-      console.error('Error fetching company:', error);
-    });
+    this.commonService.fetchData('CompanyAccountList', this.companyAccountList);
+  }
+
+  paidbyChange(event: any) {
+    const paidbylist = this.expensesList.filter((paidbyObj: any) => paidbyObj.paidBy === event.value)
+    this.expensesListDataSource = new MatTableDataSource(paidbylist);
+    this.expensesListDataSource.paginator = this.paginator;
   }
 
   openExpenses(action: string, obj: any) {
@@ -79,36 +69,21 @@ export class ExpensesComponent implements OnInit {
     })
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'ExpensesList');
-        this.getExpensesListData();
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'ExpensesList').then(() => this.getExpensesListData()).catch(console.error);
       }
-      if (result?.event === 'Edit') {
-        this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'ExpensesList');
-        this.getExpensesListData();
-      }
-      if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'ExpensesList');
-        this.getExpensesListData();
-      }
-    });
+    });  
   }
 
-  openExpensesMaster() {
+  openExpensesMaster(action: string, obj: any) {
+    obj.action = action;
     const dialogRef = this.dialog.open(ExpensesmasterDialogComponent, {
+      data: obj,
     })
-  }
-
-  private updateDataStorage(){
-    this.expensesListDataSource = new MatTableDataSource(this.expenses);
-    localStorage.setItem('expensesnewdata',JSON.stringify(this.expenses));
-  }
-
-  private loadBillData(){
-    const savedData = localStorage.getItem('expensesnewdata');
-    if(savedData){
-    this.expenses = JSON.parse(savedData)
-      this.expensesListDataSource = new MatTableDataSource(this.expenses);
-    }   
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'ExpensesmasterList').then(() => this.getExpensesmasterListData()).catch(console.error);
+      }
+    });  
   }
 }

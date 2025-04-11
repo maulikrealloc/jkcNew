@@ -1,76 +1,63 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MaterialModule } from '../../../material.module';
-import { CommonModule } from '@angular/common';
-
-
-export interface productsData {
-  id: number;
-  imagePath: string;
-  uname: string;
-  position: string;
-  productName: string;
-  budget: number;
-  priority: string;
-}
-
-const ELEMENT_DATA: productsData[] = [
-  {
-    id: 1,
-    imagePath: 'assets/images/profile/user-1.jpg',
-    uname: 'Sunil Joshi',
-    position: 'Web Designer',
-    productName: 'Elite Admin',
-    budget: 3.9,
-    priority: 'low'
-  },
-  {
-    id: 2,
-    imagePath: 'assets/images/profile/user-2.jpg',
-    uname: 'Andrew McDownland',
-    position: 'Project Manager',
-    productName: 'Real Homes Theme',
-    budget: 24.5,
-    priority: 'medium'
-  },
-  {
-    id: 3,
-    imagePath: 'assets/images/profile/user-3.jpg',
-    uname: 'Christopher Jamil',
-    position: 'Project Manager',
-    productName: 'MedicalPro Theme',
-    budget: 12.8,
-    priority: 'high'
-  },
-  {
-    id: 4,
-    imagePath: 'assets/images/profile/user-4.jpg',
-    uname: 'Nirav Joshi',
-    position: 'Frontend Engineer',
-    productName: 'Hosting Press HTML',
-    budget: 2.4,
-    priority: 'critical'
-  },
-];
-
-interface month {
-  value: string;
-  viewValue: string;
-}
+import { CommonModule, DatePipe } from '@angular/common';
+import { CommonService } from 'src/app/services/common.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-top-projects',
   standalone: true,
-  imports: [MaterialModule, CommonModule],
+  imports: [MaterialModule, CommonModule,DatePipe],
   templateUrl: './top-projects.component.html',
 })
-export class AppTopProjectsComponent {
+export class AppTopProjectsComponent implements OnInit {
 
-  displayedColumns: string[] = ['assigned', 'name', 'priority', 'budget'];
-  dataSource = ELEMENT_DATA;
+  displayedColumns: string[] = ['name', 'date', 'amount'];
 
-  months: month[] = [
-    { value: 'mar', viewValue: 'March 2023' },
-    { value: 'apr', viewValue: 'April 2023' },
-    { value: 'june', viewValue: 'June 2023' },
-  ];
+  InvoiceList: any = [];
+  partyList: any = [];
+  dataSource = new MatTableDataSource(this.InvoiceList);
+
+  constructor(
+    private commonService: CommonService
+  ) { }
+
+  ngOnInit(): void {
+    this.getInvoiceData()
+    this.getPartyData()
+  }
+
+  getInvoiceData() {
+    this.commonService.fetchData('InvoiceList', this.InvoiceList, this.dataSource).then((data) => {
+      const currentDate = new Date();
+      const currentMonth = new Date().getMonth(); 
+      const currentYear = currentDate.getFullYear(); 
+
+      this.InvoiceList = this.InvoiceList.filter((invoice: any) => {
+        if (!invoice.paymentDueDate) return false;
+        const dueDate = new Date(invoice.paymentDueDate.seconds * 1000);
+        return dueDate.getMonth() === currentMonth && dueDate.getFullYear() === currentYear;
+      });
+
+      this.dataSource.data = this.InvoiceList; 
+    });
+  }
+
+
+  getPartyData() {
+    this.commonService.fetchData('PartyList', this.partyList);
+  }
+
+  convertTimestampToDate(element: any): Date | null {
+    if (element instanceof Timestamp) {
+      return element.toDate();
+    }
+    return null;
+  }
+
+  getPartyName(partyId: string): string {
+    return this.partyList.find((partyObj: any) => partyObj.id === partyId)?.firstName
+  }
+
 }

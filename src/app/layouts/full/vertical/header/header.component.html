@@ -113,7 +113,6 @@
     <a mat-button [routerLink]="['/apps/chat']">Chat</a>
     <a mat-button [routerLink]="['/apps/calendar']">Calendar</a>
     <a mat-button [routerLink]="['/apps/email/inbox']">Email</a>
-    <div id="google_translate_element"></div>
   </div>
 
   <span class="flex-1-auto"></span>
@@ -130,7 +129,8 @@
   <!-- --------------------------------------------------------------- -->
   <!-- langugage Dropdown -->
   <!-- --------------------------------------------------------------- -->
-  <button [matMenuTriggerFor]="flags" mat-icon-button class="m-r-5">
+  <div id="google_translate_element"></div>
+  <!-- <button [matMenuTriggerFor]="flags" mat-icon-button class="m-r-5">
     <img
       [src]="selectedLanguage.icon"
       class="rounded-circle object-cover icon-20"
@@ -150,7 +150,7 @@
         <span class="mat-subtitle-1 f-s-14">{{ lang.language }}</span>
       </div>
     </button>
-  </mat-menu>
+  </mat-menu> -->
 
   <!-- --------------------------------------------------------------- -->
   <!-- Notification Dropdown -->

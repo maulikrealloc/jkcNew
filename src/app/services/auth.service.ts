@@ -24,7 +24,7 @@ export class AuthService {
       if (userData?.isDisabled) {
         this.snackBar.open('This account is not active!!', 'Close', {
           duration: 3000,
-          horizontalPosition: 'right',
+          horizontalPosition: 'center',
           verticalPosition: 'top',
         });
         throw new Error("This account is not active.");
@@ -35,7 +35,7 @@ export class AuthService {
       this.router.navigate(['/dashboards/dashboard1']);
       this.snackBar.open('Login successful', 'Close', {
         duration: 3000,
-        horizontalPosition: 'right',
+        horizontalPosition: 'center',
         verticalPosition: 'top',
       });
       return result;
@@ -43,7 +43,7 @@ export class AuthService {
       console.error("Error signing in", error);
       this.snackBar.open(`${error}`, 'Close', {
         duration: 3000,
-        horizontalPosition: 'right',
+        horizontalPosition: 'center',
         verticalPosition: 'top',
       });
       throw error;
@@ -66,14 +66,14 @@ export class AuthService {
 
       this.snackBar.open(`Account created: ${result.user._delegate.email}`, 'Close', {
         duration: 3000,
-        horizontalPosition: 'right',
+        horizontalPosition: 'center',
         verticalPosition: 'top',
       });
       return result;
     } catch (error) {
       this.snackBar.open(`${error}`, 'Close', {
         duration: 3000,
-        horizontalPosition: 'right',
+        horizontalPosition: 'center',
         verticalPosition: 'top',
       });
       throw error;
@@ -102,14 +102,14 @@ export class AuthService {
       await this.afAuth.sendPasswordResetEmail(email);
       this.snackBar.open('Password reset email sent. Please check your inbox.', 'Close', {
         duration: 3000,
-        horizontalPosition: 'right',
+        horizontalPosition: 'center',
         verticalPosition: 'top',
       });
     } catch (error) {
       console.error('Error sending password reset email', error);
       this.snackBar.open(`Failed to send password reset email: ${error}`, 'Close', {
         duration: 3000,
-        horizontalPosition: 'right',
+        horizontalPosition: 'center',
         verticalPosition: 'top',
       });
       throw error;

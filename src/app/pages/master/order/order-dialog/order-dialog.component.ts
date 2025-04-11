@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-order-dialog',
@@ -22,26 +22,14 @@ export class OrderDialogComponent implements OnInit {
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<OrderDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
-    private firebaseCollectionService: FirebaseCollectionService) {
+    private commonService: CommonService) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
 
   ngOnInit(): void {
-    this.buildForm()
-    if (this.action === 'Edit') {
-      this.orderForm.controls['party'].setValue(this.local_data.partyId)
-      this.orderForm.controls['designNo'].setValue(this.local_data.designNo)
-      this.orderForm.controls['partyOrder'].setValue(this.local_data.partyOrder)
-      this.orderForm.controls['orderDate'].setValue(this.convertTimestampToDate(this.local_data.orderDate))
-      this.orderForm.controls['deliveryDate'].setValue(this.convertTimestampToDate(this.local_data.deliveryDate))
-      this.orderForm.controls['orderStatus'].setValue(this.local_data.orderStatus)
-      this.local_data.products.forEach((element: any) => {
-        this.addProduct(element);
-      });
-    } else {
-      this.addProduct()
-    }
+    this.buildForm(this.action === 'Edit' ? this.local_data : undefined);
+    (this.local_data?.products || [null]).forEach((product: any) => this.addProduct(product));
     this.getPartyData();
   }
 
@@ -52,19 +40,19 @@ export class OrderDialogComponent implements OnInit {
     return null;
   }
 
-  buildForm() {
+  buildForm(data?: any) {
     this.orderForm = this.fb.group({
-      party: ['', Validators.required],
-      designNo: [''],
-      partyOrder: ['', [Validators.required]],
-      orderDate: [new Date(), Validators.required],
-      deliveryDate: [new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), Validators.required],
+      party: [data ? data?.partyId : '', Validators.required],
+      designNo: [data ? data?.designNo : ''],
+      partyOrder: [data ? data?.partyOrder : '', [Validators.required]],
+      orderDate: [data ? this.convertTimestampToDate(this.local_data.orderDate) : new Date(), Validators.required],
+      deliveryDate: [data ? this.convertTimestampToDate(this.local_data.deliveryDate) : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), Validators.required],
       products: this.fb.array([]),
-      orderStatus: ['']
+      orderStatus: [data ? data?.orderStatus : '']
     })
   }
 
-  getProductsFormArry() {
+  getProductsFormArry(): FormArray {
     return this.orderForm.get('products') as FormArray
   }
 
@@ -84,16 +72,10 @@ export class OrderDialogComponent implements OnInit {
   }
 
   getPartyData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'PartyList').then((party) => {
-      if (party && party.length > 0) {
-        this.partyList = party
-      }
-    }).catch((error) => {
-      console.error('Error fetching party:', error);
-    });
+    this.commonService.fetchData('PartyList', this.partyList);
   }
 
-  doAction(): void {
+  saveOrder(): void {
     const payload = {
       partyId: this.orderForm.value.party,
       designNo: this.orderForm.value.designNo,

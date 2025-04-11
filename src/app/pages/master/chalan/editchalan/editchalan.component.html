@@ -1,0 +1,36 @@
+<h2 mat-dialog-title class="m-b-24 b-b-1 p-b-20">Chalan</h2>
+<mat-dialog-content class="mat-typography" style="max-width: 750px">
+    <form [formGroup]="editchalanForm">
+        <div class="row">
+
+            <div class="col-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Product Name</mat-label>
+                    <input type="text" matInput required formControlName="productName" placeholder="Enter product Name">
+                </mat-form-field>
+            </div>
+
+            <div class="col-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Quantity</mat-label>
+                    <input type="number" matInput required formControlName="quantity" placeholder="Enter quantity">
+                </mat-form-field>
+            </div>
+
+            <div class="col-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Product Price</mat-label>
+                    <input type="number" matInput required formControlName="productPrice"
+                        placeholder="Enter product Price">
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions class="p-24 justify-content-end">
+    <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
+    <button mat-flat-button color="primary" (click)="closeDialog()">
+        {{action}}
+    </button>
+</mat-dialog-actions>

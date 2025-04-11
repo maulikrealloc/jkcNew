@@ -4,8 +4,7 @@
 
       <div class="col-lg-4">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <mat-label>Party</mat-label>
-          <input matInput placeholder="Search Party" (keyup)="applyFilter($any($event.target).value)">
+          <input matInput placeholder="Search Party..." (keyup)="applyFilter($any($event.target).value)">
           <mat-icon matSuffix>
             <i-tabler name="search" class="icon-20"></i-tabler>
           </mat-icon>
@@ -23,15 +22,15 @@
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
     <div class="table-responsive">
-      <table mat-table [dataSource]="partyMasterDataSource" class="w-100">
+      <table mat-table  style="min-width: 150%;" [dataSource]="partyMasterDataSource" class="w-100">
 
-        <ng-container matColumnDef="srno">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">SR No</th>
+        <ng-container matColumnDef="srNo">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No.</th>
           <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="PartyName">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+        <ng-container matColumnDef="partyName">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600 ">
             Name
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
@@ -39,25 +38,25 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="PartyGSTIN">
+        <ng-container matColumnDef="partyGstIn">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            GSTIN
+            GST IN
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.partyGSTIN }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="ChalanNo">
+        <ng-container matColumnDef="chalanNo">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Chalan No
+            Chalan No.
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.chalanNoSeries }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="Address">
+        <ng-container matColumnDef="address">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
             Address
           </th>
@@ -66,16 +65,16 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="PartyPan">
+        <ng-container matColumnDef="partyPan">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Pan
+            Pancard No.
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.partyPanNo }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="PartyMobile">
+        <ng-container matColumnDef="partyMobile">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
             Mobile
           </th>

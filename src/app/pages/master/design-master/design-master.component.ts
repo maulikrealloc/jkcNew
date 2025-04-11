@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-design-master',
@@ -12,37 +12,25 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
 })
 export class DesignMasterComponent implements OnInit {
 
-  designMasterColumns: string[] = [
-    '#',
-    'designNumber',
-    'designPrice',
-    'noStiching',
-    'action',
-  ];
+  designMasterColumns: string[] = ['#','designNumber','designPrice','noStiching','action' ];
   designMaster: any = [];
   designMasterListDataSource = new MatTableDataSource(this.designMaster);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private dialog: MatDialog, private commonService: CommonService) { }
 
   ngOnInit(): void {
     this.getDesignMasterData();
     this.designMasterListDataSource.paginator = this.paginator;
   }
 
+  applyFilter(filterValue: string): void {
+    this.designMasterListDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   getDesignMasterData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'DesignMasterList').then((designMasters) => {
-      this.designMaster = designMasters
-      if (designMasters && designMasters.length > 0) {
-        this.designMasterListDataSource = new MatTableDataSource(this.designMaster);
-      } else {
-        this.designMaster = [];
-        this.designMasterListDataSource = new MatTableDataSource(this.designMaster);
-      }
-    }).catch((error) => {
-      console.error('Error fetching designMasters:', error);
-    });
+    this.commonService.fetchData('DesignMasterList', this.designMaster, this.designMasterListDataSource);
   }
 
   openDesignMaster(action: string, obj: any) {
@@ -52,17 +40,8 @@ export class DesignMasterComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'DesignMasterList');
-        this.getDesignMasterData();
-      }
-      if (result?.event === 'Edit') {
-        this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'DesignMasterList');
-        this.getDesignMasterData();
-      }
-      if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'DesignMasterList');
-        this.getDesignMasterData();
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'DesignMasterList').then(() => this.getDesignMasterData()).catch(console.error);
       }
     });
   }
@@ -92,29 +71,20 @@ export class designMasterDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.formBuild();
-    if (this.action === 'Edit') {
-      this.designForm.controls['designNo'].setValue(this.local_data.designNo)
-      this.designForm.controls['designPrice'].setValue(this.local_data.designPrice)
-      this.designForm.controls['noStiching'].setValue(this.local_data.noStiching)
-    }
+    this.formBuild(this.action === 'Edit' ? this.local_data : undefined);
   }
 
-  formBuild() {
+  formBuild(data:any) {
     this.designForm = this.fb.group({
-      designNo: ['', Validators.required],
-      designPrice: ['', Validators.required],
-      noStiching: ['', Validators.required]
+      designNo: [data ? data?.designNo : '', Validators.required],
+      designPrice: [data ? data?.designPrice :'', Validators.required],
+      noStiching: [data ? data?.noStiching : '', Validators.required],
     })
   }
 
   doAction(): void {
-    const payload = {
-      designNo: this.designForm.value.designNo,
-      designPrice: this.designForm.value.designPrice,
-      noStiching: this.designForm.value.noStiching,
-      imagePath: this.local_data.imagePath
-    }
+    const payload = this.designForm.value
+    payload.imagePath = this.local_data.imagePath
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

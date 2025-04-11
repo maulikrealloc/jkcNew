@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { EmployeeDialogComponent } from './employee-dialog/employee-dialog.component';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-employee-master',
@@ -13,23 +13,13 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
 
 export class EmployeeMasterComponent implements OnInit {
 
-  employeeMasterDataColumns: string[] = [
-    '#',
-    'firstName',
-    'lastName',
-    'salary',
-    'phoneNo',
-    'bankName',
-    'ifscCode',
-    'bankAccountNo',
-    'action'
-  ];
+  employeeMasterDataColumns: string[] = ['#','firstName','lastName','salary','phoneNo','bankName','ifscCode','bankAccountNo','action' ];
   employeesList: any = [];
   employeeListDataSource = new MatTableDataSource(this.employeesList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private dialog: MatDialog, private commonService: CommonService) { }
 
   ngOnInit() {
     this.employeeListDataSource.paginator = this.paginator;
@@ -41,17 +31,7 @@ export class EmployeeMasterComponent implements OnInit {
   }
 
   getEmployeeData() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'EmployeeList').then((employee) => {
-      this.employeesList = employee
-      if (employee && employee.length > 0) {
-        this.employeeListDataSource = new MatTableDataSource(this.employeesList);
-      } else {
-        this.employeesList = [];
-        this.employeeListDataSource = new MatTableDataSource(this.employeesList);
-      }
-    }).catch((error) => {
-      console.error('Error fetching employee:', error);
-    });
+    this.commonService.fetchData('EmployeeList', this.employeesList, this.employeeListDataSource);
   }
 
   openEmployee(action: string, obj: any) {
@@ -61,21 +41,8 @@ export class EmployeeMasterComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result.event === 'Add') {
-        this.firebaseCollectionService.addDocument('CompanyList', result.data, 'EmployeeList');
-        this.getEmployeeData();
-      }
-      if (result.event === 'Edit') {
-        this.employeesList.forEach((element: any) => {
-          if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('CompanyList', obj.id, result.data, 'EmployeeList');
-            this.getEmployeeData();
-          }
-        });
-      }
-      if (result.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('CompanyList', obj.id, 'EmployeeList');
-        this.getEmployeeData();
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'EmployeeList').then(() => this.getEmployeeData()).catch(console.error);
       }
     });
   }

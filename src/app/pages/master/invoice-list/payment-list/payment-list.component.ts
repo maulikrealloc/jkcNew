@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-payment-list',
@@ -21,6 +22,7 @@ export class PaymentListComponent implements OnInit {
   invoiceList: any = [];
   paymentReciveList: any = [];
   paymentReceiveData: any = [];
+  incomeMasterData: any = [];
   editIndex: number | null = null;
   paymentListDataSource = new MatTableDataSource(this.paymentReciveList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -28,9 +30,11 @@ export class PaymentListComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private firebaseCollectionService: FirebaseCollectionService,
+    private commonService:CommonService,
     public dialogRef: MatDialogRef<ProductDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.getPaymentReceiveList()
+    this.getIncomeMasterList()
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
@@ -41,8 +45,7 @@ export class PaymentListComponent implements OnInit {
   }
 
   getPaymentReceiveList() {
-    this.firebaseCollectionService.getDocuments('CompanyList', 'PaymentReceiveList').then((payment) => {
-      this.paymentReceiveData = payment
+    this.commonService.fetchData('PaymentReceiveList', this.paymentReceiveData).then((data) => {
       const datafind = this.paymentReceiveData?.find((id: any) => id.invoiceId === this.local_data.id)?.payments
       if (datafind) {
         datafind.forEach((element: any) => {
@@ -54,7 +57,23 @@ export class PaymentListComponent implements OnInit {
         });
         this.paymentListDataSource.data = [...this.paymentReciveList];
       }
-    });
+    })
+  }
+
+  getIncomeMasterList() {
+    this.commonService.fetchData('IncomeMasterList', this.incomeMasterData).then((data) => {
+      const datafind = this.incomeMasterData?.find((id: any) => id.invoiceId === this.local_data.id)?.payments
+      if (datafind) {
+        datafind.forEach((element: any) => {
+          const payload = {
+            paymentReceive: element.paymentReceive,
+            paymentDate: new Date(element.paymentDate).toLocaleDateString(),
+          };
+          this.paymentReciveList.push(payload)
+        });
+        this.paymentListDataSource.data = [...this.paymentReciveList];
+      }
+    })
   }
 
   buildForm() {
@@ -80,7 +99,7 @@ export class PaymentListComponent implements OnInit {
 
     this.paymentListDataSource.data = [...this.paymentReciveList];
     this.paymentReceiveList.patchValue({ paymentDate: paymentDateValue });
-    this.paymentReceiveList.controls['paymentReceive'].reset();
+    // this.paymentReceiveList.controls['paymentReceive'].reset();
   }
 
   editData(index: number) {
@@ -97,13 +116,29 @@ export class PaymentListComponent implements OnInit {
       invoiceId: this.local_data.id,
       finalAmount: this.data?.finalAmount,
       payments: this.paymentListDataSource.data,
-    }
-    const datafind = this.paymentReceiveData?.find((id: any) => id.invoiceId === this.local_data.id)?.payments
-    if (datafind?.length > 0) {
-      this.firebaseCollectionService.updateDocument('CompanyList', this.paymentReceiveData?.find((id: any) => id.invoiceId === this.local_data.id).id, payload, 'PaymentReceiveList');
+    };
+
+    const datafindPayment = this.paymentReceiveData?.find((id: any) => id.invoiceId === this.local_data.id);
+    const datafindIncome = this.incomeMasterData?.find((id: any) => id.invoiceId === this.local_data.id);
+
+    if (datafindPayment?.payments?.length > 0) {
+      this.firebaseCollectionService.updateDocument('CompanyList', datafindPayment.id, payload, 'PaymentReceiveList');
     } else {
       this.firebaseCollectionService.addDocument('CompanyList', payload, 'PaymentReceiveList');
     }
+
+      const IncomeMaster = {
+        type: 'Invoice',
+        description: this.local_data.id,
+        createddate: new Date(),
+        AmountDate: this.paymentReceiveList.value.paymentDate, 
+        Amount: this.paymentReceiveList.value.paymentReceive,  
+      };
+      if (datafindIncome?.payments?.length > 0) {
+        this.firebaseCollectionService.updateDocument('CompanyList', datafindIncome.id, IncomeMaster, 'IncomeMasterList');
+      } else {
+        this.firebaseCollectionService.addDocument('CompanyList', IncomeMaster, 'IncomeMasterList');
+      }
   }
 
   deleteData(index: number) {
@@ -120,5 +155,5 @@ export class PaymentListComponent implements OnInit {
     const pendingAmount = Number(this.data?.finalAmount) - totalReceived;
     return pendingAmount.toFixed(2);
   }
-
+  
 }

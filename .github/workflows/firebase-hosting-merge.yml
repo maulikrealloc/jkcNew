@@ -3,7 +3,7 @@ name: Deploy Angular to Firebase
 on:
   push:
     branches:
-      - main2 
+      - main
 
 jobs:
   deploy:

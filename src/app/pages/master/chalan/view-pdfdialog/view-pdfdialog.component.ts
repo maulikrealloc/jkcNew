@@ -89,21 +89,18 @@ export class ViewPDFdialogComponent implements OnInit {
 
   submitData() {
     this.isDisplayChalan = true;
-    debugger
     const payload = {
       firmId: this.data?.payload?.chalanForm.firm,
       partyId: this.data?.payload?.chalanForm.party,
       partyOrderId: this.data?.payload?.chalanForm.partyOrder,
       chalanDate: this.data?.payload?.chalanForm.date,
       chalanNo: this.data?.payload?.selectedPartyChalanNo,
-      netAmount: this.data.payload.chalanForm.product.map((id: any) => id.totalAmount).reduce((a:any,b:any)=> a + b),
+      netAmount: this.data.payload.chalanForm.product.map((id: any) => id.totalAmount).reduce((a: any, b: any) => a + b),
       isCreated: false,
     }
     this.data.payload.updateProductsData.isCreated = true;
     this.firebaseCollectionService.updateDocument('CompanyList', this.data.payload.updateProductsData.id, this.data.payload.updateProductsData, 'OrderList');
     this.firebaseCollectionService.addDocument('CompanyList', payload, 'ChalanList');
-    console.log("this.data.payload.updateProductsData", this.data.payload.updateProductsData);
-
   }
 
 }

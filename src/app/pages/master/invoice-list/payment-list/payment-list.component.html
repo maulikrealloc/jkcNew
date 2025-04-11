@@ -3,7 +3,7 @@
     <form [formGroup]="paymentReceiveList">
         <div class="row align-items-baseline">
 
-            <div class="col-12 col-sm-12 col-md-4">
+            <div class="col-12 col-sm-12 col-md-6">
                 <div>
                     <mat-label class="f-s-13 f-w-600">
                         Final Total : <span class="f-s-13 f-w-600">{{ data?.finalAmount }}</span>
@@ -11,7 +11,7 @@
                 </div>
             </div>
 
-            <div class="col-12 col-sm-12 col-md-4">
+            <div class="col-12 col-sm-12 col-md-6">
                 <div *ngIf="+pendingAmount() > 0">
                     <mat-label class="f-s-13 f-w-600">
                         Pending Payment : {{ pendingAmount() }}

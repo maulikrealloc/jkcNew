@@ -9,19 +9,23 @@
                         <div class="col-4">
                             <mat-form-field appearance="outline" class="w-100 m-t-10">
                                 <mat-label>Chalan No</mat-label>
-                                <input type="number" matInput [value]="data?.payload?.chalanForm?.product[0]?.chalanNo" placeholder="Enter party order" disabled  style="font-weight: bold;color: #0f0f0f;">
+                                <input type="number" matInput [value]="data?.payload?.chalanForm?.product[0]?.chalanNo"
+                                    placeholder="Enter party order" disabled style="font-weight: bold;color: #0f0f0f;">
                             </mat-form-field>
                         </div>
                         <div class="col-4">
                             <mat-form-field appearance="outline" class="w-100 m-t-10">
                                 <mat-label>Date</mat-label>
-                                <input matInput type="date" [value]="convertTimestampToDate(data.payload.chalanForm?.date)" placeholder="Enter party order" disabled  style="font-weight: bold;color: #0f0f0f;">
+                                <input matInput type="date"
+                                    [value]="convertTimestampToDate(data.payload.chalanForm?.date)"
+                                    placeholder="Enter party order" disabled style="font-weight: bold;color: #0f0f0f;">
                             </mat-form-field>
                         </div>
                         <div class="col-4">
                             <mat-form-field appearance="outline" class="w-100 m-t-10">
                                 <mat-label>PO No</mat-label>
-                                <input type="number" matInput [value]="data.payload?.partyOrder" placeholder="Enter party order" disabled  style="font-weight: bold;color: #0f0f0f;">
+                                <input type="number" matInput [value]="data.payload?.partyOrder"
+                                    placeholder="Enter party order" disabled style="font-weight: bold;color: #0f0f0f;">
                             </mat-form-field>
                         </div>
                     </div>
@@ -33,19 +37,23 @@
                         <div class="col-6">
                             <mat-form-field appearance="outline" class="w-100 m-t-5">
                                 <mat-label>Name</mat-label>
-                                <input type="text" matInput [value]="data.payload?.firmDetails?.header + ' ' + data.payload?.firmDetails?.subHeader" placeholder="Enter party order" disabled  style="font-weight: bold;color: #0f0f0f;">
+                                <input type="text" matInput
+                                    [value]="data.payload?.firmDetails?.header + ' ' + data.payload?.firmDetails?.subHeader"
+                                    placeholder="Enter party order" disabled style="font-weight: bold;color: #0f0f0f;">
                             </mat-form-field>
                         </div>
                         <div class="col-6">
                             <mat-form-field appearance="outline" class="w-100 m-t-5">
                                 <mat-label>Moblie Number</mat-label>
-                                <input type="number" matInput [value]="data.payload?.firmDetails?.mobileNO" placeholder="Enter party order" disabled  style="font-weight: bold;color: #0f0f0f;">
+                                <input type="number" matInput [value]="data.payload?.firmDetails?.mobileNO"
+                                    placeholder="Enter party order" disabled style="font-weight: bold;color: #0f0f0f;">
                             </mat-form-field>
                         </div>
                         <div class="col-12">
                             <mat-form-field appearance="outline" class="w-100 m-t-5">
                                 <mat-label>Address</mat-label>
-                                <input type="text" matInput [value]="data.payload?.firmDetails?.address" placeholder="Enter party order" disabled  style="font-weight: bold;color: #0f0f0f;">
+                                <input type="text" matInput [value]="data.payload?.firmDetails?.address"
+                                    placeholder="Enter party order" disabled style="font-weight: bold;color: #0f0f0f;">
                             </mat-form-field>
                         </div>
                     </div>
@@ -55,19 +63,23 @@
                         <div class="col-6">
                             <mat-form-field appearance="outline" class="w-100 m-t-5">
                                 <mat-label>Name</mat-label>
-                                <input type="text" matInput [value]="data.payload?.partyDetails?.firstName + ' ' + data.payload?.partyDetails?.lastName " placeholder="Enter party order" disabled  style="font-weight: bold;color: #0f0f0f;">
+                                <input type="text" matInput
+                                    [value]="data.payload?.partyDetails?.firstName + ' ' + data.payload?.partyDetails?.lastName "
+                                    placeholder="Enter party order" disabled style="font-weight: bold;color: #0f0f0f;">
                             </mat-form-field>
                         </div>
                         <div class="col-6">
                             <mat-form-field appearance="outline" class="w-100 m-t-5">
                                 <mat-label>Moblie Number</mat-label>
-                                <input type="text" matInput [value]="data.payload?.partyDetails?.partyMobile" placeholder="Enter party order" disabled  style="font-weight: bold;color: #0f0f0f;">
+                                <input type="text" matInput [value]="data.payload?.partyDetails?.partyMobile"
+                                    placeholder="Enter party order" disabled style="font-weight: bold;color: #0f0f0f;">
                             </mat-form-field>
                         </div>
                         <div class="col-12">
                             <mat-form-field appearance="outline" class="w-100 m-t-5">
                                 <mat-label>Address</mat-label>
-                                <input type="text" matInput [value]="data.payload?.partyDetails?.partyAddress" placeholder="Enter party order" disabled  style="font-weight: bold;color: #0f0f0f;">
+                                <input type="text" matInput [value]="data.payload?.partyDetails?.partyAddress"
+                                    placeholder="Enter party order" disabled style="font-weight: bold;color: #0f0f0f;">
                             </mat-form-field>
                         </div>
                     </div>
@@ -93,20 +105,20 @@
                                 <td class="text-center">{{ item.productPrice }}</td>
                                 <td class="text-center">{{ item.totalAmount }}</td>
                             </tr>
-                        <tr class="fw-bold">
-                            <td colspan="4" class="text-end" style="font-weight: bold;">
-                                Sub Total:
-                            </td>
-                            <td class="text-center" style="font-weight: bold;">
-                                {{ getSubTotal() | number: '1.2-2' }}
-                            </td>
-                        </tr>
-    
+                            <tr class="fw-bold">
+                                <td colspan="4" class="text-end" style="font-weight: bold;">
+                                    Sub Total:
+                                </td>
+                                <td class="text-center" style="font-weight: bold;">
+                                    {{ getSubTotal() | number: '1.2-2' }}
+                                </td>
+                            </tr>
+
                         </tbody>
                     </table>
                 </div>
             </div>
-    
+
             <div class="text-right m-t-10">
                 <div class="table-responsive showTable">
                     <table class="table table-hover b-1 no-wrap w-100 rounded">
@@ -123,8 +135,12 @@
                             </div>
                             <div class="col-6">
                                 <div class="row">
-                                    <div class="col-3"><th class="text-center">In Word</th></div>
-                                    <div class="col-9"><th class="text-center">{{ convertNumberToWords(getSubTotal()) }}</th></div>
+                                    <div class="col-3">
+                                        <th class="text-center">In Word</th>
+                                    </div>
+                                    <div class="col-9">
+                                        <th class="text-center">{{ convertNumberToWords(getSubTotal()) }}</th>
+                                    </div>
                                 </div>
                             </div>
                         </div>

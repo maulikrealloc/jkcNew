@@ -268,7 +268,7 @@ export class ValidationService {
       doc.setFontSize(10);
       doc.text(`MO: ${firmDetails?.mobileNO.toString()}`, margin + 8, margin + 8);
       if (partyDetails?.partyMobile) {
-        doc.text(`MO: ${partyDetails?.partyMobile.toString()}`, pageWidth - margin - 35, margin + 8);
+      doc.text(`MO: ${partyDetails?.partyMobile.toString()}`, pageWidth - margin - 35, margin + 8);
       }
 
       doc.setTextColor(2, 2, 2);
@@ -368,7 +368,7 @@ export class ValidationService {
         '',
         netAmount.toFixed(2) + '/-'
       ]);
-
+      
 
       autoTable(doc, {
         head: [['Sr.', 'Particulars', 'Pcs./Mts.', 'Rate', 'Amount']],

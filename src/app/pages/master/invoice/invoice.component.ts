@@ -123,13 +123,22 @@ export class InvoiceComponent implements OnInit {
   }
 
   invoiceSubmitData() {
-    const grossTotal = this.selectedChalanList.products.map((id: any) => id.productQuantity * id.productPrice).reduce((a: any, b: any) => { return a + b }).toFixed(2);
-    const discountAmount: any = Number((grossTotal * this.invoiceForm.value.discountRatio) / 100).toFixed(2);
-    const netAmount: any = Number(grossTotal - discountAmount).toFixed(2);
-    const cgst = Number((netAmount * Number(this.invoiceForm.value.cgst)) / 100).toFixed(2);
-    const sgst = Number((netAmount * Number(this.invoiceForm.value.sgst)) / 100).toFixed(2);
-    const igst = Number((netAmount * Number(this.invoiceForm.value.igst)) / 100).toFixed(2);
-    const finalAmount = (Number(netAmount) + Number(igst) + Number(cgst) + Number(sgst)).toFixed(2);
+    const grossTotal = this.selectedChalanList.products
+      .reduce((total:any, product:any) => total + (product.productQuantity * product.productPrice), 0);
+
+    const discountRatio = Number(this.invoiceForm.value.discountRatio) || 0;
+    const cgstRate = Number(this.invoiceForm.value.cgst) || 0;
+    const sgstRate = Number(this.invoiceForm.value.sgst) || 0;
+    const igstRate = Number(this.invoiceForm.value.igst) || 0;
+
+    const discountAmount = grossTotal * (discountRatio / 100);
+    const netAmount = grossTotal - discountAmount;
+
+    const cgstAmount = netAmount * (cgstRate / 100);
+    const sgstAmount = netAmount * (sgstRate / 100);
+    const igstAmount = netAmount * (igstRate / 100);
+
+    const finalAmount = netAmount + cgstAmount + sgstAmount + igstAmount;
 
     const payload = {
       firmId: this.invoiceForm.value.firm,
@@ -137,18 +146,23 @@ export class InvoiceComponent implements OnInit {
       chalanId: this.invoiceForm.value.chalanNo,
       date: this.invoiceForm.value.date,
       invoiceNo: this.invoiceForm.value.invoiceNo,
-      cgst: isNaN(Number(this.invoiceForm.value.cgst)) ? 0 : Number(this.invoiceForm.value.cgst),
-      sgst: isNaN(Number(this.invoiceForm.value.sgst)) ? 0 : Number(this.invoiceForm.value.sgst),
-      igst: isNaN(Number(this.invoiceForm.value.igst)) ? 0 : Number(this.invoiceForm.value.igst),
-      discountRatio: this.invoiceForm.value.discountRatio,
-      grossTotal: grossTotal,
-      netAmount: netAmount,
-      finalAmount: isNaN(Number(finalAmount)) ? 0 : Number(finalAmount),
-      paymentDueDate: this.paymentDays
-    }
+      cgst: cgstRate,
+      sgst: sgstRate,
+      igst: igstRate,
+      discountRatio: discountRatio,
+      grossTotal: Number(grossTotal.toFixed(2)),
+      netAmount: Number(netAmount.toFixed(2)),
+      finalAmount: Number(finalAmount.toFixed(2)),
+      paymentDueDate: this.paymentDays,
+      cgstAmount: Number(cgstAmount.toFixed(2)),
+      sgstAmount: Number(sgstAmount.toFixed(2)),
+      igstAmount: Number(igstAmount.toFixed(2)),
+      discountAmount: Number(discountAmount.toFixed(2))
+    };
 
-    this.updateChalanIsCreated(payload.chalanId)
+    this.updateChalanIsCreated(payload.chalanId);
     this.firebaseCollectionService.addDocument('CompanyList', payload, 'InvoiceList');
+
     this.invoiceForm.reset({
       firm: '',
       party: '',
@@ -159,11 +173,12 @@ export class InvoiceComponent implements OnInit {
       cgst: 0,
       sgst: 0,
       igst: 0,
-      paymentDueDate:''
+      paymentDueDate: ''
     });
 
-    ['cgst', 'sgst', 'igst'].forEach(ele => this.invoiceForm.controls[ele].enable())
+    ['cgst', 'sgst', 'igst'].forEach(ele => this.invoiceForm.controls[ele].enable());
     this.invoiceForm.setErrors(null);
+
     this.selectedChalanList = [];
     this.invoiceListDataSource = new MatTableDataSource(this.selectedChalanList);
   }

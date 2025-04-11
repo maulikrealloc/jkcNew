@@ -5,6 +5,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { OrderListDialogComponent } from './order-list-dialog/order-list-dialog.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CommonService } from 'src/app/services/common.service';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-order-list',
@@ -36,7 +37,7 @@ export class OrderListComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private fb: FormBuilder, private commonService: CommonService, private dialog: MatDialog) { }
+  constructor(private fb: FormBuilder, private commonService: CommonService, private dialog: MatDialog, private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
     this.orderDataSource.paginator = this.paginator;
@@ -70,7 +71,7 @@ export class OrderListComponent implements OnInit {
       this.orderDataSource.data = this.khataOrderList;
     }
   }
-  
+
   getKhataOrderData() {
     this.commonService.fetchData('KhataOrderList', this.khataOrderList, this.orderDataSource);
   }
@@ -115,6 +116,32 @@ export class OrderListComponent implements OnInit {
         this.commonService.commonApiCalled(result, obj, 'KhataOrderList').then(() => this.getKhataOrderData()).catch(console.error);
       }
     });
+  }
+
+  filterOrders() {
+    if (this!.isChecked) {
+      this.orderDataSource.data = this.khataOrderList.filter(
+        (order: any) => order.status === 'Done'
+        );
+    } else {
+      this.orderDataSource.data = this.khataOrderList.filter(
+        (order: any) => order.status === 'Pending'
+        );
+    }
+  }
+
+  markAsDone(element: any) {
+    const updateData = { status: 'Done' };
+
+    this.firebaseCollectionService.updateDocument('CompanyList', element.id, updateData, 'KhataOrderList')
+      .then(() => {
+        element.status = 'Done';
+        this.filterOrders();
+      })
+      .catch(error => {
+        console.error('Update failed:', error);
+        element.status = 'Pending';
+      });
   }
 
 }

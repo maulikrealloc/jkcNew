@@ -39,7 +39,6 @@ export class ChalanComponent implements OnInit {
   totalProductPrices: any;
   selectedPartyChalanNo: number = 0;
   selectedProduct: any = [];
-  chalanListDataSource = new MatTableDataSource(this.chalanList);
   partyDetails: any;
   firmDetails: any;
   partyOrder: any;
@@ -48,20 +47,21 @@ export class ChalanComponent implements OnInit {
   netAmount: number = 0;
   selectedPartyChalan = []
   isDisplayChalan: boolean = false;
+  chalanListDataSource = new MatTableDataSource(this.chalanList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   constructor(
     private dialog: MatDialog, private fb: FormBuilder,
     private commonService: CommonService,
-    private validationService : ValidationService,
-    private firebaseCollectionService: FirebaseCollectionService) { }
+    private validationService : ValidationService) { }
 
   ngOnInit(): void {
     this.formBuild();
     this.getPartyData();
     this.getFirmData();
     this.productPriceTotal();
+    this.chalanListDataSource.paginator = this.paginator;
   }
 
   formBuild() {
@@ -88,13 +88,6 @@ export class ChalanComponent implements OnInit {
     this.generatePDF()
     
     this.isDisplayChalan = true
-  }
-
-  openProductViewData(action: any, obj: any) {
-    obj.action = action;
-    const dialogRef = this.dialog.open(ChalanViewDialogComponent, {
-      data: obj,
-    });
   }
 
   // submitData() {
@@ -130,8 +123,21 @@ export class ChalanComponent implements OnInit {
   }
 
   generatePDF() {
-    const url = this.validationService.generatePDF(this.partyDetails, this.firmDetails, this.chalanForm, this.partyOrder, this.imageUrl, this.netAmount, this.toWords)
-    this.imageUrl = ''
+    this.getPartyDetails(this.chalanForm.value.party);
+    this.getFirmDetails(this.chalanForm.value.firm);
+    this.netAmount = this.chalanList.reduce((sum:any, item:any) => sum + item.totalAmount, 0);
+
+    const url = this.validationService.generatePDF(
+      this.partyDetails,
+      this.firmDetails,
+      this.chalanForm,
+      this.partyOrder,
+      this.imageUrl,
+      this.netAmount,
+      this.toWords
+    );
+
+    this.imageUrl = '';
 
     const payload = {
       url: url,
@@ -140,21 +146,23 @@ export class ChalanComponent implements OnInit {
       chalanForm: this.chalanForm.value,
       partyOrder: this.partyOrder,
       imageUrl: this.imageUrl,
-      netAmount: this.chalanList.totalAmount,
+      netAmount: this.netAmount,
       toWords: this.toWords,
       selectedPartyChalanNo: this.selectedPartyChalanNo,
+      chalanList: this.chalanList, 
       updateProductsData: this.updateProductsData
-    }
+    };
 
     const dialogRef = this.dialog.open(ViewPDFdialogComponent, {
       width: '50%',
       data: { payload: payload }
     });
-    dialogRef.afterClosed().subscribe((result) => { 
-      this.chalanForm.reset(); 
-      this.chalanList = []
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.chalanForm.reset();
+      this.chalanList = [];
       this.chalanListDataSource = new MatTableDataSource(this.chalanList);
-    })
+    });
   }
 
   partyChange(event: any) {
@@ -169,28 +177,6 @@ export class ChalanComponent implements OnInit {
     })
   }
 
-  // orderChange(event: any) {
-  //   this.chalanList = [];
-  //   this.partyOrder = '';
-
-  //   const selectedOrder = this.orderList.find((order: any) => order.id === event.value);
-  //   if (!selectedOrder) return;
-
-  //   const { firm, party, date } = this.chalanForm.value;
-  //   this.partyOrder = selectedOrder.partyOrder;
-
-  //   this.chalanList = selectedOrder.products.map(({ productName, productQuantity, productPrice }: any) => {
-  //     const totalAmount = productQuantity * productPrice;
-  //     const productData = { productName, quantity: productQuantity, productPrice, totalAmount, productID: selectedOrder.id, chalanNo: this.selectedPartyChalanNo, orderId: selectedOrder.id };
-
-  //     this.selectedProduct.push(productData);
-  //     return { firm, partyId: party, date, partyOrder: this.partyOrder, ...productData };
-  //   });
-
-  //   this.chalanListDataSource = new MatTableDataSource(this.chalanList);
-  //   this.updateProductsData = selectedOrder;
-  //   this.chalanListDataSource.paginator = this.paginator;
-  // }
   orderChange(event: any) {
     this.chalanList = []
     this.partyOrder = ''
@@ -222,6 +208,7 @@ export class ChalanComponent implements OnInit {
       this.selectedProduct.push(product);
       this.chalanList.push(payload);
       this.chalanListDataSource = new MatTableDataSource(this.chalanList);
+      this.chalanListDataSource.paginator = this.paginator;
     });
     this.updateProductsData = seletedOrderProducts;
   }
@@ -236,30 +223,49 @@ export class ChalanComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      const findOrder = this.orderList.find((order: any) => order.id === obj.orderId);
-      console.log('findOrder===>>', findOrder);
-      findOrder?.products.forEach((element: any) => {
-        if (element.productName === result.data.productName) {
-          element.productPrice = result.data.productPrice;
-          element.productQuantity = result.data.quantity;
+      if (result && result.data) {
+        
+        const findOrder = this.orderList.find((order: any) => order.id === obj.productID);
+        findOrder?.products.forEach((element: any) => {
+          if (element.productName === result.data.productName) {
+            element.productPrice = result.data.productPrice;
+            element.productQuantity = result.data.quantity;
+          }
+        });
+
+       
+        const productIndex = this.chalanList.findIndex((item:any) =>
+          item.productID === obj.productID && item.productName === result.data.productName
+        );
+
+        if (productIndex !== -1) {
+          this.chalanList[productIndex].productPrice = result.data.productPrice;
+          this.chalanList[productIndex].quantity = result.data.quantity;
+          this.chalanList[productIndex].totalAmount = result.data.quantity * result.data.productPrice;
+          
+          const selectedProductIndex = this.selectedProduct.findIndex((item:any) =>
+            item.productID === obj.productID && item.productName === result.data.productName
+          );
+          if (selectedProductIndex !== -1) {
+            this.selectedProduct[selectedProductIndex].productPrice = result.data.productPrice;
+            this.selectedProduct[selectedProductIndex].quantity = result.data.quantity;
+            this.selectedProduct[selectedProductIndex].totalAmount = result.data.quantity * result.data.productPrice;
+          }
         }
-      });
 
-      const resultApi = {
-        event: 'Edit',
-        data: { ...findOrder, id: findOrder?.id },
-      };
-      console.log('resultApi===>>', resultApi );
+        const resultApi = {
+          event: 'Edit',
+          data: { ...findOrder, id: findOrder?.id },
+        };
 
-      this.commonService.commonApiCalled(resultApi, findOrder, 'OrderList').catch(console.error);
-      const event = {
-        value: findOrder?.id
+        this.commonService.commonApiCalled(resultApi, findOrder, 'OrderList').catch(console.error);
+
+        this.chalanListDataSource = new MatTableDataSource(this.chalanList);
+        this.chalanListDataSource.paginator = this.paginator;
       }
-      this.orderChange(event)
     });
   }
-
-
+  
   deleteData(index: number) {
     this.chalanList.splice(index, 1);
     this.selectedProduct.splice(index, 1);

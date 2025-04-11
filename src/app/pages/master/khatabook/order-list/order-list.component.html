@@ -3,7 +3,7 @@
         <div style="align-items: baseline;" class="row">
 
             <div class="col-3">
-                <mat-slide-toggle [(ngModel)]="isChecked"></mat-slide-toggle>
+                <mat-slide-toggle [(ngModel)]="isChecked" (change)="filterOrders()"></mat-slide-toggle>
                 <span *ngIf="!isChecked">Progress</span>
                 <span *ngIf="isChecked">Done</span>
             </div>
@@ -143,7 +143,8 @@
                         </a>
                         <a class="m-r-10 cursor-pointer">
                             <!-- <button class="done-button">Done</button> -->
-                            <button class="done-button" *ngIf="element.status === 'Pending'" >
+                            <button class="done-button" *ngIf="!isChecked && element.status === 'Pending'"
+                                (click)="markAsDone(element)" >
                                 Done
                             </button>
                         </a>

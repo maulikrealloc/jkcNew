@@ -3,7 +3,7 @@
   <form [formGroup]="employeeForm">
     <div class="row">
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>First Name</mat-label>
           <input type="text" matInput placeholder="Enter first name" formControlName="firstName">
@@ -11,7 +11,7 @@
         <app-validation-message class="position-relative" [control]="employeeForm.controls['firstName']"></app-validation-message>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Last Name</mat-label>
           <input type="text" matInput placeholder="Enter last name" formControlName="lastName">
@@ -19,7 +19,7 @@
         <app-validation-message class="position-relative" [control]="employeeForm.controls['lastName']"></app-validation-message>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Salary</mat-label>
           <input type="number" matInput placeholder="Enter salary" formControlName="salary" min="0">
@@ -27,7 +27,7 @@
         <app-validation-message class="position-relative" [control]="employeeForm.controls['salary']"></app-validation-message>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Mobile No</mat-label>
           <input type="number" onKeyPress="if(this.value.length==10) return false;" matInput
@@ -36,21 +36,21 @@
           <app-validation-message class="position-relative" [control]="employeeForm.controls['mobileNo']"></app-validation-message>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Bank Name</mat-label>
           <input type="text" matInput placeholder="Enter bank name" formControlName="bankName">
         </mat-form-field>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Bank IFSC</mat-label>
           <input type="text" matInput placeholder="Enter bank IFSC" formControlName="ifscCode">
         </mat-form-field>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Bank AccountNo</mat-label>
           <input type="number" matInput placeholder="Enter bank accountno" formControlName="bankAccountNo" min="0">

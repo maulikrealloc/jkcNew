@@ -128,11 +128,11 @@ export const navItems: NavItem[] = [
     route: '/master/employee',
   },
   
-  {
-    displayName: 'Kharch Master',
-    iconName: 'id-badge',
-    route: '/master/kharchmaster',
-  },
+  // {
+  //   displayName: 'Kharch Master',
+  //   iconName: 'id-badge',
+  //   route: '/master/kharchmaster',
+  // },
   {
     displayName: 'Account',
     iconName: 'sort-descending',

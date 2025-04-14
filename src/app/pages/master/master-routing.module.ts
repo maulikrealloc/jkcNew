@@ -129,17 +129,17 @@ export const MasterRoutes: Routes = [
           ],
         },
       },
-      {
-        path: 'kharchmaster',
-        component: KharchMasterComponent,
-        data: {
-          title: 'Kharch Master',
-          urls: [
-            { title: 'Master', url: '/master/kharchmaster' },
-            { title: 'Kharch Master' },
-          ],
-        },
-      },
+      // {
+      //   path: 'kharchmaster',
+      //   component: KharchMasterComponent,
+      //   data: {
+      //     title: 'Kharch Master',
+      //     urls: [
+      //       { title: 'Master', url: '/master/kharchmaster' },
+      //       { title: 'Kharch Master' },
+      //     ],
+      //   },
+      // },
       {
         path: 'chalanlist',
         component: ChalanListComponent,

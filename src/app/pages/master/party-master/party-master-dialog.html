@@ -3,7 +3,7 @@
   <form [formGroup]="partyForm">
     <div class="row">
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>First Name</mat-label>
           <input type="text" matInput required formControlName="firstName" placeholder="Enter first name">
@@ -11,7 +11,7 @@
         <app-validation-message class="position-relative" [control]="partyForm.controls['firstName']"></app-validation-message>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Last Name</mat-label>
           <input type="text" matInput formControlName="lastName" placeholder="Enter first name">
@@ -19,7 +19,7 @@
         <app-validation-message class="position-relative" [control]="partyForm.controls['lastName']"></app-validation-message>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Party Address</mat-label>
           <input type="text" matInput required formControlName="partyAddress" placeholder="Enter party firm address">
@@ -27,7 +27,7 @@
         <app-validation-message class="position-relative" [control]="partyForm.controls['partyAddress']"></app-validation-message>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Party Mobile</mat-label>
           <input type="number" matInput required onKeyPress="if(this.value.length==10) return false;"
@@ -36,7 +36,7 @@
         <app-validation-message class="position-relative" [control]="partyForm.controls['partyMobile']"></app-validation-message>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Party GSTIN</mat-label>
           <input type="text" matInput formControlName="partyGSTIN" placeholder="Enter party GSTIN">
@@ -44,7 +44,7 @@
         <app-validation-message class="position-relative" [control]="partyForm.controls['partyGSTIN']"></app-validation-message>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Party Pan No</mat-label>
           <input type="text" matInput formControlName="partyPanNo" placeholder="Enter party pan no">
@@ -52,7 +52,7 @@
         <app-validation-message class="position-relative" [control]="partyForm.controls['partyPanNo']"></app-validation-message>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Chalan No Series</mat-label>
           <input type="number" min="0" matInput formControlName="chalanNoSeries" placeholder="Enter chalan no series">
@@ -60,7 +60,7 @@
         <app-validation-message class="position-relative" [control]="partyForm.controls['chalanNoSeries']"></app-validation-message>
       </div>
 <!-- *ngIf="action !== 'Edit'" -->
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Select Color</mat-label>
           <mat-select required formControlName="partyColorCode" placeholder="Select color">
@@ -77,7 +77,7 @@
         </mat-form-field>
         <app-validation-message class="position-relative" [control]="partyForm.controls['partyColorCode']"></app-validation-message>
       </div>
-      <div class="col-6" *ngIf="action === 'Edit'">
+      <div class="col-lg-6" *ngIf="action === 'Edit'">
         <div style="width: 20px; height: 20px;border-radius: 10px;">
 
         </div>

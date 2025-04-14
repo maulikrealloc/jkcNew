@@ -35,7 +35,6 @@ export class PassbookComponent implements OnInit {
 
   getPassBookData() {
     this.commonService.fetchData('PassBookList', this.passbookList,this.passbookListDataSource);
-    console.log('[{this.passbookList}]', this.passbookList);
   }
 
   getCompanyAccountData() {

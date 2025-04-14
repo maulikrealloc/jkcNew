@@ -159,8 +159,10 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-    <button (click)="submitData()" mat-flat-button color="primary">
-        Generate Chalan
-    </button>
+    <div *ngIf="!isDisplayChalan">
+        <button (click)="submitData()" mat-flat-button color="primary">
+            Generate Chalan
+        </button>
+    </div >
     <button mat-button (click)="close()">Close</button>
 </mat-dialog-actions>

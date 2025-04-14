@@ -1,0 +1,89 @@
+.cardWithShadow {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 24px;
+    border-radius: 8px !important;
+    overflow: hidden;
+
+    .p-24 {
+        padding: 24px;
+    }
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -12px;
+
+    >div[class^="col-"] {
+        padding: 12px;
+    }
+}
+
+.mat-flat-button {
+    min-width: 120px;
+    white-space: nowrap;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 1199.98px) {
+
+    .col-lg-2,
+    .col-lg-4 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .row {
+        margin: -8px;
+
+        >div[class^="col-"] {
+            padding: 8px;
+        }
+    }
+
+    .col-lg-2,
+    .col-lg-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .mat-flat-button {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    .cardWithShadow {
+        .p-24 {
+            padding: 16px;
+        }
+    }
+
+    mat-table {
+
+        .mat-header-cell,
+        .mat-cell {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+
+        .mat-header-cell {
+            font-size: 14px;
+        }
+    }
+}
+
+@media (max-width: 575.98px) {
+    mat-table {
+        min-width: 600px;
+    }
+
+    .mat-paginator {
+        overflow-x: auto;
+    }
+}

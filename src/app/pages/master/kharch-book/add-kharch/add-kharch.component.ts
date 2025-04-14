@@ -2,10 +2,11 @@ import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/cor
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { AddKharchDialogComponent } from './add-kharch-dialog/add-kharch-dialog.component';
 import { Timestamp } from 'firebase/firestore';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CommonService } from 'src/app/services/common.service';
+import { ExpensesmasterDialogComponent } from '../../account/expenses/expensesmaster-dialog/expensesmaster-dialog.component';
+import { ExpensesDialogComponent } from '../../account/expenses/expenses-dialog/expenses-dialog.component';
 
 @Component({
   selector: 'app-add-kharch',
@@ -15,15 +16,16 @@ import { CommonService } from 'src/app/services/common.service';
 
 export class AddKharchComponent implements OnInit {
 
+  expensesDataColumns: string[] = ['#', 'expensesType', 'date', 'description', 'chalanNo', 'amount', 'paidBy', 'status', 'action'];
+  expensesList: any = [];
+  expensesmasterList: any = [];
+  expenses: any = []
   dateKharchListForm: FormGroup;
-  kharchDataColumns: string[] = ['srNo','unitname','kharchname','dec','date','chalanno','amount','action' ];
-  KharchList: any = [];
-  kharchReportData: any = [];
-  kharchListDataSource = new MatTableDataSource(this.KharchList);
+  expensesListDataSource = new MatTableDataSource(this.expensesList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
-  constructor(private fb: FormBuilder, private commonService: CommonService, private dialog: MatDialog) { }
+  constructor(private fb: FormBuilder,private dialog: MatDialog, private commonService: CommonService) { }
 
   ngOnInit(): void {
     const today = new Date();
@@ -34,8 +36,13 @@ export class AddKharchComponent implements OnInit {
       start: [startDate],
       end: [endDate]
     })
-    this.getKharchData();
-    this.kharchListDataSource.paginator = this.paginator;
+    this.getExpensesListData();
+    this.getExpensesmasterListData();
+    this.expensesListDataSource.paginator = this.paginator;
+  }
+
+  applyFilter(filterValue: string): void {
+    this.expensesListDataSource.filter = filterValue.trim().toLowerCase();
   }
 
   convertTimestampToDate(element: any): Date | null {
@@ -44,42 +51,53 @@ export class AddKharchComponent implements OnInit {
     }
     return null;
   }
-  
-  applyFilter(filterValue: string): void {
-    this.kharchListDataSource.filter = filterValue.trim().toLowerCase();
-  }
 
   filterDate() {
-    if (!this.KharchList) return;
+    if (!this.expensesList) return;
     const startDate = this.dateKharchListForm.value.start ? new Date(this.dateKharchListForm.value.start) : null;
     const endDate = this.dateKharchListForm.value.end ? new Date(this.dateKharchListForm.value.end) : null;
     if (startDate && endDate) {
-      this.kharchListDataSource.data = this.KharchList.filter((invoice: any) => {
+      this.expensesListDataSource.data = this.expensesList.filter((invoice: any) => {
         if (!invoice.date) return false;
 
         const invoiceDate = new Date(invoice.date.seconds * 1000);
         return invoiceDate >= startDate && invoiceDate <= endDate;
       });
     } else {
-      this.kharchListDataSource.data = this.KharchList;
+      this.expensesListDataSource.data = this.expensesList;
     }
   }
 
-  getKharchData() {
-    this.commonService.fetchData('KharchList', this.KharchList, this.kharchListDataSource);
+  getExpensesListData() {
+    this.commonService.fetchData('ExpensesList', this.expensesList, this.expensesListDataSource);
   }
 
-  openKhatu(action: string, obj: any) {
+  getExpensesmasterListData() {
+    this.commonService.fetchData('ExpensesmasterList', this.expensesmasterList);
+  }
+
+  openExpenses(action: string, obj: any) {
     obj.action = action;
-    const dialogRef = this.dialog.open(AddKharchDialogComponent, {
+    const dialogRef = this.dialog.open(ExpensesDialogComponent, {
       data: obj,
-    });
+    })
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event) {
-        this.commonService.commonApiCalled(result, obj, 'KharchList').then(() => this.getKharchData()).catch(console.error);
+        this.commonService.commonApiCalled(result, obj, 'ExpensesList').then(() => this.getExpensesListData()).catch(console.error);
       }
     });
   }
 
+  openExpensesMaster(action: string, obj: any) {
+    obj.action = action;
+    const dialogRef = this.dialog.open(ExpensesmasterDialogComponent, {
+      data: obj,
+    })
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'ExpensesmasterList').then(() => this.getExpensesmasterListData()).catch(console.error);
+      }
+    });
+  }
 }

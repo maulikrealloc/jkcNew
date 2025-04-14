@@ -32,19 +32,11 @@
         <div style="align-items: baseline;" class="row">
 
             <div class="col-4">
-                <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Unit</mat-label>
-                    <mat-select #dropdown placeholder="Select unit">
-                        <mat-option [value]="item.name" *ngFor="let item of UnitDataList">{{item.name}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-
-            <div class="col-4 ">
-                <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Kharch</mat-label>
-                    <mat-select #dropdown placeholder="Select kharch">
-                        <mat-option [value]="item.name"  *ngFor="let item of KharchDataList">{{item.name}}</mat-option>
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Paid By</mat-label>
+                    <mat-select #dropdown placeholder="Select paid by" (selectionChange)="paidbyChange($event)"  [value]="'All'">
+                        <mat-option value="All">All</mat-option>
+                        <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -63,21 +55,21 @@
                     <td mat-cell *matCellDef="let element let i = index">{{ i + 1 }}</td>
                 </ng-container>
 
-                <ng-container matColumnDef="unitname">
+                <ng-container matColumnDef="expensesType">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                        Unit Name
+                    Expenses Type
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.unit }}
+                        {{ element.expensesType }}
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="kharchname">
+                <ng-container matColumnDef="paidBy">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                        Kharch Name
+                        Paid By
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.kharch }}
+                        {{ element.paidBy }}
                     </td>
                 </ng-container>
 
@@ -86,7 +78,7 @@
                         Description
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.dec }}
+                        {{ element.description }}
                     </td>
                 </ng-container>
 

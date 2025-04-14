@@ -37,7 +37,6 @@ import { AbsentDialogComponent } from './attendance/absent-dialog/absent-dialog.
 import { KharchBookComponent } from './kharch-book/kharch-book.component';
 import { KhataMasterComponent } from './khata-master/khata-master.component';
 import { AddKharchComponent } from './kharch-book/add-kharch/add-kharch.component';
-import { AddKharchDialogComponent } from './kharch-book/add-kharch/add-kharch-dialog/add-kharch-dialog.component';
 import { KharchReportComponent } from './kharch-book/kharch-report/kharch-report.component';
 import { KhataMasterDialogComponent } from './khata-master/khata-master-dialog/khata-master-dialog.component';
 import { RowMaterialComponent } from './row-material/row-material.component';
@@ -68,6 +67,7 @@ import { EditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.compon
 import { EditchalanComponent } from './chalan/editchalan/editchalan.component';
 import { ViewPDFdialogComponent } from './chalan/view-pdfdialog/view-pdfdialog.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { KharchDialogComponent } from './kharch-master/kharch-dialog/kharch-dialog.component';
 
 
 @NgModule({
@@ -105,7 +105,6 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
     KharchBookComponent,
     KhataMasterComponent,
     AddKharchComponent,
-    AddKharchDialogComponent,
     KharchReportComponent,
     KhataMasterDialogComponent,
     RowMaterialComponent,
@@ -132,6 +131,7 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
     EditInvoiceComponent,
     EditchalanComponent,
     ViewPDFdialogComponent,
+    KharchDialogComponent,
   ],
   imports: [
     CommonModule,

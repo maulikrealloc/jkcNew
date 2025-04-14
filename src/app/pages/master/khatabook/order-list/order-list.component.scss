@@ -11,3 +11,69 @@
 .done-button:hover {
     background-color: #45a049;
 }
+
+.cardWithShadow {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 24px;
+
+    .p-24 {
+        padding: 24px;
+    }
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -12px; 
+
+    [class^="col-"] {
+        padding: 12px;
+        box-sizing: border-box;
+    }
+
+    .col-3 {
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+
+    .w-100 {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 992px) {
+    .row {
+        .col-3 {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .cardWithShadow {
+        .p-24 {
+            padding: 16px;
+        }
+    }
+
+    .row {
+        margin: -8px;
+
+        [class^="col-"] {
+            padding: 8px;
+        }
+
+        .col-3 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    }
+
+    button[mat-flat-button] {
+        width: 100%;
+    }
+}

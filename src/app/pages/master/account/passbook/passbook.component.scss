@@ -1,0 +1,52 @@
+  .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -12px; 
+        align-items: baseline;
+
+        [class^="col-"] {
+            padding: 0 12px;
+            box-sizing: border-box;
+        }
+
+        .col-4 {
+            flex: 0 0 33.333333%;
+            max-width: 33.333333%;
+        }
+
+    }
+
+    @media (max-width: 959px) {
+        .p-24 {
+            padding: 16px;
+        }
+
+        .row {
+            [class^="col-"] {
+                padding: 0 8px;
+            }
+
+            .col-4 {
+                flex: 0 0 50%;
+                max-width: 50%;
+                margin-bottom: 16px;
+            }
+        }
+    }
+
+    @media (max-width: 599px) {
+        .p-24 {
+            padding: 12px;
+        }
+
+        .row {
+            [class^="col-"] {
+                padding: 0 6px;
+            }
+
+            .col-4 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+    }

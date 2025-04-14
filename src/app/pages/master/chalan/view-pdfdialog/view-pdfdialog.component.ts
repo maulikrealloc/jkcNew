@@ -25,8 +25,6 @@ export class ViewPDFdialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.pdfSrc = this.data.payload.url;
-    console.log("{this.data.payload}", this.data.payload);
-    console.log("{this.pdfSrc}", this.pdfSrc);
   }
 
   convertTimestampToDate(timestamp: any): string {
@@ -102,5 +100,4 @@ export class ViewPDFdialogComponent implements OnInit {
     this.firebaseCollectionService.updateDocument('CompanyList', this.data.payload.updateProductsData.id, this.data.payload.updateProductsData, 'OrderList');
     this.firebaseCollectionService.addDocument('CompanyList', payload, 'ChalanList');
   }
-
 }

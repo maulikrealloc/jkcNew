@@ -3,7 +3,7 @@
   <form [formGroup]="orderForm">
     <div class="row">
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Party List</mat-label>
           <mat-select #dropdown formControlName="party" placeholder="Select party">
@@ -13,7 +13,7 @@
         <app-validation-message class="position-relative" [control]="orderForm.controls['party']"></app-validation-message>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Design No</mat-label>
           <mat-select #dropdown formControlName="designNo" placeholder="Select design no">
@@ -22,7 +22,7 @@
         </mat-form-field>
       </div>
 
-      <div class="col-4">
+      <div class="col-lg-4">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>P-Order</mat-label>
           <input type="number" min="0" matInput required formControlName="partyOrder" placeholder="Enter party order">
@@ -30,7 +30,7 @@
         <app-validation-message class="position-relative" [control]="orderForm.controls['partyOrder']"></app-validation-message>
       </div>
 
-      <div class="col-4">
+      <div class="col-lg-4">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Select Order Date</mat-label>
           <input matInput [matDatepicker]="orderDate" formControlName="orderDate" placeholder="Order date">
@@ -40,7 +40,7 @@
         <app-validation-message class="position-relative" [control]="orderForm.controls['orderDate']"></app-validation-message>
       </div>
 
-      <div class="col-4">
+      <div class="col-lg-4">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Select Delivery Date</mat-label>
           <input matInput [matDatepicker]="deliveryDate" formControlName="deliveryDate" placeholder="Delivery date">
@@ -54,7 +54,7 @@
     <div class="row">
       <ng-container formArrayName="products">
         <ng-container *ngFor="let item of getProductsFormArry().controls; let i = index" [formGroupName]="i">
-          <div class="col-4">
+          <div class="col-lg-4">
             <mat-form-field appearance="outline" class="w-100 m-t-10">
               <mat-label>Name</mat-label>
               <input type="text" matInput required formControlName="productName" placeholder="Enter name">
@@ -62,7 +62,7 @@
             <!-- <app-validation-message class="position-relative" [control]="item.controls['productName']"></app-validation-message> -->
           </div>
 
-          <div class="col-4">
+          <div class="col-lg-4">
             <mat-form-field appearance="outline" class="w-100 m-t-10">
               <mat-label>Quantity</mat-label>
               <input type="number" matInput required formControlName="productQuantity" onKeyPress="if(this.value.length==5) return false;" placeholder="Enter quantity"
@@ -71,7 +71,7 @@
             <!-- <app-validation-message class="position-relative" [control]="item.controls['productQuantity']"></app-validation-message> -->
           </div>
 
-          <div class="col-3">
+          <div class="col-lg-3">
             <mat-form-field appearance="outline" class="w-100 m-t-10">
               <mat-label>Price</mat-label>
               <input type="number" matInput required formControlName="productPrice" onKeyPress="if(this.value.length==7) return false;" placeholder="Enter price" min="0">
@@ -79,7 +79,7 @@
             <!-- <app-validation-message class="position-relative" [control]="item.controls['productPrice']"></app-validation-message> -->
           </div>
 
-          <div class="col-1">
+          <div class="col-lg-1">
             <a *ngIf="i === 0 && getProductsFormArry().length < 11" class="action-btn" (click)="addProduct()"><i-tabler name="plus"
                 class="icon-18"></i-tabler></a>
             <a *ngIf="i !== 0" (click)="removeProduct(i)" class="action-btn"><i-tabler name="trash" class="icon-18"></i-tabler></a>

@@ -3,23 +3,6 @@
   <form [formGroup]="expensesForm">
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Expenses Type</mat-label>
-      <mat-select #dropdown formControlName="expensesType" placeholder="Enter expenses">
-        <mat-option *ngFor="let item of expensesmasterList" [value]="item.type">{{item.type}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <app-validation-message class="position-relative" [control]="expensesForm.controls['expensesType']"></app-validation-message>
-
-    <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Paid By</mat-label>
-      <mat-select #dropdown formControlName="paidBy" placeholder="Enter paid by">
-        <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName
-          }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <app-validation-message class="position-relative" [control]="expensesForm.controls['paidBy']"></app-validation-message>
-
-    <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Date</mat-label>
       <input matInput [matDatepicker]="Date" formControlName="date" placeholder="Select date">
       <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
@@ -27,31 +10,45 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
+      <mat-label>Expenses Type</mat-label>
+      <mat-select #dropdown formControlName="expensesType" placeholder="Select expenses">
+        <mat-option *ngFor="let item of expensesmasterList" [value]="item.type">{{item.type}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <app-validation-message class="position-relative" [control]="expensesForm.controls['expensesType']"></app-validation-message>
+
+    <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Description</mat-label>
       <input type="text" matInput placeholder="Enter description" formControlName="description">
     </mat-form-field>
-    <app-validation-message class="position-relative" [control]="expensesForm.controls['description']"></app-validation-message>
-
+    <app-validation-message class="position-relative"
+      [control]="expensesForm.controls['description']"></app-validation-message>
+    
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Chalan No</mat-label>
       <input type="number" matInput placeholder="Enter chalan no" formControlName="chalanNo" min="0">
     </mat-form-field>
-    <app-validation-message class="position-relative" [control]="expensesForm.controls['chalanNo']"></app-validation-message>
-
+    
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Amount</mat-label>
       <input type="number" matInput placeholder="Enter amount" formControlName="amount" min="0">
     </mat-form-field>
     <app-validation-message class="position-relative" [control]="expensesForm.controls['amount']"></app-validation-message>
+      
+        <mat-label class="mat-subtitle-2 m-b-8 d-block">Status</mat-label>
+        <mat-radio-group formControlName="status" aria-label="Select an option">
+          <mat-radio-button value="pending">Pending</mat-radio-button>
+          <mat-radio-button value="paid">Paid</mat-radio-button>
+        </mat-radio-group>
+    <app-validation-message class="position-relative" [control]="expensesForm.controls['status']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Status</mat-label>
-      <mat-select #dropdown formControlName="status" placeholder="Enter status">
-        <mat-option value="pending">Pending</mat-option>
-        <mat-option value="paid">Paid</mat-option>
+      <mat-label>Paid By</mat-label>
+      <mat-select #dropdown formControlName="paidBy" placeholder="Enter paid by">
+        <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName}}</mat-option>
       </mat-select>
     </mat-form-field>
-    <app-validation-message class="position-relative" [control]="expensesForm.controls['status']"></app-validation-message>
+    <app-validation-message class="position-relative" [control]="expensesForm.controls['paidBy']"></app-validation-message>
   </form>
 </mat-dialog-content>
 <mat-divider></mat-divider>

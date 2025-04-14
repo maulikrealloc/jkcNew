@@ -13,12 +13,11 @@ import { CommonService } from 'src/app/services/common.service';
 export class KharchReportComponent implements OnInit {
 
   dateKharchReportListForm: FormGroup;
-  UnitDataList: any = [];
-  KharchDataList: any = [];
-  KharchList: any = [];
-  kharchReportDataColumns: string[] = [ 'srNo', 'unitname', 'kharchname', 'dec', 'date', 'chalanno', 'amount' ];
+  expensesList: any = [];
+  companyAccountList: any = [];
+  kharchReportDataColumns: string[] = ['srNo', 'expensesType', 'paidBy', 'dec', 'date', 'chalanno', 'amount' ];
   totalAmount: number = 0;
-  kharchListDataSource = new MatTableDataSource(this.KharchList);
+  kharchListDataSource = new MatTableDataSource(this.expensesList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
@@ -26,9 +25,8 @@ export class KharchReportComponent implements OnInit {
 
   ngOnInit(): void {
     this.kharchReportForm()
-    this.getKharchData();
-    this.getunitList()
-    this.getkharchList()
+    this.getExpensesListData();
+    this.getCompanyAccountData()
     this.kharchListDataSource.paginator = this.paginator;
   }
 
@@ -40,18 +38,34 @@ export class KharchReportComponent implements OnInit {
       start: [startDate],
       end: [endDate]
     })
-   }
+  }
+  
+  paidbyChange(event: any) {
+    if (event.value === 'All') {
+      this.kharchListDataSource = new MatTableDataSource(this.expensesList);
+    } else {
+      const paidbylist = this.expensesList.filter((paidbyObj: any) => paidbyObj.paidBy === event.value);
+      this.kharchListDataSource = new MatTableDataSource(paidbylist);
+    }
+
+    this.calculateTotalAmount();
+    this.kharchListDataSource.paginator = this.paginator;
+  }
+
+  getCompanyAccountData() {
+    this.commonService.fetchData('CompanyAccountList', this.companyAccountList);
+  }
   
   applyFilter(filterValue: string): void {
     this.kharchListDataSource.filter = filterValue.trim().toLowerCase();
   }
 
   filterDate() {
-    if (!this.KharchList) return;
+    if (!this.expensesList) return;
     const startDate = this.dateKharchReportListForm.value.start ? new Date(this.dateKharchReportListForm.value.start) : null;
     const endDate = this.dateKharchReportListForm.value.end ? new Date(this.dateKharchReportListForm.value.end) : null;
     if (startDate && endDate) {
-      this.kharchListDataSource.data = this.KharchList.filter((invoice: any) => {
+      this.kharchListDataSource.data = this.expensesList.filter((invoice: any) => {
         if (!invoice.date) return false;
 
         const invoiceDate = new Date(invoice.date.seconds * 1000);
@@ -59,7 +73,7 @@ export class KharchReportComponent implements OnInit {
         
       });
     } else {
-      this.kharchListDataSource.data = this.KharchList;
+      this.kharchListDataSource.data = this.expensesList;
     }
     this.calculateTotalAmount()
   }
@@ -75,21 +89,14 @@ export class KharchReportComponent implements OnInit {
     this.totalAmount = this.kharchListDataSource.data.reduce((sum:number, item:any) => sum + (item.amount || 0), 0);
   }
  
-  getKharchData() {
-    this.commonService.fetchData('KharchList', this.KharchList, this.kharchListDataSource).then(() => {
-      this.kharchListDataSource.data = [...this.KharchList]; 
-      this.calculateTotalAmount(); 
+  getExpensesListData() {
+    this.commonService.fetchData('ExpensesList', this.expensesList).then(() => {
+      this.kharchListDataSource.data = [...this.expensesList];
+      this.calculateTotalAmount();
     });
   }
 
-  getunitList() {
-    this.commonService.fetchData('UnitList', this.UnitDataList);
-    console.log('[{{this.UnitDataList}}]', this.UnitDataList);
-  }
 
-  getkharchList() {
-    this.commonService.fetchData('kharchList', this.KharchDataList);
-    console.log('[{{this.KharchDataList}}]', this.KharchDataList);
-  }
+  
 
 }

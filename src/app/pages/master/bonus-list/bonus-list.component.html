@@ -2,7 +2,7 @@
   <mat-card-content class="p-24">
     <div class="row justify-content-between">
 
-      <div class="col-lg-4">
+      <div class="col-lg-4 m-t-10">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <mat-label>Bonus</mat-label>
           <input matInput placeholder="Search bonus" (keyup)="applyFilter($any($event.target).value)">
@@ -12,7 +12,7 @@
         </mat-form-field>
       </div>
 
-      <div class="col-4">
+      <div class="col-lg-4 m-t-10">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Select a Bonus Date</mat-label>
           <mat-date-range-input [rangePicker]="picker" [formGroup]="dateBonusForm">

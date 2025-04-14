@@ -78,18 +78,43 @@ export class OrderListDialogComponent implements OnInit {
     }
   }
 
+  // updateProductsFormArray(products: any[]) {
+  //   const productsArray = this.orderForm.get('productsOrder') as FormArray;
+  //   productsArray.clear();
+  //   products.forEach(product => {
+  //     productsArray.push(
+  //       this.fb.group({
+  //         productName: [product.productName, Validators.required],
+  //         productQuantity: [product.productQuantity, Validators.required],
+  //         productPrice: [product.productPrice, Validators.required],
+  //         khataPrice: [Validators.required],
+  //       })
+  //     );
+  //   });
+  // }
+
   updateProductsFormArray(products: any[]) {
     const productsArray = this.orderForm.get('productsOrder') as FormArray;
     productsArray.clear();
+
     products.forEach(product => {
-      productsArray.push(
-        this.fb.group({
-          productName: [product.productName, Validators.required],
-          productQuantity: [product.productQuantity, Validators.required],
-          productPrice: [product.productPrice, Validators.required],
-          khataPrice: [ Validators.required],
-        })
-      );
+      const productGroup = this.fb.group({
+        productName: [product.productName, Validators.required],
+        productQuantity: [product.productQuantity, Validators.required],
+        productkQuantity: [product.productkQuantity || product.productQuantity],
+        productPrice: [product.productPrice, Validators.required],
+        khataPrice: ['', Validators.required],
+      });
+
+      productGroup.get('productkQuantity')?.valueChanges.subscribe(newValue => {
+        if (newValue !== null && newValue !== undefined && newValue !== '') {
+          productGroup.get('productQuantity')?.setValue(newValue, { emitEvent: false });
+        } else {
+          productGroup.get('productQuantity')?.setValue(product.productQuantity, { emitEvent: false });
+        }
+      });
+
+      productsArray.push(productGroup);
     });
   }
 

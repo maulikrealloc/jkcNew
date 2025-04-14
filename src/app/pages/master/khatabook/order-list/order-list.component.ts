@@ -49,7 +49,6 @@ export class OrderListComponent implements OnInit {
       start: [startDate],
       end: [endDate]
     });
-
     this.getKhataOrderData();
     this.getKhataData();
     this.getPartyData();
@@ -73,7 +72,9 @@ export class OrderListComponent implements OnInit {
   }
 
   getKhataOrderData() {
-    this.commonService.fetchData('KhataOrderList', this.khataOrderList, this.orderDataSource);
+    this.commonService.fetchData('KhataOrderList', this.khataOrderList, this.orderDataSource).then(res => {
+      this.filterOrders()
+    });
   }
 
   getPartyData() {
@@ -119,24 +120,19 @@ export class OrderListComponent implements OnInit {
   }
 
   filterOrders() {
-    if (this!.isChecked) {
-      this.orderDataSource.data = this.khataOrderList.filter(
-        (order: any) => order.status === 'Done'
-        );
+    if (this.isChecked) {
+      this.orderDataSource.data = this.khataOrderList.filter((order: any) => order.status === 'Done');
     } else {
-      this.orderDataSource.data = this.khataOrderList.filter(
-        (order: any) => order.status === 'Pending'
-        );
+      this.orderDataSource.data = this.khataOrderList.filter((order: any) => order.status === 'Pending');
     }
   }
 
   markAsDone(element: any) {
     const updateData = { status: 'Done' };
-
     this.firebaseCollectionService.updateDocument('CompanyList', element.id, updateData, 'KhataOrderList')
-      .then(() => {
-        element.status = 'Done';
-        this.filterOrders();
+    .then(() => {
+      element.status = 'Done';
+      this.filterOrders();
       })
       .catch(error => {
         console.error('Update failed:', error);

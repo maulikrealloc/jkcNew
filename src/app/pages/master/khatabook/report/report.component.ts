@@ -36,11 +36,12 @@ export class ReportComponent implements OnInit {
       start: [startDate],
       end: [endDate]
     })
-    this.getKhataReportData();
     this.getKhataOrderData();
+    this.getKhataReportData();
     this.getPartyData();
     this.getKhataData();
     this.getOrderData();
+    
     this.khataReportDataSource.paginator = this.paginator;  
   }
 
@@ -59,7 +60,16 @@ export class ReportComponent implements OnInit {
       this.khataReportDataSource.data = this.khataOrderList;
     }
   }
-
+ 
+  processData(data: any[]) {
+    return data.map(element => {
+      element.pTotal = element.productsOrder[0].productPrice * element.productsOrder[0].productkQuantity;
+      element.kTotal = element.productsOrder[0].khataPrice * element.productsOrder[0].productQuantity;
+      element.profit = element.pTotal - element.kTotal;
+      return element;
+    });
+  }
+  
   convertTimestampToDate(element: any): Date | null {
     if (element instanceof Timestamp) {
       return element.toDate();
@@ -69,11 +79,12 @@ export class ReportComponent implements OnInit {
   
   getKhataReportData() {
     this.commonService.fetchData('KhataReportList', this.khataReportList, this.khataReportDataSource)
+    this.getKhataOrderData()
   }
   
   getKhataOrderData() {
     this.commonService.fetchData('KhataOrderList', this.khataOrderList).then((data:any) => {
-      this.khataReportDataSource.data = [...this.khataOrderList]; 
+      this.khataReportDataSource.data = this.processData([...this.khataOrderList]); 
     });
   }
   

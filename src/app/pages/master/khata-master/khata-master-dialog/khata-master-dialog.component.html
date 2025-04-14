@@ -3,7 +3,7 @@
   <form [formGroup]="khataForm">
     <div class="row">
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>FIrst Name</mat-label>
           <input type="text" matInput formControlName="firstName" placeholder="Enter first name">
@@ -11,7 +11,7 @@
         <app-validation-message class="position-relative" [control]="khataForm.controls['firstName']"></app-validation-message>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Last Name</mat-label>
           <input type="text" matInput formControlName="lastName" placeholder="Enter last name">
@@ -19,7 +19,7 @@
         <app-validation-message class="position-relative" [control]="khataForm.controls['lastName']"></app-validation-message>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Company Name</mat-label>
           <input type="text" matInput formControlName="companyName" placeholder="Enter company name">
@@ -27,7 +27,7 @@
         <app-validation-message class="position-relative" [control]="khataForm.controls['companyName']"></app-validation-message>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Owner Name</mat-label>
           <input type="text" matInput formControlName="ownerName" placeholder="Enter owner name">
@@ -35,7 +35,7 @@
         <app-validation-message class="position-relative" [control]="khataForm.controls['ownerName']"></app-validation-message>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Address</mat-label>
           <input type="text" matInput formControlName="address" placeholder="Enter address">
@@ -43,7 +43,7 @@
         <app-validation-message class="position-relative" [control]="khataForm.controls['address']"></app-validation-message>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Mobile No</mat-label>
           <input type="number" matInput onKeyPress="if(this.value.length==10) return false;" formControlName="mobileNo"
@@ -52,14 +52,14 @@
           <app-validation-message class="position-relative" [control]="khataForm.controls['mobileNo']"></app-validation-message>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>PAN</mat-label>
           <input type="text" matInput formControlName="pan" placeholder="Enter PAN">
         </mat-form-field>
       </div>
 
-      <div class="col-6">
+      <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>GST</mat-label>
           <input type="text" matInput formControlName="gst" placeholder="Enter GST">

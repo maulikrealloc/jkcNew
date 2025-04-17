@@ -38,8 +38,10 @@ export class InvoiceComponent implements OnInit {
   orderList: any = [];
   partyDetails: any;
   firmDetails: any;
-  orderDetails: any;
+  orderDetails: any =[];
   selectedChalanList: any = [];
+  filteredChalan: any = []
+  
   invoiceListDataSource = new MatTableDataSource(this.selectedChalanList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
@@ -113,17 +115,50 @@ export class InvoiceComponent implements OnInit {
   }
 
   partyChange(event: any) {
-    this.chalanList = this.chalanData.filter((id: any) => id.partyId === event.value)
+    if (event.value) {
+      this.chalanList = this.chalanData.filter((id: any) => id.partyId === event.value);
+      this.filteredChalan = this.chalanList;
+    }
+    if (this.chalanList.length > 0) {
+        this.filteredChalanList();
+      } 
   }
 
+  filteredChalanList() {
+    const usedChalanNos = this.InvoiceList.flatMap((inv: any) => inv.products.map((p: any) => p.productChalanNo));
+    this.filteredChalan = this.chalanList.filter((c: any) => !usedChalanNos.includes(c.chalanNo));
+  }
+
+
   chalanChange(event: any) {
-    const selectedChalanPartyOrderId = this.chalanList.find((id: any) => id.id === event.value).partyOrderId
-    this.selectedChalanList = this.orderList.find((id: any) => id.id === selectedChalanPartyOrderId)
-    this.invoiceListDataSource = new MatTableDataSource(this.selectedChalanList);
+    const selectedChalanIds = event.value;
+    const selectedChalanList: any = this.chalanList.filter((chalan: any) => selectedChalanIds.includes(chalan.id));
+    const partyOrderIds = [...new Set(selectedChalanList.map((chalan: any) => chalan.partyOrderId))];
+ 
+    let listOfProducts: any = [];
+    selectedChalanList.forEach((chalanObj:any,index: number) => {
+      const orderDataIndex = this.orderList.findIndex((orderObj: any) => orderObj.id === chalanObj.partyOrderId);
+      const chalanId = chalanObj.id;  
+      const orderID = chalanObj.partyOrderId;  
+
+      const updatedArray = this.orderList[orderDataIndex].products?.map((productObj: any) => ({
+        ...productObj,
+        chalanId,
+        orderID
+      }));
+      this.orderList[orderDataIndex].products = updatedArray;
+      if (selectedChalanList.length === index + 1) {
+        listOfProducts = this.orderList.filter((order: any) => partyOrderIds.includes(order.id));
+        listOfProducts = listOfProducts.flatMap((order: any) => order.products);
+        this.selectedChalanList = listOfProducts;
+        this.invoiceListDataSource = new MatTableDataSource(this.selectedChalanList);
+        this.invoiceListDataSource.paginator = this.paginator;
+      }
+    });
   }
 
   invoiceSubmitData() {
-    const grossTotal = this.selectedChalanList.products
+    const grossTotal = this.selectedChalanList
       .reduce((total:any, product:any) => total + (product.productQuantity * product.productPrice), 0);
 
     const discountRatio = Number(this.invoiceForm.value.discountRatio) || 0;
@@ -157,9 +192,10 @@ export class InvoiceComponent implements OnInit {
       cgstAmount: Number(cgstAmount.toFixed(2)),
       sgstAmount: Number(sgstAmount.toFixed(2)),
       igstAmount: Number(igstAmount.toFixed(2)),
-      discountAmount: Number(discountAmount.toFixed(2))
+      discountAmount: Number(discountAmount.toFixed(2)),
+       products: [...this.selectedChalanList]
     };
-
+   
     this.updateChalanIsCreated(payload.chalanId);
     this.firebaseCollectionService.addDocument('CompanyList', payload, 'InvoiceList');
 
@@ -181,10 +217,12 @@ export class InvoiceComponent implements OnInit {
 
     this.selectedChalanList = [];
     this.invoiceListDataSource = new MatTableDataSource(this.selectedChalanList);
+    this.invoiceListDataSource.paginator = this.paginator;
   }
+  
 
   invoiceView() {
-    const grossTotal = this.selectedChalanList.products?.map((id: any) => id.productQuantity * id.productPrice).reduce((a: any, b: any) => { return a + b }).toFixed(2);
+    const grossTotal = this.selectedChalanList.map((id: any) => id.productQuantity * id.productPrice).reduce((a: any, b: any) => { return a + b }).toFixed(2);
     const discountAmount: any = Number((grossTotal * this.invoiceForm.value.discountRatio) / 100).toFixed(2);
     const netAmount: any = Number(grossTotal - discountAmount).toFixed(2);
     const cgst = Number((netAmount * Number(this.invoiceForm.value.cgst)) / 100).toFixed(2);
@@ -212,14 +250,27 @@ export class InvoiceComponent implements OnInit {
     this.generatePDF(payload);
   }
 
-  updateChalanIsCreated(chalanId: any) {
-    const findChalanData = this.chalanList.find((id: any) => id.id === chalanId)
-    findChalanData.isCreated = true
-    this.firebaseCollectionService.updateDocument('CompanyList', findChalanData.id, findChalanData, 'ChalanList');
+  // updateChalanIsCreated(chalanId: any) {
+  //   const findChalanData = this.chalanList.find((id: any) => id.id === chalanId)
+  //   findChalanData.isCreated = true
+  //   this.firebaseCollectionService.updateDocument('CompanyList', findChalanData.id, findChalanData, 'ChalanList');
+  // }
+   updateChalanIsCreated(chalanId: any) {
+    const index = this.chalanList.findIndex((id: any) => id.id === chalanId);
+    if (index === -1) return;
+
+    this.chalanList[index].isCreated = true;
+
+    this.firebaseCollectionService.updateDocument('CompanyList', chalanId, this.chalanList[index], 'ChalanList')
+      .then(() => {
+        this.chalanList.splice(index, 1); 
+      });
   }
 
+
   getInvoiceData() {
-    this.commonService.fetchData('InvoiceList', this.InvoiceList);
+    this.commonService.fetchData('InvoiceList', this.InvoiceList).then(res => {
+    });
   }
 
   calculateFinalAmount(baseAmount: number): number {
@@ -383,9 +434,8 @@ export class InvoiceComponent implements OnInit {
       doc.setLineWidth(0.3);
       doc.line((box2XPosition - 25) + textWidth + 2, lineYPosition, (box2XPosition - 25) + box2Width, lineYPosition);
     });
-
     const columns = ["Sr.No", "Particulars", "Ch No.", "Pcs/Mtr.", "Rate", "Amount"];
-    const data: any = this.orderDetails.products;
+    const data: any = this.selectedChalanList;
 
     data.forEach((ele: any) => { ele.total = Number(ele.productQuantity) * Number(ele.productPrice) })
 
@@ -556,7 +606,14 @@ export class InvoiceComponent implements OnInit {
   }
 
   getChalanDetails(chalanId: any) {
-    this.orderDetails = this.orderList.find((id: any) => id.id === this.chalanList.find((id: any) => id.id === chalanId).partyOrderId)
+    // this.orderDetails = this.orderList.find((id: any) => id.id === this.chalanList.find((id: any) => id.id === chalanId))
+    chalanId.forEach((chalanId: any) => {
+      const chalan = this.chalanList.find((c: any) => c.id === chalanId);
+      if (!chalan) return;
+
+      const order = this.orderList.find((o: any) => o.id === chalan.partyOrderId);
+      this.orderDetails.push(order);
+    });
   }
 
   addTextWithFontSize(doc: any, text: any, x: any, y: any, fontSize: any) {
@@ -583,9 +640,10 @@ export class InvoiceComponent implements OnInit {
       data: { ...obj, action },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      const findOrder = this.orderList.find((order: any) => order.id === this.selectedChalanList.id);
+      const findOrder = this.orderList.find((order: any) => order.id === obj.orderID);
       findOrder?.products.forEach((element: any) => {
-        if (element.productName === result.data.productName) {
+        if (element.productIndex === obj.productIndex) {
+          element.productName = result.data.productName;
           element.productPrice = result.data.productPrice;
           element.productQuantity = result.data.quantity;
         } 

@@ -99,7 +99,7 @@
             <a class="m-r-10 cursor-pointer" *ngIf="element?.products[0]?.productChalanNo == ''"><i-tabler name="edit" (click)="addDesign('Edit', element)"
                 class="icon-18"></i-tabler></a>
             <a class="m-r-10 cursor-pointer">
-              <i-tabler name="trash" (click)="addDesign('Delete', element)" class="icon-18"></i-tabler>
+              <i-tabler name="trash" *ngIf="element?.products[0]?.productChalanNo == ''" (click)="addDesign('Delete', element)" class="icon-18"></i-tabler>
             </a>
             <a [matMenuTriggerFor]="menu">
               <i-tabler name="dots-vertical" class="icon-18"></i-tabler>

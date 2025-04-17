@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { Timestamp } from 'firebase/firestore';
+import { forkJoin } from 'rxjs';
 import { CommonService } from 'src/app/services/common.service';
 
 @Component({
@@ -36,12 +38,13 @@ export class EmployeeReportComponent implements OnInit {
       end: [endDate]
     });
     this.getEmployeeReport();
-    this.getEmployeeData();
-    this.getAttendanceData();
-    this.getBonusData();
-    this.getWithdrawalData();
-    this.getmachineSalaryData();
     this.employeeListDataSource.paginator = this.paginator;
+    setTimeout(() => {
+    }, 2000);
+  }
+
+  applyFilter(filterValue: string): void {
+    this.employeeListDataSource.filter = filterValue.trim().toLowerCase();
   }
 
   filterDate() {
@@ -61,44 +64,64 @@ export class EmployeeReportComponent implements OnInit {
   }
 
   getEmployeeReport() {
-   
-    this.commonService.fetchData('employeeReportList', this.employeeReportList);
-       console.log('[{=employeeReportList=}]',this.employeeReportList);
-  }
-  
-  getEmployeeData() {
-    this.commonService.fetchData('EmployeeList', this.employeesList).then((data: any) => {
-      this.employeeReportList = [...this.employeesList]
+    forkJoin({
+      employeeReport: this.commonService.fetchData('employeeReportList', this.employeeReportList),
+      employees: this.commonService.fetchData('EmployeeList', this.employeesList),
+      attendance: this.commonService.fetchData('AttendanceList', this.attendanceList),
+      bonus: this.commonService.fetchData('BonusList', this.bonusList),
+      withdrawal: this.commonService.fetchData('WithdrawalList', this.withdrawalList),
+      machineSalary: this.commonService.fetchData('MachineSalaryList', this.machineSalaryList)
+    }).subscribe(response => {
+      this.employeeReportList = [];
+
+      this.employeesList 
+      this.attendanceList
+      this.bonusList 
+      this.withdrawalList 
+      this.machineSalaryList 
+
+      this.employeesList.forEach((element: any) => {
+        const salary = element.salary || 0;
+        const days = element.days || 30;
+        const abesent = this.getTotal(this.attendanceList, element.id, 'day');
+        const upad = this.getTotal(this.withdrawalList, element.id, 'amount');
+        const extra = this.getTotal(this.machineSalaryList, element.id, 'amount');
+        const bonus = this.getTotal(this.bonusList, element.id, 'amount');
+
+        const presentDays = days - abesent;
+        const perDay = salary / days;
+        const total = perDay * presentDays;
+        const totalupad = total - upad;
+        const remain = totalupad + extra;
+        const finalAMT = remain + bonus;
+        const obj = {
+          name: element.firstName,
+          salary: salary,
+          day: days,
+          abesent: abesent,
+          upad: upad,
+          extra: extra,
+          remain: remain.toFixed(2),
+          bonus: bonus,
+          finalAMT: finalAMT.toFixed(2),
+        };
+
+        this.employeeReportList.push(obj);
+      });
+      this.employeeListDataSource = new MatTableDataSource(this.employeeReportList);
+      this.employeeListDataSource.paginator = this.paginator;
+
+      console.log("employeeReportList", this.employeeReportList);
+    }, error => {
+      console.error("Error fetching data", error);
     });
-    console.log('{[this.employeesList]}', this.employeesList);
   }
 
-  getAttendanceData() {
-    this.commonService.fetchData('AttendanceList', this.attendanceList).then((data: any) => {
-      this.employeeReportList = [...this.attendanceList]
-    });
-    console.log('{[this.attendanceList]}', this.attendanceList);
-  }
 
-  getBonusData() {
-    this.commonService.fetchData('BonusList', this.bonusList).then((data: any) => {
-      this.employeeReportList = [...this.bonusList]
-    });;
-    console.log('[{this.bonusList}]', this.bonusList);
-  }
-
-  getWithdrawalData() {
-    this.commonService.fetchData('WithdrawalList', this.withdrawalList).then((data: any) => {
-      this.employeeReportList = [...this.withdrawalList]
-    });
-    console.log('[{=withdrawalList=}]', this.withdrawalList);
-  }
-
-  getmachineSalaryData() {
-    this.commonService.fetchData('MachineSalaryList', this.machineSalaryList).then((data: any) => {
-      this.employeeReportList = [...this.machineSalaryList]
-    });;
-    console.log('[{=machineSalaryList=}]', this.machineSalaryList);
+  getTotal(list: any[], empId: any, key: string): number {
+    return list
+      ?.filter(item => item?.employeeList === empId)
+      .reduce((sum, item) => sum + (item?.[key] || 0), 0);
   }
 
 }

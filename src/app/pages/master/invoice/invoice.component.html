@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-3">
-                    <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <!-- <mat-form-field appearance="outline" class="w-100 m-t-10">
                         <mat-label>Chalan no</mat-label>
                         <mat-select #dropdown formControlName="chalanNo" placeholder="Enter chalan no"
                             (selectionChange)="chalanChange($event)">
@@ -39,7 +39,19 @@
                                 <mat-option class="text-center" disabled>No record found</mat-option>
                             </ng-template>
                         </mat-select>
-                    </mat-form-field>
+                    </mat-form-field> -->
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Chalan no</mat-label>
+                            <mat-select multiple formControlName="chalanNo" placeholder="Enter chalan no"
+                                (selectionChange)="chalanChange($event)">
+                                <mat-option *ngFor="let item of filteredChalan" [value]="item.id">
+                                    {{item.chalanNo}}
+                                </mat-option>
+                                <mat-option *ngIf="filteredChalan.length === 0" class="text-center" disabled>
+                                    No record found
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     <app-validation-message class="position-relative" [control]="invoiceForm.controls['chalanNo']"></app-validation-message>
                 </div>
 
@@ -130,8 +142,8 @@
 <mat-card class="cardWithShadow">
     <mat-card-content class="p-24">
         <div class="table-responsive">
-            <table mat-table [dataSource]="selectedChalanList?.products" class="w-100 m-t-10"
-                *ngIf="selectedChalanList?.products?.length > 0; else noData">
+            <table mat-table [dataSource]="selectedChalanList" class="w-100 m-t-10"
+                *ngIf="selectedChalanList.length > 0; else noData">
 
                 <ng-container matColumnDef="srNo">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No</th>
@@ -186,8 +198,7 @@
             <ng-template #noData>
                 <div class="f-s-16 f-w-600 text-center m-t-10">No record found</div>
             </ng-template>
-            <mat-paginator *ngIf="selectedChalanList?.products?.length > 0" [pageSizeOptions]="[5, 10, 20]"
-                showFirstLastButtons></mat-paginator>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>
     </mat-card-content>
 </mat-card>

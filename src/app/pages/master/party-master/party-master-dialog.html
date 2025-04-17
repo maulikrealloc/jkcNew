@@ -57,9 +57,11 @@
           <mat-label>Chalan No Series</mat-label>
           <input type="number" min="0" matInput formControlName="chalanNoSeries" placeholder="Enter chalan no series">
         </mat-form-field>
+        <mat-error class="f-s-12" *ngIf="partyForm.get('chalanNoSeries')?.hasError('seriesExists')">
+          This seriesNo is already exists, Plz enter another series
+        </mat-error>
         <app-validation-message class="position-relative" [control]="partyForm.controls['chalanNoSeries']"></app-validation-message>
       </div>
-<!-- *ngIf="action !== 'Edit'" -->
       <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Select Color</mat-label>

@@ -39,10 +39,6 @@ export class OrderComponent implements OnInit {
     return null;
   }
 
-  ngAfterViewInit() {
-    
-  }
-
   applyFilter(filterValue: string): void {
     this.orderDataSource.filter = filterValue.trim().toLowerCase();
   }

@@ -5,7 +5,7 @@
             <div class="col-lg-4 m-t-10">
                 <mat-form-field appearance="outline" class="w-100 hide-hint">
                     <mat-label>Report</mat-label>
-                    <input matInput placeholder="Search report">
+                    <input matInput placeholder="Search report" (keyup)="applyFilter($any($event.target).value)">
                     <mat-icon matSuffix>
                         <i-tabler name="search" class="icon-20"></i-tabler>
                     </mat-icon>
@@ -59,7 +59,7 @@
                         Days
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.days }}
+                        {{ element.days || 30}}
                     </td>
                 </ng-container>
 
@@ -68,7 +68,7 @@
                         Absent
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.mobileNo }}
+                        {{ element.abesent }}
                     </td>
                 </ng-container>
 
@@ -77,7 +77,7 @@
                         Upad
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.bankName }}
+                        {{ element.upad }}
                     </td>
                 </ng-container>
 
@@ -86,7 +86,7 @@
                         Extra
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.ifscCode }}
+                        {{ element.extra }}
                     </td>
                 </ng-container>
 
@@ -95,7 +95,7 @@
                         Remain
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.bankAccountNo }}
+                        {{ element.remain }}
                     </td>
                 </ng-container>
 
@@ -104,7 +104,7 @@
                         Bonus
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.bankAccountNo }}
+                        {{ element.bonus }}
                     </td>
                 </ng-container>
 
@@ -113,7 +113,7 @@
                         Final AMT
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
-                        {{ element.bankAccountNo }}
+                        {{ element.finalAMT }}
                     </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="employeeMasterColumns"></tr>

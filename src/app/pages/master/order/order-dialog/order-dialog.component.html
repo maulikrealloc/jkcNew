@@ -80,7 +80,7 @@
           </div>
 
           <div class="col-lg-1">
-            <a *ngIf="i === 0 && getProductsFormArry().length < 11" class="action-btn" (click)="addProduct()"><i-tabler name="plus"
+            <a *ngIf="i === 0 && getProductsFormArry().length < 11" class="action-btn" (click)="addProduct(null,i+1)"><i-tabler name="plus"
                 class="icon-18"></i-tabler></a>
             <a *ngIf="i !== 0" (click)="removeProduct(i)" class="action-btn"><i-tabler name="trash" class="icon-18"></i-tabler></a>
           </div>

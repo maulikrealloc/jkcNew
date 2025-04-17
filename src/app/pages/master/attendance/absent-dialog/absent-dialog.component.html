@@ -3,6 +3,13 @@
   <form [formGroup]="absentForm">
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="Date" formControlName="date" placeholder="Select date">
+      <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
+      <mat-datepicker #Date></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Employee List</mat-label>
       <mat-select #dropdown formControlName="employeeList" placeholder="Enter employee">
         <mat-option [value]="item.id" *ngFor="let item of employeesList">{{item.firstName}}</mat-option>
@@ -18,12 +25,6 @@
     <app-validation-message class="position-relative"
     [control]="absentForm.controls['day']"></app-validation-message>
 
-    <mat-form-field appearance="outline" class="w-100 m-t-10">
-      <mat-label>Date</mat-label>
-      <input matInput [matDatepicker]="Date" formControlName="date" placeholder="Select date">
-      <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
-      <mat-datepicker #Date></mat-datepicker>
-    </mat-form-field>
   </form>
 </mat-dialog-content>
 <mat-divider></mat-divider>

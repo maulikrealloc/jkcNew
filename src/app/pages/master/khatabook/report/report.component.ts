@@ -63,7 +63,7 @@ export class ReportComponent implements OnInit {
  
   processData(data: any[]) {
     return data.map(element => {
-      element.pTotal = element.productsOrder[0].productPrice * element.productsOrder[0].productkQuantity;
+      element.pTotal = element.productsOrder[0].productPrice * element.productsOrder[0].productQuantity;
       element.kTotal = element.productsOrder[0].khataPrice * element.productsOrder[0].productQuantity;
       element.profit = element.pTotal - element.kTotal;
       return element;

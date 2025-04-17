@@ -29,7 +29,7 @@ export class OrderDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.buildForm(this.action === 'Edit' ? this.local_data : undefined);
-    (this.local_data?.products || [null]).forEach((product: any) => this.addProduct(product));
+    (this.local_data?.products || [null]).forEach((product: any) => this.addProduct(product,0));
     this.getPartyData();
   }
 
@@ -56,9 +56,10 @@ export class OrderDialogComponent implements OnInit {
     return this.orderForm.get('products') as FormArray
   }
 
-  addProduct(product?: any) {
+  addProduct(product?: any, index?: number) {
     this.getProductsFormArry().push(
       this.fb.group({
+        productIndex:index,
         productName: [product?.productName || '', [Validators.required]],
         productPrice: [product?.productPrice || '', Validators.required],
         productQuantity: [product?.productQuantity || '', Validators.required],

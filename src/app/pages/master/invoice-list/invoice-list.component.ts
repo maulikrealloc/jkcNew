@@ -36,11 +36,10 @@ export class InvoiceListComponent implements OnInit {
   orderList: any = [];
   chalanData: any = [];
   paymentReceiveData: any = [];
-  invoiceListdataSource: any;
   firmDetails: any;
   orderDetails: any;
   partyDetails: any;
-  selectedChalanList: any;
+  selectedChalanList: any =[];
   invoiceListDataSource = new MatTableDataSource(this.invoiceList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatSort) sort!: MatSort;
@@ -178,8 +177,18 @@ export class InvoiceListComponent implements OnInit {
   }
 
   generatePDF(value: any) {
-    const selectedChalanPartyOrderId = this.chalanData.find((id: any) => id.id === value.chalanId).partyOrderId
-    this.selectedChalanList = this.orderList.find((id: any) => id.id === selectedChalanPartyOrderId);
+    this.selectedChalanList = [];
+    if (value?.chalanId && Array.isArray(value.chalanId)) {
+      value.chalanId.forEach((chalanId:any) => {
+        const matchedChalan = this.chalanData?.find((chalan: any) => chalan.id === chalanId);
+        if (matchedChalan?.partyOrderId) {
+          const matchedOrder = this.orderList?.find((order: any) => order.id === matchedChalan.partyOrderId);
+          if (matchedOrder?.products && Array.isArray(matchedOrder.products)) {
+            this.selectedChalanList = [...(this.selectedChalanList || []), ...matchedOrder.products];
+          }
+        }
+      });
+    }
     this.firmDetails = this.firmList.find((id: any) => id.id === value?.firmId);
     this.partyDetails = this.partyList.find((id: any) => id.id === value?.partyId)
 
@@ -326,7 +335,7 @@ export class InvoiceListComponent implements OnInit {
     });
 
     const columns = ["Sr.No", "Particulars", "Ch No.", "Pcs/Mtr.", "Rate", "Amount"];
-    const data: any = this.selectedChalanList.products;
+    const data: any = this.selectedChalanList;
 
     data.forEach((ele: any) => { ele.total = Number(ele.productQuantity) * Number(ele.productPrice) })
 
@@ -372,7 +381,7 @@ export class InvoiceListComponent implements OnInit {
       doc.line(70 + textWidth + 2, yPosition, 70 + bankBoxWidth1, yPosition);
     });
 
-    const grossTotal = this.selectedChalanList.products.map((id: any) => id.productPrice * id.productQuantity).reduce((a: any, b: any) => { return a + b }).toFixed(2);
+    const grossTotal = this.selectedChalanList.map((id: any) => id.productPrice * id.productQuantity).reduce((a: any, b: any) => { return a + b }).toFixed(2);
     const discountAmount: any = Number((grossTotal * value?.discountRatio) / 100).toFixed(2);
     const netAmount: any = Number(grossTotal - discountAmount).toFixed(2);
     const cgst = Number((netAmount * value?.cgst) / 100).toFixed(2);

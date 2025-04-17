@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, Optional, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -41,7 +41,7 @@ export class PartyMasterComponent implements OnInit {
 
   addParty(action: string, obj: any) {
     const dialogRef = this.dialog.open(partyMasterDialogComponent, {
-      data: { ...obj, action },
+      data: { ...obj, action,existingSeries: this.partyList.map((p :any)=> p.chalanNoSeries) },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -64,6 +64,7 @@ export class partyMasterDialogComponent implements OnInit {
   partyForm: FormGroup;
   action: string;
   local_data: any;
+  existingSeries: string[] = [];
   colorCode: any = [
     {bgColor: '#9370DB',fontColor: '#ffffff'},
     {bgColor: '#00008B',fontColor: '#ffffff'},
@@ -81,6 +82,7 @@ export class partyMasterDialogComponent implements OnInit {
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
+    this.existingSeries = this.local_data.existingSeries || [];
   }
 
   ngOnInit(): void {
@@ -93,13 +95,24 @@ export class partyMasterDialogComponent implements OnInit {
       lastName: [data ? data?.lastName : '', [Validators.pattern(Validators_Pattern.NAME)]],
       partyAddress: [data ? data?.partyAddress : ''],
       partyGSTIN: [data ? data?.partyGSTIN : '', [Validators.pattern(Validators_Pattern.GST_NUMBER)]],
-      chalanNoSeries: [data ? data?.chalanNoSeries : '', [Validators.pattern(Validators_Pattern.NUMBER)]],
+      chalanNoSeries: [data ? data?.chalanNoSeries : '', [Validators.pattern(Validators_Pattern.NUMBER), this.validateSeriesUnique.bind(this)]],
       partyPanNo: [data ? data?.partyPanNo : '', [Validators.pattern(Validators_Pattern.PAN_NUMBER)]],
       partyMobile: [data ? data?.partyMobile : '', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       partyColorCode: ['']
     });
   }
+  
+  validateSeriesUnique(control: AbstractControl): ValidationErrors | null {
+    if (this.action === 'Edit' && control.value === this.local_data.chalanNoSeries) {
+      return null; 
+    }
 
+    if (this.existingSeries.includes(control.value)) {
+      return { seriesExists: true };
+    }
+    return null;
+  }
+  
   doAction(): void {
     const payload = this.partyForm.value
     this.dialogRef.close({ event: this.action, data: payload });

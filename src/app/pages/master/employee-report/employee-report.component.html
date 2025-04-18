@@ -11,17 +11,25 @@
                     </mat-icon>
                 </mat-form-field>
             </div>
+           
 
             <div class="col-lg-4 m-t-10">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Report Date</mat-label>
-                    <mat-date-range-input [rangePicker]="picker" [formGroup]="dateEmployeeForm">
-                        <input matStartDate placeholder="Start date" formControlName="start">
-                        <input matEndDate placeholder="End date" formControlName="end">
-                    </mat-date-range-input>
-                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-date-range-picker #picker (closed)="filterDate()"></mat-date-range-picker>
-                </mat-form-field>
+                <div class="row">
+                    <!-- <div class="col-lg-2 m-t-10">
+                            <a class="file-download" (click)="filedownload()"><i-tabler name="file-download" class="icon-18"></i-tabler></a>
+                    </div> -->
+                    <div class="col-lg-10 m-t-10">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Report Date</mat-label>
+                            <mat-date-range-input [rangePicker]="picker" [formGroup]="dateEmployeeForm">
+                                <input matStartDate placeholder="Start date" formControlName="start">
+                                <input matEndDate placeholder="End date" formControlName="end">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker (closed)="filterDate()"></mat-date-range-picker>
+                        </mat-form-field>
+                    </div>
+                </div>
             </div>
         </div>
     </mat-card-content>

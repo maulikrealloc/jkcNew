@@ -37,7 +37,7 @@ export class OrderListDialogComponent implements OnInit {
 
   formBuild(data: any) {
     this.orderForm = this.fb.group({
-      party: [data ? data?.party : ''],
+      party: [data ? data?.party : '',Validators.required],
       order: [data ? data?.order : ''],
       khata: [data ? data?.khata : ''],
       date: [data ? this.convertTimestampToDate(this.local_data.date) : new Date()],

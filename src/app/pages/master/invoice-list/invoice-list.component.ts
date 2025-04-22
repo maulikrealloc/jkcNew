@@ -520,8 +520,6 @@ export class InvoiceListComponent implements OnInit {
     doc.setFontSize(13);
 
     const filteredData: any[] = this.invoiceListDataSource.data;
-    console.log(this.invoiceListDataSource.data);
-    
 
     if (!filteredData || filteredData.length === 0) {
       window.alert("No chalan data available for the selected filters.");

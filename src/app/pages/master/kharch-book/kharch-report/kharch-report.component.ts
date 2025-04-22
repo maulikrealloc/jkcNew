@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Timestamp } from 'firebase/firestore';
 import jsPDF from 'jspdf';
+import moment from 'moment';
 import { CommonService } from 'src/app/services/common.service';
 @Component({
   selector: 'app-kharch-report',
@@ -50,6 +51,7 @@ export class KharchReportComponent implements OnInit {
     }
 
     this.calculateTotalAmount();
+    this.filterDate();
     this.kharchListDataSource.paginator = this.paginator;
   }
 
@@ -76,7 +78,7 @@ export class KharchReportComponent implements OnInit {
     } else {
       this.kharchListDataSource.data = this.expensesList;
     }
-    this.calculateTotalAmount()
+    this.calculateTotalAmount();
   }
 
   convertTimestampToDate(element: any): Date | null {
@@ -97,73 +99,91 @@ export class KharchReportComponent implements OnInit {
     });
   }
 
-  // filedownload() {
-  //   const doc: any = new jsPDF();
-  //   doc.setFontSize(13);
+  filedownload() {
+    const doc: any = new jsPDF();
+    doc.setFontSize(13);
 
-  //   const startDate = this.dateKharchReportListForm.value.start;
-  //   const endDate = this.dateKharchReportListForm.value.end;
+    const startDate = this.dateKharchReportListForm.value.start;
+    const endDate = this.dateKharchReportListForm.value.end;
 
-  //   const formattedStart = new Date(startDate).toLocaleDateString('en-GB');
-  //   const formattedEnd = new Date(endDate).toLocaleDateString('en-GB');
+    const formattedStart = new Date(startDate).toLocaleDateString('en-GB');
+    const formattedEnd = new Date(endDate).toLocaleDateString('en-GB');
 
-  //   doc.text(`Report Date: ${formattedStart} To ${formattedEnd}`, 14, 15);
+    doc.text(`Report Date: ${formattedStart} To ${formattedEnd}`, 14, 15);
 
-  //   const totalAmount = this.employeeReportList.reduce((sum: number, item: any) => sum + parseFloat(item.finalAMT), 0);
-  //   doc.text(`Total Amount: - ${totalAmount.toFixed(2)}`, 145, 15);
+    const filteredData = this.kharchListDataSource.data;
 
-  //   const headers = [
-  //     "Name",
-  //     "Salary",
-  //     "Day",
-  //     "Absent",
-  //     "Updated",
-  //     "Extra",
-  //     "Remain",
-  //     "Bonus",
-  //     "Final AMT",
-  //     "Signature"
-  //   ];
+    const totalAmount = filteredData.reduce((sum: number, item: any) => sum + parseFloat(item.amount || 0), 0);
+    doc.text(`Total Amount: - ${totalAmount.toFixed(2)}`, 145, 15);
 
-  //   const data = this.employeeReportList.map((item: any) => [
-  //     item.name,
-  //     item.salary.toString(),
-  //     item.day.toString(),
-  //     item.abesent.toString(),
-  //     item.upad.toString(),
-  //     item.extra.toString(),
-  //     item.remain.toString(),
-  //     item.bonus.toString(),
-  //     item.finalAMT.toString(),
-  //     ""
-  //   ]);
+    const headers = [
+      "Sr No",
+      "Date",
+      "Chalanno",
+      "ExpensesType",
+      "PaidBy",
+      "Dec",
+      "Amount",
+      "Status"
+    ];
 
-  //   doc.setFontSize(10);
+    const data = filteredData.map((item: any, i: number) => {
+      const dateStr = item.date?.seconds
+        ? moment(item.date.seconds * 1000).format('DD/MM/YYYY')
+        : '';
+      return [
+        i + 1,
+        dateStr,
+        item.chalanNo,
+        item.expensesType,
+        item.paidBy,
+        item.description,
+        item.amount,
+        item.status
+      ];
+    });
 
-  //   (doc as any).autoTable({
-  //     head: [headers],
-  //     body: data,
-  //     startY: 25,
-  //     theme: 'grid',
-  //     headStyles: {
-  //       fillColor: [255, 187, 0],
-  //       textColor: [8, 8, 8],
-  //       fontStyle: 'bold'
-  //     },
-  //     styles: {
-  //       textColor: [8, 8, 8],
-  //       fontSize: 9,
-  //       valign: 'middle',
-  //       halign: 'center'
-  //     },
-  //     columnStyles: {
-  //       0: { halign: 'left' },
-  //       9: { halign: 'left' }
-  //     }
-  //   });
+    const MIN_ROWS = 32;
+    if (data.length < MIN_ROWS) {
+      for (let idx = data.length; idx < MIN_ROWS; idx++) {
+        data.push([
+          idx + 1,
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          ''
+        ]);
+      }
+    }
 
-  //   doc.save(`Salary_Report_${formattedStart.replace(/\//g, '-')}_to_${formattedEnd.replace(/\//g, '-')}.pdf`);
-  // }
-  filedownload(){}
+    doc.setFontSize(10);
+
+    (doc as any).autoTable({
+      head: [headers],
+      body: data,
+      startY: 25,
+      theme: 'grid',
+      headStyles: {
+        fillColor: [255, 187, 0],
+        textColor: [8, 8, 8],
+        fontStyle: 'bold'
+      },
+      styles: {
+        textColor: [8, 8, 8],
+        fontSize: 9,
+        valign: 'middle',
+        halign: 'center'
+      },
+      columnStyles: {
+        0: { halign: 'left' }
+      }
+    });
+
+    doc.save(`Kharch_Report_${formattedStart.replace(/\//g, '-')}_to_${formattedEnd.replace(/\//g, '-')}.pdf`);
+  }
+
 
 }

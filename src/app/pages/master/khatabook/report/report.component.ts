@@ -112,10 +112,12 @@ export class ReportComponent implements OnInit {
     return this.orderList.find((orderObj: any) => orderObj.id === order)?.partyOrder
   }
 
-  partyChange(event: any) {
-    const party = this.khataOrderList.filter((partyobj: any) => partyobj.khata === event.value)
-    this.khataReportDataSource = new MatTableDataSource(party);
-    this.khataReportDataSource.paginator = this.paginator;  
-  }
+    KhataChange(event: any) {
+      const khata = this.khataOrderList.filter((khataobj: any) => khataobj.khata === event.value)
+      this.khataReportDataSource = new MatTableDataSource(khata);
+      this.khataReportDataSource.paginator = this.paginator;  
+      this.filterDate();
+    }
 
+  filedownload(){}
 }

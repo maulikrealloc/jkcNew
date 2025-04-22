@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Timestamp } from 'firebase/firestore';
+import { forkJoin } from 'rxjs';
 import { CommonService } from 'src/app/services/common.service';
 
 @Component({
@@ -12,7 +13,7 @@ import { CommonService } from 'src/app/services/common.service';
   
 export class PassbookComponent implements OnInit {
 
-  passbookDataColumns: string[] = ['#','passbook','name','date','debit','credit','balance' ];
+  passbookDataColumns: string[] = ['passbook','name','date','debit','credit','balance' ];
   passbookList: any = []
   companyAccountList: any = [];
   incomeList: any = [];
@@ -23,10 +24,7 @@ export class PassbookComponent implements OnInit {
   constructor(private commonService: CommonService) { }
 
   ngOnInit(): void {
-    this.getCompanyAccountData()
     this.getPassBookData()
-    this.getIncomeListData()
-    this.getExpensesmasterListData()
    }
 
   ngAfterViewInit() {
@@ -34,21 +32,34 @@ export class PassbookComponent implements OnInit {
   }
 
   getPassBookData() {
-    this.commonService.fetchData('PassBookList', this.passbookList,this.passbookListDataSource);
-  }
+    forkJoin({ 
+      PassBookList: this.commonService.fetchData('PassBookList', this.passbookList),
+      CompanyAccountList: this.commonService.fetchData('CompanyAccountList', this.companyAccountList),
+      IncomeList: this.commonService.fetchData('IncomeList', this.incomeList),
+      ExpensesmasterList: this.commonService.fetchData('ExpensesmasterList', this.expensesmasterList)
+    }).subscribe(response => { 
+      this.passbookList = []
 
-  getCompanyAccountData() {
-    this.commonService.fetchData('CompanyAccountList',this.companyAccountList).then((data: any) => {
-      this.passbookList = this.companyAccountList
+      this.companyAccountList
+      this.incomeList
+      this.expensesmasterList
+
+      this.companyAccountList.forEach((element:any) => {
+        const accountName = element.accountName;
+        const date = element.date;
+        const openingBalance = element.openingBalance;
+        console.log(this.incomeList);
+        
+        const obj = {
+          name: accountName,
+          date: date,
+          credit: openingBalance,
+        }
+        this.passbookList.push(obj)
+      })
+      this.passbookListDataSource = new MatTableDataSource(this.passbookList);
+      this.passbookListDataSource.paginator = this.paginator;
     })
-  }
-
-  getIncomeListData() {
-    this.commonService.fetchData('IncomeList', this.incomeList);
-  }
-
-  getExpensesmasterListData() {
-    this.commonService.fetchData('ExpensesmasterList', this.expensesmasterList);
   }
 
   convertTimestampToDate(element: any): Date | null {
@@ -57,11 +68,10 @@ export class PassbookComponent implements OnInit {
     }
     return null;
   }
-  
-  paidbyChange(event: any) {
-    const paidbylist = this.passbookList.filter((paidbyObj: any) => paidbyObj.accountName === event.value)
-    this.passbookListDataSource = new MatTableDataSource(paidbylist);
+   
+  partyChange(event: any) {
+    const partylist = this.passbookList.filter((partyObj: any) => partyObj.name === event.value)
+    this.passbookListDataSource = new MatTableDataSource(partylist);
     this.passbookListDataSource.paginator = this.paginator;
   }
-
 }

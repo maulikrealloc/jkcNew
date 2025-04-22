@@ -11,6 +11,7 @@ import moment from 'moment';
 import { ToWords } from 'to-words';
 import { CommonService } from 'src/app/services/common.service';
 import { MatSort } from '@angular/material/sort';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-chalan-list',
@@ -38,19 +39,46 @@ export class ChalanListComponent implements OnInit {
   firmDetails: any;
   selectedOrderData: any;
   netAmount: number = 0;
+  selectedPartyId: any;
+  selectedFirmId: any;
+  dateChalanForm: FormGroup;
   chalanListDataSource = new MatTableDataSource(this.chalanList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private dialog: MatDialog, private commonService: CommonService, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private fb: FormBuilder, private dialog: MatDialog, private commonService: CommonService, private firebaseCollectionService: FirebaseCollectionService) { }
 
   ngOnInit(): void {
+    const today = new Date();
+    const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    this.dateChalanForm = this.fb.group({
+      start: [startDate],
+      end: [endDate]
+    });
     this.getFirmData();
     this.getPartyData();
     this.getChalanData();
     this.getOrderData();
     this.chalanListDataSource.paginator = this.paginator;
+  }
+
+  filterDate() {
+    if (!this.chalanList) return;
+    const startDate = this.dateChalanForm.value.start ? new Date(this.dateChalanForm.value.start) : null;
+    const endDate = this.dateChalanForm.value.end ? new Date(this.dateChalanForm.value.end) : null;
+    if (startDate && endDate) {
+      this.chalanListDataSource.data = this.chalanList.filter((invoice: any) => {
+        if (!invoice.chalanDate) return false;
+
+        const invoiceDate = new Date(invoice.chalanDate.seconds * 1000);
+        return invoiceDate >= startDate && invoiceDate <= endDate;
+      });
+    } else {
+      this.chalanListDataSource.data = this.chalanList;
+    }
   }
 
   applyFilter(filterValue: string): void {
@@ -76,7 +104,7 @@ export class ChalanListComponent implements OnInit {
     this.commonService.fetchData('ChalanList', this.chalanList, this.chalanListDataSource).then((chalan) => {
       if (this.chalanList.length > 0)
         this.chalanSorting();
-        this.filterData();
+      this.filterData(); 
     })    
   }
 
@@ -98,6 +126,7 @@ export class ChalanListComponent implements OnInit {
       ].join(' ').toLowerCase();
       return dataStr.includes(filter.trim().toLowerCase());
     };
+    this.filterDate()
   }
 
   getFirmData() {
@@ -113,16 +142,19 @@ export class ChalanListComponent implements OnInit {
   }
 
   partyChange(event: any) {
-    const partyChange = this.chalanList.filter((chalanObj: any) => chalanObj.partyId === event.value)
+    this.selectedPartyId = event.value;
+    const partyChange = this.chalanList.filter((chalanObj: any) => chalanObj.partyId === event.value);
     this.chalanListDataSource = new MatTableDataSource(partyChange);
     this.chalanSorting();
   }
 
-  firmChange(event: any) { 
-    const partyChange = this.chalanList.filter((chalanObj: any) => chalanObj.firmId === event.value)
-    this.chalanListDataSource = new MatTableDataSource(partyChange);
+  firmChange(event: any) {
+    this.selectedFirmId = event.value;
+    const firmChange = this.chalanList.filter((chalanObj: any) => chalanObj.firmId === event.value);
+    this.chalanListDataSource = new MatTableDataSource(firmChange);
     this.chalanSorting();
   }
+
   
   deleteChalan(action: any, obj: any) {
     obj.action = action;
@@ -150,6 +182,7 @@ export class ChalanListComponent implements OnInit {
     this.getFirmDetails(data.firmId);
     this.selectedOrderData = this.orderList.find((obj: any) => obj.id === data.partyOrderId);
     this.generatePDF(data);
+    this.filedownload()
   }
 
   getPartyDetails(partyId: any) {
@@ -625,4 +658,114 @@ export class ChalanListComponent implements OnInit {
     return { br, bg, bb };
   }
 
+  filedownload() {
+    const doc: any = new jsPDF();
+    doc.setFontSize(13);
+
+    const filteredData: any[] = this.chalanListDataSource.data;
+
+    if (!filteredData || filteredData.length === 0) {
+      window.alert("No chalan data available for the selected filters.");
+      return;
+    }
+
+    const firmName = this.selectedFirmId
+      ? (this.firmList.find((f:any) => f.id === this.selectedFirmId)?.header || '')
+      : 'All Firms';
+    const partyName = this.selectedPartyId
+      ? (this.partyList.find((p:any) => p.id === this.selectedPartyId)?.firstName || '')
+      : 'All Parties';
+
+    const startDate = this.dateChalanForm.value.start;
+    const endDate = this.dateChalanForm.value.end;
+
+    const formattedStart = new Date(startDate).toLocaleDateString('en-GB');
+    const formattedEnd = new Date(endDate).toLocaleDateString('en-GB');
+
+    doc.text(`Report Date: ${formattedStart} To ${formattedEnd}`, 14, 31);
+
+   
+    doc.text(`Firm: ${firmName}`, 14, 15);
+    doc.text(`Party: ${partyName}`, 14, 23);
+    
+    const totalAmount = filteredData
+      .reduce((sum, item) => sum + parseFloat(item.netAmount), 0);
+    doc.text(`Total Amount: ${totalAmount.toFixed(2)}`, 145, 15);
+
+   
+    const headers = [
+      "Sr. No",
+      "Chalan Date",
+      "Chalan No",
+      "Party Order",
+      "Party Name",
+      "Amount"
+    ];
+
+    const data = filteredData.map((item, i) => {
+      const dateStr = item.chalanDate?.seconds
+        ? moment(item.chalanDate.seconds * 1000).format('DD/MM/YYYY')
+        : '';
+      const orderNo = this.getOrderNo(item.partyOrderId);
+      const party = this.partyList.find((p: any) => p.id === item.partyId)?.firstName || '';
+      return [
+        i + 1,
+        dateStr,
+        item.chalanNo,
+        orderNo,
+        party,
+        parseFloat(item.netAmount).toFixed(2)
+      ];
+    });
+
+    const MIN_ROWS = 32;
+    if (data.length < MIN_ROWS) {
+      for (let idx = data.length; idx < MIN_ROWS; idx++) {
+        data.push([
+          idx + 1,
+          '',
+          '',
+          '',
+          '',
+          ''
+        ]);
+      }
+    }
+
+    doc.setFontSize(10);
+    (doc as any).autoTable({
+      head: [headers],
+      body: data,
+      startY: 40,
+      theme: 'grid',
+      headStyles: {
+        fillColor: [255, 187, 0],
+        textColor: [8, 8, 8],
+        fontStyle: 'bold'
+      },
+      styles: {
+        textColor: [8, 8, 8],
+        fontSize: 9,
+        valign: 'middle',
+        halign: 'center'
+      },
+      columnStyles: {
+      //   0: { cellWidth: 15 },
+      //   1: { cellWidth: 25 },
+        2: {  halign: 'left' },
+      //   3: { cellWidth: 30 },
+      //   4: { cellWidth: 25 },
+        5: {  halign: 'right' }
+      }
+    });
+
+   
+    const fileNameParts = ['Chalan_Report'];
+    if (firmName && firmName !== 'All Firms') fileNameParts.push(firmName.replace(/\s+/g, '_'));
+    if (partyName && partyName !== 'All Parties') fileNameParts.push(partyName.replace(/\s+/g, '_'));
+    const fileName = fileNameParts.join('_');
+
+    doc.save(`${fileName}.pdf`);
+  }
+ 
 }

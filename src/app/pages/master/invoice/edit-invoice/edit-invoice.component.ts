@@ -29,9 +29,6 @@ export class EditInvoiceComponent implements OnInit {
       productName: [data ? data?.productName : ''],
       productPrice: [data ? data?.productPrice :''],
       quantity: [data ? data?.productQuantity :''],
-      // chalanNo: [data ? data?.productChalanNo :''],
-      // totalAmount: [data ? data?.productPrice * data?.productQuantity :''],
-      // finalAmount: [data ? data?.productPrice * data?.productQuantity :''],
     })
   }
 

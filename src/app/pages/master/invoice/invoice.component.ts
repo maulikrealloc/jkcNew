@@ -41,7 +41,7 @@ export class InvoiceComponent implements OnInit {
   orderDetails: any =[];
   selectedChalanList: any = [];
   filteredChalan: any = []
-  
+  originalFirmChalanList: any[] = []; 
   invoiceListDataSource = new MatTableDataSource(this.selectedChalanList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
@@ -96,7 +96,12 @@ export class InvoiceComponent implements OnInit {
   }
 
   firmChange(event: any) {
-    this.chalanList = this.chalanData.filter((obj: any) => obj.firmId === event.value)
+   
+    this.originalFirmChalanList = this.chalanData.filter(
+      (obj: any) => obj.firmId === event.value
+    );
+    this.chalanList = this.originalFirmChalanList;
+
     this.firebaseCollectionService
       .getDocuments('CompanyList', 'InvoiceList')
       .then((invoice) => {
@@ -116,12 +121,15 @@ export class InvoiceComponent implements OnInit {
 
   partyChange(event: any) {
     if (event.value) {
-      this.chalanList = this.chalanData.filter((id: any) => id.partyId === event.value);
+      this.chalanList = this.originalFirmChalanList.filter(
+        (id: any) => id.partyId === event.value
+      );
       this.filteredChalan = this.chalanList;
     }
+
     if (this.chalanList.length > 0) {
-        this.filteredChalanList();
-      } 
+      this.filteredChalanList(); 
+    }
   }
 
   filteredChalanList() {
@@ -209,7 +217,7 @@ export class InvoiceComponent implements OnInit {
       cgst: 0,
       sgst: 0,
       igst: 0,
-      paymentDueDate: ''
+      paymentDueDate: 30
     });
 
     ['cgst', 'sgst', 'igst'].forEach(ele => this.invoiceForm.controls[ele].enable());

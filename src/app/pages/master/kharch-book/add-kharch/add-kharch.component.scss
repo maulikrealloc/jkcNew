@@ -65,7 +65,6 @@
     }
 
     mat-table {
-
         .mat-header-cell,
         .mat-cell {
             padding: 8px 12px;
@@ -86,4 +85,9 @@
     .mat-paginator {
         overflow-x: auto;
     }
+}
+
+button .icon-20 {
+    margin-left: 6px;
+    vertical-align: middle;
 }

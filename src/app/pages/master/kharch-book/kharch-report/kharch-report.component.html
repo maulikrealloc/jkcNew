@@ -2,7 +2,7 @@
     <mat-card-content class="p-24">
         <div class="row">
 
-            <div class="col-6">
+            <div class="col-5">
                 <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
                     <mat-label>Kharch</mat-label>
                     <input matInput placeholder="Search Kharch" (keyup)="applyFilter($any($event.target).value)">
@@ -12,7 +12,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-6">
+            <div class="col-5">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Select a Date</mat-label>
                     <mat-date-range-input [rangePicker]="picker" [formGroup]="dateKharchReportListForm">
@@ -22,6 +22,13 @@
                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-date-range-picker #picker (closed)="filterDate()"></mat-date-range-picker>
                 </mat-form-field>
+            </div>
+            <div class="col-2">
+            <div class="d-flex m-t-15 hide-hint align-items-center justify-content-end marginTop">
+                <button class="file-download w-100" (click)="filedownload()" mat-flat-button color="primary">
+                    <i-tabler name="file-download" class="icon-25"></i-tabler>
+                </button>
+            </div>
             </div>
         </div>
     </mat-card-content>
@@ -106,6 +113,15 @@
                     </th>
                     <td mat-cell *matCellDef="let element" class="f-s-14">
                         {{ element.amount }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                        Status
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="f-s-14">
+                        {{ element.status }}
                     </td>
                 </ng-container>
 

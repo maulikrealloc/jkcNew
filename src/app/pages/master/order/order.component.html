@@ -13,9 +13,14 @@
       </div>
 
       <div class="col-lg-4 d-flex align-items-center justify-content-end margintop">
-        <button mat-flat-button color="primary" (click)="addDesign('Add', {})">
-          Add Order
+        <!-- <button mat-flat-button color="primary" (click)="addDesign('Add', {})">
+          Add <i-tabler name="circle-plus" class="icon-20"></i-tabler>
+        </button> -->
+        <button mat-flat-button color="primary" (click)="addDesign('Add', {})" class="d-flex align-items-center gap-1">
+          <span>Add</span>
+          <i-tabler name="circle-plus" class="icon-20"></i-tabler>
         </button>
+
       </div>
     </div>
   </mat-card-content>

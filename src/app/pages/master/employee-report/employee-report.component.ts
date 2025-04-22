@@ -160,7 +160,6 @@ export class EmployeeReportComponent implements OnInit {
       });
       this.employeeListDataSource = new MatTableDataSource(this.employeeReportList);
       this.employeeListDataSource.paginator = this.paginator;
-
       console.log("employeeReportList", this.employeeReportList);
     }, error => {
       console.error("Error fetching data", error);
@@ -173,60 +172,72 @@ export class EmployeeReportComponent implements OnInit {
       .reduce((sum, item) => sum + (item?.[key] || 0), 0);
   }
 
-  // filedownload() {
-  //   console.log(this.employeeReportList);
-  //   this.dateEmployeeForm.value
-  //   const doc: any = new jsPDF();
-  //     doc.setFontSize(13);
-  //    doc.text("Report Date:- 01-04-2025 To 30-04-2025", 14, 15);
-  //   doc.text("Total Amount: - 199833", 145,15)
+  filedownload() {
+    const doc: any = new jsPDF();
+    doc.setFontSize(13);
 
-  //     const headers = [
-  //       "Name",
-  //       "Salary",
-  //       "Day",
-  //       "Absent",
-  //       "Updated",
-  //       "Extra",
-  //       "Remain",
-  //       "Bonus",
-  //       "Final AMT",
-  //       "Signature"
-  //     ];
+    const startDate = this.dateEmployeeForm.value.start;
+    const endDate = this.dateEmployeeForm.value.end;
 
-  //     const data = [
-  //       ["WQE", "20000", "30", "4", "200", "600", "17733.33", "500", "18233", ""],
-  //     ];
+    const formattedStart = new Date(startDate).toLocaleDateString('en-GB');
+    const formattedEnd = new Date(endDate).toLocaleDateString('en-GB');
 
-  //     doc.setFontSize(10);
+    doc.text(`Report Date: ${formattedStart} To ${formattedEnd}`, 14, 15);
 
-  //     doc.autoTable({
-  //       head: [headers],
-  //       body: data,
-  //       startY: 25,
-  //       theme: 'grid',
-  //       headStyles: {
-  //         fillColor: [255, 187, 0],
-  //         textColor: [8, 8, 8],
-  //         fontStyle: 'bold'
-  //       },
-  //       styles: {
-  //         cellPadding: 3,
-  //         fontSize: 9,
-  //         valign: 'middle',
-  //         halign: 'center'
-  //       },
-  //       columnStyles: {
-  //         0: { halign: 'left' },
-  //         9: { halign: 'left' }
-  //       }
-  //     });
+    const totalAmount = this.employeeReportList.reduce((sum: number, item: any) => sum + parseFloat(item.finalAMT), 0);
+    doc.text(`Total Amount: - ${totalAmount.toFixed(2)}`, 145, 15);
 
-  //     // doc.setFontSize(12);
-  //     // doc.text("Total Amount:- 199833", 14, doc.autoTable.previous.finalY + 15);
+    const headers = [
+      "Name",
+      "Salary",
+      "Day",
+      "Absent",
+      "Updated",
+      "Extra",
+      "Remain",
+      "Bonus",
+      "Final AMT",
+      "Signature"
+    ];
 
-  //     doc.save("Salary_Report_April_2025.pdf");
-    
-  // }
+    const data = this.employeeReportList.map((item: any) => [
+      item.name,
+      item.salary.toString(),
+      item.day.toString(),
+      item.abesent.toString(),
+      item.upad.toString(),
+      item.extra.toString(),
+      item.remain.toString(),
+      item.bonus.toString(),
+      item.finalAMT.toString(),
+      ""
+    ]);
+
+    doc.setFontSize(10);
+
+    (doc as any).autoTable({
+      head: [headers],
+      body: data,
+      startY: 25,
+      theme: 'grid',
+      headStyles: {
+        fillColor: [255, 187, 0],
+        textColor: [8, 8, 8],
+        fontStyle: 'bold'
+      },
+      styles: {
+        textColor:[8, 8, 8],
+        fontSize: 9,
+        valign: 'middle',
+        halign: 'center'
+      },
+      columnStyles: {
+        0: { halign: 'left' },
+        9: { halign: 'left' }
+      }
+    });
+
+    doc.save(`Salary_Report_${formattedStart.replace(/\//g, '-')}_to_${formattedEnd.replace(/\//g, '-')}.pdf`);
+  }
 
 }

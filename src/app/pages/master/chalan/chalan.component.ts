@@ -159,10 +159,10 @@ export class ChalanComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.chalanForm.reset();
-      // this.chalanForm.controls['firm'].reset();
-      // this.chalanForm.controls['party'].reset();
-      // this.chalanForm.controls['partyOrder'].reset();
+      // this.chalanForm.reset();
+      this.chalanForm.controls['firm'].reset();
+      this.chalanForm.controls['party'].reset();
+      this.chalanForm.controls['partyOrder'].reset();
       this.chalanList = [];
       this.chalanListDataSource = new MatTableDataSource(this.chalanList);
       this.chalanListDataSource.paginator = this.paginator;

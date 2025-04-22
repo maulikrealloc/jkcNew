@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Timestamp } from 'firebase/firestore';
+import jsPDF from 'jspdf';
 import { CommonService } from 'src/app/services/common.service';
 @Component({
   selector: 'app-kharch-report',
@@ -15,7 +16,7 @@ export class KharchReportComponent implements OnInit {
   dateKharchReportListForm: FormGroup;
   expensesList: any = [];
   companyAccountList: any = [];
-  kharchReportDataColumns: string[] = ['srNo', 'expensesType', 'paidBy', 'dec', 'date', 'chalanno', 'amount' ];
+  kharchReportDataColumns: string[] = ['srNo', 'expensesType', 'paidBy', 'dec', 'date', 'chalanno', 'amount','status' ];
   totalAmount: number = 0;
   kharchListDataSource = new MatTableDataSource(this.expensesList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -24,8 +25,8 @@ export class KharchReportComponent implements OnInit {
   constructor(private fb: FormBuilder, private commonService:CommonService) { }
 
   ngOnInit(): void {
-    this.kharchReportForm()
     this.getExpensesListData();
+    this.kharchReportForm()
     this.getCompanyAccountData()
     this.kharchListDataSource.paginator = this.paginator;
   }
@@ -96,7 +97,73 @@ export class KharchReportComponent implements OnInit {
     });
   }
 
+  // filedownload() {
+  //   const doc: any = new jsPDF();
+  //   doc.setFontSize(13);
 
-  
+  //   const startDate = this.dateKharchReportListForm.value.start;
+  //   const endDate = this.dateKharchReportListForm.value.end;
+
+  //   const formattedStart = new Date(startDate).toLocaleDateString('en-GB');
+  //   const formattedEnd = new Date(endDate).toLocaleDateString('en-GB');
+
+  //   doc.text(`Report Date: ${formattedStart} To ${formattedEnd}`, 14, 15);
+
+  //   const totalAmount = this.employeeReportList.reduce((sum: number, item: any) => sum + parseFloat(item.finalAMT), 0);
+  //   doc.text(`Total Amount: - ${totalAmount.toFixed(2)}`, 145, 15);
+
+  //   const headers = [
+  //     "Name",
+  //     "Salary",
+  //     "Day",
+  //     "Absent",
+  //     "Updated",
+  //     "Extra",
+  //     "Remain",
+  //     "Bonus",
+  //     "Final AMT",
+  //     "Signature"
+  //   ];
+
+  //   const data = this.employeeReportList.map((item: any) => [
+  //     item.name,
+  //     item.salary.toString(),
+  //     item.day.toString(),
+  //     item.abesent.toString(),
+  //     item.upad.toString(),
+  //     item.extra.toString(),
+  //     item.remain.toString(),
+  //     item.bonus.toString(),
+  //     item.finalAMT.toString(),
+  //     ""
+  //   ]);
+
+  //   doc.setFontSize(10);
+
+  //   (doc as any).autoTable({
+  //     head: [headers],
+  //     body: data,
+  //     startY: 25,
+  //     theme: 'grid',
+  //     headStyles: {
+  //       fillColor: [255, 187, 0],
+  //       textColor: [8, 8, 8],
+  //       fontStyle: 'bold'
+  //     },
+  //     styles: {
+  //       textColor: [8, 8, 8],
+  //       fontSize: 9,
+  //       valign: 'middle',
+  //       halign: 'center'
+  //     },
+  //     columnStyles: {
+  //       0: { halign: 'left' },
+  //       9: { halign: 'left' }
+  //     }
+  //   });
+
+  //   doc.save(`Salary_Report_${formattedStart.replace(/\//g, '-')}_to_${formattedEnd.replace(/\//g, '-')}.pdf`);
+  // }
+  filedownload(){}
 
 }

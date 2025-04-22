@@ -10,6 +10,7 @@ import { PaymentListComponent } from './payment-list/payment-list.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CommonService } from 'src/app/services/common.service';
 import { MatSort } from '@angular/material/sort';
+import moment from 'moment';
 
 @Component({
   selector: 'app-invoice-list',
@@ -40,6 +41,7 @@ export class InvoiceListComponent implements OnInit {
   orderDetails: any;
   partyDetails: any;
   selectedChalanList: any =[];
+  selectedFirmId: any;
   invoiceListDataSource = new MatTableDataSource(this.invoiceList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatSort) sort!: MatSort;
@@ -136,9 +138,15 @@ export class InvoiceListComponent implements OnInit {
     this.commonService.fetchData('FirmList', this.firmList);
   }
 
+  // firmChange(event: any) {
+  //   const partyChange = this.invoiceList.filter((chalanObj: any) => chalanObj.firmId === event.value)
+  //   this.invoiceListDataSource = new MatTableDataSource(partyChange);
+  //   this.invoiceSorting();
+  // }
   firmChange(event: any) {
-    const partyChange = this.invoiceList.filter((chalanObj: any) => chalanObj.firmId === event.value)
-    this.invoiceListDataSource = new MatTableDataSource(partyChange);
+    this.selectedFirmId = event.value;
+    const firmChange = this.invoiceList.filter((chalanObj: any) => chalanObj.firmId === event.value);
+    this.invoiceListDataSource = new MatTableDataSource(firmChange);
     this.invoiceSorting();
   }
 
@@ -507,4 +515,124 @@ export class InvoiceListComponent implements OnInit {
     return this.partyList.find((partyObj: any) => partyObj.id === partyId)?.firstName
   }
 
+  filedownload() {
+    const doc: any = new jsPDF();
+    doc.setFontSize(13);
+
+    const filteredData: any[] = this.invoiceListDataSource.data;
+    console.log(this.invoiceListDataSource.data);
+    
+
+    if (!filteredData || filteredData.length === 0) {
+      window.alert("No chalan data available for the selected filters.");
+      return;
+    }
+
+    const firmName = this.selectedFirmId
+      ? (this.firmList.find((f: any) => f.id === this.selectedFirmId)?.header || '')
+      : 'All Firms';
+
+    const startDate = this.dateInvoiceListForm.value.start;
+    const endDate = this.dateInvoiceListForm.value.end;
+
+    const formattedStart = new Date(startDate).toLocaleDateString('en-GB');
+    const formattedEnd = new Date(endDate).toLocaleDateString('en-GB');
+
+    doc.text(`Firm: ${firmName}`, 14, 15);
+    doc.text(`Report Date: ${formattedStart} To ${formattedEnd}`, 14, 23);
+
+    const totalAmount = filteredData
+      .reduce((sum, item) => sum + parseFloat(item.finalAmount), 0);
+    doc.text(`Total Amount: ${totalAmount.toFixed(2)}`, 145, 15);
+  
+    const headers = [
+      "Sr.No",
+      "Invoice No",
+      "Invoice Date",
+      "Party Name",
+      "Gross",
+      "Dis.",
+      "Net",
+      "IGST",
+      "CGST",
+      "SGST",
+      "Amount",
+      "Recived"
+    ];
+
+    const data = filteredData.map((item, i) => {
+      const dateStr = item.date?.seconds
+        ? moment(item.date.seconds * 1000).format('DD/MM/YYYY')
+        : '';
+      const party = this.partyList.find((p: any) => p.id === item.partyId)?.firstName || '';
+      const receivedAmount = this.getPaymentReceiveAmount(item); 
+      return [
+        i + 1,
+        item.invoiceNo,
+        dateStr,
+        party,
+        item.grossTotal,
+        item.discountRatio,
+        item.netAmount,
+        item.igst,
+        item.cgst,
+        item.sgst,
+        parseFloat(item.finalAmount).toFixed(2),
+        receivedAmount.toFixed(2)
+      ];
+    });
+
+    const MIN_ROWS = 32;
+    if (data.length < MIN_ROWS) {
+      for (let idx = data.length; idx < MIN_ROWS; idx++) {
+        data.push([
+          idx + 1,
+          '',
+          '',
+          '',
+          '',
+          ''
+        ]);
+      }
+    }
+
+    doc.setFontSize(10);
+    (doc as any).autoTable({
+      head: [headers],
+      body: data,
+      startY: 40,
+      theme: 'grid',
+      headStyles: {
+        fillColor: [255, 187, 0],
+        textColor: [8, 8, 8],
+        fontStyle: 'bold'
+      },
+      styles: {
+        textColor: [8, 8, 8],
+        fontSize: 8,
+        valign: 'middle',
+        halign: 'center'
+      },
+      columnStyles: {
+        0: { cellWidth: 11 },
+        1: { cellWidth: 11 },
+        2: { cellWidth: 20 },
+        3: { cellWidth: 30 },
+        4: { cellWidth: 18 },
+        5: { cellWidth: 11 },
+        6: { cellWidth: 18 },
+        7: { cellWidth: 11 },
+        8: { cellWidth: 11 },
+        9: { cellWidth: 11 },
+        10: { cellWidth: 18 },
+        11: { cellWidth: 18 }
+      }
+    });
+
+    const fileNameParts = ['Invoice_Report'];
+    if (firmName && firmName !== 'All Firms') fileNameParts.push(firmName.replace(/\s+/g, '_'));
+    const fileName = fileNameParts.join('_');
+
+    doc.save(`${fileName}.pdf`);
+  }
 }

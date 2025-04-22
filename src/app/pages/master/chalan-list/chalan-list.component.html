@@ -2,7 +2,7 @@
   <mat-card-content class="p-24">
     <div class="row">
 
-      <div class="col-12 col-sm-12 col-md-3">
+      <div class="col-12 col-sm-12 col-md-2">
         <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
           <mat-label>Chalan</mat-label>
           <input matInput placeholder="Search chalan" (keyup)="applyFilter($any($event.target).value)">
@@ -12,7 +12,7 @@
         </mat-form-field>
       </div>
 
-      <div class="col-12 col-sm-12 col-md-3">
+      <div class="col-12 col-sm-12 col-md-2">
         <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
           <mat-label>Select Firm</mat-label>
           <mat-select #dropdown placeholder="Select firm" (selectionChange)="firmChange($event)">
@@ -21,7 +21,7 @@
         </mat-form-field>
       </div>
 
-      <div class="col-12 col-sm-12 col-md-3">
+      <div class="col-12 col-sm-12 col-md-2">
         <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
           <mat-label>Select Party</mat-label>
           <mat-select #dropdown placeholder="Select party" (selectionChange)="partyChange($event)">
@@ -31,9 +31,30 @@
       </div>
 
       <div class="col-12 col-sm-12 col-md-3">
+          <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
+            <mat-label>Report Date</mat-label>
+            <mat-date-range-input [rangePicker]="picker" [formGroup]="dateChalanForm">
+              <input matStartDate placeholder="Start date" formControlName="start">
+              <input matEndDate placeholder="End date" formControlName="end">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker (closed)="filterDate()"></mat-date-range-picker>
+          </mat-form-field>
+      </div>
+
+      <div class="col-12 col-sm-12 col-md-1">
         <div class="d-flex m-t-15 hide-hint align-items-center justify-content-end marginTop">
-          <button mat-flat-button class="w-100" color="primary" routerLink="/master/chalan">
-            Add Chalan
+          <button class="file-download w-100" (click)="filedownload()" mat-flat-button color="primary">
+            <i-tabler name="file-download" class="icon-25"></i-tabler>
+          </button>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-12 col-md-2">
+        <div class="d-flex m-t-15 hide-hint align-items-center justify-content-end marginTop">
+          <button mat-flat-button class="w-100 d-flex align-items-center gap-1" color="primary" routerLink="/master/chalan">
+            <span>Add</span>
+           <i-tabler name="circle-plus" class="icon-20"></i-tabler>
           </button>
         </div>
       </div>

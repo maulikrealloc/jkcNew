@@ -3,8 +3,7 @@
         <div style="align-items: baseline;" class="row">
             <div class="col-3">
                 <mat-form-field appearance="outline" class="w-100 hide-hint">
-                    <mat-label>Search Report</mat-label>
-                    <input matInput placeholder="Search report">
+                    <input matInput placeholder="Search..." (keyup)="applyFilter($any($event.target).value)">
                     <mat-icon matSuffix>
                         <i-tabler name="search" class="icon-20"></i-tabler>
                     </mat-icon>
@@ -26,11 +25,12 @@
             <div class="col-4">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Khata</mat-label>
-                    <mat-select #dropdown [value]="khataList?.length ? khataList[0].id : null" placeholder="Enter a party" (selectionChange)="KhataChange($event)">
+                    <mat-select #dropdown [value]="khataList?.length ? khataList.id : null" placeholder="Enter a party" (selectionChange)="KhataChange($event)">
                         <mat-option [value]="item.id" *ngFor="let item of khataList">{{ item.companyName }}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
+            
             <div class="col-1">
                 <div class="d-flex m-t-15 hide-hint align-items-center justify-content-end">
                     <button class="file-download w-100" (click)="filedownload()" mat-flat-button color="primary">

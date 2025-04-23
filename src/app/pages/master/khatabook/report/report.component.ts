@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Timestamp } from 'firebase/firestore';
+import jsPDF from 'jspdf';
 import { CommonService } from 'src/app/services/common.service';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
@@ -25,6 +26,7 @@ export class ReportComponent implements OnInit {
   khataReportDataSource = new MatTableDataSource(this.khataReportList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
+  selectedkhata: any;
 
   constructor(private fb: FormBuilder, private commonService: CommonService) { }
 
@@ -41,7 +43,6 @@ export class ReportComponent implements OnInit {
     this.getPartyData();
     this.getKhataData();
     this.getOrderData();
-    
     this.khataReportDataSource.paginator = this.paginator;  
   }
 
@@ -69,6 +70,10 @@ export class ReportComponent implements OnInit {
       return element;
     });
   }
+
+  applyFilter(filterValue: string): void {
+    this.khataReportDataSource.filter = filterValue.trim().toLowerCase();
+  }
   
   convertTimestampToDate(element: any): Date | null {
     if (element instanceof Timestamp) {
@@ -84,9 +89,11 @@ export class ReportComponent implements OnInit {
   
   getKhataOrderData() {
     this.commonService.fetchData('KhataOrderList', this.khataOrderList).then((data:any) => {
-      this.khataReportDataSource.data = this.processData([...this.khataOrderList]); 
+      const processedData = this.processData([...this.khataOrderList]);
+      this.khataReportDataSource.data = processedData.filter(item => item.status === 'Done');
     });
-  }
+    this.khataReportDataSource =new MatTableDataSource(this.khataReportList)
+  } 
   
   getPartyData() {
     this.commonService.fetchData('PartyList', this.partyList) 
@@ -112,12 +119,107 @@ export class ReportComponent implements OnInit {
     return this.orderList.find((orderObj: any) => orderObj.id === order)?.partyOrder
   }
 
-    KhataChange(event: any) {
+  KhataChange(event: any) {
+    this.selectedkhata = event.value;
       const khata = this.khataOrderList.filter((khataobj: any) => khataobj.khata === event.value)
       this.khataReportDataSource = new MatTableDataSource(khata);
-      this.khataReportDataSource.paginator = this.paginator;  
-      this.filterDate();
+    this.khataReportDataSource.paginator = this.paginator; 
     }
 
-  filedownload(){}
+  filedownload() {
+    const doc: any = new jsPDF();
+    doc.setFontSize(13);
+
+    const khataName = this.selectedkhata
+      ? (this.khataList.find((k: any) => k.id === this.selectedkhata)?.companyName || '')
+      : 'All Khata';
+    
+    const startDate = this.dateKhataReportListForm.value.start;
+    const endDate = this.dateKhataReportListForm.value.end;
+
+    const formattedStart = new Date(startDate).toLocaleDateString('en-GB');
+    const formattedEnd = new Date(endDate).toLocaleDateString('en-GB');
+
+    doc.text(`Firm: ${khataName}`, 14, 15);
+    doc.text(`Report Date: ${formattedStart} To ${formattedEnd}`, 14, 23);
+
+    const filteredData = this.khataReportDataSource.data;
+    console.log(this.khataReportDataSource.data);
+
+    const totalAmount = filteredData.reduce((sum: number, item: any) => sum + parseFloat(item.profit || 0), 0);
+    doc.text(`Total Amount: - ${totalAmount.toFixed(2)}`, 145, 15);
+
+    const headers = [
+      "Sr No",
+      "Party Name",
+      "Party Order",
+      "Khata Name",
+      "Item Name",
+      "K-Quantity",
+      "K-Price",
+      "P-Total",
+      "K-Total",
+      "Profit",
+    ];
+
+    const data = filteredData.map((item: any, i: number) => {
+      const party = this.partyList.find((p: any) => p.id === item.party)?.firstName || '';
+      const order = this.orderList.find((p: any) => p.id === item.order)?.partyOrder || '';
+      const khata = this.khataList.find((p: any) => p.id === item.khata)?.companyName || '';
+      const product = item.productsOrder[0];
+      return [
+        i + 1,
+        party,
+        order,
+        khata,
+        product.productName,
+        product.productQuantity,
+        product.khataPrice,
+        item.pTotal,
+        item.kTotal,
+        item.profit
+      ];
+    });
+
+    const MIN_ROWS = 32;
+    if (data.length < MIN_ROWS) {
+      for (let idx = data.length; idx < MIN_ROWS; idx++) {
+        data.push([
+          idx + 1,
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          ''
+        ]);
+      }
+    }
+
+    doc.setFontSize(10);
+
+    (doc as any).autoTable({
+      head: [headers],
+      body: data,
+      startY: 40,
+      theme: 'grid',
+      headStyles: {
+        fillColor: [255, 187, 0],
+        textColor: [8, 8, 8],
+        fontStyle: 'bold'
+      },
+      styles: {
+        textColor: [8, 8, 8],
+        fontSize: 9,
+        valign: 'middle',
+        halign: 'center'
+      },
+      columnStyles: {
+        0: { halign: 'left' }
+      }
+    });
+
+    doc.save(`Kharch_Report_${formattedStart.replace(/\//g, '-')}_to_${formattedEnd.replace(/\//g, '-')}.pdf`);
+  }
 }

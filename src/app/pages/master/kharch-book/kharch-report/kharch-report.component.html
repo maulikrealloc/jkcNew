@@ -4,8 +4,7 @@
 
             <div class="col-4">
                 <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
-                    <mat-label>Kharch</mat-label>
-                    <input matInput placeholder="Search Kharch" (keyup)="applyFilter($any($event.target).value)">
+                    <input matInput placeholder="Search..." (keyup)="applyFilter($any($event.target).value)">
                     <mat-icon matSuffix>
                         <i-tabler name="search" class="icon-20"></i-tabler>
                     </mat-icon>
@@ -47,8 +46,7 @@
                     <mat-select #dropdown placeholder="Select paid by" (selectionChange)="paidbyChange($event)"
                         [value]="'All'">
                         <mat-option value="All">All</mat-option>
-                        <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{
-                            item.accountName}}</mat-option>
+                        <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{item.accountName}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>

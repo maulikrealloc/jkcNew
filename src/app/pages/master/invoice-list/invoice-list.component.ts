@@ -610,20 +610,6 @@ export class InvoiceListComponent implements OnInit {
         fontSize: 8,
         valign: 'middle',
         halign: 'center'
-      },
-      columnStyles: {
-        0: { cellWidth: 11 },
-        1: { cellWidth: 11 },
-        2: { cellWidth: 20 },
-        3: { cellWidth: 30 },
-        4: { cellWidth: 18 },
-        5: { cellWidth: 11 },
-        6: { cellWidth: 18 },
-        7: { cellWidth: 11 },
-        8: { cellWidth: 11 },
-        9: { cellWidth: 11 },
-        10: { cellWidth: 18 },
-        11: { cellWidth: 18 }
       }
     });
 

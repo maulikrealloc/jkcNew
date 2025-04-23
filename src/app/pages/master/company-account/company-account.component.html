@@ -4,8 +4,7 @@
 
       <div class="col-lg-4">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <mat-label>Company</mat-label>
-          <input matInput placeholder="Search company" (keyup)="applyFilter($any($event.target).value)">
+          <input matInput placeholder="Search..." (keyup)="applyFilter($any($event.target).value)">
           <mat-icon matSuffix>
             <i-tabler name="search" class="icon-20"></i-tabler>
           </mat-icon>

@@ -4,8 +4,7 @@
 
             <div class="col-12 col-sm-12 col-md-4">
                 <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
-                    <mat-label>Invoice List</mat-label>
-                    <input matInput placeholder="Search invoice" (keyup)="applyFilter($any($event.target).value)">
+                    <input matInput placeholder="Search..." (keyup)="applyFilter($any($event.target).value)">
                     <mat-icon matSuffix>
                         <i-tabler name="search" class="icon-20"></i-tabler>
                     </mat-icon>

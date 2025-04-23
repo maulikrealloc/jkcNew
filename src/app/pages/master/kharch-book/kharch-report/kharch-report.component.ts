@@ -51,7 +51,6 @@ export class KharchReportComponent implements OnInit {
     }
 
     this.calculateTotalAmount();
-    this.filterDate();
     this.kharchListDataSource.paginator = this.paginator;
   }
 
@@ -89,7 +88,7 @@ export class KharchReportComponent implements OnInit {
   }
 
   calculateTotalAmount() {
-    this.totalAmount = this.kharchListDataSource.data.reduce((sum:number, item:any) => sum + (item.amount || 0), 0);
+    this.totalAmount = this.kharchListDataSource.data.reduce((sum: number, item: any) => sum + (item.amount || 0), 0);
   }
  
   getExpensesListData() {

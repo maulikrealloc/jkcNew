@@ -18,6 +18,8 @@ export class IncomeComponent implements OnInit {
   incomeDataColumns: string[] = ['#','partyName','account','invoiceNo','invoiceDate','creditDate','amount','action' ];
   incomeList: any = [];
   companyAccountList: any = [];
+  partyList: any = [];
+
   incomeListDataSource = new MatTableDataSource(this.incomeList);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -27,6 +29,7 @@ export class IncomeComponent implements OnInit {
   ngOnInit(): void {
     this.getIncomeListData();
     this.getCompanyAccountData();
+    this.getPartyData();
   }
 
   ngAfterViewInit() {
@@ -50,6 +53,14 @@ export class IncomeComponent implements OnInit {
 
   getCompanyAccountData() {
     this.commonService.fetchData('CompanyAccountList', this.companyAccountList);
+  }
+  
+  getPartyData() {
+    this.commonService.fetchData('PartyList', this.partyList);
+  }
+
+  getPartyName(partyName: string): string {
+    return this.partyList.find((partyObj: any) => partyObj.id === partyName)?.firstName
   }
 
   paidbyChange(event: any) {

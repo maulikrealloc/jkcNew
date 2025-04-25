@@ -20,7 +20,7 @@ import moment from 'moment';
 
 export class InvoiceListComponent implements OnInit {
 
-  invoicDataColumns: string[] = ['srNo', 'no', 'date', 'party', 'gross', 'discount', 'net', 'IGST','CGST','SGST','final','recived','action'];
+  invoicDataColumns: string[] = [ 'no', 'date', 'party', 'gross', 'discount', 'net', 'IGST','CGST','SGST','final','recived','action'];
   toWords = new ToWords({
     localeCode: 'en-IN',
     converterOptions: {
@@ -42,6 +42,9 @@ export class InvoiceListComponent implements OnInit {
   partyDetails: any;
   selectedChalanList: any =[];
   selectedFirmId: any;
+  selectedPartyId: any;
+  parties: any[] = []; 
+  filteredParties: any[] = [];
   invoiceListDataSource = new MatTableDataSource(this.invoiceList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatSort) sort!: MatSort;
@@ -138,15 +141,28 @@ export class InvoiceListComponent implements OnInit {
     this.commonService.fetchData('FirmList', this.firmList);
   }
 
-  // firmChange(event: any) {
-  //   const partyChange = this.invoiceList.filter((chalanObj: any) => chalanObj.firmId === event.value)
-  //   this.invoiceListDataSource = new MatTableDataSource(partyChange);
-  //   this.invoiceSorting();
-  // }
   firmChange(event: any) {
     this.selectedFirmId = event.value;
-    const firmChange = this.invoiceList.filter((chalanObj: any) => chalanObj.firmId === event.value);
+    this.selectedPartyId = null; 
+
+    this.filteredParties = this.parties.filter((party:any) =>
+      party.firmId === this.selectedFirmId
+    );
+
+    const firmChange = this.invoiceList.filter((chalanObj: any) =>
+      chalanObj.firmId === event.value
+    );
     this.invoiceListDataSource = new MatTableDataSource(firmChange);
+    this.invoiceSorting();
+  }
+
+  partyChange(event: any) {
+    this.selectedPartyId = event.value;
+    const partyChange = this.invoiceList.filter((chalanObj: any) =>
+      chalanObj.partyId === event.value &&
+      (!this.selectedFirmId || chalanObj.firmId === this.selectedFirmId)
+    );
+    this.invoiceListDataSource = new MatTableDataSource(partyChange);
     this.invoiceSorting();
   }
 
@@ -394,16 +410,17 @@ export class InvoiceListComponent implements OnInit {
     const netAmount: any = Number(grossTotal - discountAmount).toFixed(2);
     const cgst = Number((netAmount * value?.cgst) / 100).toFixed(2);
     const sgst = Number((netAmount * value?.sgst) / 100).toFixed(2);
-    const finalAmount = (Number(netAmount) + Number(cgst) + Number(sgst)).toFixed(2);
+    const igst = Number((netAmount * value?.igst) / 100).toFixed(2);
+    const finalAmount = Math.round(Number(netAmount) + Number(igst) + Number(cgst) + Number(sgst)).toFixed(2);
     const finalAmountInWords = this.toWords.convert(Number(finalAmount));
 
     body.push(
       ['', '', '', '', { content: 'Gross Total', styles: { halign: 'left' } }, `${grossTotal}`],
       ['', '', '', '', { content: `Discount ${value.discountRatio}%`, styles: { halign: 'left' } }, `${discountAmount}`],
       [{ content: `${finalAmountInWords}`, rowSpan: 2, colSpan: 4, styles: { halign: 'left', fontStyle: 'bold', valign: 'middle' } }, 'Net Amount', `${netAmount}`],
-      [`CGST ${value?.cgst}%`, `${cgst}`],
-      [{ content: '', rowSpan: 2, colSpan: 4, styles: { halign: 'center', fontStyle: 'bold' } }, `SGST ${value?.sgst}%`, `${sgst}`],
-      ['Final Amount', `${finalAmount}`, { styles: { FontFace: 'left' } }],
+      value?.igst ? [`IGST ${value?.igst}%`, `${igst}`] : [`CGST ${value?.cgst}%`, `${cgst}`],
+      [{ content: '', rowSpan: 2, colSpan: 4, styles: { halign: 'center', fontStyle: 'bold' } }, value?.igst ? `` : `SGST ${value?.sgst}%`, value?.igst ? `` : `${sgst}`],
+      ['Final Amount', `${parseFloat(finalAmount)?.toFixed(2) || '0.00'}`, { styles: { FontFace: 'left' } }],
       [
         { content: `Bank Name: ${this.firmDetails.bankName}`, styles: { fontStyle: 'bold' }, colSpan: 2 },
         { content: `IFSC Code: ${this.firmDetails.ifscCode}`, styles: { fontStyle: 'bold' }, colSpan: 2 },
@@ -530,6 +547,10 @@ export class InvoiceListComponent implements OnInit {
       ? (this.firmList.find((f: any) => f.id === this.selectedFirmId)?.header || '')
       : 'All Firms';
 
+    const partyName = this.selectedPartyId
+      ? (this.partyList.find((p: any) => p.id === this.selectedPartyId)?.firstName || '')
+      : 'All Parties';
+    
     const startDate = this.dateInvoiceListForm.value.start;
     const endDate = this.dateInvoiceListForm.value.end;
 
@@ -537,11 +558,15 @@ export class InvoiceListComponent implements OnInit {
     const formattedEnd = new Date(endDate).toLocaleDateString('en-GB');
 
     doc.text(`Firm: ${firmName}`, 14, 15);
-    doc.text(`Report Date: ${formattedStart} To ${formattedEnd}`, 14, 23);
+    doc.text(`Party: ${partyName}`, 14, 23);
+    doc.text(`Report Date: ${formattedStart} To ${formattedEnd}`, 14, 31);
 
+    // const totalAmount = filteredData
+    //   .reduce((sum, item) => sum + parseFloat(item.finalAmount), 0);
+    // doc.text(`Total Amount: ${totalAmount.toFixed(2)}`, 145, 15);
     const totalAmount = filteredData
       .reduce((sum, item) => sum + parseFloat(item.finalAmount), 0);
-    doc.text(`Total Amount: ${totalAmount.toFixed(2)}`, 145, 15);
+    doc.text(`Total Amount: ${Math.round(totalAmount).toFixed(2)}`, 145, 15);
   
     const headers = [
       "Sr.No",
@@ -575,7 +600,7 @@ export class InvoiceListComponent implements OnInit {
         item.igst,
         item.cgst,
         item.sgst,
-        parseFloat(item.finalAmount).toFixed(2),
+        Math.round(item.finalAmount).toFixed(2),
         receivedAmount.toFixed(2)
       ];
     });

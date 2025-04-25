@@ -147,7 +147,7 @@ export class ReportComponent implements OnInit {
     console.log(this.khataReportDataSource.data);
 
     const totalAmount = filteredData.reduce((sum: number, item: any) => sum + parseFloat(item.profit || 0), 0);
-    doc.text(`Total Amount: - ${totalAmount.toFixed(2)}`, 145, 15);
+    doc.text(`Total Amount: - ${Math.round(totalAmount).toFixed(2)}`, 145, 15);
 
     const headers = [
       "Sr No",
@@ -177,7 +177,7 @@ export class ReportComponent implements OnInit {
         product.khataPrice,
         item.pTotal,
         item.kTotal,
-        item.profit
+        Math.round(item.profit).toFixed(2)
       ];
     });
 

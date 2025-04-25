@@ -113,7 +113,7 @@ export class KharchReportComponent implements OnInit {
     const filteredData = this.kharchListDataSource.data;
 
     const totalAmount = filteredData.reduce((sum: number, item: any) => sum + parseFloat(item.amount || 0), 0);
-    doc.text(`Total Amount: - ${totalAmount.toFixed(2)}`, 145, 15);
+    doc.text(`Total Amount: - ${Math.round(totalAmount).toFixed(2)}`, 145, 15);
 
     const headers = [
       "Sr No",
@@ -137,7 +137,7 @@ export class KharchReportComponent implements OnInit {
         item.expensesType,
         item.paidBy,
         item.description,
-        item.amount,
+        Math.round(item.amount).toFixed(2),
         item.status
       ];
     });

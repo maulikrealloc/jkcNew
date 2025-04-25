@@ -1,5 +1,5 @@
 <h2 mat-dialog-title class="m-b-24 b-b-1 p-b-20">{{action}} Order</h2>
-<mat-dialog-content class="mat-typography" style="max-width: 600px" *ngIf="action !== 'Delete'; else elseTemplate">
+<mat-dialog-content class="mat-typography" style="max-width: 800px" *ngIf="action !== 'Delete'; else elseTemplate">
     <form [formGroup]="orderForm">
         <div class="row">
 
@@ -61,7 +61,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <mat-form-field appearance="outline" class="w-100 m-t-20">
                             <mat-label>Quantity</mat-label>
                             <input type="number" matInput formControlName="productQuantity" placeholder="Enter quantity">

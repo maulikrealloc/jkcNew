@@ -495,7 +495,7 @@ export class InvoiceComponent implements OnInit {
     const cgst = Number((netAmount * invoiceData?.cgst) / 100).toFixed(2);
     const sgst = Number((netAmount * invoiceData?.sgst) / 100).toFixed(2);
     const igst = Number((netAmount * invoiceData?.igst) / 100).toFixed(2);
-    const finalAmount = (Number(netAmount) + (invoiceData?.igst ? Number(igst) : Number(cgst) + Number(sgst))).toFixed(2);
+    const finalAmount = Math.round(Number(netAmount) + (invoiceData?.igst ? Number(igst) : Number(cgst) + Number(sgst))).toFixed(2);
     const finalAmountInWords = this.toWords.convert(Number(finalAmount));
 
     body.push(

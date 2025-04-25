@@ -42,6 +42,8 @@ export class ChalanListComponent implements OnInit {
   selectedPartyId: any;
   selectedFirmId: any;
   dateChalanForm: FormGroup;
+  parties: any[] = [];
+  filteredParties: any[] = [];
   chalanListDataSource = new MatTableDataSource(this.chalanList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
@@ -141,17 +143,28 @@ export class ChalanListComponent implements OnInit {
     this.commonService.fetchData('PartyList', this.partyList);
   }
 
-  partyChange(event: any) {
-    this.selectedPartyId = event.value;
-    const partyChange = this.chalanList.filter((chalanObj: any) => chalanObj.partyId === event.value);
-    this.chalanListDataSource = new MatTableDataSource(partyChange);
+  firmChange(event: any) {
+    this.selectedFirmId = event.value;
+    this.selectedPartyId = null;
+
+    this.filteredParties = this.parties.filter((party: any) =>
+      party.firmId === this.selectedFirmId
+    );
+
+    const firmChange = this.chalanList.filter((chalanObj: any) =>
+      chalanObj.firmId === event.value
+    );
+    this.chalanListDataSource = new MatTableDataSource(firmChange);
     this.chalanSorting();
   }
 
-  firmChange(event: any) {
-    this.selectedFirmId = event.value;
-    const firmChange = this.chalanList.filter((chalanObj: any) => chalanObj.firmId === event.value);
-    this.chalanListDataSource = new MatTableDataSource(firmChange);
+  partyChange(event: any) {
+    this.selectedPartyId = event.value;
+    const partyChange = this.chalanList.filter((chalanObj: any) =>
+      chalanObj.partyId === event.value &&
+      (!this.selectedFirmId || chalanObj.firmId === this.selectedFirmId)
+    );
+    this.chalanListDataSource = new MatTableDataSource(partyChange);
     this.chalanSorting();
   }
 
@@ -690,7 +703,7 @@ export class ChalanListComponent implements OnInit {
     
     const totalAmount = filteredData
       .reduce((sum, item) => sum + parseFloat(item.netAmount), 0);
-    doc.text(`Total Amount: ${totalAmount.toFixed(2)}`, 145, 15);
+    doc.text(`Total Amount: ${Math.round(totalAmount).toFixed(2)}`, 145, 15);
 
    
     const headers = [
@@ -714,7 +727,7 @@ export class ChalanListComponent implements OnInit {
         item.chalanNo,
         orderNo,
         party,
-        parseFloat(item.netAmount).toFixed(2)
+        Math.round(item.netAmount).toFixed(2)
       ];
     });
 

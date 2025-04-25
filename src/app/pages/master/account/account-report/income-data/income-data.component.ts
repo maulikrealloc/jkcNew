@@ -15,16 +15,26 @@ export class IncomeDataComponent implements OnInit {
     'totalAmount'
   ];
   incomeDataList: any = [];
+  partyList: any = [];
   incomeListDataSource = new MatTableDataSource(this.incomeDataList);
 
   constructor(private commonService: CommonService) { }
 
   ngOnInit(): void {
     this.getIncomeListData();
+    this.getPartyData();
   }
 
   getIncomeListData() {
     this.commonService.fetchData('IncomeList', this.incomeDataList, this.incomeListDataSource)    
+  }
+
+  getPartyData() {
+    this.commonService.fetchData('PartyList', this.partyList);
+  }
+
+  getPartyName(partyName: string) {
+    return this.partyList.find((partyobj: any) => partyobj.id === partyName)?.firstName;
   }
 
   getTotalAmount(): number {

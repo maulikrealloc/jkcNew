@@ -83,11 +83,13 @@ export class ChalanComponent implements OnInit {
   }
   
   viewpdf() {
+    this.chalanList = []
     this.getPartyDetails(this.chalanForm.value.party)
     this.getFirmDetails(this.chalanForm.value.firm)
     this.generatePDF()
     
     this.isDisplayChalan = true
+    this.chalanListDataSource = new MatTableDataSource(this.chalanList);
   }
 
   // submitData() {

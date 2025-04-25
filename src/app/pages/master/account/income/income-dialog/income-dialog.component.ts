@@ -19,6 +19,8 @@ export class IncomeDialogComponent implements OnInit {
   local_data: any;
   companyAccountList: any = [];
   incomeMasterData: any = [];
+  partyList: any = [];
+  invoiceList: any = [];
 
   constructor(
     private fb: FormBuilder,
@@ -33,7 +35,9 @@ export class IncomeDialogComponent implements OnInit {
   ngOnInit(): void {
     this.incomegroup(this.action === 'Edit' ? this.local_data : undefined);
     this.getCompanyAccountData();
-    this.getIncomeMasterList()
+    this.getIncomeMasterList();
+    this.getPartyData();
+    this.getinvoiceData();
   }
 
   incomegroup(data:any) {
@@ -60,6 +64,14 @@ export class IncomeDialogComponent implements OnInit {
 
   getIncomeMasterList() {
     this.commonService.fetchData('IncomeMasterList', this.incomeMasterData);
+  }
+
+  getPartyData() {
+    this.commonService.fetchData('PartyList', this.partyList);
+  }
+
+  getinvoiceData() {
+    this.commonService.fetchData('InvoiceList', this.invoiceList);
   }
 
   doAction() {

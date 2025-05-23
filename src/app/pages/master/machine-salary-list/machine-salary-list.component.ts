@@ -70,7 +70,22 @@ export class MachineSalaryListComponent implements OnInit {
   }
 
   getmachineSalaryData() {
-    this.commonService.fetchData('MachineSalaryList', this.machineSalaryList, this.machineSalaryDataSource);
+    this.commonService.fetchData('MachineSalaryList', this.machineSalaryList, this.machineSalaryDataSource).then((res) => {
+      this.filterData();
+    });
+  }
+
+  filterData() {
+    this.machineSalaryDataSource.filterPredicate = (data: any, filter: string) => {
+      const dataStr = [
+        this.getEmployeeName(data.employeeId) || '',
+        this.convertTimestampToDate(data.date)?.toLocaleDateString() || '',
+        data.amount || ''
+      ].join(' ').toLowerCase();
+
+      return dataStr.includes(filter.toLowerCase());
+    };
+    this.filterDate();
   }
 
   getEmployeeData() {

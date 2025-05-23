@@ -107,6 +107,20 @@ export class EmployeeReportComponent implements OnInit {
     this.employeeListDataSource.paginator = this.paginator;
   }
 
+  filterData() {
+    this.employeeListDataSource.filterPredicate = (data: any, filter: string) => {
+      const dataStr = [
+        data.abesent || 0,
+        data.upad || 0,
+        data.extra || 0,
+        data.bonus || 0,
+      ].join(' ').toLowerCase();
+
+      return dataStr.includes(filter.toLowerCase());
+    };
+    this.filterDate()
+  }
+
   checkDateInRange(dateObj: any, start: Date, end: Date): boolean {
     if (!dateObj || !dateObj.seconds) return false;
     const date = new Date(dateObj.seconds * 1000);
@@ -158,9 +172,9 @@ export class EmployeeReportComponent implements OnInit {
 
         this.employeeReportList.push(obj);
       });
+      this.filterData();
       this.employeeListDataSource = new MatTableDataSource(this.employeeReportList);
       this.employeeListDataSource.paginator = this.paginator;
-      console.log("employeeReportList", this.employeeReportList);
     }, error => {
       console.error("Error fetching data", error);
     });

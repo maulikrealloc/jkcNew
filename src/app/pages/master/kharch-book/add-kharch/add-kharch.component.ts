@@ -69,7 +69,26 @@ export class AddKharchComponent implements OnInit {
   }
 
   getExpensesListData() {
-    this.commonService.fetchData('ExpensesList', this.expensesList, this.expensesListDataSource);
+    this.commonService.fetchData('ExpensesList', this.expensesList, this.expensesListDataSource).then((res) => {
+      this.filterData();
+    });
+  }
+
+  filterData() {
+    this.expensesListDataSource.filterPredicate = (data: any, filter: string) => {
+      const dataStr = [
+        data.expensesType,
+        this.convertTimestampToDate(data.date)?.toLocaleDateString() || '',
+        data.description,
+        data.chalanNo,
+        data.amount || '',
+        data.paidBy,
+        data.status
+      ].join(' ').toLowerCase();
+
+      return dataStr.includes(filter.toLowerCase());
+    };
+    this.filterDate()
   }
 
   getExpensesmasterListData() {

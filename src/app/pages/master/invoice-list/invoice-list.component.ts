@@ -75,8 +75,9 @@ export class InvoiceListComponent implements OnInit {
   getInvoiceData() {
     this.commonService.fetchData('InvoiceList', this.invoiceList, this.invoiceListDataSource).then((invoice) => {
       if (this.invoiceList.length > 0) 
+        this.invoiceSorting();
       this.filterData();
-          this.invoiceListDataSource.paginator = this.paginator;
+          // this.invoiceListDataSource.paginator = this.paginator;
     })
   }
 

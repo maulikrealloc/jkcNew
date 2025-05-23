@@ -21,7 +21,7 @@ export class IncomeDialogComponent implements OnInit {
   incomeMasterData: any = [];
   partyList: any = [];
   invoiceList: any = [];
-
+  filteredInvoiceList: any = [];
   constructor(
     private fb: FormBuilder,
     private commonService: CommonService,
@@ -91,6 +91,13 @@ export class IncomeDialogComponent implements OnInit {
       this.firebaseCollectionService.addDocument('CompanyList', IncomeMaster, 'IncomeMasterList');
     }
     this.dialogRef.close({ event: this.action, data: payload })
+  }
+
+  partyChange(event: any) {
+    const selectedPartyId = event.value;
+    this.filteredInvoiceList = this.invoiceList.filter((invoice: any) =>
+      invoice.partyId === selectedPartyId
+    );
   }
 
   closeDialog() {

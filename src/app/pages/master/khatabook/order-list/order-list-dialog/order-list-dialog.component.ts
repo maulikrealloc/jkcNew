@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Timestamp } from 'firebase/firestore';
+import { order } from 'src/app/pages/apps/invoice/invoice';
 import { CommonService } from 'src/app/services/common.service';
 
 @Component({
@@ -19,6 +20,7 @@ export class OrderListDialogComponent implements OnInit {
   partyList: any = [];
   orderList: any = [];
   filterOrderList: any = [];
+  khataOrderList: any = [];
 
   constructor(
     private fb: FormBuilder, private commonService: CommonService,
@@ -29,10 +31,11 @@ export class OrderListDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.formBuild(this.action === 'Edit' ? this.local_data : undefined)
+    this.getKhataOrderData();
     this.getKhataData();
     this.getPartyData();
     this.getOrderData();
-    this.formBuild(this.action === 'Edit' ? this.local_data : undefined)
   }
 
   formBuild(data: any) {
@@ -64,11 +67,29 @@ export class OrderListDialogComponent implements OnInit {
     this.filterOrderList = this.orderList.filter(
       (order: any) => order.partyId === selectedPartyId && order.orderStatus === 'Pending'
     );
+
+    this.filterOrderList  = this.filterOrderList.filter((order: any) => {
+      return ! this.khataOrderList.some((khataOrder:any)=>khataOrder.order === order.id)
+    })
+    const currentOrder = this.orderForm.get('order')?.value;
+    if (currentOrder && !this.filterOrderList.some((order: any) => order.id === currentOrder)) {
+      this.orderForm.get('order')?.setValue('');
+      this.productsOrder.clear();
+    }
   }
 
   onOrderSelection() {
     if (this.filterOrderList.length > 0) {
       const selectedOrderId = this.orderForm.get('order')?.value;
+      const availableOrders =  this.filterOrderList.filter((order: any) => {
+        return ! this.khataOrderList.some((khataOrder:any)=>khataOrder.order === order.id)
+      })
+      this.filterOrderList = availableOrders;
+      if (!availableOrders.some((order: any) => order.id === selectedOrder.id)) {
+        this.orderForm.get('order')?.setValue('');
+        this.productsOrder.clear();
+        return;
+      }
       const selectedOrder = this.filterOrderList.find((order:any) => order.id === selectedOrderId);
 
       if (selectedOrder && selectedOrder.products) {
@@ -125,6 +146,14 @@ export class OrderListDialogComponent implements OnInit {
 
   getPartyData() {
     this.commonService.fetchData('PartyList', this.partyList)
+  }
+
+  getKhataOrderData() {
+    this.commonService.fetchData('KhataOrderList', this.khataOrderList).then((res) => {
+      if (this.orderForm.get('order')?.value) {
+        this.onOrderSelection();
+      }
+    })
   }
 
   getOrderData() {

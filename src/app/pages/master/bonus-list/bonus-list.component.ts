@@ -72,7 +72,22 @@ export class BonusListComponent implements OnInit {
   }
 
   getBonusData() {
-    this.commonService.fetchData('BonusList', this.bonusList, this.bonusListDataSource);
+    this.commonService.fetchData('BonusList', this.bonusList, this.bonusListDataSource).then((res) => {
+      this.filterData();
+    });
+  }
+
+  filterData() {
+    this.bonusListDataSource.filterPredicate = (data: any, filter: string) => {
+      const dataStr = [
+        this.getEmployeeName(data.employeeId) || '',
+        this.convertTimestampToDate(data.date)?.toLocaleDateString() || '',
+        data.amount || ''
+      ].join(' ').toLowerCase();
+
+      return dataStr.includes(filter.toLowerCase());
+    };
+    this.filterDate()
   }
 
   getEmployeeData() {

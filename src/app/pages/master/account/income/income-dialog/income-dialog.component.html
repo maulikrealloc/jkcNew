@@ -4,7 +4,7 @@
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Party</mat-label>
-      <mat-select #dropdown formControlName="partyName" placeholder="Select party">
+      <mat-select #dropdown formControlName="partyName" placeholder="Select party" (selectionChange)="partyChange($event)">
         <mat-option [value]="item.id" *ngFor="let item of partyList">{{item.firstName}}</mat-option>
       </mat-select>
     </mat-form-field>
@@ -22,8 +22,8 @@
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Invoice No</mat-label>
       <mat-select #dropdown formControlName="invoiceNo" placeholder="Select invoice no">
-          <ng-container *ngIf="invoiceList.length > 0; else noRecode">
-            <mat-option [value]="item.id" *ngFor="let item of invoiceList">{{item.invoiceNo}}</mat-option>
+          <ng-container *ngIf="filteredInvoiceList.length > 0; else noRecode">
+            <mat-option [value]="item.id" *ngFor="let item of filteredInvoiceList">{{item.invoiceNo}}</mat-option>
           </ng-container>
           <ng-template #noRecode>
             <mat-option class="text-center" disabled>No record found</mat-option>

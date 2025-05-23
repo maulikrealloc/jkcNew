@@ -7,15 +7,15 @@
       </div>
 
       <div class="col-4">
-        <label>Remaining Balance:-
-          <span>1760</span>
+        <label><b>Remaining Balance:-</b>
+          <span><b>{{remainingBalance}}</b></span>
         </label>
       </div>
 
       <div class="col-4">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Party</mat-label>
-          <mat-select #dropdown placeholder="Select party"  [value]="companyAccountList[0]?.accountName" (selectionChange)="partyChange($event)">
+          <mat-select #dropdown placeholder="Select party"  [value]="'manish'" (selectionChange)="partyChange($event)">
             <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName }}</mat-option>
           </mat-select>
         </mat-form-field>

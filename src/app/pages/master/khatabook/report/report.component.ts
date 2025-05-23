@@ -46,20 +46,41 @@ export class ReportComponent implements OnInit {
     this.khataReportDataSource.paginator = this.paginator;  
   }
 
+  // filterDate() {
+  //   if (!this.khataOrderList) return;
+  //   const startDate = this.dateKhataReportListForm.value.start ? new Date(this.dateKhataReportListForm.value.start) : null;
+  //   const endDate = this.dateKhataReportListForm.value.end ? new Date(this.dateKhataReportListForm.value.end) : null;
+  //   if (startDate && endDate) {
+  //     this.khataReportDataSource.data = this.khataOrderList.filter((invoice: any) => {
+  //       if (!invoice.date) return false;
+
+  //       const invoiceDate = new Date(invoice.date.seconds * 1000);
+  //       return invoiceDate >= startDate && invoiceDate <= endDate;
+  //     });
+  //   } else {
+  //     this.khataReportDataSource.data = this.khataOrderList;
+  //   }
+  // }
+
   filterDate() {
     if (!this.khataOrderList) return;
     const startDate = this.dateKhataReportListForm.value.start ? new Date(this.dateKhataReportListForm.value.start) : null;
     const endDate = this.dateKhataReportListForm.value.end ? new Date(this.dateKhataReportListForm.value.end) : null;
-    if (startDate && endDate) {
-      this.khataReportDataSource.data = this.khataOrderList.filter((invoice: any) => {
-        if (!invoice.date) return false;
 
-        const invoiceDate = new Date(invoice.date.seconds * 1000);
-        return invoiceDate >= startDate && invoiceDate <= endDate;
-      });
-    } else {
-      this.khataReportDataSource.data = this.khataOrderList;
+    let filteredData = this.khataOrderList.filter((invoice: any) => {
+      if (!invoice.date || invoice.status !== 'Done') return false;
+
+      const invoiceDate = new Date(invoice.date.seconds * 1000);
+      const startCondition = startDate ? invoiceDate >= startDate : true;
+      const endCondition = endDate ? invoiceDate <= endDate : true;
+      return startCondition && endCondition;
+    });
+
+    if (this.selectedkhata) {
+      filteredData = filteredData.filter((item: any) => item.khata === this.selectedkhata);
     }
+
+    this.khataReportDataSource.data = this.processData(filteredData);
   }
  
   processData(data: any[]) {
@@ -85,14 +106,35 @@ export class ReportComponent implements OnInit {
   getKhataReportData() {
     this.commonService.fetchData('KhataReportList', this.khataReportList, this.khataReportDataSource)
     this.getKhataOrderData()
+    this.filterData()
+  }
+
+  filterData() {
+    this.khataReportDataSource.filterPredicate = (data: any, filter: string) => {
+      const dataStr = [
+        this.getPartyName(data.party)||'',
+        this.getOrderNo(data.khata)||'',
+        this.getKhataName(data.order)||'',
+        data.productsOrder[0]?.productName,
+        data.productsOrder[0]?.productkQuantity || '',
+        data.productsOrder[0]?.productQuantity || '',
+        data.productsOrder[0]?.productPrice || '',
+        data.productsOrder[0]?.khataPrice || '',
+        data.pTotal || '',
+        data.kTotal || '',
+        data.profit || '',
+      ].join(' ').toLowerCase();
+      return dataStr.includes(filter.toLowerCase());
+    };
+    this.filterDate()
   }
   
   getKhataOrderData() {
     this.commonService.fetchData('KhataOrderList', this.khataOrderList).then((data:any) => {
       const processedData = this.processData([...this.khataOrderList]);
       this.khataReportDataSource.data = processedData.filter(item => item.status === 'Done');
+      this.filterDate();
     });
-    this.khataReportDataSource =new MatTableDataSource(this.khataReportList)
   } 
   
   getPartyData() {
@@ -121,9 +163,10 @@ export class ReportComponent implements OnInit {
 
   KhataChange(event: any) {
     this.selectedkhata = event.value;
-      const khata = this.khataOrderList.filter((khataobj: any) => khataobj.khata === event.value)
-      this.khataReportDataSource = new MatTableDataSource(khata);
-    this.khataReportDataSource.paginator = this.paginator; 
+    //   const khata = this.khataOrderList.filter((khataobj: any) => khataobj.khata === event.value)
+    //   this.khataReportDataSource = new MatTableDataSource(khata);
+    // this.khataReportDataSource.paginator = this.paginator; 
+    this.filterDate();
     }
 
   filedownload() {

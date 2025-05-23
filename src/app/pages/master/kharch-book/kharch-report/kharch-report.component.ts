@@ -51,6 +51,7 @@ export class KharchReportComponent implements OnInit {
     }
 
     this.calculateTotalAmount();
+    this.filterData();
     this.kharchListDataSource.paginator = this.paginator;
   }
 
@@ -95,7 +96,25 @@ export class KharchReportComponent implements OnInit {
     this.commonService.fetchData('ExpensesList', this.expensesList).then(() => {
       this.kharchListDataSource.data = [...this.expensesList];
       this.calculateTotalAmount();
+      this.filterData();
     });
+  }
+
+  filterData() {
+    this.kharchListDataSource.filterPredicate = (data: any, filter: string) => {
+      const dataStr = [
+        data.expensesType,
+        this.convertTimestampToDate(data.date)?.toLocaleDateString() || '',
+        data.description,
+        data.chalanNo,
+        data.amount || '',
+        data.paidBy,
+        data.status
+      ].join(' ').toLowerCase();
+
+      return dataStr.includes(filter.toLowerCase());
+    };
+    this.filterDate()
   }
 
   filedownload() {

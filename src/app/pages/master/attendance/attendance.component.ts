@@ -72,8 +72,24 @@ export class AttendanceComponent implements OnInit {
   }
 
   getAttendanceData() {
-    this.commonService.fetchData('AttendanceList', this.attendanceList, this.attendanceListDataSource);
+    this.commonService.fetchData('AttendanceList', this.attendanceList, this.attendanceListDataSource).then((res) => {
+      this.filterData();
+    });
   }
+
+  filterData() {
+    this.attendanceListDataSource.filterPredicate = (data: any, filter: string) => {
+      const dataStr = [
+        this.getEmployeeName(data.employeeId) || '',
+        this.convertTimestampToDate(data.date)?.toLocaleDateString() || '',
+        data.day || ''
+      ].join(' ').toLowerCase();
+
+      return dataStr.includes(filter.toLowerCase());
+    };
+    this.filterDate()
+  }
+
 
   getEmployeeData() {
     this.commonService.fetchData('EmployeeList', this.employeesList);

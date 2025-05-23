@@ -78,7 +78,9 @@ export class WithdrawalListComponent implements OnInit {
   }
 
   getWithdrawalData() {
-    this.commonService.fetchData('WithdrawalList', this.withdrawalList, this.withdrawalDataSource);
+    this.commonService.fetchData('WithdrawalList', this.withdrawalList, this.withdrawalDataSource).then((res) => {
+      this.filterData()
+    })
   }
 
   filterData() {
@@ -91,6 +93,7 @@ export class WithdrawalListComponent implements OnInit {
 
       return dataStr.includes(filter.toLowerCase());
     };
+    this.filterDate()
   }
 
   getEmployeeData() {

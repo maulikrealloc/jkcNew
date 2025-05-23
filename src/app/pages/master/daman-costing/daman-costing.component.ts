@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import jsPDF from 'jspdf';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-daman-costing',
@@ -6,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./daman-costing.component.scss']
 })
 export class DamanCostingComponent implements OnInit {
-
+  partyList: any = [];
   areaHead: string = '400';
   designType = "daman";
   no: number | null = null;
@@ -25,6 +27,7 @@ export class DamanCostingComponent implements OnInit {
   empSalarymt: any;
   taxAmount: any;
   finalPrice: any;
+  partyName: any;
 
   designEstimate: any = [
     {
@@ -83,7 +86,7 @@ export class DamanCostingComponent implements OnInit {
     }
   ]
 
-  constructor() { }
+  constructor(private commonService: CommonService) { }
 
   ngOnInit(): void {
     this.getFinalStitches();
@@ -93,6 +96,11 @@ export class DamanCostingComponent implements OnInit {
     this.getEmpSalartMt();
     this.areaHeadChanges();
     this.designTypeChanges();
+    this.getPartyData();
+  }
+
+  getPartyData() {
+    this.commonService.fetchData('PartyList', this.partyList)
   }
 
   getFinalStitches() {
@@ -239,4 +247,136 @@ export class DamanCostingComponent implements OnInit {
     }
   }
 
+  filedownload() {
+    const doc = new jsPDF();
+    
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Design Estimate Report', 105, 15, { align: 'center' }); 
+    doc.setFont('helvetica', 'normal');
+    doc.setDrawColor(204, 204, 204);
+    doc.line(0, 20, 210, 20);
+
+    const today = new Date();
+    const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+
+    doc.setFontSize(10);
+    doc.text(`Date: ${formattedDate}`, 170, 30);
+
+    doc.setFontSize(12);
+    const partyName = this.partyName ? (this.partyList.find((party: any) => party.id === this.partyName)?.firstName || '') : 'All Party';
+    doc.text(`Party: ${partyName}`, 14, 30);
+
+
+    doc.setFontSize(12);
+    doc.text(`Design Type: ${this.designType}`, 14, 40);
+
+    if (this.designType === 'daman') {
+      doc.text(`Area Head: ${this.areaHead}`, 85, 40);
+    } else if (this.designType === 'choli') {
+      doc.text(`No: ${this.no}`, 85, 40);
+    } else if (this.designType === 'less') {
+      doc.text(`Area Head: ${this.areaHead}`, 85, 40);
+      doc.text(`No: ${this.no}`, 170, 40);
+    }
+
+    doc.setDrawColor(204, 204, 204);
+    doc.line(0, 47, 210, 47); 
+    doc.setFontSize(12);
+    doc.text('Machine Stitches', 14, 57);
+
+    const machineStitchesData = [
+      ['Stitches', this.stitchesValue],
+      ['Head', this.designType === 'choli' ? 'N/A' : this.headValue],
+      ['Stitches Head Total', this.stitchesHeadTotal],
+      ['Final Stitches', this.finalStitches],
+      ['Price', this.priceValue],
+      ['Per/Meter', this.meterTotal]
+    ];
+
+    (doc as any).autoTable({
+      startY: 60,
+      head: [['Item', 'Value']],
+      body: machineStitchesData,
+      theme: 'grid',
+      headStyles: { fillColor: [0, 0, 0], textColor: 255 },
+      tableWidth: 85,
+      columnStyles: {
+        0: { cellWidth: 43 },
+        1: { cellWidth: 43 }
+      },
+      margin: { left: 14 }
+    });
+    
+
+    doc.setFontSize(12);
+    doc.text('Production Details', 108, 57);
+
+    const productionData = [
+      ['Machine Stiches', this.machineStichesValue],
+      ['Design Stich', this.stitchesValue],
+      ['Frames/Day', this.framesDayTotal],
+      [this.designType === 'choli' ? 'Peace/Frame' : 'Mtr/Frame', this.mtrFrameValue],
+      ['Final Meter', this.finalMeter],
+      ['Employee-Salary', this.employeeSalaryValue],
+      ['Emp Salary/mt', this.empSalarymt]
+    ];
+
+    (doc as any).autoTable({
+      startY: 60,
+      head: [['Item', 'Value']],
+      body: productionData,
+      theme: 'grid',
+      headStyles: { fillColor: [0, 0, 0], textColor: 255 },
+      tableWidth: 85,
+      columnStyles: {
+        0: { cellWidth: 44 },
+        1: { cellWidth: 44 }
+      },
+      margin: { left: 108 }
+    });
+
+    doc.setFontSize(12);
+    doc.text('Design Estimate', 14, 132);
+
+    const estimateData = this.designEstimate.map((item: any) => [
+      item.name,
+      item.no,
+      item.price,
+      item.item,
+      this.designEstimateTotal(item),
+      this.designEstimateAmount(item)
+    ]);
+
+    (doc as any).autoTable({
+      startY: 135,
+      head: [['Name', 'No', 'Price', 'Item', 'Total', 'Amount']],
+      body: estimateData,
+      theme: 'grid',
+      headStyles: { fillColor: [0, 0, 0], textColor: 255 },
+    });
+
+    doc.setFontSize(12);
+    doc.text('Summary', 14, 222);
+    const summaryData = [
+      this.getTotalAmount(),
+      this.meterTotal,
+      this.cut,
+      this.taxAmount,
+      this.finalPrice,
+      this.getNetProfit(),
+      this.getProfitPercentage(),
+      this.finalPrice
+    ];
+
+    (doc as any).autoTable({
+      startY: 225,
+      head: [['Total', 'Rs/Meter', 'Cut %', 'Tax Amt', 'Total Price', 'Net Profit', 'Profit', 'Final Price']],
+      body: [summaryData],
+      theme: 'grid',
+      headStyles: { fillColor: [0, 0, 0], textColor: 255 },
+    });
+
+    doc.save(`Design_Estimate_${new Date().toISOString().slice(0, 10)}.pdf`);
+  }
 }

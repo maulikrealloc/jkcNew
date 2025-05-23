@@ -155,6 +155,7 @@ export class ChalanListComponent implements OnInit {
       chalanObj.firmId === event.value
     );
     this.chalanListDataSource = new MatTableDataSource(firmChange);
+    this.filterData(); 
     this.chalanSorting();
   }
 

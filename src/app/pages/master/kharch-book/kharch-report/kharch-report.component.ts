@@ -49,9 +49,9 @@ export class KharchReportComponent implements OnInit {
       const paidbylist = this.expensesList.filter((paidbyObj: any) => paidbyObj.paidBy === event.value);
       this.kharchListDataSource = new MatTableDataSource(paidbylist);
     }
+    // this.filterData();
 
     this.calculateTotalAmount();
-    this.filterData();
     this.kharchListDataSource.paginator = this.paginator;
   }
 

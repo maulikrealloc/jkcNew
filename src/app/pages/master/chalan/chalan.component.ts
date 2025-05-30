@@ -2,9 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { ToWords } from 'to-words';
-import { ChalanViewDialogComponent } from './chalan-view-dialog/chalan-view-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonService } from 'src/app/services/common.service';
 import { ValidationService } from 'src/app/services/validation.service';
@@ -83,7 +81,7 @@ export class ChalanComponent implements OnInit {
   }
   
   viewpdf() {
-    this.chalanList = []
+    this.chalanList = [];
     this.getPartyDetails(this.chalanForm.value.party)
     this.getFirmDetails(this.chalanForm.value.firm)
     this.generatePDF()
@@ -125,9 +123,10 @@ export class ChalanComponent implements OnInit {
   }
 
   generatePDF() {
+    this.chalanList = [];
     this.getPartyDetails(this.chalanForm.value.party);
     this.getFirmDetails(this.chalanForm.value.firm);
-    this.netAmount = this.chalanList.reduce((sum:any, item:any) => sum + item.totalAmount, 0);
+    this.netAmount = this.chalanList.reduce((sum: any, item: any) => sum + item.totalAmount, 0);
 
     const url = this.validationService.generatePDF(
       this.partyDetails,
@@ -161,14 +160,13 @@ export class ChalanComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      // this.chalanForm.reset();
-      this.chalanForm.controls['firm'].reset();
-      this.chalanForm.controls['party'].reset();
-      this.chalanForm.controls['partyOrder'].reset();
       this.chalanList = [];
       this.chalanListDataSource = new MatTableDataSource(this.chalanList);
       this.chalanListDataSource.paginator = this.paginator;
     });
+    this.chalanForm.controls['firm'].reset();
+    this.chalanForm.controls['party'].reset();
+    this.chalanForm.controls['partyOrder'].reset();
   }
 
   partyChange(event: any) {
@@ -186,6 +184,7 @@ export class ChalanComponent implements OnInit {
   orderChange(event: any) {
     this.chalanList = []
     this.partyOrder = ''
+    this.selectedProduct = [];
     this.chalanListDataSource = new MatTableDataSource(this.chalanList);
     const seletedOrderProducts = this.orderList.find((id: any) => id.id === event.value)
     seletedOrderProducts.products.forEach((element: any) => {
@@ -212,6 +211,7 @@ export class ChalanComponent implements OnInit {
         chalanNo: this.selectedPartyChalanNo
       }
       this.selectedProduct.push(product);
+      this.chalanForm.value.product = this.selectedProduct
       this.chalanList.push(payload);
       this.chalanListDataSource = new MatTableDataSource(this.chalanList);
       this.chalanListDataSource.paginator = this.paginator;

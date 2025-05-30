@@ -13,7 +13,7 @@ import { CommonService } from 'src/app/services/common.service';
   
 export class PassbookComponent implements OnInit {
 
-  passbookDataColumns: string[] = ['passbook','name','date','debit','credit','balance' ];
+  passbookDataColumns: string[] = ['passbook', 'name', 'date', 'debit', 'credit', 'balance'];
   passbookList: any = []
   companyAccountList: any = [];
   incomeList: any = [];
@@ -43,7 +43,7 @@ export class PassbookComponent implements OnInit {
    
   partyChange(event: any) {
     let balance = 0;
-    const partylist = this.passbookList.filter((partyObj: any) => partyObj.accountName === event.value || partyObj.account === event.value || partyObj.paidBy === event.value )
+    const partylist = this.passbookList.filter((partyObj: any) => partyObj.accountName === event.value || partyObj.account === event.value || partyObj.paidBy === event.value)
     const updatedPartyList = partylist.map((transaction: any) => {
       if (transaction.credit) {
         balance += transaction.credit;

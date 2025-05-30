@@ -9,13 +9,26 @@
       <mat-datepicker #Date></mat-datepicker>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="w-100 m-t-10">
+    <!-- <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Expenses Type</mat-label>
       <mat-select #dropdown formControlName="expensesType" placeholder="Select expenses">
         <mat-option *ngFor="let item of expensesmasterList" [value]="item.type">{{item.type}}</mat-option>
       </mat-select>
+    </mat-form-field>  -->
+
+    <mat-form-field class="example-full-width" appearance="outline" class="w-100 m-t-10">
+      <mat-label>Expenses Type</mat-label>
+      <input type="text" placeholder="Select expenses" aria-label="Number" (blur)="checkedValue()" matInput formControlName="expensesType"
+        [matAutocomplete]="auto">
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+          {{option}}
+        </mat-option>
+      </mat-autocomplete>
     </mat-form-field>
-    <app-validation-message class="position-relative" [control]="expensesForm.controls['expensesType']"></app-validation-message>
+
+    <app-validation-message class="position-relative"
+      [control]="expensesForm.controls['expensesType']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Description</mat-label>
@@ -23,32 +36,36 @@
     </mat-form-field>
     <app-validation-message class="position-relative"
       [control]="expensesForm.controls['description']"></app-validation-message>
-    
+
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Chalan No</mat-label>
       <input type="number" matInput placeholder="Enter chalan no" formControlName="chalanNo" min="0">
     </mat-form-field>
-    
+
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Amount</mat-label>
       <input type="number" matInput placeholder="Enter amount" formControlName="amount" min="0">
     </mat-form-field>
-    <app-validation-message class="position-relative" [control]="expensesForm.controls['amount']"></app-validation-message>
-      
-        <mat-label class="mat-subtitle-2 m-b-8 d-block">Status</mat-label>
-        <mat-radio-group formControlName="status" aria-label="Select an option">
-          <mat-radio-button value="pending">Pending</mat-radio-button>
-          <mat-radio-button value="paid">Paid</mat-radio-button>
-        </mat-radio-group>
-    <app-validation-message class="position-relative" [control]="expensesForm.controls['status']"></app-validation-message>
+    <app-validation-message class="position-relative"
+      [control]="expensesForm.controls['amount']"></app-validation-message>
+
+    <mat-label class="mat-subtitle-2 m-b-8 d-block">Status</mat-label>
+    <mat-radio-group formControlName="status" aria-label="Select an option">
+      <mat-radio-button value="pending">Pending</mat-radio-button>
+      <mat-radio-button value="paid">Paid</mat-radio-button>
+    </mat-radio-group>
+    <app-validation-message class="position-relative"
+      [control]="expensesForm.controls['status']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Paid By</mat-label>
       <mat-select #dropdown formControlName="paidBy" placeholder="Enter paid by">
-        <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{ item.accountName}}</mat-option>
+        <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{
+          item.accountName}}</mat-option>
       </mat-select>
     </mat-form-field>
-    <app-validation-message class="position-relative" [control]="expensesForm.controls['paidBy']"></app-validation-message>
+    <app-validation-message class="position-relative"
+      [control]="expensesForm.controls['paidBy']"></app-validation-message>
   </form>
 </mat-dialog-content>
 <mat-divider></mat-divider>

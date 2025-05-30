@@ -201,7 +201,8 @@ export class InvoiceComponent implements OnInit {
       sgstAmount: Number(sgstAmount.toFixed(2)),
       igstAmount: Number(igstAmount.toFixed(2)),
       discountAmount: Number(discountAmount.toFixed(2)),
-       products: [...this.selectedChalanList]
+      products: [...this.selectedChalanList],
+      paymentReceiveAmount:[]
     };
    
     this.updateChalanIsCreated(payload.chalanId);

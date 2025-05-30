@@ -83,9 +83,10 @@ export class OrderListDialogComponent implements OnInit {
       const selectedOrderId = this.orderForm.get('order')?.value;
       const availableOrders =  this.filterOrderList.filter((order: any) => {
         return ! this.khataOrderList.some((khataOrder:any)=>khataOrder.order === order.id)
-      })
+      });
       this.filterOrderList = availableOrders;
-      if (!availableOrders.some((order: any) => order.id === selectedOrder.id)) {
+
+      if (selectedOrderId && !availableOrders.some((order: any) => order.id === selectedOrderId)) {
         this.orderForm.get('order')?.setValue('');
         this.productsOrder.clear();
         return;

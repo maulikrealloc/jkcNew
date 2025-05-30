@@ -146,6 +146,16 @@
                     </div>
                   </div>
                 </div>
+                <div class="menu-item" *ngIf="!hasInvoice(element.id)"  (click)="editChalan('Edit',element)">
+                  <div class="d-flex">
+                    <div>
+                      <i-tabler name="edit" class="icon-18"></i-tabler>
+                    </div>
+                    <div>
+                      <span class="m-l-10">Update</span>
+                    </div>
+                  </div>
+                </div>
                 <div class="menu-item" (click)="deleteChalan('Delete', element)">
                   <div class="d-flex">
                     <div>

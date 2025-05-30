@@ -99,5 +99,6 @@ export class ViewPDFdialogComponent implements OnInit {
     this.data.payload.updateProductsData.isCreated = true;
     this.firebaseCollectionService.updateDocument('CompanyList', this.data.payload.updateProductsData.id, this.data.payload.updateProductsData, 'OrderList');
     this.firebaseCollectionService.addDocument('CompanyList', payload, 'ChalanList');
+    this.chalanList = [];
   }
 }

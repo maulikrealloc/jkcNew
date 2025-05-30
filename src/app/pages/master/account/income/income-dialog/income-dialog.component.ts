@@ -71,7 +71,10 @@ export class IncomeDialogComponent implements OnInit {
   }
 
   getinvoiceData() {
-    this.commonService.fetchData('InvoiceList', this.invoiceList);
+    this.commonService.fetchData('InvoiceList', this.invoiceList).then((res) => {
+      console.log(this.invoiceList);
+      
+    });
   }
 
   doAction() {
@@ -103,5 +106,33 @@ export class IncomeDialogComponent implements OnInit {
   closeDialog() {
     this.dialogRef.close({ event: 'cancel' })
   }
+  
+  invoiceChange(event: any) {
+    const selectedInvoiceId = event.value;
+    const selectedInvoice = this.invoiceList.find((invoice: any) => invoice.id === selectedInvoiceId);
 
+    if (selectedInvoice) {
+      let totalAmount = 0;
+      if (selectedInvoice.paymentReceiveAmount && selectedInvoice.paymentReceiveAmount.length > 0) {
+        totalAmount = selectedInvoice.paymentReceiveAmount.reduce((sum: number, payment: any) => {
+          return sum + (payment.amount || 0);
+        }, 0);
+      }
+
+      let invoiceDate = new Date();
+      if (selectedInvoice.paymentReceiveAmount && selectedInvoice.paymentReceiveAmount.length > 0) {
+        const payment = selectedInvoice.paymentReceiveAmount[0];
+        if (payment.date && payment.date.seconds) {
+          invoiceDate = new Date(payment.date.seconds * 1000);
+        }
+      } else if (selectedInvoice.date && selectedInvoice.date.seconds) {
+        invoiceDate = new Date(selectedInvoice.date.seconds * 1000);
+      }
+
+      this.incomeForm.patchValue({
+        amount: totalAmount,
+        invoiceDate: invoiceDate
+      });
+    }
+  }
 }

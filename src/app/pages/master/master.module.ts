@@ -68,6 +68,7 @@ import { EditchalanComponent } from './chalan/editchalan/editchalan.component';
 import { ViewPDFdialogComponent } from './chalan/view-pdfdialog/view-pdfdialog.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { KharchDialogComponent } from './kharch-master/kharch-dialog/kharch-dialog.component';
+import { ChalaneditDialogComponent } from './chalan-list/chalanedit-dialog/chalanedit-dialog.component';
 
 
 @NgModule({
@@ -132,6 +133,7 @@ import { KharchDialogComponent } from './kharch-master/kharch-dialog/kharch-dial
     EditchalanComponent,
     ViewPDFdialogComponent,
     KharchDialogComponent,
+    ChalaneditDialogComponent,
   ],
   imports: [
     CommonModule,

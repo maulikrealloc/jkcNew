@@ -108,15 +108,15 @@ export class AddKharchComponent implements OnInit {
     });
   }
 
-  openExpensesMaster(action: string, obj: any) {
-    obj.action = action;
-    const dialogRef = this.dialog.open(ExpensesmasterDialogComponent, {
-      data: obj,
-    })
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event) {
-        this.commonService.commonApiCalled(result, obj, 'ExpensesmasterList').then(() => this.getExpensesmasterListData()).catch(console.error);
-      }
-    });
-  }
+  // openExpensesMaster(action: string, obj: any) {
+  //   obj.action = action;
+  //   const dialogRef = this.dialog.open(ExpensesmasterDialogComponent, {
+  //     data: obj,
+  //   })
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     if (result?.event) {
+  //       this.commonService.commonApiCalled(result, obj, 'ExpensesmasterList').then(() => this.getExpensesmasterListData()).catch(console.error);
+  //     }
+  //   });
+  // }
 }

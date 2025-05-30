@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Timestamp } from 'firebase/firestore';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { ProductDialogComponent } from './product-dialog/product-dialog.component';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -12,6 +11,7 @@ import { ToWords } from 'to-words';
 import { CommonService } from 'src/app/services/common.service';
 import { MatSort } from '@angular/material/sort';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ChalaneditDialogComponent } from './chalanedit-dialog/chalanedit-dialog.component';
 
 @Component({
   selector: 'app-chalan-list',
@@ -21,7 +21,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 export class ChalanListComponent implements OnInit {
 
-  chalanDataColumns: string[] = [ 'srNo', 'partyName', 'partyOrder', 'chalanNo', 'chalanDate', 'netAmount', 'action'];
+  chalanDataColumns: string[] = ['srNo', 'partyName', 'partyOrder', 'chalanNo', 'chalanDate', 'netAmount', 'action'];
   toWords = new ToWords({
     localeCode: 'en-IN',
     converterOptions: {
@@ -35,6 +35,7 @@ export class ChalanListComponent implements OnInit {
   partyList: any = [];
   orderList: any = [];
   chalanList: any = [];
+  InvoiceList: any = [];
   partyDetails: any;
   firmDetails: any;
   selectedOrderData: any;
@@ -49,7 +50,7 @@ export class ChalanListComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private fb: FormBuilder, private dialog: MatDialog, private commonService: CommonService, private firebaseCollectionService: FirebaseCollectionService) { }
+  constructor(private fb: FormBuilder, private dialog: MatDialog, private commonService: CommonService) { }
 
   ngOnInit(): void {
     const today = new Date();
@@ -64,6 +65,7 @@ export class ChalanListComponent implements OnInit {
     this.getPartyData();
     this.getChalanData();
     this.getOrderData();
+    this.getInvoiceData();
     this.chalanListDataSource.paginator = this.paginator;
   }
 
@@ -136,11 +138,92 @@ export class ChalanListComponent implements OnInit {
   }
 
   getOrderData() {
-    this.commonService.fetchData('OrderList', this.orderList);
+    this.commonService.fetchData('OrderList', this.orderList).then((res) => {
+    });
   }
 
   getPartyData() {
     this.commonService.fetchData('PartyList', this.partyList);
+  }
+
+  getInvoiceData() {
+    this.commonService.fetchData('InvoiceList', this.InvoiceList).then(res => {
+      this.chalanListDataSource.data = [...this.chalanListDataSource.data];
+    });
+  }
+
+  hasInvoice(chalanId: string): boolean {
+    return this.InvoiceList.some((invoice: any) => invoice.chalanId && (Array.isArray(invoice.chalanId) ? invoice.chalanId.includes(chalanId) : invoice.chalanId === chalanId
+    ));
+  }
+
+  editChalan(action: any, obj: any) {
+    const dialogRef = this.dialog.open(ChalaneditDialogComponent, {
+      data: { ...obj, action },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      
+      if (result?.event === 'Edit' && result.data) {
+       const chalanupdate = result.data
+        const itemTochalanUpdate = this.chalanList.find((item: any) => item.id === chalanupdate.id);
+        const itemToorderUpdate = this.orderList.find((item: any) => item.id === chalanupdate.partyOrderId);
+        if (itemTochalanUpdate) {
+
+          const updatePayload = {
+            event: 'Edit',
+            data: {
+              id: chalanupdate.id,
+              chalanDate: chalanupdate.chalanDate,
+              firmId: chalanupdate.firmId,
+              partyId: chalanupdate.partyId,
+              partyOrderId: chalanupdate.partyOrderId
+            }
+          };
+
+          this.commonService.commonApiCalled(updatePayload, updatePayload.data, 'ChalanList').then(() => this.getChalanData()).catch(console.error);
+        } if (itemToorderUpdate) {
+          const productsPayload = chalanupdate.products?.map((product: any) => ({
+            productIndex: product.productIndex,
+            productName: product.productName,
+            productPrice: product.productPrice,
+            productQuantity: product.productQuantity,
+            productChalanNo: product.productChalanNo
+          }));
+
+            const Payload = {
+              event: 'Edit',
+              data: {
+                products: productsPayload,
+              }
+            };
+            this.commonService.commonApiCalled(Payload, {id : chalanupdate.partyOrderId }, 'OrderList').then(() => this.getOrderData()).catch(console.error);
+
+        }
+      }
+    });
+  }
+
+
+  deleteChalan(action: any, obj: any) {
+    obj.action = action;
+    const dialogRef = this.dialog.open(ProductDialogComponent, {
+      data: obj,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'ChalanList').then(() => this.getChalanData()).catch(console.error);
+      }
+    });
+  }
+
+  getProductList(action: any, obj: any) {
+    obj.action = action;
+    const dialogRef = this.dialog.open(ProductDialogComponent, {
+      data: obj,
+      width: '700px'
+    });
   }
 
   firmChange(event: any) {
@@ -167,28 +250,6 @@ export class ChalanListComponent implements OnInit {
     );
     this.chalanListDataSource = new MatTableDataSource(partyChange);
     this.chalanSorting();
-  }
-
-  
-  deleteChalan(action: any, obj: any) {
-    obj.action = action;
-    const dialogRef = this.dialog.open(ProductDialogComponent, {
-      data: obj,
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event) {
-        this.commonService.commonApiCalled(result, obj, 'ChalanList').then(() => this.getChalanData()).catch(console.error);
-      }
-    });
-  }
-
-  getProductList(action: any, obj: any) {
-    obj.action = action;
-    const dialogRef = this.dialog.open(ProductDialogComponent, {
-      data: obj,
-      width: '700px'
-    });
   }
 
   downloadPDF(data: any) {

@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Timestamp } from 'firebase/firestore';
+import { Observable, map, startWith } from 'rxjs';
 import { CommonService } from 'src/app/services/common.service';
 
 @Component({
@@ -16,7 +17,9 @@ export class ExpensesDialogComponent implements OnInit {
   action: string;
   local_data: any;
   companyAccountList: any = [];
-  expensesmasterList: any = [];
+  expensesList: any = [];
+  options: string[] = [];
+  filteredOptions: Observable<string[]>;
 
   constructor(
     private fb: FormBuilder, public dialogRef: MatDialogRef<ExpensesDialogComponent>,
@@ -29,7 +32,30 @@ export class ExpensesDialogComponent implements OnInit {
   ngOnInit(): void {
     this.expensesData(this.action === 'Edit' ? this.local_data : undefined);
     this.getCompanyAccountData();
-    this.getExpensesmasterListData()
+    this.getExpensesListData();
+
+  }
+
+  initializeAutocomplete() {
+    this.filteredOptions = this.expensesForm.controls['expensesType'].valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value || ''))
+    );
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.options.filter(option =>
+      option.toLowerCase().includes(filterValue)
+    );
+  }
+
+  checkedValue() {
+    const selectedValue = this.expensesForm.controls['expensesType'].value?.trim();
+    if (selectedValue && !this.options.includes(selectedValue)) {
+      this.options.push(selectedValue);
+      this.initializeAutocomplete();
+    }
   }
 
   expensesData(data:any) {
@@ -55,8 +81,11 @@ export class ExpensesDialogComponent implements OnInit {
     this.commonService.fetchData('CompanyAccountList', this.companyAccountList);
   } 
   
-  getExpensesmasterListData() {
-    this.commonService.fetchData('ExpensesmasterList', this.expensesmasterList);
+  getExpensesListData() {
+    this.commonService.fetchData('ExpensesList', this.expensesList).then((res) => {
+      this.options =(this.expensesList.map((expense: any) => expense.expensesType));
+      this.initializeAutocomplete();
+    });
   }
 
 

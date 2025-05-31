@@ -57,6 +57,7 @@ export class BonusListComponent implements OnInit {
         if (!invoice.date) return false;
 
         const invoiceDate = new Date(invoice.date.seconds * 1000);
+        invoiceDate.setHours(0, 0, 0);
         return invoiceDate >= startDate && invoiceDate <= endDate;
       });
     } else {

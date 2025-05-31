@@ -66,6 +66,7 @@ export class WithdrawalListComponent implements OnInit {
         if (!invoice.date) return false;
 
         const invoiceDate = new Date(invoice.date.seconds * 1000);
+        invoiceDate.setHours(0, 0, 0);
         return invoiceDate >= startDate && invoiceDate <= endDate;
       });
     } else {
@@ -79,7 +80,7 @@ export class WithdrawalListComponent implements OnInit {
 
   getWithdrawalData() {
     this.commonService.fetchData('WithdrawalList', this.withdrawalList, this.withdrawalDataSource).then((res) => {
-      this.filterData()
+      this.filterDate()
     })
   }
 
@@ -93,7 +94,6 @@ export class WithdrawalListComponent implements OnInit {
 
       return dataStr.includes(filter.toLowerCase());
     };
-    this.filterDate()
   }
 
   getEmployeeData() {

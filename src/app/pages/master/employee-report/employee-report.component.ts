@@ -124,6 +124,7 @@ export class EmployeeReportComponent implements OnInit {
   checkDateInRange(dateObj: any, start: Date, end: Date): boolean {
     if (!dateObj || !dateObj.seconds) return false;
     const date = new Date(dateObj.seconds * 1000);
+    date.setHours(0, 0, 0);
     return date >= start && date <= end;
   }
 

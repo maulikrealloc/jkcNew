@@ -49,7 +49,7 @@ export class KharchReportComponent implements OnInit {
       const paidbylist = this.expensesList.filter((paidbyObj: any) => paidbyObj.paidBy === event.value);
       this.kharchListDataSource = new MatTableDataSource(paidbylist);
     }
-    // this.filterData();
+    this.filterData();
 
     this.calculateTotalAmount();
     this.kharchListDataSource.paginator = this.paginator;
@@ -72,6 +72,7 @@ export class KharchReportComponent implements OnInit {
         if (!invoice.date) return false;
 
         const invoiceDate = new Date(invoice.date.seconds * 1000);
+        invoiceDate.setHours(0, 0, 0);
         return invoiceDate >= startDate && invoiceDate <= endDate;
         
       });

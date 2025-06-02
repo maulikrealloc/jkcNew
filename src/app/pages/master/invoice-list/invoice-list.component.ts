@@ -38,13 +38,12 @@ export class InvoiceListComponent implements OnInit {
   chalanData: any = [];
   paymentReceiveData: any = [];
   firmDetails: any;
-  orderDetails: any;
   partyDetails: any;
   selectedChalanList: any =[];
   selectedFirmId: any;
   selectedPartyId: any;
-  parties: any[] = []; 
-  filteredParties: any[] = [];
+  invoicListArr: any[] = []; 
+
   invoiceListDataSource = new MatTableDataSource(this.invoiceList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatSort) sort!: MatSort;
@@ -74,10 +73,10 @@ export class InvoiceListComponent implements OnInit {
 
   getInvoiceData() {
     this.commonService.fetchData('InvoiceList', this.invoiceList, this.invoiceListDataSource).then((invoice) => {
-      if (this.invoiceList.length > 0) 
-        this.invoiceSorting();
+      if (this.invoiceList.length > 0)
+        this.invoicListArr = this.invoiceList;  
       this.filterData();
-          // this.invoiceListDataSource.paginator = this.paginator;
+        this.invoiceSorting();
     })
   }
 
@@ -111,6 +110,7 @@ export class InvoiceListComponent implements OnInit {
         if (!invoice.date) return false;
 
         const invoiceDate = new Date(invoice.date.seconds * 1000);
+        invoiceDate.setHours(0, 0, 0);
         return invoiceDate >= startDate && invoiceDate <= endDate;
       });
     } else {
@@ -143,28 +143,36 @@ export class InvoiceListComponent implements OnInit {
   }
 
   firmChange(event: any) {
+    this.invoiceList = this.invoicListArr;  
     this.selectedFirmId = event.value;
-    this.selectedPartyId = null; 
 
-    this.filteredParties = this.parties.filter((party:any) =>
-      party.firmId === this.selectedFirmId
-    );
-
-    const firmChange = this.invoiceList.filter((chalanObj: any) =>
-      chalanObj.firmId === event.value
-    );
-    this.invoiceListDataSource = new MatTableDataSource(firmChange);
+    const firmChanges = this.invoiceList.filter((chalanObj: any) => {
+      if (this.selectedPartyId) {
+        return chalanObj.firmId === this.selectedFirmId && chalanObj.partyId === this.selectedPartyId
+      } else {
+        return chalanObj.firmId === this.selectedFirmId
+      }
+    });
+    this.invoiceList = firmChanges;
     this.invoiceSorting();
+    this.filterDate();
   }
 
   partyChange(event: any) {
+    this.invoiceList = this.invoicListArr;  
     this.selectedPartyId = event.value;
-    const partyChange = this.invoiceList.filter((chalanObj: any) =>
-      chalanObj.partyId === event.value &&
-      (!this.selectedFirmId || chalanObj.firmId === this.selectedFirmId)
-    );
-    this.invoiceListDataSource = new MatTableDataSource(partyChange);
+
+    const partyChanges = this.invoiceList.filter((chalanObj: any) => {
+      if (this.selectedFirmId) {
+        return chalanObj.partyId === this.selectedPartyId && chalanObj.firmId === this.selectedFirmId
+      } else {
+        return chalanObj.partyId === this.selectedPartyId
+      }
+    });
+
+    this.invoiceList = partyChanges;
     this.invoiceSorting();
+    this.filterDate();
   }
 
   invoiceSorting() {

@@ -19,7 +19,6 @@ export class ProductDialogComponent implements OnInit {
   action: string;
   local_data: any;
   orderList: any = [];
-  selectedProduct: any;
   productListDataSource = new MatTableDataSource(this.orderList);
 
   constructor(

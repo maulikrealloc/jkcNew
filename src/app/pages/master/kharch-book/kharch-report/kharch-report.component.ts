@@ -19,6 +19,7 @@ export class KharchReportComponent implements OnInit {
   companyAccountList: any = [];
   kharchReportDataColumns: string[] = ['srNo', 'expensesType', 'paidBy', 'dec', 'date', 'chalanno', 'amount','status' ];
   totalAmount: number = 0;
+  
   kharchListDataSource = new MatTableDataSource(this.expensesList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);

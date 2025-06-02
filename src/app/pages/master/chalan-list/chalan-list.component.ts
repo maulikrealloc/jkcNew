@@ -43,8 +43,8 @@ export class ChalanListComponent implements OnInit {
   selectedPartyId: any;
   selectedFirmId: any;
   dateChalanForm: FormGroup;
-  parties: any[] = [];
-  filteredParties: any[] = [];
+  chalanListArr: any[] = [];
+  
   chalanListDataSource = new MatTableDataSource(this.chalanList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
@@ -74,11 +74,12 @@ export class ChalanListComponent implements OnInit {
     const startDate = this.dateChalanForm.value.start ? new Date(this.dateChalanForm.value.start) : null;
     const endDate = this.dateChalanForm.value.end ? new Date(this.dateChalanForm.value.end) : null;
     if (startDate && endDate) {
-      this.chalanListDataSource.data = this.chalanList.filter((invoice: any) => {
-        if (!invoice.chalanDate) return false;
+      this.chalanListDataSource.data = this.chalanList.filter((chalan: any) => {
+        if (!chalan.chalanDate) return false;
 
-        const invoiceDate = new Date(invoice.chalanDate.seconds * 1000);
-        return invoiceDate >= startDate && invoiceDate <= endDate;
+        const chalanDate = new Date(chalan.chalanDate.seconds * 1000);
+        chalanDate.setHours(0, 0, 0);
+        return chalanDate >= startDate && chalanDate <= endDate;
       });
     } else {
       this.chalanListDataSource.data = this.chalanList;
@@ -107,15 +108,16 @@ export class ChalanListComponent implements OnInit {
   getChalanData() {
     this.commonService.fetchData('ChalanList', this.chalanList, this.chalanListDataSource).then((chalan) => {
       if (this.chalanList.length > 0)
+        this.chalanListArr = this.chalanList;
+        this.filterData(); 
         this.chalanSorting();
-      this.filterData(); 
     })    
   }
 
   chalanSorting() {
     this.chalanListDataSource.data.sort((a: any, b: any) => b.chalanNo - a.chalanNo);
-    this.chalanListDataSource.paginator = this.paginator;
     this.chalanListDataSource.sort = this.sort;
+    this.chalanListDataSource.paginator = this.paginator;
   }
 
   filterData() {
@@ -130,7 +132,7 @@ export class ChalanListComponent implements OnInit {
       ].join(' ').toLowerCase();
       return dataStr.includes(filter.trim().toLowerCase());
     };
-    this.filterDate()
+    this.filterDate();
   }
 
   getFirmData() {
@@ -227,29 +229,36 @@ export class ChalanListComponent implements OnInit {
   }
 
   firmChange(event: any) {
+    this.chalanList = this.chalanListArr;
     this.selectedFirmId = event.value;
-    this.selectedPartyId = null;
-
-    this.filteredParties = this.parties.filter((party: any) =>
-      party.firmId === this.selectedFirmId
-    );
-
-    const firmChange = this.chalanList.filter((chalanObj: any) =>
-      chalanObj.firmId === event.value
-    );
-    this.chalanListDataSource = new MatTableDataSource(firmChange);
-    this.filterData(); 
+    
+    const firmChanges = this.chalanList.filter((chalanObj: any) => {
+      if (this.selectedPartyId) {
+        return chalanObj.firmId === this.selectedFirmId && chalanObj.partyId === this.selectedPartyId
+      } else {
+        return chalanObj.firmId === this.selectedFirmId
+      }
+    });
+    this.chalanList = firmChanges;
     this.chalanSorting();
+    this.filterDate();
   }
 
   partyChange(event: any) {
+    this.chalanList = this.chalanListArr;
     this.selectedPartyId = event.value;
-    const partyChange = this.chalanList.filter((chalanObj: any) =>
-      chalanObj.partyId === event.value &&
-      (!this.selectedFirmId || chalanObj.firmId === this.selectedFirmId)
-    );
-    this.chalanListDataSource = new MatTableDataSource(partyChange);
+
+    const partyChanges = this.chalanList.filter((chalanObj: any) => {
+      if (this.selectedFirmId) {
+        return chalanObj.partyId === this.selectedPartyId && chalanObj.firmId === this.selectedFirmId
+      } else {
+        return chalanObj.partyId === this.selectedPartyId
+      }
+    });
+
+    this.chalanList = partyChanges;
     this.chalanSorting();
+    this.filterDate();
   }
 
   downloadPDF(data: any) {

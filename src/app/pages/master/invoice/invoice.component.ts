@@ -28,6 +28,7 @@ export class InvoiceComponent implements OnInit {
       ignoreZeroCurrency: false,
     },
   });
+  
   paymentDays = new Date()
   invoiceForm: FormGroup;
   firmList: any = [];
@@ -42,6 +43,7 @@ export class InvoiceComponent implements OnInit {
   selectedChalanList: any = [];
   filteredChalan: any = []
   originalFirmChalanList: any[] = []; 
+
   invoiceListDataSource = new MatTableDataSource(this.selectedChalanList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);

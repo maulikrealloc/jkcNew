@@ -25,6 +25,7 @@ export class PaymentListComponent implements OnInit {
   incomeMasterData: any = [];
   editIndex: number | null = null;
   invoiceDocId: string;
+  
   paymentListDataSource = new MatTableDataSource(this.paymentReciveList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 

@@ -93,7 +93,6 @@ export class ChalaneditDialogComponent implements OnInit {
       id: this.local_data.id 
     };
     this.dialogRef.close({ event: this.action, data: payload });
-    console.log(this.chalanForm.value);
     
   }
 

@@ -259,6 +259,7 @@ export class InvoiceComponent implements OnInit {
     this.getFirmDetails(payload.firmId);
     this.getChalanDetails(payload.chalanId);
     this.generatePDF(payload);
+   
   }
 
   // updateChalanIsCreated(chalanId: any) {

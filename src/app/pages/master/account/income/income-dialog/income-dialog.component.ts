@@ -72,9 +72,7 @@ export class IncomeDialogComponent implements OnInit {
   }
 
   getinvoiceData() {
-    this.commonService.fetchData('InvoiceList', this.invoiceList).then((res) => {
-      console.log(this.invoiceList);
-      
+    this.commonService.fetchData('InvoiceList', this.invoiceList).then((res) => {      
     });
   }
 

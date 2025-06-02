@@ -40,8 +40,7 @@ export class EmployeeReportComponent implements OnInit {
     });
     this.getEmployeeReport();
     this.employeeListDataSource.paginator = this.paginator;
-    setTimeout(() => {
-    }, 2000);
+  
   }
 
   applyFilter(filterValue: string): void {
@@ -95,9 +94,9 @@ export class EmployeeReportComponent implements OnInit {
         abesent: abesent,
         upad: upad,
         extra: extra,
-        remain: remain.toFixed(2),
+        remain: Math.round(remain).toFixed(2),
         bonus: bonus,
-        finalAMT: finalAMT.toFixed(2),
+        finalAMT: Math.round(finalAMT).toFixed(2),
       };
 
       this.employeeReportList.push(obj);
@@ -166,11 +165,10 @@ export class EmployeeReportComponent implements OnInit {
           abesent: abesent,
           upad: upad,
           extra: extra,
-          remain: remain.toFixed(2),
+          remain: Math.round(remain).toFixed(2),
           bonus: bonus,
-          finalAMT: finalAMT.toFixed(2),
+          finalAMT: Math.round(finalAMT).toFixed(2),
         };
-
         this.employeeReportList.push(obj);
       });
       this.filterData();

@@ -31,7 +31,6 @@ export class AppTopProjectsComponent implements OnInit {
     this.getInvoiceData();
     this.getPartyData();
     this.PaymentdataSource.paginator = this.paginator;
-    console.log(this.PaymentdataSource);
   }
 
   // getInvoiceData() {

@@ -38,8 +38,8 @@ export class ReportComponent implements OnInit {
       start: [startDate],
       end: [endDate]
     })
-    this.getKhataOrderData();
     this.getKhataReportData();
+    this.getKhataOrderData();
     this.getPartyData();
     this.getKhataData();
     this.getOrderData();
@@ -83,13 +83,34 @@ export class ReportComponent implements OnInit {
     this.khataReportDataSource.data = this.processData(filteredData);
   }
  
+  // processData(data: any[]) {
+  //   return data.map(element => {
+  //     element.pTotal = element.productsOrder.productPrice * element.productsOrder.productQuantity;
+  //     element.kTotal = element.productsOrder.khataPrice * element.productsOrder.productQuantity;
+  //     element.profit = element.pTotal - element.kTotal;
+  //     return element;
+  //   });
+  // }
+
+  // Update your processData method to flatten the array
   processData(data: any[]) {
-    return data.map(element => {
-      element.pTotal = element.productsOrder[0].productPrice * element.productsOrder[0].productQuantity;
-      element.kTotal = element.productsOrder[0].khataPrice * element.productsOrder[0].productQuantity;
-      element.profit = element.pTotal - element.kTotal;
-      return element;
+    const processedData: any[] = [];
+    data.forEach(element => {
+      element.productsOrder.forEach((product: any) => {
+        const pTotal = product.productPrice * product.productQuantity;
+        const kTotal = product.khataPrice * product.productQuantity;
+        const profit = pTotal - kTotal;
+
+        processedData.push({
+          ...element,
+          productDetails: product, 
+          pTotal,
+          kTotal,
+          profit
+        });
+      });
     });
+    return processedData;
   }
 
   applyFilter(filterValue: string): void {
@@ -104,9 +125,10 @@ export class ReportComponent implements OnInit {
   }
   
   getKhataReportData() {
-    this.commonService.fetchData('KhataReportList', this.khataReportList, this.khataReportDataSource)
-    this.getKhataOrderData()
-    this.filterData()
+    this.commonService.fetchData('KhataReportList', this.khataReportList, this.khataReportDataSource).then((res) => {
+      this.getKhataOrderData()
+      this.filterData()
+    })
   }
 
   filterData() {
@@ -115,11 +137,11 @@ export class ReportComponent implements OnInit {
         this.getPartyName(data.party)||'',
         this.getOrderNo(data.khata)||'',
         this.getKhataName(data.order)||'',
-        data.productsOrder[0]?.productName,
-        data.productsOrder[0]?.productkQuantity || '',
-        data.productsOrder[0]?.productQuantity || '',
-        data.productsOrder[0]?.productPrice || '',
-        data.productsOrder[0]?.khataPrice || '',
+        data.productsOrder.productName,
+        data.productsOrder.productkQuantity || '',
+        data.productsOrder.productQuantity || '',
+        data.productsOrder.productPrice || '',
+        data.productsOrder.khataPrice || '',
         data.pTotal || '',
         data.kTotal || '',
         data.profit || '',
@@ -187,7 +209,6 @@ export class ReportComponent implements OnInit {
     doc.text(`Report Date: ${formattedStart} To ${formattedEnd}`, 14, 23);
 
     const filteredData = this.khataReportDataSource.data;
-    console.log(this.khataReportDataSource.data);
 
     const totalAmount = filteredData.reduce((sum: number, item: any) => sum + parseFloat(item.profit || 0), 0);
     doc.text(`Total Amount: - ${Math.round(totalAmount).toFixed(2)}`, 145, 15);
@@ -209,7 +230,7 @@ export class ReportComponent implements OnInit {
       const party = this.partyList.find((p: any) => p.id === item.party)?.firstName || '';
       const order = this.orderList.find((p: any) => p.id === item.order)?.partyOrder || '';
       const khata = this.khataList.find((p: any) => p.id === item.khata)?.companyName || '';
-      const product = item.productsOrder[0];
+      const product = item.productDetails;
       return [
         i + 1,
         party,

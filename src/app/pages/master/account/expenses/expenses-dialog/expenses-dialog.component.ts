@@ -33,7 +33,6 @@ export class ExpensesDialogComponent implements OnInit {
     this.expensesData(this.action === 'Edit' ? this.local_data : undefined);
     this.getCompanyAccountData();
     this.getExpensesListData();
-
   }
 
   initializeAutocomplete() {
@@ -45,7 +44,8 @@ export class ExpensesDialogComponent implements OnInit {
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.options.filter(option =>
+    const uniqueOptions = [...new Set(this.options)];
+    return uniqueOptions.filter(option =>
       option.toLowerCase().includes(filterValue)
     );
   }

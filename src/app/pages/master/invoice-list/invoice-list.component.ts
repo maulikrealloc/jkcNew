@@ -570,13 +570,15 @@ export class InvoiceListComponent implements OnInit {
     doc.text(`Party: ${partyName}`, 14, 23);
     doc.text(`Report Date: ${formattedStart} To ${formattedEnd}`, 14, 31);
 
-    // const totalAmount = filteredData
-    //   .reduce((sum, item) => sum + parseFloat(item.finalAmount), 0);
-    // doc.text(`Total Amount: ${totalAmount.toFixed(2)}`, 145, 15);
     const totalAmount = filteredData
       .reduce((sum, item) => sum + parseFloat(item.finalAmount), 0);
     doc.text(`Total Amount: ${Math.round(totalAmount).toFixed(2)}`, 145, 15);
-  
+    
+    const totalReceivedAmount = filteredData.reduce(
+      (sum, item) => sum + item.paymentReceiveAmount.reduce(
+        (amtSum:any, payment:any) => amtSum + parseFloat(payment.amount), 0), 0);
+    doc.text(`Total Received Amount: ${Math.round(totalReceivedAmount).toFixed(2)}`, 130, 23);
+
     const headers = [
       "Sr.No",
       "Invoice No",

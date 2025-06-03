@@ -6,6 +6,7 @@ import { IncomeDialogComponent } from './income-dialog/income-dialog.component';
 import { Timestamp } from 'firebase/firestore';
 import { CommonService } from 'src/app/services/common.service';
 import { MatPaginator } from '@angular/material/paginator';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-income',
@@ -20,14 +21,25 @@ export class IncomeComponent implements OnInit {
   companyAccountList: any = [];
   partyList: any = [];
   invoiceList: any = [];
+  dateIncomeForm: FormGroup;
+  incomeListArr: any = [];
+  selectedPaibyId: any;
 
   incomeListDataSource = new MatTableDataSource(this.incomeList);
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private dialog: MatDialog, private commonService: CommonService) { }
+  constructor(private fb: FormBuilder, private dialog: MatDialog, private commonService: CommonService) { }
 
   ngOnInit(): void {
+    const today = new Date();
+    const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    this.dateIncomeForm = this.fb.group({
+      start: [startDate],
+      end: [endDate]
+    });
     this.getIncomeListData();
     this.getCompanyAccountData();
     this.getPartyData();
@@ -49,8 +61,45 @@ export class IncomeComponent implements OnInit {
     return null;
   }
 
+  filterDate() {
+    if (!this.incomeList) return;
+    const startDate = this.dateIncomeForm.value.start ? new Date(this.dateIncomeForm.value.start) : null;
+    const endDate = this.dateIncomeForm.value.end ? new Date(this.dateIncomeForm.value.end) : null;
+    if (startDate && endDate) {
+      this.incomeListDataSource.data = this.incomeList.filter((invoice: any) => {
+        if (!invoice.invoiceDate) return false;
+
+        const invoiceDate = new Date(invoice.invoiceDate.seconds * 1000);
+        invoiceDate.setHours(0, 0, 0);
+        return invoiceDate >= startDate && invoiceDate <= endDate;
+      });
+    } else {
+      this.incomeListDataSource.data = this.incomeList;
+    }
+  }
+
+  filterData() {
+    this.incomeListDataSource.filterPredicate = (data: any, filter: string) => {
+      const dataStr = [
+        data.srNo || '',
+        this.getPartyName(data.partyName) || '',
+        data.account || '',
+        this.getInvoiceno(data.invoiceNo )|| '',
+        data.invoiceDate || '',
+        data.amount || ''
+      ].join(' ').toLowerCase();
+
+      return dataStr.includes(filter.trim().toLowerCase());
+    };
+    this.filterDate()
+  }
+
   getIncomeListData() {
-    this.commonService.fetchData('IncomeList', this.incomeList, this.incomeListDataSource);
+    this.commonService.fetchData('IncomeList', this.incomeList, this.incomeListDataSource).then((res) => {
+      if (this.incomeList.length > 0)
+        this.incomeListArr = this.incomeList;
+      this.filterData();
+    });
   }
 
   getCompanyAccountData() {
@@ -74,9 +123,13 @@ export class IncomeComponent implements OnInit {
   }
 
   paidbyChange(event: any) {
+    this.incomeList = this.incomeListArr;
+    this.selectedPaibyId = event.value;
+
     const paidbylist = this.incomeList.filter((paidbyObj: any) => paidbyObj.account === event.value)
-    this.incomeListDataSource = new MatTableDataSource(paidbylist);
+    this.incomeList = paidbylist;
     this.incomeListDataSource.paginator = this.paginator;
+    this.filterDate();
   }
 
   openIncome(action: string, obj: any) {

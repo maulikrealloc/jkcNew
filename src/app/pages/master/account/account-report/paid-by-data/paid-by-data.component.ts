@@ -19,7 +19,23 @@ export class PaidByDataComponent implements OnInit {
   }
 
   getExpensesListData() {
-    this.commonService.fetchData('ExpensesList', this.expensesList, this.paidByListDataSource);
+    this.commonService.fetchData('ExpensesList', this.expensesList, this.paidByListDataSource).then((res) => {
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth();
+      const currentYear = currentDate.getFullYear();
+
+      const currentMonthExpenses = this.expensesList.filter((expense:any) => {
+        const expenseDate = new Date(expense.date.seconds * 1000);
+
+        return (
+          expenseDate.getMonth() === currentMonth &&
+          expenseDate.getFullYear() === currentYear
+        );
+      });
+
+      console.log("Current month paidByListDataSource:", currentMonthExpenses);
+      this.paidByListDataSource = new MatTableDataSource (currentMonthExpenses)
+    });
   }
 
 }

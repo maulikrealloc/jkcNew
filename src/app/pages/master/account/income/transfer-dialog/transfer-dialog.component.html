@@ -30,7 +30,7 @@
 <mat-divider></mat-divider>
 <mat-dialog-actions class="p-24 justify-content-end">
   <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-  <button mat-flat-button [mat-dialog-close]="true" [disabled]="transferForm.invalid" color="primary">
+  <button mat-flat-button [mat-dialog-close]="true" [disabled]="transferForm.invalid" color="primary" (click)="submit()">
     Add
   </button>
 </mat-dialog-actions>

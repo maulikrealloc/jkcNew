@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { Logger } from 'sass';
 import { CommonService } from 'src/app/services/common.service';
 @Component({
   selector: 'app-net-profit-data',
@@ -25,7 +26,21 @@ export class NetProfitDataComponent implements OnInit {
 
   getExpensesListData() {
     this.commonService.fetchData('ExpensesList', this.expensesList).then((data) => {
-      this.totalExpenses = this.expensesList.map((id: any) => id.amount).reduce((a: any, b: any) => a + b,0);
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth();
+      const currentYear = currentDate.getFullYear();
+
+      const currentMonthExpenses = this.expensesList.filter((expense: any) => {
+        const expenseDate = new Date(expense.date.seconds * 1000);
+        return (
+          expenseDate.getMonth() === currentMonth &&
+          expenseDate.getFullYear() === currentYear
+        );
+      });
+
+      console.log("Current month expenses:", currentMonthExpenses);
+      this.totalExpenses = currentMonthExpenses.map((id: any) => id.amount).reduce((a: any, b: any) => a + b, 0);
+
     });
   }
 

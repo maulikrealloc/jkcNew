@@ -25,11 +25,56 @@ export class ExpensesDataComponent implements OnInit {
     this.getExpensesListData();
   }
 
+  // getExpensesListData() {
+  //   this.commonService.fetchData('ExpensesList', this.expensesList, this.expensesListDataSource).then((data) => {
+  //     this.pendingTotal = this.expensesList.filter((expenseObj: any) => expenseObj.status === 'pending').reduce((amount: number, expenseObj: any) => amount + (expenseObj.amount || 0), 0);
+  //     this.paidTotal = this.expensesList.filter((expenseObj: any) => expenseObj.status === 'paid').reduce((amount: number, expenseObj: any) => amount + (expenseObj.amount || 0), 0);
+
+  //     const currentDate = new Date();
+  //     const currentMonth = currentDate.getMonth();
+  //     const currentYear = currentDate.getFullYear();
+
+  //     const currentMonthExpenses = this.expensesList.filter((expense: any) => {
+  //       const expenseDate = new Date(expense.date.seconds * 1000);
+
+  //       return (
+  //         expenseDate.getMonth() === currentMonth &&
+  //         expenseDate.getFullYear() === currentYear
+  //       );
+  //     });
+
+  //     console.log("Current month expenses:", currentMonthExpenses);
+  //     this.expensesListDataSource = new MatTableDataSource(currentMonthExpenses)
+  //   })
+  // }
+
+
   getExpensesListData() {
     this.commonService.fetchData('ExpensesList', this.expensesList, this.expensesListDataSource).then((data) => {
-      this.pendingTotal = this.expensesList.filter((expenseObj: any) => expenseObj.status === 'pending').reduce((amount: number, expenseObj: any) => amount + (expenseObj.amount || 0), 0);
-      this.paidTotal = this.expensesList.filter((expenseObj: any) => expenseObj.status === 'paid').reduce((amount: number, expenseObj: any) => amount + (expenseObj.amount || 0), 0);
-    })
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth();
+      const currentYear = currentDate.getFullYear();
+
+      const currentMonthExpenses = this.expensesList.filter((expense: any) => {
+        const expenseDate = new Date(expense.date.seconds * 1000);
+        return (
+          expenseDate.getMonth() === currentMonth &&
+          expenseDate.getFullYear() === currentYear
+        );
+      });
+
+      console.log("Current month expenses:", currentMonthExpenses);
+
+      this.pendingTotal = currentMonthExpenses
+        .filter((expenseObj: any) => expenseObj.status === 'pending')
+        .reduce((amount: number, expenseObj: any) => amount + (expenseObj.amount || 0), 0);
+
+      this.paidTotal = currentMonthExpenses
+        .filter((expenseObj: any) => expenseObj.status === 'paid')
+        .reduce((amount: number, expenseObj: any) => amount + (expenseObj.amount || 0), 0);
+
+      this.expensesListDataSource = new MatTableDataSource(currentMonthExpenses);
+    });
   }
 
 }

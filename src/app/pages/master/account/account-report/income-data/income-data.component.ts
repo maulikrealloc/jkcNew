@@ -26,7 +26,23 @@ export class IncomeDataComponent implements OnInit {
   }
 
   getIncomeListData() {
-    this.commonService.fetchData('IncomeList', this.incomeDataList, this.incomeListDataSource)    
+    this.commonService.fetchData('IncomeList', this.incomeDataList, this.incomeListDataSource).then((res) => {
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth();
+      const currentYear = currentDate.getFullYear();
+
+      const currentMonthExpenses = this.incomeDataList.filter((expense: any) => {
+        const expenseDate = new Date(expense.creditDate.seconds * 1000);
+
+        return (
+          expenseDate.getMonth() === currentMonth &&
+          expenseDate.getFullYear() === currentYear
+        );
+      });
+
+      console.log("Current month incomeDataList:", currentMonthExpenses);
+      this.incomeListDataSource = new MatTableDataSource(currentMonthExpenses)      
+    });    
   }
 
   getPartyData() {

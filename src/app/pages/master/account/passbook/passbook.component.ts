@@ -20,8 +20,11 @@ export class PassbookComponent implements OnInit {
   expensesList: any = [];
   partyList: any = [];
   remainingBalance: number = 0;
+  selectedParty: any;
+
   passbookListDataSource = new MatTableDataSource(this.passbookList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  updatedPartyList: any =[];
 
   constructor(private commonService: CommonService) { }
 
@@ -42,9 +45,11 @@ export class PassbookComponent implements OnInit {
   }
    
   partyChange(event: any) {
+    this.selectedParty = event.value
     let balance = 0;
-    const partylist = this.passbookList.filter((partyObj: any) => partyObj.accountName === event.value || partyObj.account === event.value || partyObj.paidBy === event.value)
-    const updatedPartyList = partylist.map((transaction: any) => {
+    
+    const partylist = this.passbookList.filter((partyObj: any) => partyObj.accountName ===  this.selectedParty || partyObj.account ===  this.selectedParty || partyObj.paidBy ===  this.selectedParty)
+    this.updatedPartyList = partylist.map((transaction: any) => {
       if (transaction.credit) {
         balance += transaction.credit;
       } else if (transaction.debit) {
@@ -53,7 +58,7 @@ export class PassbookComponent implements OnInit {
       return { ...transaction, balance };
     });
     this.remainingBalance = balance
-    this.passbookListDataSource = new MatTableDataSource(updatedPartyList);
+    this.passbookListDataSource = new MatTableDataSource(this.updatedPartyList);
     this.passbookListDataSource.paginator = this.paginator;
   }
 
@@ -108,16 +113,8 @@ export class PassbookComponent implements OnInit {
       this.passbookList = [...this.passbookList, ...passBookData];
       
       if (this.passbookList.length > 0) {
-        const defaultParty =
-          this.passbookList[0].accountName ||
-          this.passbookList[0].account ||
-          this.passbookList[0].paidBy;
-
-        this.partyChange({ value: defaultParty });
+        this.partyChange({ value: this.companyAccountList[0]?.accountName })
       }
-
-      this.passbookListDataSource = new MatTableDataSource(this.passbookList);
-      this.passbookListDataSource.paginator = this.paginator;
     });
   }
 

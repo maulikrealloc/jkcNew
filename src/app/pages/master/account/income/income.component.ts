@@ -23,6 +23,7 @@ export class IncomeComponent implements OnInit {
   invoiceList: any = [];
   dateIncomeForm: FormGroup;
   incomeListArr: any = [];
+  transferList: any = [];
   selectedPaibyId: any;
 
   incomeListDataSource = new MatTableDataSource(this.incomeList);
@@ -44,6 +45,7 @@ export class IncomeComponent implements OnInit {
     this.getCompanyAccountData();
     this.getPartyData();
     this.getinvoiceData();
+    this.getTransferData();
   }
 
   ngAfterViewInit() {
@@ -118,6 +120,13 @@ export class IncomeComponent implements OnInit {
     this.commonService.fetchData('InvoiceList', this.invoiceList);
   }
 
+  getTransferData() {
+    this.commonService.fetchData('TransferList', this.transferList).then((res) => {
+      console.log("{{this.transferList}}", this.transferList);
+
+    });
+  }
+
   getInvoiceno(invoiceNo: string): string {
     return this.invoiceList.find((invoiceObj: any) => invoiceObj.id === invoiceNo)?.invoiceNo
   }
@@ -144,7 +153,16 @@ export class IncomeComponent implements OnInit {
     });
   }
 
-  openTransfer() {
-    const dialogRef = this.dialog.open(TransferDialogComponent, {})
+  openTransfer(action:string , obj:any) {
+    const dialogRef = this.dialog.open(TransferDialogComponent, {
+      data: { ...obj, action },
+      
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.event) {
+        this.commonService.commonApiCalled(result, obj, 'TransferList').then(() => this.getTransferData()).catch(console.error);
+      }
+    });
   }
 }

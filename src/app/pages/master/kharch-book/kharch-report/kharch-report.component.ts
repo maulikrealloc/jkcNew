@@ -19,6 +19,8 @@ export class KharchReportComponent implements OnInit {
   companyAccountList: any = [];
   kharchReportDataColumns: string[] = ['srNo', 'expensesType', 'paidBy', 'dec', 'date', 'chalanno', 'amount','status' ];
   totalAmount: number = 0;
+  selectedPaidbyId: any ;
+  invoicListArr: any =[];
   
   kharchListDataSource = new MatTableDataSource(this.expensesList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -44,13 +46,16 @@ export class KharchReportComponent implements OnInit {
   }
   
   paidbyChange(event: any) {
+    this.expensesList = this.invoicListArr; 
+    this.selectedPaidbyId = event.value;
+
     if (event.value === 'All') {
       this.kharchListDataSource = new MatTableDataSource(this.expensesList);
     } else {
-      const paidbylist = this.expensesList.filter((paidbyObj: any) => paidbyObj.paidBy === event.value);
-      this.kharchListDataSource = new MatTableDataSource(paidbylist);
+      const paidbylist = this.expensesList.filter((paidbyObj: any) => paidbyObj.paidBy === this.selectedPaidbyId);
+      this.expensesList = paidbylist;
     }
-    this.filterData();
+    this.filterDate();
 
     this.calculateTotalAmount();
     this.kharchListDataSource.paginator = this.paginator;
@@ -95,10 +100,13 @@ export class KharchReportComponent implements OnInit {
   }
  
   getExpensesListData() {
-    this.commonService.fetchData('ExpensesList', this.expensesList).then(() => {
-      this.kharchListDataSource.data = [...this.expensesList];
-      this.calculateTotalAmount();
-      this.filterData();
+    this.commonService.fetchData('ExpensesList', this.expensesList).then((expenses) => {
+      if (this.expensesList.length > 0) {
+        this.invoicListArr = this.expensesList;
+        this.calculateTotalAmount();
+        this.filterData();
+      }
+      // this.kharchListDataSource.data = [...this.expensesList];
     });
   }
 

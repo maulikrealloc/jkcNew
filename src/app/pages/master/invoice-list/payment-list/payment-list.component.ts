@@ -23,6 +23,7 @@ export class PaymentListComponent implements OnInit {
   paymentReciveList: any = [];
   paymentReceiveData: any = [];
   incomeMasterData: any = [];
+  // companyAccountList: any = [];
   editIndex: number | null = null;
   invoiceDocId: string;
   
@@ -44,6 +45,7 @@ export class PaymentListComponent implements OnInit {
 
   ngOnInit(): void {
     this.buildForm();
+    // this.getCompanyAccountData();
     this.paymentListDataSource.paginator = this.paginator;
   }
 
@@ -54,6 +56,7 @@ export class PaymentListComponent implements OnInit {
         datafind.forEach((element: any) => {
           const payload = {
             paymentReceive: element.paymentReceive,
+            // account: element.account,
             paymentDate: new Date(element.paymentDate).toLocaleDateString(),
           };
           this.paymentReciveList.push(payload)
@@ -70,6 +73,7 @@ export class PaymentListComponent implements OnInit {
         datafind.forEach((element: any) => {
           const payload = {
             paymentReceive: element.paymentReceive,
+            // account: element.account,
             paymentDate: new Date(element.paymentDate).toLocaleDateString(),
           };
           this.paymentReciveList.push(payload)
@@ -82,7 +86,8 @@ export class PaymentListComponent implements OnInit {
   buildForm() {
     this.paymentReceiveList = this.fb.group({
       paymentReceive: ['', Validators.required],
-      paymentDate: [new Date(), Validators.required]
+      paymentDate: [new Date(), Validators.required],
+      // account:['', Validators.required]
     });
   }
 
@@ -90,6 +95,7 @@ export class PaymentListComponent implements OnInit {
     const paymentDateValue = this.paymentReceiveList.value.paymentDate;
     const payload = {
       paymentReceive: this.paymentReceiveList.value.paymentReceive,
+      // account: this.paymentReceiveList.value.account,
       paymentDate: new Date(this.paymentReceiveList.value.paymentDate).toLocaleDateString(),
     };
 
@@ -109,6 +115,7 @@ export class PaymentListComponent implements OnInit {
     const selectedData = this.paymentReciveList[index];
     this.paymentReceiveList.patchValue({
       paymentReceive: selectedData.paymentReceive,
+      // account: selectedData.account,
       paymentDate: new Date(selectedData.paymentDate),
     });
     this.editIndex = index;
@@ -131,8 +138,11 @@ export class PaymentListComponent implements OnInit {
     const IncomeMaster = {
       type: 'Invoice',
       description: this.local_data.id,
+      partyName: this.local_data.partyId,
+      invoiceNo: this.local_data.invoiceNo,
       createddate: new Date(),
       AmountDate: this.paymentReceiveList.value.paymentDate, 
+      // account: this.paymentReceiveList.value.account,
       Amount: this.paymentReceiveList.value.paymentReceive,  
     };
 
@@ -165,8 +175,10 @@ export class PaymentListComponent implements OnInit {
     }
   }
   
+  // getCompanyAccountData() {
+  //   this.commonService.fetchData('CompanyAccountList', this.companyAccountList);
+  // }
  
-
   deleteData(index: number) {
     this.paymentReciveList.splice(index, 1);
     this.paymentListDataSource.data = [...this.paymentReciveList];

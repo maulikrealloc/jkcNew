@@ -21,6 +21,7 @@ export class PassbookComponent implements OnInit {
   partyList: any = [];
   remainingBalance: number = 0;
   selectedParty: any;
+  transferList: any = [];
 
   passbookListDataSource = new MatTableDataSource(this.passbookList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -31,6 +32,7 @@ export class PassbookComponent implements OnInit {
   ngOnInit(): void {
     this.getPassBookData();
     this.getPartyData();
+    this.getTransferData();
    }
 
   ngAfterViewInit() {
@@ -69,7 +71,8 @@ export class PassbookComponent implements OnInit {
       PassBookList: this.commonService.fetchData('PassBookList', this.passbookList),
       CompanyAccountList: this.commonService.fetchData('CompanyAccountList', this.companyAccountList),
       IncomeList: this.commonService.fetchData('IncomeList', this.incomeList),
-      ExpensesmasterList: this.commonService.fetchData('ExpensesList', this.expensesList)
+      ExpensesmasterList: this.commonService.fetchData('ExpensesList', this.expensesList),
+      TransferList: this.commonService.fetchData('TransferList', this.transferList)
     }).subscribe((response: any) => {
       this.passbookList = [];
       let balance = 0;
@@ -109,6 +112,36 @@ export class PassbookComponent implements OnInit {
         });
       });
 
+      this.transferList?.forEach((element: any) => {
+        balance -= element.amount || 0;
+        // this.passbookList.push({
+        //   paidBy: element.from, 
+        //   name: element.to,  
+        //   date: element.date,  
+        //   credit: 0,
+        //   debit: element.amount || 0,
+        //   balance: balance
+        // });
+        this.passbookList.push({
+          paidBy: element.from,  
+          name: element.to,  
+          date: element.date || new Date(),
+          credit: 0,
+          debit: element.amount || 0,
+          balance: balance
+        });
+
+        balance += element.amount || 0;  
+        this.passbookList.push({
+          paidBy: element.to,  
+          name: element.from,  
+          date: element.date || new Date(),
+          credit: element.amount || 0,
+          debit: 0,
+          balance: balance
+        });
+      });
+
       const passBookData = response.PassBookList || [];
       this.passbookList = [...this.passbookList, ...passBookData];
       
@@ -121,6 +154,14 @@ export class PassbookComponent implements OnInit {
   getPartyData() {
     this.commonService.fetchData('PartyList', this.partyList);
   }
+
+  getTransferData() {
+    this.commonService.fetchData('TransferList', this.transferList).then((res) => {
+      console.log("{{this.transferList}}", this.transferList);
+
+    });
+  }
+
 
   getPartyName(partyName: string): string {
     return this.partyList.find((partyObj: any) => partyObj.id === partyName)?.firstName

@@ -14,25 +14,46 @@ export class IncomeDataComponent implements OnInit {
     'partyName',
     'totalAmount'
   ];
-  incomeDataList: any = [];
+  incomeMasterData: any = [];
   partyList: any = [];
-  incomeListDataSource = new MatTableDataSource(this.incomeDataList);
+  incomeListDataSource = new MatTableDataSource(this.incomeMasterData);
 
   constructor(private commonService: CommonService) { }
 
   ngOnInit(): void {
-    this.getIncomeListData();
+    this.getIncomeMasterList();
     this.getPartyData();
   }
 
-  getIncomeListData() {
-    this.commonService.fetchData('IncomeList', this.incomeDataList, this.incomeListDataSource).then((res) => {
+  // getIncomeListData() {
+  //   // this.commonService.fetchData('IncomeList', this.incomeDataList, this.incomeListDataSource).then((res) => {
+  //   this.commonService.fetchData('IncomeMasterList', this.incomeMasterData, this.incomeListDataSource).then((res) => {
+  //     const currentDate = new Date();
+  //     const currentMonth = currentDate.getMonth();
+  //     const currentYear = currentDate.getFullYear();
+
+  //     const currentMonthExpenses = this.incomeMasterData.filter((expense: any) => {
+  //       const expenseDate = new Date(expense.createddate.seconds * 1000);
+
+  //       return (
+  //         expenseDate.getMonth() === currentMonth &&
+  //         expenseDate.getFullYear() === currentYear
+  //       );
+  //     });
+
+  //     console.log("Current month incomeDataList:", currentMonthExpenses);
+  //     this.incomeListDataSource = new MatTableDataSource(currentMonthExpenses)      
+  //   });    
+  // }
+  getIncomeMasterList() {
+    // this.commonService.fetchData('IncomeList', this.incomeDataList, this.incomeListDataSource).then((res) => {
+    this.commonService.fetchData('IncomeMasterList', this.incomeMasterData, this.incomeListDataSource).then((res) => {
       const currentDate = new Date();
       const currentMonth = currentDate.getMonth();
       const currentYear = currentDate.getFullYear();
 
-      const currentMonthExpenses = this.incomeDataList.filter((expense: any) => {
-        const expenseDate = new Date(expense.creditDate.seconds * 1000);
+      const currentMonthExpenses = this.incomeMasterData.filter((expense: any) => {
+        const expenseDate = new Date(expense.createddate.seconds * 1000);
 
         return (
           expenseDate.getMonth() === currentMonth &&
@@ -54,7 +75,7 @@ export class IncomeDataComponent implements OnInit {
   }
 
   getTotalAmount(): number {
-    return this.incomeDataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
+    return this.incomeMasterData.reduce((total: number, item: any) => total + (item.Amount || 0), 0);
   }
 
 }

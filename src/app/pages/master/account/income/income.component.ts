@@ -16,7 +16,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 export class IncomeComponent implements OnInit {
 
-  incomeDataColumns: string[] = ['#','partyName','account','invoiceNo','invoiceDate','creditDate','amount','action' ];
+  incomeDataColumns: string[] = ['#','partyName','invoiceNo','type','invoiceDate','creditDate','amount' ];
+  // incomeDataColumns: string[] = ['#','partyName','account','invoiceNo','invoiceDate','creditDate','amount','action' ];
   incomeList: any = [];
   companyAccountList: any = [];
   partyList: any = [];
@@ -24,6 +25,7 @@ export class IncomeComponent implements OnInit {
   dateIncomeForm: FormGroup;
   incomeListArr: any = [];
   transferList: any = [];
+  incomeMasterData: any = [];
   selectedPaibyId: any;
 
   incomeListDataSource = new MatTableDataSource(this.incomeList);
@@ -46,11 +48,12 @@ export class IncomeComponent implements OnInit {
     this.getPartyData();
     this.getinvoiceData();
     this.getTransferData();
+    this.getIncomeMasterList();
   }
 
-  ngAfterViewInit() {
-    this.incomeListDataSource.paginator = this.paginator;
-  }
+  // ngAfterViewInit() {
+  //   this.incomeListDataSource.paginator = this.paginator;
+  // }
 
   applyFilter(filterValue: string): void {
     this.incomeListDataSource.filter = filterValue.trim().toLowerCase();
@@ -64,19 +67,19 @@ export class IncomeComponent implements OnInit {
   }
 
   filterDate() {
-    if (!this.incomeList) return;
+    if (!this.incomeMasterData) return;
     const startDate = this.dateIncomeForm.value.start ? new Date(this.dateIncomeForm.value.start) : null;
     const endDate = this.dateIncomeForm.value.end ? new Date(this.dateIncomeForm.value.end) : null;
     if (startDate && endDate) {
-      this.incomeListDataSource.data = this.incomeList.filter((invoice: any) => {
-        if (!invoice.invoiceDate) return false;
+      this.incomeListDataSource.data = this.incomeMasterData.filter((invoice: any) => {
+        if (!invoice.AmountDate) return false;
 
-        const invoiceDate = new Date(invoice.invoiceDate.seconds * 1000);
+        const invoiceDate = new Date(invoice.AmountDate.seconds * 1000);
         invoiceDate.setHours(0, 0, 0);
         return invoiceDate >= startDate && invoiceDate <= endDate;
       });
     } else {
-      this.incomeListDataSource.data = this.incomeList;
+      this.incomeListDataSource.data = this.incomeMasterData;
     }
   }
 
@@ -104,6 +107,13 @@ export class IncomeComponent implements OnInit {
     });
   }
 
+  getIncomeMasterList() {
+    this.commonService.fetchData('IncomeMasterList', this.incomeMasterData).then((res) => {
+      this.incomeListDataSource = new MatTableDataSource(this.incomeMasterData);
+      this.incomeListDataSource.paginator = this.paginator;
+    });
+  }
+
   getCompanyAccountData() {
     this.commonService.fetchData('CompanyAccountList', this.companyAccountList);
   }
@@ -122,8 +132,6 @@ export class IncomeComponent implements OnInit {
 
   getTransferData() {
     this.commonService.fetchData('TransferList', this.transferList).then((res) => {
-      console.log("{{this.transferList}}", this.transferList);
-
     });
   }
 
@@ -131,15 +139,15 @@ export class IncomeComponent implements OnInit {
     return this.invoiceList.find((invoiceObj: any) => invoiceObj.id === invoiceNo)?.invoiceNo
   }
 
-  paidbyChange(event: any) {
-    this.incomeList = this.incomeListArr;
-    this.selectedPaibyId = event.value;
+  // paidbyChange(event: any) {
+  //   this.incomeList = this.incomeListArr;
+  //   this.selectedPaibyId = event.value;
 
-    const paidbylist = this.incomeList.filter((paidbyObj: any) => paidbyObj.account === event.value)
-    this.incomeList = paidbylist;
-    this.incomeListDataSource.paginator = this.paginator;
-    this.filterDate();
-  }
+  //   const paidbylist = this.incomeList.filter((paidbyObj: any) => paidbyObj.account === event.value)
+  //   this.incomeList = paidbylist;
+  //   this.incomeListDataSource.paginator = this.paginator;
+  //   this.filterDate();
+  // }
 
   openIncome(action: string, obj: any) {
     const dialogRef = this.dialog.open(IncomeDialogComponent, {

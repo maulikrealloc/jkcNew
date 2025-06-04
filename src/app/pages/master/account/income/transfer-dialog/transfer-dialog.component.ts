@@ -43,6 +43,7 @@ export class TransferDialogComponent implements OnInit {
 
   submit() {
     const payload = this.transferForm.value;
+    payload.date = new Date();
     this.dialogRef.close({ event: this.action, data: payload })
   }
 

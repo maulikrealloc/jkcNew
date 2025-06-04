@@ -12,7 +12,7 @@ export class NetProfitDataComponent implements OnInit {
   netProfitDataColumns: string[] = [ 'totalIncome', 'totalExpenses', 'netProfit' ];
   netProfitData: any = [];
   expensesList: any = [];
-  incomeDataList: any = [];
+  incomeMasterData: any = [];
   netProfitListDataSource = new MatTableDataSource(this.netProfitData);
   totalExpenses: any;
   totalIncome: any;
@@ -21,7 +21,7 @@ export class NetProfitDataComponent implements OnInit {
 
   ngOnInit(): void {
     this.getExpensesListData();
-    this.getIncomeListData();
+    this.getIncomeMasterList();
   }
 
   getExpensesListData() {
@@ -44,12 +44,19 @@ export class NetProfitDataComponent implements OnInit {
     });
   }
 
-  getIncomeListData() {
-    this.commonService.fetchData('IncomeList', this.incomeDataList).then((data) => {
-      this.totalIncome = this.incomeDataList?.map((id: any) => id.amount).reduce((a: any, b: any) => a + b,0);
+  getIncomeMasterList() {
+    this.commonService.fetchData('IncomeMasterList', this.incomeMasterData).then((data) => {
+      this.totalIncome = this.incomeMasterData?.map((id: any) => id.Amount).reduce((a: any, b: any) => a + b,0);
       const totalNetProfit:any = [{ totalExpenses: this.totalExpenses, totalIncome: this.totalIncome, netProfit: this.totalIncome - this.totalExpenses }]
       this.netProfitListDataSource = new MatTableDataSource(totalNetProfit);
     });
   }
+  // getIncomeListData() {
+  //   this.commonService.fetchData('IncomeList', this.incomeDataList).then((data) => {
+  //     this.totalIncome = this.incomeDataList?.map((id: any) => id.Amount).reduce((a: any, b: any) => a + b,0);
+  //     const totalNetProfit:any = [{ totalExpenses: this.totalExpenses, totalIncome: this.totalIncome, netProfit: this.totalIncome - this.totalExpenses }]
+  //     this.netProfitListDataSource = new MatTableDataSource(totalNetProfit);
+  //   });
+  // }
 
 }

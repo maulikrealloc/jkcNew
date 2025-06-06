@@ -570,14 +570,19 @@ export class InvoiceListComponent implements OnInit {
     doc.text(`Party: ${partyName}`, 14, 23);
     doc.text(`Report Date: ${formattedStart} To ${formattedEnd}`, 14, 31);
 
-    const totalAmount = filteredData
-      .reduce((sum, item) => sum + parseFloat(item.finalAmount), 0);
-    doc.text(`Total Amount: ${Math.round(totalAmount).toFixed(2)}`, 145, 15);
+    const totalAmount = filteredData.reduce((sum, item) => sum + parseFloat(item.finalAmount), 0);
+    const formattedAmount = Math.round(totalAmount).toLocaleString('en-IN', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    doc.text(`Total Amount: ${(formattedAmount)}`, 145, 15);
     
-    const totalReceivedAmount = filteredData.reduce(
-      (sum, item) => sum + item.paymentReceiveAmount.reduce(
-        (amtSum:any, payment:any) => amtSum + parseFloat(payment.amount), 0), 0);
-    doc.text(`Total Received Amount: ${Math.round(totalReceivedAmount).toFixed(2)}`, 130, 23);
+    const totalReceivedAmount = filteredData.reduce((sum, item) => sum + item.paymentReceiveAmount.reduce((amtSum: any, payment: any) => amtSum + parseFloat(payment.amount), 0), 0);
+    const receivedAmount = Math.round(totalReceivedAmount).toLocaleString('en-IN', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    doc.text(`Total Received Amount: ${(receivedAmount)}`, 130, 23);
 
     const headers = [
       "Sr.No",

@@ -16,6 +16,7 @@ export class OrderDialogComponent implements OnInit {
   action: string;
   local_data: any;
   partyList: any = [];
+  designMaster: any = [];
   searchQuery: string = '';
 
   constructor(
@@ -31,6 +32,7 @@ export class OrderDialogComponent implements OnInit {
     this.buildForm(this.action === 'Edit' ? this.local_data : undefined);
     (this.local_data?.products || [null]).forEach((product: any) => this.addProduct(product,0));
     this.getPartyData();
+    this.getDesignMasterData();
   }
 
   convertTimestampToDate(element: any): Date | null {
@@ -74,6 +76,10 @@ export class OrderDialogComponent implements OnInit {
 
   getPartyData() {
     this.commonService.fetchData('PartyList', this.partyList);
+  }
+
+  getDesignMasterData() {
+    this.commonService.fetchData('DesignMasterList', this.designMaster);
   }
 
   saveOrder(): void {

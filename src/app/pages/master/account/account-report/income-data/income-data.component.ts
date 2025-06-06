@@ -53,7 +53,7 @@ export class IncomeDataComponent implements OnInit {
       const currentYear = currentDate.getFullYear();
 
       const currentMonthExpenses = this.incomeMasterData.filter((expense: any) => {
-        const expenseDate = new Date(expense.createddate.seconds * 1000);
+        const expenseDate = new Date(expense.AmountDate.seconds * 1000);
 
         return (
           expenseDate.getMonth() === currentMonth &&
@@ -61,8 +61,8 @@ export class IncomeDataComponent implements OnInit {
         );
       });
 
-      console.log("Current month incomeDataList:", currentMonthExpenses);
-      this.incomeListDataSource = new MatTableDataSource(currentMonthExpenses)      
+      this.incomeListDataSource = new MatTableDataSource(currentMonthExpenses)   
+      this.incomeMasterData = currentMonthExpenses;   
     });    
   }
 
@@ -75,7 +75,7 @@ export class IncomeDataComponent implements OnInit {
   }
 
   getTotalAmount(): number {
-    return this.incomeMasterData.reduce((total: number, item: any) => total + (item.Amount || 0), 0);
+    return this.incomeMasterData.reduce((total: number, item: any) => total + (item.Amount || 0), 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
 }

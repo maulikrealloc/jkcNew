@@ -63,15 +63,14 @@ export class ExpensesDataComponent implements OnInit {
         );
       });
 
-      console.log("Current month expenses:", currentMonthExpenses);
 
       this.pendingTotal = currentMonthExpenses
         .filter((expenseObj: any) => expenseObj.status === 'pending')
-        .reduce((amount: number, expenseObj: any) => amount + (expenseObj.amount || 0), 0);
+        .reduce((amount: number, expenseObj: any) => amount + (expenseObj.amount || 0), 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
       this.paidTotal = currentMonthExpenses
         .filter((expenseObj: any) => expenseObj.status === 'paid')
-        .reduce((amount: number, expenseObj: any) => amount + (expenseObj.amount || 0), 0);
+        .reduce((amount: number, expenseObj: any) => amount + (expenseObj.amount || 0), 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
       this.expensesListDataSource = new MatTableDataSource(currentMonthExpenses);
     });

@@ -198,7 +198,11 @@ export class EmployeeReportComponent implements OnInit {
     doc.text(`Report Date: ${formattedStart} To ${formattedEnd}`, 14, 15);
 
     const totalAmount = this.employeeReportList.reduce((sum: number, item: any) => sum + parseFloat(item.finalAMT), 0);
-    doc.text(`Total Amount: - ${totalAmount.toFixed(2)}`, 145, 15);
+    const formattedAmount = Math.round(totalAmount).toLocaleString('en-IN', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    doc.text(`Total Amount: - ${formattedAmount}`, 145, 15);
 
     const headers = [
       "Name",

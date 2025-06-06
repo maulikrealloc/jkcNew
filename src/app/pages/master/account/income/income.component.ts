@@ -73,7 +73,6 @@ export class IncomeComponent implements OnInit {
     if (startDate && endDate) {
       this.incomeListDataSource.data = this.incomeMasterData.filter((invoice: any) => {
         if (!invoice.AmountDate) return false;
-
         const invoiceDate = new Date(invoice.AmountDate.seconds * 1000);
         invoiceDate.setHours(0, 0, 0);
         return invoiceDate >= startDate && invoiceDate <= endDate;
@@ -88,9 +87,11 @@ export class IncomeComponent implements OnInit {
       const dataStr = [
         data.srNo || '',
         this.getPartyName(data.partyName) || '',
-        data.account || '',
-        this.getInvoiceno(data.invoiceNo )|| '',
-        data.invoiceDate || '',
+        // data.account || '',
+        this.getInvoiceno(data.invoiceNo) || '',
+        data.type || '',
+        data.AmountDate || '',
+        data.createddate || '',
         data.amount || ''
       ].join(' ').toLowerCase();
 
@@ -109,9 +110,12 @@ export class IncomeComponent implements OnInit {
 
   getIncomeMasterList() {
     this.commonService.fetchData('IncomeMasterList', this.incomeMasterData).then((res) => {
-      this.incomeListDataSource = new MatTableDataSource(this.incomeMasterData);
-      this.incomeListDataSource.paginator = this.paginator;
+      if (this.incomeList.length > 0)
+        this.incomeListArr = this.incomeList;
+      this.filterData();
     });
+    this.incomeListDataSource = new MatTableDataSource(this.incomeListArr);
+      this.incomeListDataSource.paginator = this.paginator;
   }
 
   getCompanyAccountData() {
@@ -139,15 +143,15 @@ export class IncomeComponent implements OnInit {
     return this.invoiceList.find((invoiceObj: any) => invoiceObj.id === invoiceNo)?.invoiceNo
   }
 
-  // paidbyChange(event: any) {
-  //   this.incomeList = this.incomeListArr;
-  //   this.selectedPaibyId = event.value;
+  paidbyChange(event: any) {
+    this.incomeList = this.incomeListArr;
+    this.selectedPaibyId = event.value;
 
-  //   const paidbylist = this.incomeList.filter((paidbyObj: any) => paidbyObj.account === event.value)
-  //   this.incomeList = paidbylist;
-  //   this.incomeListDataSource.paginator = this.paginator;
-  //   this.filterDate();
-  // }
+    const paidbylist = this.incomeList.filter((paidbyObj: any) => paidbyObj.account === event.value)
+    this.incomeList = paidbylist;
+    this.incomeListDataSource.paginator = this.paginator;
+    this.filterDate();
+  }
 
   openIncome(action: string, obj: any) {
     const dialogRef = this.dialog.open(IncomeDialogComponent, {

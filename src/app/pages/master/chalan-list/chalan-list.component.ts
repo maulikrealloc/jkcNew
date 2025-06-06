@@ -772,9 +772,12 @@ export class ChalanListComponent implements OnInit {
     doc.text(`Firm: ${firmName}`, 14, 15);
     doc.text(`Party: ${partyName}`, 14, 23);
     
-    const totalAmount = filteredData
-      .reduce((sum, item) => sum + parseFloat(item.netAmount), 0);
-    doc.text(`Total Amount: ${Math.round(totalAmount).toFixed(2)}`, 145, 15);
+    const totalAmount = filteredData.reduce((sum, item) => sum + parseFloat(item.netAmount), 0);
+    const formattedAmount = Math.round(totalAmount).toLocaleString('en-IN', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    doc.text(`Total Amount: ${(formattedAmount)}`, 145, 15);
 
    
     const headers = [

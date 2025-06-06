@@ -17,7 +17,7 @@
         <mat-form-field appearance="outline" class="w-100 m-t-10">
           <mat-label>Design No</mat-label>
           <mat-select #dropdown formControlName="designNo" placeholder="Select design no">
-            <mat-option value="ABC">ABC</mat-option>
+            <mat-option [value]="item.id" *ngFor="let item of designMaster">{{item.designNo}}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>

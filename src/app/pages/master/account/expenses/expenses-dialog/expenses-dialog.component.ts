@@ -63,7 +63,7 @@ export class ExpensesDialogComponent implements OnInit {
       expensesType: [data? data?.expensesType : '', Validators.required],
       paidBy: [data ? data?.paidBy : ''],
       date: [data ? this.convertTimestampToDate(data?.date) : new Date()],
-      description: [data ? data?.description : '', Validators.required],
+      description: [data ? data?.description : ''],
       chalanNo: [data ? data?.chalanNo : ''],
       amount: [data ? data?.amount : ''],
       status: [data ? data?.status : '', Validators.required]

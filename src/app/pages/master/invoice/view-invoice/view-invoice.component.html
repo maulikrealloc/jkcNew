@@ -1,0 +1,9 @@
+<mat-dialog-content class="mat-typography">
+    <div class="m-y-30">
+        <ngx-extended-pdf-viewer [src]="this.local_data" [showDownloadButton]="false" [showPrintButton]="false"
+            [showToolbar]="true"></ngx-extended-pdf-viewer>
+    </div>
+    <mat-dialog-actions align="end">
+        <button mat-stroked-button  mat-dialog-close>Cancel</button>
+    </mat-dialog-actions>
+</mat-dialog-content>

@@ -1,0 +1,8 @@
+.scrollable-dialog {
+    max-height: 70vh;
+    overflow: auto;
+}
+
+.mat-mdc-dialog-content {
+    max-height: fit-content;
+}

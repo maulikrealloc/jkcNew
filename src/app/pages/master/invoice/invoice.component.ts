@@ -10,6 +10,7 @@ import { DatePipe } from '@angular/common';
 import { CommonService } from 'src/app/services/common.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditInvoiceComponent } from './edit-invoice/edit-invoice.component';
+import { ViewInvoiceComponent } from './view-invoice/view-invoice.component';
 
 @Component({
   selector: 'app-invoice',
@@ -258,8 +259,17 @@ export class InvoiceComponent implements OnInit {
     this.getPartyDetails(payload.partyId);
     this.getFirmDetails(payload.firmId);
     this.getChalanDetails(payload.chalanId);
-    this.generatePDF(payload);
-   
+    const url = this.generatePDF(payload);
+
+
+    const dialogRef = this.dialog.open(ViewInvoiceComponent, {
+      width: '70%',
+      height: '90vh',
+      data: url 
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+     
+    });  
   }
 
   // updateChalanIsCreated(chalanId: any) {
@@ -605,8 +615,7 @@ export class InvoiceComponent implements OnInit {
     doc.line(signatureXPosition, signatureLabelYPosition + 5, signatureXPosition + signatureLineLength, signatureLabelYPosition + 5);
 
     const blob = doc.output('blob');
-    const url = URL.createObjectURL(blob);
-    window.open(url);
+    return URL.createObjectURL(blob);
   }
 
   getPartyDetails(partyId: any) {

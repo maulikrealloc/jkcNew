@@ -211,7 +211,11 @@ export class ReportComponent implements OnInit {
     const filteredData = this.khataReportDataSource.data;
 
     const totalAmount = filteredData.reduce((sum: number, item: any) => sum + parseFloat(item.profit || 0), 0);
-    doc.text(`Total Amount: - ${Math.round(totalAmount).toFixed(2)}`, 145, 15);
+    const formattedAmount = Math.round(totalAmount).toLocaleString('en-IN', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    doc.text(`Total Amount: - ${(formattedAmount)}`, 145, 15);
 
     const headers = [
       "Sr No",

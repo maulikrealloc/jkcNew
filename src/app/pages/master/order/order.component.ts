@@ -18,6 +18,7 @@ export class OrderComponent implements OnInit {
   orderDataColumns: string[] = [ 'orderNo', 'partyName', 'orderDate', 'deliveryDate', 'designNo', 'p-Order', 'chalanNo', 'status', 'action'];
   orderList: any = [];
   partyList: any = [];
+  designMaster: any = [];
   stausList: any = ["Pending", "In Progress", "Rejected", "Cancelled", "Done"];
   orderDataSource = new MatTableDataSource(this.orderList);
 
@@ -30,6 +31,7 @@ export class OrderComponent implements OnInit {
   ngOnInit(): void {
     this.getOrderData();
     this.getPartyData();
+    this.getDesignMasterData();
   }
 
   convertTimestampToDate(element: any): Date | null {
@@ -45,6 +47,18 @@ export class OrderComponent implements OnInit {
 
   getPartyData() {
     this.commonService.fetchData('PartyList', this.partyList);
+  }
+
+  getPartyName(partyId: string): string {
+    return this.partyList.find((partyObj: any) => partyObj.id === partyId)?.firstName
+  }
+
+  getDesignMasterData() {
+    this.commonService.fetchData('DesignMasterList', this.designMaster);
+  }
+
+  getDesignNo(designId:any) {
+    return this.designMaster.find((designobj: any) => designobj.id === designId)?.designNo
   }
 
   getOrderData() {
@@ -98,10 +112,6 @@ export class OrderComponent implements OnInit {
         this.commonService.commonApiCalled(result, obj, 'OrderList').then(() => this.getOrderData()).catch(console.error);
       }
     });
-  }
-
-  getPartyName(partyId: string): string {
-    return this.partyList.find((partyObj: any) => partyObj.id === partyId)?.firstName
   }
 
   changeStatus(status: string, element: any): any {

@@ -33,7 +33,6 @@ export class PaidByDataComponent implements OnInit {
         );
       });
 
-      console.log("Current month paidByListDataSource:", currentMonthExpenses);
       this.paidByListDataSource = new MatTableDataSource (currentMonthExpenses)
     });
   }

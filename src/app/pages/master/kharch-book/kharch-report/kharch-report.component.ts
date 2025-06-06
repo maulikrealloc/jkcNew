@@ -21,6 +21,7 @@ export class KharchReportComponent implements OnInit {
   totalAmount: number = 0;
   selectedPaidbyId: any ;
   invoicListArr: any =[];
+  formattedTotalAmount: string;
   
   kharchListDataSource = new MatTableDataSource(this.expensesList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -96,7 +97,15 @@ export class KharchReportComponent implements OnInit {
   }
 
   calculateTotalAmount() {
-    this.totalAmount = this.kharchListDataSource.data.reduce((sum: number, item: any) => sum + (item.amount || 0), 0);
+    const rawTotal = this.kharchListDataSource.data
+      .reduce((sum: number, item: any) => sum + (item.amount || 0), 0);
+
+    this.totalAmount = rawTotal;
+
+    this.formattedTotalAmount = rawTotal.toLocaleString('en-IN', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
   }
  
   getExpensesListData() {
@@ -142,7 +151,11 @@ export class KharchReportComponent implements OnInit {
     const filteredData = this.kharchListDataSource.data;
 
     const totalAmount = filteredData.reduce((sum: number, item: any) => sum + parseFloat(item.amount || 0), 0);
-    doc.text(`Total Amount: - ${Math.round(totalAmount).toFixed(2)}`, 145, 15);
+    const formattedAmount = Math.round(totalAmount).toLocaleString('en-IN', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    doc.text(`Total Amount: - ${(formattedAmount)}`, 145, 15);
 
     const headers = [
       "Sr No",

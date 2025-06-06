@@ -157,7 +157,6 @@ export class PassbookComponent implements OnInit {
 
   getTransferData() {
     this.commonService.fetchData('TransferList', this.transferList).then((res) => {
-      console.log("{{this.transferList}}", this.transferList);
 
     });
   }

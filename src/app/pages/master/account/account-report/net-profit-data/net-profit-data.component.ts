@@ -38,7 +38,6 @@ export class NetProfitDataComponent implements OnInit {
         );
       });
 
-      console.log("Current month expenses:", currentMonthExpenses);
       this.totalExpenses = currentMonthExpenses.map((id: any) => id.amount).reduce((a: any, b: any) => a + b, 0);
 
     });
@@ -46,11 +45,24 @@ export class NetProfitDataComponent implements OnInit {
 
   getIncomeMasterList() {
     this.commonService.fetchData('IncomeMasterList', this.incomeMasterData).then((data) => {
-      this.totalIncome = this.incomeMasterData?.map((id: any) => id.Amount).reduce((a: any, b: any) => a + b,0);
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth();
+      const currentYear = currentDate.getFullYear();
+
+      const currentMonthIncomeMaster = this.incomeMasterData.filter((incomeMaster: any) => {
+        const incomeDate = new Date(incomeMaster.AmountDate.seconds * 1000);
+        return (
+          incomeDate.getMonth() === currentMonth &&
+          incomeDate.getFullYear() === currentYear
+        );
+      });
+
+      this.totalIncome = currentMonthIncomeMaster.map((id: any) => id.Amount).reduce((a: any, b: any) => a + b,0);
       const totalNetProfit:any = [{ totalExpenses: this.totalExpenses, totalIncome: this.totalIncome, netProfit: this.totalIncome - this.totalExpenses }]
       this.netProfitListDataSource = new MatTableDataSource(totalNetProfit);
     });
   }
+
   // getIncomeListData() {
   //   this.commonService.fetchData('IncomeList', this.incomeDataList).then((data) => {
   //     this.totalIncome = this.incomeDataList?.map((id: any) => id.Amount).reduce((a: any, b: any) => a + b,0);

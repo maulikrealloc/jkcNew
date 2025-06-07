@@ -22,7 +22,8 @@
 }
 
 .col-2,
-.col-4 {
+.col-4,
+.col-3 {
     flex: 0 0 100%;
     max-width: 100%;
 }
@@ -39,7 +40,7 @@
 }
 
 @media (min-width: 576px) {
-    .col-4 {
+    .col-4,.col-3 {
         flex: 0 0 50%;
         max-width: 50%;
     }
@@ -68,7 +69,8 @@
 }
 
 @media (min-width: 992px) {
-    .col-4 {
+    .col-4,
+        .col-3 {
         flex: 0 0 33.333333%;
         max-width: 33.333333%;
     }

@@ -11,7 +11,6 @@
                 </mat-form-field>
             </div>
            
-
             <div class="col-lg-4 m-t-10">
                 <div class="row">
                     <div class="col-lg-9 m-t-10">
@@ -25,9 +24,10 @@
                             <mat-date-range-picker #picker (closed)="filterDate()"></mat-date-range-picker>
                         </mat-form-field>
                     </div>
+
                     <div class="col-lg-3">
                         <div class="d-flex m-t-15 hide-hint align-items-center justify-content-end">
-                        <button mat-flat-button color="primary" class="d-flex align-items-center gap-1 w-100" (click)="filedownload()">
+                        <button mat-flat-button color="primary" class="d-flex align-items-center gap-1" (click)="filedownload()">
                             <i-tabler name="file-download" class="icon-25"></i-tabler>
                         </button>
                     </div>

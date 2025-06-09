@@ -191,7 +191,7 @@ export class PaymentListComponent implements OnInit {
   pendingAmount(): string {
     const totalReceived = this.paymentReciveList.reduce((total: number, item: any) => total + Number(item.paymentReceive), 0);
     const pendingAmount = Number(this.data?.finalAmount) - totalReceived;
-    return pendingAmount.toFixed(2);
+    return Math.round(pendingAmount).toString();
   }
   
 }

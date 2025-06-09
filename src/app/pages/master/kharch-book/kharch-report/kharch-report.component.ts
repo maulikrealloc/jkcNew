@@ -115,7 +115,6 @@ export class KharchReportComponent implements OnInit {
         this.calculateTotalAmount();
         this.filterData();
       }
-      // this.kharchListDataSource.data = [...this.expensesList];
     });
   }
 

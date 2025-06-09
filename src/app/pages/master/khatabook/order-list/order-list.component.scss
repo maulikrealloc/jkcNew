@@ -60,19 +60,6 @@
         }
     }
 
-    .row {
-        margin: -8px;
-
-        [class^="col-"] {
-            padding: 8px;
-        }
-
-        .col-3 {
-            flex: 0 0 100%;
-            max-width: 100%;
-        }
-    }
-
     button[mat-flat-button] {
         width: 100%;
     }

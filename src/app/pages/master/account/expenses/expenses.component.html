@@ -1,8 +1,8 @@
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
-    <div style="align-items: baseline;" class="row">
-
-      <div class="col-3">
+  <div class="row g-3 align-items-baseline">
+    
+      <div class="col-12 col-sm-6 col-md-3 m-t-10">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <input matInput placeholder="Search..." (keyup)="applyFilter($any($event.target).value)">
           <mat-icon matSuffix>
@@ -10,19 +10,20 @@
           </mat-icon>
         </mat-form-field>
       </div>
-
-      <div class="col-3">
+    
+      <div class="col-12 col-sm-6 col-md-3 m-t-10">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Paid By</mat-label>
           <mat-select #dropdown placeholder="Select paid by" (selectionChange)="paidbyChange($event)">
-            <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{
-              item.accountName}}</mat-option>
+            <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">
+              {{ item.accountName }}
+            </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
-
-      <div class="col-4">
-        <mat-form-field appearance="outline" class="w-100 m-t-10 hide-hint">
+    
+      <div class="col-12 col-sm-12 col-md-4">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
           <mat-label>Select Expenses Date</mat-label>
           <mat-date-range-input [rangePicker]="picker" [formGroup]="dateExpensesForm">
             <input matStartDate placeholder="Start date" formControlName="start">
@@ -33,17 +34,16 @@
         </mat-form-field>
       </div>
 
-      <!-- <div class="col-2 d-flex align-items-center justify-content-end">
-        <button mat-flat-button color="primary" (click)="openExpensesMaster('Add',{})">
-          Expenses Master
-        </button>
-      </div> -->
+    <!-- <div class="col-12 col-sm-12 col-md-2 m-t-10 d-flex align-items-center justify-content-end">
+      <button mat-flat-button color="primary" (click)="openExpensesMaster('Add',{})">
+        Expenses Master
+      </button>
+    </div> -->
 
-      <div class="col-2 d-flex align-items-center justify-content-end">
-        <button mat-flat-button color="primary" class="d-flex align-items-center gap-1"
-          (click)="openExpenses('Add', {})">
+      <div class="col-12 col-sm-12 col-md-2 m-t-10 d-flex align-items-center justify-content-end">
+        <button mat-flat-button color="primary" (click)="openExpenses('Add', {})">
           <span>Add</span>
-          <i-tabler name="circle-plus" class="icon-20"></i-tabler>
+          <i-tabler name="circle-plus" class="icon-20 ms-1"></i-tabler>
         </button>
       </div>
     </div>

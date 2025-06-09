@@ -123,8 +123,9 @@ export class InvoiceListComponent implements OnInit {
   }
 
   getPaymentReceiveAmount(data: any) {
-    const receiveData = this.paymentReceiveData?.find((obj: any) => obj.invoiceId === data.id)?.payments?.map((id: any) => id.paymentReceive)?.reduce((a: any, b: any) => a + b, 0)
-    return receiveData ?? 0
+    const receiveData = this.paymentReceiveData?.find((obj: any) => obj.invoiceId === data.id)?.payments?.map((id: any) => id.paymentReceive)?.reduce((a: any, b: any) => a + b, 0);
+    const formattedAmount = receiveData? receiveData.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }): '0.00';
+    return formattedAmount;
   }
 
   getFormattedDate(value: any): string {

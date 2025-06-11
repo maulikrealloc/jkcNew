@@ -36,8 +36,9 @@ export class PaymentListComponent implements OnInit {
     private commonService:CommonService,
     public dialogRef: MatDialogRef<ProductDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
-    this.getPaymentReceiveList()
-    this.getIncomeMasterList()
+    this.getPaymentReceiveList();
+    this.getIncomeMasterList();
+    this.getInvoiceData();
     this.local_data = { ...data };
     this.action = this.local_data.action;
     this.invoiceDocId = this.local_data.invoiceDocId || '';
@@ -47,6 +48,10 @@ export class PaymentListComponent implements OnInit {
     this.buildForm();
     // this.getCompanyAccountData();
     this.paymentListDataSource.paginator = this.paginator;
+  }
+
+  getInvoiceData() {
+    this.commonService.fetchData('InvoiceList', this.invoiceList)
   }
 
   getPaymentReceiveList() {

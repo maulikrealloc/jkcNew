@@ -576,14 +576,14 @@ export class InvoiceListComponent implements OnInit {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     });
-    doc.text(`Total Amount: ${(formattedAmount)}`, 145, 15);
+    doc.text(`Total Amount: ${(formattedAmount)}`, 140, 15);
     
     const totalReceivedAmount = filteredData.reduce((sum, item) => sum + item.paymentReceiveAmount.reduce((amtSum: any, payment: any) => amtSum + parseFloat(payment.amount), 0), 0);
     const receivedAmount = Math.round(totalReceivedAmount).toLocaleString('en-IN', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     });
-    doc.text(`Total Received Amount: ${(receivedAmount)}`, 130, 23);
+    doc.text(`Total Received Amount: ${(receivedAmount)}`, 120, 23);
 
     const headers = [
       "Sr.No",
@@ -618,7 +618,7 @@ export class InvoiceListComponent implements OnInit {
         item.cgst,
         item.sgst,
         Math.round(item.finalAmount).toFixed(2),
-        receivedAmount.toFixed(2)
+        receivedAmount
       ];
     });
 

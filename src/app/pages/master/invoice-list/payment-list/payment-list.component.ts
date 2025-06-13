@@ -24,7 +24,8 @@ export class PaymentListComponent implements OnInit {
   incomeMasterList: any = [];
   editIndex: number | null = null;
   invoiceDocId: string;
-  
+  editPaymentIndex: number | null = null;
+
   paymentListDataSource = new MatTableDataSource(this.paymentReciveList);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
@@ -105,6 +106,7 @@ export class PaymentListComponent implements OnInit {
       paymentDate: new Date(selectedData.paymentDate),
     });
     this.editIndex = index;
+    this.editPaymentIndex = index;
   }
 
   submitPayment() {
@@ -120,6 +122,27 @@ export class PaymentListComponent implements OnInit {
     } else {
       this.firebaseCollectionService.addDocument('CompanyList', paymentPayload, 'PaymentReceiveList');
     }
+
+    this.firebaseCollectionService.getDocuments('CompanyList', 'InvoiceList').then((invoices) => {
+      const invoice = invoices.find((inv: any) => inv.invoiceNo === this.local_data.invoiceNo);
+      if (invoice) {
+        this.invoiceDocId = invoice.id;
+        const existingPayments = invoice.paymentReceiveAmount || [];
+
+        const updatedPayments = [...this.paymentReciveList].map((item: any, index: number) => ({
+          amount: item.paymentReceive,
+          date: item.paymentDate,
+          paymentindex: index
+        }));
+
+        const invoiceUpdatePayload = {
+          paymentReceiveAmount: updatedPayments,
+          paymentDate: new Date()
+        };
+
+        this.firebaseCollectionService.updateDocument('CompanyList', this.invoiceDocId, invoiceUpdatePayload, 'InvoiceList');
+      }
+    });
 
     this.paymentReciveList.forEach((payment: any) => {
       const incomeMasterPayload = {
@@ -154,29 +177,6 @@ export class PaymentListComponent implements OnInit {
         this.firebaseCollectionService.deleteDocument('CompanyList', income.id, 'IncomeMasterList');
       }
     });
-
-    const currentPayment = {
-      amount: this.paymentReceiveList.value.paymentReceive,
-      date: this.paymentReceiveList.value.paymentDate
-        };
-
-        if (!this.invoiceDocId) {
-          this.firebaseCollectionService.getDocuments('CompanyList', 'InvoiceList').then((invoices) => {
-            const invoice = invoices.find((inv: any) => inv.invoiceNo === this.local_data.invoiceNo);
-            if (invoice) {
-              this.invoiceDocId = invoice.id;
-              const existingPayments = invoice.paymentReceiveAmount || [];
-              const invoiceUpdatePayload = {
-                paymentReceiveAmount: [...existingPayments, currentPayment],
-                paymentDate: new Date()
-              };
-              debugger
-              this.firebaseCollectionService.updateDocument('CompanyList', this.invoiceDocId, invoiceUpdatePayload, 'InvoiceList');
-            }
-          });
-      }
-
-  
   }
 
 

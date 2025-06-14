@@ -28,31 +28,6 @@ export const navItems: NavItem[] = [
     ddType: '',
     children: [
       {
-        displayName: 'Chat',
-        iconName: 'point',
-        route: 'apps/chat',
-      },
-      {
-        displayName: 'Calendar',
-        iconName: 'point',
-        route: 'apps/calendar',
-      },
-      {
-        displayName: 'Email',
-        iconName: 'point',
-        route: 'apps/email/inbox',
-      },
-      {
-        displayName: 'Contacts',
-        iconName: 'point',
-        route: 'apps/contacts',
-      },
-      {
-        displayName: 'Courses',
-        iconName: 'point',
-        route: 'apps/courses',
-      },
-      {
         displayName: 'Employee',
         iconName: 'point',
         route: 'apps/employee',
@@ -61,21 +36,6 @@ export const navItems: NavItem[] = [
         displayName: 'Notes',
         iconName: 'point',
         route: 'apps/notes',
-      },
-      {
-        displayName: 'Tickets',
-        iconName: 'point',
-        route: 'apps/tickets',
-      },
-      {
-        displayName: 'Invoice',
-        iconName: 'point',
-        route: 'apps/invoice',
-      },
-      {
-        displayName: 'ToDo',
-        iconName: 'point',
-        route: 'apps/todo',
       },
       {
         displayName: 'Taskboard',

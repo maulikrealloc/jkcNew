@@ -10,11 +10,6 @@ export const navItems: NavItem[] = [
     route: '/dashboards/dashboard1',
   },
   {
-    displayName: 'Account',
-    iconName: 'shopping-cart',
-    route: '/dashboards/dashboard2',
-  },
-  {
     navCap: 'Account',
   },
   {

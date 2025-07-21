@@ -76,17 +76,17 @@ export class OrderComponent implements OnInit {
     });
   }
 
-  convertToDate(orderDate: any): Date | null {
-    if (!orderDate) return null;
+  // convertToDate(orderDate: any): Date | null {
+  //   if (!orderDate) return null;
 
-    if (typeof orderDate === "string") {
-      return new Date(orderDate);
-    } else if (typeof orderDate === "object" && orderDate.seconds) {
-      return new Date(orderDate.seconds * 1000); 
-    }
+  //   if (typeof orderDate === "string") {
+  //     return new Date(orderDate);
+  //   } else if (typeof orderDate === "object" && orderDate.seconds) {
+  //     return new Date(orderDate.seconds * 1000); 
+  //   }
 
-    return null;
-  }
+  //   return null;
+  // }
 
   filterData() {
     this.orderDataSource.filterPredicate = (data: any, filter: string) => {

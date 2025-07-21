@@ -47,7 +47,7 @@ export class OrderDialogComponent implements OnInit {
       party: [data ? data?.partyId : '', Validators.required],
       designNo: [data ? data?.designNo : ''],
       partyOrder: [data ? data?.partyOrder : '', [Validators.required]],
-      orderDate: [data ? this.convertTimestampToDate(this.local_data.orderDate) : new Date(), Validators.required],
+      orderDate: [data ? data?.orderDate : new Date(), Validators.required],
       deliveryDate: [data ? this.convertTimestampToDate(this.local_data.deliveryDate) : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), Validators.required],
       products: this.fb.array([]),
       orderStatus: [data ? data?.orderStatus : '']

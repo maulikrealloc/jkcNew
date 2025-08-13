@@ -151,7 +151,7 @@ export class OrderListDialogComponent implements OnInit {
           (order: any) => order.id === this.local_data?.order
         );
         this.orderForm.get('order')?.setValue(this.orderList.find((id: any) => id.id === this.local_data?.order).id)
-        this.onOrderSelection();
+        // this.onOrderSelection();
       }
     })
   }

@@ -44,7 +44,11 @@ export class OrderListDialogComponent implements OnInit {
       khata: [data ? data?.khata : ''],
       date: [data ? this.convertTimestampToDate(this.local_data.date) : new Date()],
       productsOrder: this.fb.array([])
-    })
+    });
+
+    if (data && data.productsOrder) {
+      this.updateProductsFormArray(data.productsOrder, true);
+    }
   }
 
   convertTimestampToDate(element: any): Date | null {
@@ -68,8 +72,9 @@ export class OrderListDialogComponent implements OnInit {
     );
 
     this.filterOrderList  = this.filterOrderList.filter((order: any) => {
-      return ! this.khataOrderList.some((khataOrder:any)=>khataOrder.order === order.id)
-    })
+      return !this.khataOrderList.some((khataOrder:any) => khataOrder.order === order.id);
+    });
+
     const currentOrder = this.orderForm.get('order')?.value;
     if (currentOrder && !this.filterOrderList.some((order: any) => order.id === currentOrder)) {
       this.orderForm.get('order')?.setValue('');
@@ -80,8 +85,8 @@ export class OrderListDialogComponent implements OnInit {
   onOrderSelection() {
     if (this.filterOrderList.length > 0) {
       const selectedOrderId = this.orderForm.get('order')?.value;
-      const availableOrders =  this.filterOrderList.filter((order: any) => {
-        return ! this.khataOrderList.some((khataOrder:any)=>khataOrder.order === order.id)
+      const availableOrders = this.filterOrderList.filter((order: any) => {
+        return !this.khataOrderList.some((khataOrder:any) => khataOrder.order === order.id);
       });
       this.filterOrderList = availableOrders;
 
@@ -90,32 +95,15 @@ export class OrderListDialogComponent implements OnInit {
         this.productsOrder.clear();
         return;
       }
-      const selectedOrder = this.filterOrderList.find((order:any) => order.id === selectedOrderId);
 
+      const selectedOrder = this.filterOrderList.find((order: any) => order.id === selectedOrderId);
       if (selectedOrder && selectedOrder.products) {
-        const products = selectedOrder.products;
-        this.updateProductsFormArray(products);
+        this.updateProductsFormArray(selectedOrder.products);
       }
     }
   }
 
-  
-  // updateProductsFormArray(products: any[]) {
-  //   const productsArray = this.orderForm.get('productsOrder') as FormArray;
-  //   productsArray.clear();
-  //   products.forEach(product => {
-  //     productsArray.push(
-  //       this.fb.group({
-  //         productName: [product.productName, Validators.required],
-  //         productQuantity: [product.productQuantity, Validators.required],
-  //         productPrice: [product.productPrice, Validators.required],
-  //         khataPrice: [Validators.required],
-  //       })
-  //     );
-  //   });
-  // }
-
-  updateProductsFormArray(products: any[]) {
+  updateProductsFormArray(products: any[], isEditMode: boolean = false) {
     const productsArray = this.orderForm.get('productsOrder') as FormArray;
     productsArray.clear();
 
@@ -125,7 +113,7 @@ export class OrderListDialogComponent implements OnInit {
         productQuantity: [product.productQuantity, Validators.required],
         productkQuantity: [product.productkQuantity || product.productQuantity],
         productPrice: [product.productPrice, Validators.required],
-        khataPrice: ['', Validators.required],
+        khataPrice: [isEditMode ? product.khataPrice : '', Validators.required],
       });
 
       productGroup.get('productkQuantity')?.valueChanges.subscribe(newValue => {

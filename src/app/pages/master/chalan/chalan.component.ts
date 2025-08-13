@@ -164,9 +164,8 @@ export class ChalanComponent implements OnInit {
       this.chalanListDataSource = new MatTableDataSource(this.chalanList);
       this.chalanListDataSource.paginator = this.paginator;
     });
-    this.chalanForm.controls['firm'].reset();
-    this.chalanForm.controls['party'].reset();
-    this.chalanForm.controls['partyOrder'].reset();
+    const controlsToClear = ['firm', 'party', 'partyOrder'];
+    controlsToClear.forEach(control => this.chalanForm.controls[control].reset());
   }
 
   partyChange(event: any) {

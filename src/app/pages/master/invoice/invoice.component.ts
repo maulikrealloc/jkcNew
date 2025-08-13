@@ -223,13 +223,15 @@ export class InvoiceComponent implements OnInit {
       igst: 0,
       paymentDueDate: 30
     });
-
-    ['cgst', 'sgst', 'igst'].forEach(ele => this.invoiceForm.controls[ele].enable());
-    this.invoiceForm.setErrors(null);
-
+    
     this.selectedChalanList = [];
     this.invoiceListDataSource = new MatTableDataSource(this.selectedChalanList);
     this.invoiceListDataSource.paginator = this.paginator;
+    
+    const controlsToClear = ['firm', 'party', 'chalanNo'];
+    controlsToClear.forEach(control => this.invoiceForm.controls[control].reset());
+    ['cgst', 'sgst', 'igst','paymentDueDate'].forEach(ele => this.invoiceForm.controls[ele].enable());
+    this.invoiceForm.setErrors(null);
   }
   
 

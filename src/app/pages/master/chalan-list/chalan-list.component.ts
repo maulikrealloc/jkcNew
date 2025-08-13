@@ -159,32 +159,66 @@ export class ChalanListComponent implements OnInit {
     ));
   }
 
+  // editChalan(action: any, obj: any) {
+  //   const dialogRef = this.dialog.open(ChalaneditDialogComponent, {
+  //     data: { ...obj, action },
+  //   });
+
+  //   dialogRef.afterClosed().subscribe((result) => {
+      
+  //     if (result?.event === 'Edit' && result.data) {
+  //      const chalanupdate = result.data
+  //       const itemTochalanUpdate = this.chalanList.find((item: any) => item.id === chalanupdate.id);
+  //       const itemToorderUpdate = this.orderList.find((item: any) => item.id === chalanupdate.partyOrderId);
+  //       if (itemTochalanUpdate) {
+
+  //         const updatePayload = {
+  //           event: 'Edit',
+  //           data: {
+  //             id: chalanupdate.id,
+  //             chalanDate: chalanupdate.chalanDate,
+  //             firmId: chalanupdate.firmId,
+  //             partyId: chalanupdate.partyId,
+  //             partyOrderId: chalanupdate.partyOrderId,
+  //           }
+  //         };
+
+  //         this.commonService.commonApiCalled(updatePayload, updatePayload.data, 'ChalanList').then(() => this.getChalanData()).catch(console.error);
+  //       } if (itemToorderUpdate) {
+  //         const productsPayload = chalanupdate.products?.map((product: any) => ({
+  //           productIndex: product.productIndex,
+  //           productName: product.productName,
+  //           productPrice: product.productPrice,
+  //           productQuantity: product.productQuantity,
+  //           productChalanNo: product.productChalanNo
+  //         }));
+
+  //           const Payload = {
+  //             event: 'Edit',
+  //             data: {
+  //               products: productsPayload,
+  //             }
+  //           };
+  //           debugger
+  //           this.commonService.commonApiCalled(Payload, {id : chalanupdate.partyOrderId }, 'OrderList').then(() => this.getOrderData()).catch(console.error);
+
+  //       }
+  //     }
+  //   });
+  // }
+
   editChalan(action: any, obj: any) {
     const dialogRef = this.dialog.open(ChalaneditDialogComponent, {
       data: { ...obj, action },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      
       if (result?.event === 'Edit' && result.data) {
-       const chalanupdate = result.data
+        const chalanupdate = result.data;
         const itemTochalanUpdate = this.chalanList.find((item: any) => item.id === chalanupdate.id);
         const itemToorderUpdate = this.orderList.find((item: any) => item.id === chalanupdate.partyOrderId);
-        if (itemTochalanUpdate) {
 
-          const updatePayload = {
-            event: 'Edit',
-            data: {
-              id: chalanupdate.id,
-              chalanDate: chalanupdate.chalanDate,
-              firmId: chalanupdate.firmId,
-              partyId: chalanupdate.partyId,
-              partyOrderId: chalanupdate.partyOrderId
-            }
-          };
-
-          this.commonService.commonApiCalled(updatePayload, updatePayload.data, 'ChalanList').then(() => this.getChalanData()).catch(console.error);
-        } if (itemToorderUpdate) {
+        if (itemToorderUpdate) {
           const productsPayload = chalanupdate.products?.map((product: any) => ({
             productIndex: product.productIndex,
             productName: product.productName,
@@ -193,14 +227,51 @@ export class ChalanListComponent implements OnInit {
             productChalanNo: product.productChalanNo
           }));
 
-            const Payload = {
-              event: 'Edit',
-              data: {
-                products: productsPayload,
-              }
-            };
-            this.commonService.commonApiCalled(Payload, {id : chalanupdate.partyOrderId }, 'OrderList').then(() => this.getOrderData()).catch(console.error);
+          const netAmount = chalanupdate.products?.reduce((sum: number, product: any) => {
+            return sum + (product.productPrice * product.productQuantity);
+          }, 0);
 
+          const orderPayload = {
+            event: 'Edit',
+            data: {
+              products: productsPayload,
+            }
+          };
+
+          this.commonService.commonApiCalled(orderPayload, { id: chalanupdate.partyOrderId }, 'OrderList')
+            .then(() => {
+              if (itemTochalanUpdate) {
+                const updatePayload = {
+                  event: 'Edit',
+                  data: {
+                    id: chalanupdate.id,
+                    chalanDate: chalanupdate.chalanDate,
+                    firmId: chalanupdate.firmId,
+                    partyId: chalanupdate.partyId,
+                    partyOrderId: chalanupdate.partyOrderId,
+                    netAmount: netAmount 
+                  }
+                };
+
+                return this.commonService.commonApiCalled(updatePayload, updatePayload.data, 'ChalanList').then(() => {this.getChalanData(); this.getOrderData();});
+              }
+              return Promise.resolve();
+            })
+            .catch(console.error);
+        } else if (itemTochalanUpdate) {
+          const updatePayload = {
+            event: 'Edit',
+            data: {
+              id: chalanupdate.id,
+              chalanDate: chalanupdate.chalanDate,
+              firmId: chalanupdate.firmId,
+              partyId: chalanupdate.partyId,
+              partyOrderId: chalanupdate.partyOrderId,
+              netAmount: itemTochalanUpdate.netAmount
+            }
+          };
+
+          this.commonService.commonApiCalled(updatePayload, updatePayload.data, 'ChalanList').then(() => this.getChalanData()).catch(console.error);
         }
       }
     });
@@ -376,6 +447,28 @@ export class ChalanListComponent implements OnInit {
         ''
       ]);
 
+      // const tableData = [
+      //   ...products.map((p: any, index: number) => {
+      //     const totalAmount = p.productPrice * p.productQuantity;
+      //     return [
+      //       (index + 1).toString(),
+      //       p.productName,
+      //       p.productQuantity.toString(),
+      //       p.productPrice.toString(),
+      //       totalAmount.toString()
+      //     ];
+      //   }),
+      //   ...emptyRows
+      // ];
+      // this.netAmount = seletedChalan.netAmount;
+
+      // tableData.push([
+      //   '',
+      //   'Net Amount',
+      //   '',
+      //   '',
+      //   this.netAmount.toFixed(2) + '/-'
+      // ]);
       const tableData = [
         ...products.map((p: any, index: number) => {
           const totalAmount = p.productPrice * p.productQuantity;
@@ -390,7 +483,7 @@ export class ChalanListComponent implements OnInit {
         ...emptyRows
       ];
 
-      this.netAmount = seletedChalan.netAmount;
+      this.netAmount = products.reduce((sum: any, item: any) => sum + (item.productPrice * item.productQuantity), 0);
 
       tableData.push([
         '',
@@ -605,7 +698,7 @@ export class ChalanListComponent implements OnInit {
         ...emptyRows
       ];
 
-      const netAmount = seletedChalan.netAmount;
+      const netAmount = products.reduce((sum: any, p: any) => sum + (p.productPrice * p.productQuantity), 0);
 
       tableData.push([
         '',

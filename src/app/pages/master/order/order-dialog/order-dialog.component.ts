@@ -29,7 +29,7 @@ export class OrderDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.buildForm(this.action === 'Edit' ? this.local_data : undefined);
+    this.buildForm(this.action === 'Edit' || 'View' ? this.local_data : undefined);
     (this.local_data?.products || [null]).forEach((product: any) => this.addProduct(product,0));
     this.getPartyData();
     this.getDesignMasterData();

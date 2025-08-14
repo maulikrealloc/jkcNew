@@ -79,7 +79,7 @@
             <!-- <app-validation-message class="position-relative" [control]="item.controls['productPrice']"></app-validation-message> -->
           </div>
 
-          <div class="col-lg-1">
+          <div class="col-lg-1" *ngIf="action !== 'View'">
             <a *ngIf="i === 0 && getProductsFormArry().length < 11" class="action-btn" (click)="addProduct(null,i+1)"><i-tabler name="plus"
                 class="icon-18"></i-tabler></a>
             <a *ngIf="i !== 0" (click)="removeProduct(i)" class="action-btn"><i-tabler name="trash" class="icon-18"></i-tabler></a>
@@ -93,7 +93,7 @@
 <mat-dialog-actions class="p-24 justify-content-end">
   <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
   <button mat-flat-button [mat-dialog-close]="true" [disabled]="action !== 'Delete' && orderForm.invalid"
-    color="primary" (click)="saveOrder();">
+    color="primary" (click)="saveOrder();"  *ngIf="action !== 'View'">
     {{action}}
   </button>
 </mat-dialog-actions>

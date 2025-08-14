@@ -1,10 +1,10 @@
-<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start"   (selectedTabChange)="onTabChanged($event)">
     <mat-tab label="Order">
-        <app-order-list></app-order-list>
+        <app-order-list  *ngIf="activeTab === 0"></app-order-list>
     </mat-tab>
 
     <mat-tab label="Report">
-        <app-report></app-report>
+        <app-report  *ngIf="activeTab === 1"></app-report>
     </mat-tab>
 
 </mat-tab-group>

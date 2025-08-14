@@ -5,7 +5,6 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Timestamp } from 'firebase/firestore';
 import jsPDF from 'jspdf';
 import { CommonService } from 'src/app/services/common.service';
-import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-report',

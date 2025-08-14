@@ -1,9 +1,9 @@
-<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" (selectedTabChange)="onTabChanged($event)">
     <mat-tab label="Kharch List">
-        <app-add-kharch></app-add-kharch>
+        <app-add-kharch  *ngIf="activeTab === 0"></app-add-kharch>
     </mat-tab>
 
     <mat-tab label="Report">
-        <app-kharch-report></app-kharch-report>
+        <app-kharch-report  *ngIf="activeTab === 1"></app-kharch-report>
     </mat-tab>
 </mat-tab-group>

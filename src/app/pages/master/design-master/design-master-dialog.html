@@ -5,14 +5,14 @@
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Design No</mat-label>
       <input type="number" matInput formControlName="designNo" placeholder="Enter design no" min="0">
+      <app-validation-message class="position-relative" [control]="designForm.controls['designNo']"></app-validation-message>
     </mat-form-field>
-    <app-validation-message class="position-relative" [control]="designForm.controls['designNo']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>No Of Stiching</mat-label>
       <input type="number" matInput formControlName="noStiching" placeholder="Enter Stiching" min="0">
+      <app-validation-message class="position-relative" [control]="designForm.controls['noStiching']"></app-validation-message>
     </mat-form-field>
-    <app-validation-message class="position-relative" [control]="designForm.controls['noStiching']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Design Price</mat-label>
@@ -23,8 +23,8 @@
     <div>
 
       <mat-label>Image Upload</mat-label>
+      <img class="mat-card-avatar" [src]="local_data.imagePath" class="rounded-circle" width="50">
       <div class="d-flex align-items-center m-b-16">
-        <img class="mat-card-avatar" [src]="local_data.imagePath" class="rounded-circle" width="50">
         <button mat-flat-button color="primary" class="m-l-16 input-file-button">
           <input type="file" (change)="selectFile($event)" #fileInput>
         </button>

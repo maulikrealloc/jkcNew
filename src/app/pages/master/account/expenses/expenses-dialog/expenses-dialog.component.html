@@ -25,10 +25,10 @@
           {{option}}
         </mat-option>
       </mat-autocomplete>
+      <app-validation-message class="position-relative"
+        [control]="expensesForm.controls['expensesType']"></app-validation-message>
     </mat-form-field>
 
-    <app-validation-message class="position-relative"
-      [control]="expensesForm.controls['expensesType']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Description</mat-label>
@@ -44,16 +44,12 @@
       <mat-label>Amount</mat-label>
       <input type="number" matInput placeholder="Enter amount" formControlName="amount" min="0">
     </mat-form-field>
-    <app-validation-message class="position-relative"
-      [control]="expensesForm.controls['amount']"></app-validation-message>
 
     <mat-label class="mat-subtitle-2 m-b-8 d-block">Status</mat-label>
     <mat-radio-group formControlName="status" aria-label="Select an option">
       <mat-radio-button value="pending">Pending</mat-radio-button>
       <mat-radio-button value="paid">Paid</mat-radio-button>
     </mat-radio-group>
-    <app-validation-message class="position-relative"
-      [control]="expensesForm.controls['status']"></app-validation-message>
 
     <mat-form-field appearance="outline" class="w-100 m-t-10">
       <mat-label>Paid By</mat-label>
@@ -61,9 +57,9 @@
         <mat-option *ngFor="let item of companyAccountList" [value]="item.accountName">{{
           item.accountName}}</mat-option>
       </mat-select>
+      <!-- <app-validation-message class="position-relative"
+        [control]="expensesForm.controls['paidBy']"></app-validation-message> -->
     </mat-form-field>
-    <app-validation-message class="position-relative"
-      [control]="expensesForm.controls['paidBy']"></app-validation-message>
   </form>
 </mat-dialog-content>
 <mat-divider></mat-divider>

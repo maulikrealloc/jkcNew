@@ -61,7 +61,7 @@ export class ExpensesDialogComponent implements OnInit {
   expensesData(data:any) {
     this.expensesForm = this.fb.group({
       expensesType: [data? data?.expensesType : '', Validators.required],
-      paidBy: [data ? data?.paidBy : ''],
+      paidBy: [data ? data?.paidBy : '', Validators.required],
       date: [data ? this.convertTimestampToDate(data?.date) : new Date()],
       description: [data ? data?.description : ''],
       chalanNo: [data ? data?.chalanNo : ''],

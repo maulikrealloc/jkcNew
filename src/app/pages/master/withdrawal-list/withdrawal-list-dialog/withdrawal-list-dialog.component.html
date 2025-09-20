@@ -13,16 +13,16 @@
       <mat-select #dropdown formControlName="employeeList" placeholder="Enter employee">
         <mat-option [value]="item.id" *ngFor="let item of employeesList">{{item.firstName}}</mat-option>
       </mat-select>
+      <app-validation-message class="position-relative"
+        [control]="withdrawalForm.controls['employeeList']"></app-validation-message>
     </mat-form-field>
-    <app-validation-message class="position-relative"
-      [control]="withdrawalForm.controls['employeeList']"></app-validation-message>
 
     <mat-form-field class="w-100 m-t-10" appearance="outline">
       <mat-label>Amount</mat-label>
       <input type="number" matInput formControlName="amount" placeholder="Enter amount" min="0">
+      <app-validation-message class="position-relative"
+        [control]="withdrawalForm.controls['amount']"></app-validation-message>
     </mat-form-field>
-    <app-validation-message class="position-relative"
-      [control]="withdrawalForm.controls['amount']"></app-validation-message>
 
 
   </form>
